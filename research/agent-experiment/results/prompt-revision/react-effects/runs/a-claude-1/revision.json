@@ -1,0 +1,10 @@
+{
+  "runId": "a-claude-1",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed both issues with one edit in `index.ts:78`. The effect's dependency list changed from `[]` to `[serverSnapshotIsUsed, getSnapshot, subscribe]`.\n\n**Why this is a real bug, not just style:** with `[]`, the hook subscribes once on mount and keeps that subscription forever. If a component passes a new `subscribe` (say, one tied to a prop like an id), it stays subscribed to the old store. The listener also keeps calling the first `getSnapshot` it was given, so it can report a stale value. React's `useSyncExternalStore`, which this hook copies, re-subscribes whenever `subscribe` changes, so listing the dependencies brings it in line with that.\n\n**What changes at runtime:**\n- `serverSnapshotIsUsed` comes from `useState` and is never updated, so it never re-runs the effect.\n- When callers pass `subscribe` or `getSnapshot` as inline functions, the hook now unsubscribes and re-subscribes on every render. React behaves the same way for an inline `subscribe`, and its docs tell callers to define the function outside the component to avoid that. Unlike React, this hook also re-subscribes when only `getSnapshot` changes. That costs some extra work but gives the same results.\n- On the server-snapshot path, the effect now also calls `setState(getSnapshot())` after those renders. React skips the update when the value hasn't changed, so this doesn't cause a render loop.\n\n**What I didn't change:** the hook still returns stored state instead of reading `getSnapshot()` during render. So when `getSnapshot` changes, the new value only shows up after the next store notification, or right away on the server-snapshot path. Fixing that means changing how the hook works, which goes beyond these two lint issues.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+  "ultraciteExitCode": 0,
+  "agentLabel": "Claude Code"
+}

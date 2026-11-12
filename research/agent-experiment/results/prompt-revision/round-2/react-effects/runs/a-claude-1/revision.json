@@ -1,0 +1,13 @@
+{
+  "runId": "a-claude-1",
+  "mirrorRevision": "v2",
+  "finalMessage": "I left both issues unfixed and made no edits to the file. They are the same problem: the `useEffect` at `index.ts:71-78` has an empty dependency array. The usual fix (add the missing dependencies) would change when the effect runs, and nothing shows that change is wanted.\n\n- **`serverSnapshotIsUsed`** comes from `useState` with no setter, so it never changes. Adding it alone would be harmless, but it wouldn't clear either issue because the other two would still be missing.\n- **`subscribe` and `getSnapshot`** are what change behavior. Callers often pass them as inline functions, which get a new identity on every render. With them as dependencies, the effect would unsubscribe and resubscribe on every render. On a hydration render it would also call `setState(getSnapshot())` again each time. Right now it subscribes once on mount and keeps that subscription, and this matches upstream hono's code.\n- **The alternative** is to keep the effect mount-only and read the latest `getSnapshot` from a ref. That still changes behavior, because the store callback would use a newer `getSnapshot` than the one from mount. It also only quiets the rule rather than settling the design question.\n\nThe real decision is whether hono/jsx's `useSyncExternalStore` should follow React's version. React's resubscribes when `subscribe` changes and re-checks `getSnapshot` on every render. That's a choice for the hook's maintainers, not a lint fix. If they want React's behavior, the fix is `[subscribe, getSnapshot, serverSnapshotIsUsed]` and an accepted change to the resubscription behavior.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

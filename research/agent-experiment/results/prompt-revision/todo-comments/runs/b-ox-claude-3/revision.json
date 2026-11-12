@@ -1,0 +1,12 @@
+{
+  "runId": "b-ox-claude-3",
+  "mirrorRevision": "v2",
+  "finalMessage": "I left this one unchanged. The TODO is still accurate, so removing or rewording it would only hide it from the linter.\n\n`prunePaths` (`hmr.ts:324`) only runs the callbacks in `pruneMap`. It never runs the dispose callbacks in `disposeMap` for pruned modules. The only place a dispose callback runs is the accept path (`hmr.ts:383`), so pruned modules still skip theirs.\n\nFixing it for real means calling each pruned path's dispose callback with its saved data before the prune callbacks run. That is a runtime behavior change, not a style fix. Dispose callbacks can also return a Promise, so doing it properly means making `prunePaths` async and returning `Promise<void>`. That changes a public method's signature, and code outside this file that calls `prunePaths` would need to await it. Whoever owns this code should decide whether to make that change.\n\nLeft for review: 1",
+  "leftForReviewLine": "Left for review: 1",
+  "leftForReviewIssues": [
+    1
+  ],
+  "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

@@ -1,0 +1,218 @@
+{
+  "runId": "a-claude-1",
+  "topic": "prompt-revision/react-effects",
+  "subject": "a",
+  "agent": "claude",
+  "command": "claude",
+  "args": [
+    "-p",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Edit,Write,Grep,Glob"
+  ],
+  "cwd": "<run-root>/a-claude-1",
+  "cliVersion": "2.1.322 (Claude Code)",
+  "startedAt": "2026-11-11T23:24:33.124Z",
+  "wallMs": 35763,
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 600000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "timeoutMs": 600000,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "spawnError": null,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "strippedEnv": [
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "CLAUDE_EFFORT",
+    "CLAUDE_CODE_ENTRYPOINT",
+    "CLAUDE_PID",
+    "CLAUDE_CODE_CHILD_SESSION",
+    "CLAUDE_CODE_VERSION",
+    "CLAUDE_CODE_SESSION_ATTENDED",
+    "CLAUDE_CODE_EXECPATH",
+    "CLAUDE_CODE_SESSION_ID",
+    "CLAUDECODE",
+    "CLAUDE_CODE_MESSAGING_SOCKET"
+  ],
+  "isolation": {
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "<run-root>/.staging/a-claude-1/handoff",
+      "../corpus/examples/react-effects",
+      "../corpus/results/react-effects",
+      "../corpus/calibration/react-effects",
+      "../corpus/scripts/effects-agent-runs.cjs",
+      "../corpus/scripts/effects-calibration.cjs",
+      "../corpus/scripts/effects-census.cjs",
+      "../corpus/scripts/effects-disagreements.cjs",
+      "../corpus/scripts/effects-examples.cjs",
+      "../corpus/scripts/effects-fixes.cjs",
+      "../corpus/scripts/effects-history.cjs",
+      "../corpus/scripts/effects-inventory.cjs",
+      "../corpus/scripts/effects-lib.cjs",
+      "../corpus/scripts/effects-linters.cjs",
+      "../corpus/scripts/effects-markers.cjs",
+      "../corpus/scripts/effects-oracle.cjs",
+      "../corpus/scripts/effects-run-all.cjs",
+      "../corpus/scripts/effects-runtime.cjs",
+      "../corpus/scripts/effects-sample.cjs",
+      "../corpus/scripts/effects-tables.cjs",
+      "../bibliography/react-effects.md",
+      "../bibliography/README.md",
+      "../../apps/docs/blog/react-effects.mdx",
+      "../../apps/docs/pages/research/react-effects.astro",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/length-limits",
+      "<outside-repo>/todo-comments",
+      "../../plans",
+      "../../.changeset",
+      "<run-root>/.measure"
+    ]
+  },
+  "runFiles": [
+    "oxfmt.config.ts",
+    "oxlint.config.ts",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "handoff": {
+    "fixPassChanged": [],
+    "rules": [
+      "react-hooks/exhaustive-deps",
+      "react/exhaustive-effect-dependencies"
+    ],
+    "file": "index.ts"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptSha256": "60222bb8e9467492351a6df532a86e3f56d2a2f2b78d61026d84a2ccde0549a8",
+      "diagnosticsFile": "index.ts.a123abce.json",
+      "issues": [
+        "react/exhaustive-effect-dependencies L78",
+        "react-hooks/exhaustive-deps L72"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "startedAt": "2026-11-11T23:24:33.124Z",
+      "wallMs": 35763,
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "spawnError": null,
+      "ok": true,
+      "stderrTail": null,
+      "isolation": {
+        "lockedDuringRun": [
+          "scripts",
+          "subjects",
+          "harness-tests",
+          "biome-config",
+          "results",
+          "<run-root>/.staging/a-claude-1/handoff",
+          "../corpus/examples/react-effects",
+          "../corpus/results/react-effects",
+          "../corpus/calibration/react-effects",
+          "../corpus/scripts/effects-agent-runs.cjs",
+          "../corpus/scripts/effects-calibration.cjs",
+          "../corpus/scripts/effects-census.cjs",
+          "../corpus/scripts/effects-disagreements.cjs",
+          "../corpus/scripts/effects-examples.cjs",
+          "../corpus/scripts/effects-fixes.cjs",
+          "../corpus/scripts/effects-history.cjs",
+          "../corpus/scripts/effects-inventory.cjs",
+          "../corpus/scripts/effects-lib.cjs",
+          "../corpus/scripts/effects-linters.cjs",
+          "../corpus/scripts/effects-markers.cjs",
+          "../corpus/scripts/effects-oracle.cjs",
+          "../corpus/scripts/effects-run-all.cjs",
+          "../corpus/scripts/effects-runtime.cjs",
+          "../corpus/scripts/effects-sample.cjs",
+          "../corpus/scripts/effects-tables.cjs",
+          "../bibliography/react-effects.md",
+          "../bibliography/README.md",
+          "../../apps/docs/blog/react-effects.mdx",
+          "../../apps/docs/pages/research/react-effects.astro",
+          "plans",
+          "lint-configs",
+          "<outside-repo>/ultracite-research-length-limits",
+          "<outside-repo>/ultracite-research-todo-comments",
+          "<outside-repo>/floating-promises",
+          "<outside-repo>/length-limits",
+          "<outside-repo>/todo-comments",
+          "../../plans",
+          "../../.changeset",
+          "<run-root>/.measure"
+        ]
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "verify": {
+        "error": null,
+        "remaining": []
+      },
+      "retried": false,
+      "transcriptSource": [
+        "~/.claude/projects/<session-log>.jsonl"
+      ],
+      "transcriptCandidates": 1
+    }
+  ],
+  "ultracite": {
+    "head": "2bd7aaadbea35a004a5c586b307444a43509d6d5",
+    "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+    "agentsTsSha256": "2afbcf99c39b7424bffe111ddcdad29de2c57b4a86920d9e0035e1d58064ef40",
+    "indexTsSha256": "c3b5b2a30f3d5444047f5f24b5f2a8cb0759e89061d54955e8eb81cbff063a9d",
+    "lintersTsSha256": "742346505c9b218f94464d6355d77633767ed18125dbd939ef1658c0de64383c",
+    "runAgentTsSha256": "a0e2264c563d3dc778a6fcd519c3030f02df24ac2b4a539bd82fd27647fd6581",
+    "diffTsSha256": "c9bc0f7973043c740fa68cf161b25f3d582130a03322be0d117f2c568446f847",
+    "mirroredSlicesSha256": {
+      "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+      "linters.ts oxlint": "c985a3a7f2014bd58e2435455f8dcbcbea80c7f38643ca61ae0422e589f44978",
+      "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+      "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+      "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+      "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+      "index.ts fixFileGroup": "b102d9276938f12e1c5dac850987481b3973f126878bcf804bad5280859a1c9a",
+      "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+      "run-agent.ts": "a0e2264c563d3dc778a6fcd519c3030f02df24ac2b4a539bd82fd27647fd6581",
+      "diff.ts": "c9bc0f7973043c740fa68cf161b25f3d582130a03322be0d117f2c568446f847"
+    }
+  },
+  "fileChecks": {
+    "subjectDeleted": false,
+    "otherFileChanges": [],
+    "diagnosticsJsonUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "pristineSubjectsUnchanged": true,
+    "configFilesNearRun": []
+  },
+  "redactedFiles": [
+    "attempt1/prompt.txt"
+  ]
+}

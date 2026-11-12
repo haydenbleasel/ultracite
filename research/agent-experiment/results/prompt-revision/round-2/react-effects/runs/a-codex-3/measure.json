@@ -1,0 +1,926 @@
+{
+  "runId": "a-codex-3",
+  "topic": "prompt-revision/round-2/react-effects",
+  "subject": "a",
+  "base": "a",
+  "label": "A, a real bug",
+  "config": "oxlint react",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.167.0",
+  "wallSeconds": 33.1,
+  "attemptCount": 1,
+  "stoppedBecause": "the agent left the rest for review",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 600000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 10,
+    "leftOutByFilter": {
+      "react-hooks/rules-of-hooks": 3,
+      "react/hook-use-state": 1,
+      "react/hooks": 3,
+      "react/set-state-in-effect": 1
+    },
+    "given": [
+      {
+        "rule": "react/exhaustive-effect-dependencies",
+        "line": 78,
+        "message": "Found missing effect dependencies",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 72,
+        "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "help": "Either include it or remove the dependency array.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "340f80cccfda8ce4eb2c0d600e3183ff85989c055e58c12ee3be8f5fce420dd5",
+    "parseError": false,
+    "views": {
+      "oxlint react": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+          "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+          "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/rules-of-hooks": 3,
+          "react/exhaustive-effect-dependencies": 1,
+          "react/hooks": 3,
+          "react/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/rules-of-hooks": 3,
+          "react/exhaustive-effect-dependencies": 1,
+          "react/hook-use-state": 1,
+          "react/hooks": 3,
+          "react/set-state-in-effect": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "eslint react": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/hooks": 3,
+          "react-hooks/rules-of-hooks": 3,
+          "react-hooks/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/hooks": 3,
+          "react-hooks/rules-of-hooks": 3,
+          "react-hooks/set-state-in-effect": 1,
+          "react/hook-use-state": 1,
+          "unicorn/prefer-simple-condition-first": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "eslint react, every file": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/hooks": 3,
+          "react-hooks/rules-of-hooks": 3,
+          "react-hooks/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/hooks": 3,
+          "react-hooks/rules-of-hooks": 3,
+          "react-hooks/set-state-in-effect": 1,
+          "react/hook-use-state": 1,
+          "unicorn/prefer-simple-condition-first": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "biome react": {
+        "depHonor": [
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+        ],
+        "depIgnore": [
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+        ],
+        "hookHonor": {
+          "correctness/useExhaustiveDependencies": 3,
+          "correctness/useHookAtTopLevel": 3
+        },
+        "parseError": false,
+        "all": {
+          "correctness/useExhaustiveDependencies": 3,
+          "correctness/useHookAtTopLevel": 3,
+          "suspicious/noUnnecessaryConditions": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+      ],
+      "ignore": [
+        "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "suppressionReported": 0,
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "verdict": "bug kept",
+      "differences": [
+        "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+        "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+      ],
+      "modes": {
+        "stable": {
+          "verdict": "bug kept",
+          "effectRuns": 1,
+          "effectRunsAsWritten": 1,
+          "subscriptions": 1,
+          "subscriptionsAsWritten": 1,
+          "texts": [
+            "a1",
+            "a2",
+            "a2",
+            "a2",
+            "a2",
+            "a3",
+            ""
+          ],
+          "errors": []
+        },
+        "inline": {
+          "verdict": "bug kept",
+          "effectRuns": 1,
+          "effectRunsAsWritten": 1,
+          "subscriptions": 1,
+          "subscriptionsAsWritten": 1,
+          "texts": [
+            "a1",
+            "a2",
+            "a2",
+            "a2",
+            "a2",
+            "a3",
+            ""
+          ],
+          "errors": []
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": [],
+      "targets": [],
+      "added": {}
+    },
+    "effects": [
+      {
+        "name": "subscription",
+        "hook": "useEffect",
+        "line": 71,
+        "deps": []
+      }
+    ],
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "react/exhaustive-effect-dependencies L78: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps L72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'"
+      ],
+      "retryIssues": null,
+      "leftForReview": {
+        "issues": [
+          "react/exhaustive-effect-dependencies L78",
+          "react-hooks/exhaustive-deps L72"
+        ],
+        "explanation": "Left `index.ts` unchanged. Adding `getSnapshot` and `subscribe` would make this mount-only effect unsubscribe and resubscribe whenever either function’s identity changes. The supplied code doesn’t establish that this lifecycle change is intended, so both diagnostics need review."
+      },
+      "leftForReviewShare": "all",
+      "wallSeconds": 33.1,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": true,
+      "ownEdit": {
+        "edit": "unchanged",
+        "kinds": [],
+        "targets": [],
+        "added": {}
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "340f80cccfda8ce4eb2c0d600e3183ff85989c055e58c12ee3be8f5fce420dd5",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [
+              "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+            ],
+            "depIgnore": [
+              "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+            ],
+            "hookHonor": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/rules-of-hooks": 3,
+              "react/exhaustive-effect-dependencies": 1,
+              "react/hooks": 3,
+              "react/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/rules-of-hooks": 3,
+              "react/exhaustive-effect-dependencies": 1,
+              "react/hook-use-state": 1,
+              "react/hooks": 3,
+              "react/set-state-in-effect": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          },
+          "eslint react": {
+            "depHonor": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "depIgnore": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "hookHonor": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1,
+              "react/hook-use-state": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          },
+          "eslint react, every file": {
+            "depHonor": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "depIgnore": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "hookHonor": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1,
+              "react/hook-use-state": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          },
+          "biome react": {
+            "depHonor": [
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+            ],
+            "depIgnore": [
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+            ],
+            "hookHonor": {
+              "correctness/useExhaustiveDependencies": 3,
+              "correctness/useHookAtTopLevel": 3
+            },
+            "parseError": false,
+            "all": {
+              "correctness/useExhaustiveDependencies": 3,
+              "correctness/useHookAtTopLevel": 3,
+              "suspicious/noUnnecessaryConditions": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          }
+        },
+        "armLeft": {
+          "honor": [
+            "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+            "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+          ],
+          "ignore": [
+            "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+            "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+          ]
+        },
+        "armCleared": {
+          "honor": false,
+          "ignore": false
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "bug kept",
+          "differences": [
+            "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+            "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+          ],
+          "modes": {
+            "stable": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            },
+            "inline": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "unchanged",
+          "kinds": [],
+          "targets": [],
+          "added": {}
+        },
+        "effects": [
+          {
+            "name": "subscription",
+            "hook": "useEffect",
+            "line": 71,
+            "deps": []
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "unchanged"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "340f80cccfda8ce4eb2c0d600e3183ff85989c055e58c12ee3be8f5fce420dd5",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [
+              "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+            ],
+            "depIgnore": [
+              "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+            ],
+            "hookHonor": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/rules-of-hooks": 3,
+              "react/exhaustive-effect-dependencies": 1,
+              "react/hooks": 3,
+              "react/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/rules-of-hooks": 3,
+              "react/exhaustive-effect-dependencies": 1,
+              "react/hook-use-state": 1,
+              "react/hooks": 3,
+              "react/set-state-in-effect": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          },
+          "eslint react": {
+            "depHonor": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "depIgnore": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "hookHonor": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1,
+              "react/hook-use-state": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          },
+          "eslint react, every file": {
+            "depHonor": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "depIgnore": [
+              "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "hookHonor": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/exhaustive-deps": 1,
+              "react-hooks/hooks": 3,
+              "react-hooks/rules-of-hooks": 3,
+              "react-hooks/set-state-in-effect": 1,
+              "react/hook-use-state": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          },
+          "biome react": {
+            "depHonor": [
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+            ],
+            "depIgnore": [
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+            ],
+            "hookHonor": {
+              "correctness/useExhaustiveDependencies": 3,
+              "correctness/useHookAtTopLevel": 3
+            },
+            "parseError": false,
+            "all": {
+              "correctness/useExhaustiveDependencies": 3,
+              "correctness/useHookAtTopLevel": 3,
+              "suspicious/noUnnecessaryConditions": 1
+            },
+            "reactDoctor": {},
+            "depCleared": false
+          }
+        },
+        "armLeft": {
+          "honor": [
+            "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+            "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+          ],
+          "ignore": [
+            "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+            "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+          ]
+        },
+        "armCleared": {
+          "honor": false,
+          "ignore": false
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "bug kept",
+          "differences": [
+            "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+            "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+          ],
+          "modes": {
+            "stable": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            },
+            "inline": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "unchanged",
+          "kinds": [],
+          "targets": [],
+          "added": {}
+        },
+        "effects": [
+          {
+            "name": "subscription",
+            "hook": "useEffect",
+            "line": 71,
+            "deps": []
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "unchanged"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [
+          "react/exhaustive-effect-dependencies L78: Found missing effect dependencies",
+          "react-hooks/exhaustive-deps L72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'"
+        ],
+        "remainingDetail": [
+          {
+            "rule": "react/exhaustive-effect-dependencies",
+            "line": 78,
+            "message": "Found missing effect dependencies"
+          },
+          {
+            "rule": "react-hooks/exhaustive-deps",
+            "line": 72,
+            "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'"
+          }
+        ],
+        "remainingDependencyRulesOnly": [
+          "react/exhaustive-effect-dependencies L78",
+          "react-hooks/exhaustive-deps L72"
+        ],
+        "vsThisAttempt": {
+          "cleared": [],
+          "still": [
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps"
+          ],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [],
+          "still": [
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps"
+          ],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 3,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 90296,
+          "cached_input_tokens": 72704,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 929,
+          "reasoning_output_tokens": 638,
+          "total_tokens": 91225
+        },
+        "tokensUsedReportedOnStderr": 18521,
+        "thinkingBlocks": 2,
+        "toolCalls": [
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const r = await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g index.ts -g 'index.ts.a123abce.json' -g package.json -g '!node_modules' -g '!.git'\",\"max_output_tokens\":3000});text(r.output);\n",
+          "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nroot = Path.cwd()\\nfor directory in reversed([root, *root.parents]):\\n    instructions = directory / 'AGENTS.md'\\n    if"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const r = await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g index.ts -g 'index.ts.a123abce.json' -g package.json -g '!node_modules' -g '!.git'\",\"max_output_tokens\":3000});text(r.output);\ntext(await tools.exec_command({cmd:\"cat index.ts index.ts.a123abce.json\",\"max_output_tokens\":9000}))",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nroot = Path.cwd()\\nfor directory in reversed([root, *root.parents]):\\n    instructions = directory / 'AGENTS.md'\\n    if instructions.is_file():\\n        print(f'{instructions}:\\\\n{instructions.read_text()}')\\nPY\",\"max_o",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": false,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "readInstalledHono": [],
+        "readReactSources": [],
+        "usedReactTypes": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [],
+        "finalMessage": "Left `index.ts` unchanged. Adding `getSnapshot` and `subscribe` would make this mount-only effect unsubscribe and resubscribe whenever either function’s identity changes. The supplied code doesn’t establish that this lifecycle change is intended, so both diagnostics need review.\n\nLeft for review: 1, 2",
+        "understood": {
+          "behaviourChange": [
+            "I’ll read the effect and diagnostics, then check whether adding the dependencies would change when the effect runs."
+          ],
+          "stale": [],
+          "loop": [],
+          "resubscribe": [
+            "Adding `getSnapshot` and `subscribe` would make this mount-only effect unsubscribe and resubscribe whenever either function’s identity changes."
+          ],
+          "tdz": [],
+          "mountOnly": [
+            "Adding `getSnapshot` and `subscribe` would make this mount-only effect unsubscribe and resubscribe whenever either function’s identity changes."
+          ],
+          "useEffectEvent": [],
+          "reactDocs": [],
+          "keystroke": [],
+          "trigger": [],
+          "deliberate": [],
+          "review": [
+            "Left for review: 1, 2"
+          ]
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "otherTopicRuns": 44,
+          "mainCheckout": 4,
+          "reactDocs": 2,
+          "webAccess": 17,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "otherTopicRuns": 1,
+          "reactDocs": 1,
+          "webAccess": 5
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "final": {
+    "outcome": "unchanged",
+    "response": "bug kept, left for review",
+    "leftForReview": "all",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 0,
+    "left": 2,
+    "remaining": 2,
+    "notes": [
+      "Codex left 2 issues for you to decide:\nLeft `index.ts` unchanged. Adding `getSnapshot` and `subscribe` would make this mount-only effect unsubscribe and resubscribe whenever either function’s identity changes. The supplied code doesn’t establish that this lifecycle change is intended, so both diagnostics need review."
+    ],
+    "issueFixed": [
+      false,
+      false
+    ],
+    "outro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+    "exitCode": 1
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 18521,
+    "totalTokens": 91225
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "otherTopicRuns": 44,
+      "mainCheckout": 4,
+      "reactDocs": 2,
+      "webAccess": 17,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {
+      "otherTopicRuns": 1,
+      "reactDocs": 1,
+      "webAccess": 5
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "<run-root>/.staging/a-codex-3/handoff",
+      "../corpus/examples/react-effects",
+      "../corpus/results/react-effects",
+      "../corpus/calibration/react-effects",
+      "../corpus/scripts/effects-agent-runs.cjs",
+      "../corpus/scripts/effects-calibration.cjs",
+      "../corpus/scripts/effects-census.cjs",
+      "../corpus/scripts/effects-disagreements.cjs",
+      "../corpus/scripts/effects-examples.cjs",
+      "../corpus/scripts/effects-fixes.cjs",
+      "../corpus/scripts/effects-history.cjs",
+      "../corpus/scripts/effects-inventory.cjs",
+      "../corpus/scripts/effects-lib.cjs",
+      "../corpus/scripts/effects-linters.cjs",
+      "../corpus/scripts/effects-markers.cjs",
+      "../corpus/scripts/effects-oracle.cjs",
+      "../corpus/scripts/effects-run-all.cjs",
+      "../corpus/scripts/effects-runtime.cjs",
+      "../corpus/scripts/effects-sample.cjs",
+      "../corpus/scripts/effects-tables.cjs",
+      "../bibliography/react-effects.md",
+      "../bibliography/README.md",
+      "../../apps/docs/blog/react-effects.mdx",
+      "../../apps/docs/pages/research/react-effects.astro",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/length-limits",
+      "../../plans",
+      "../../.changeset",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-claude-3",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-claude-3",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2"
+    ]
+  }
+}

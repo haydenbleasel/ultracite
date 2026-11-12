@@ -1,0 +1,61 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,6 +220,20 @@
+   return () => jsonValue;
+ }
+ 
++// ws.clientPort -> ws.port
++// -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
++const resolveHmrPort = (
++  wsConfig: Exclude<ResolvedConfig["server"]["ws"], false>,
++  middlewareMode: boolean | undefined
++) => {
++  const isWsServerSpecified = !!wsConfig?.server;
++  let port = wsConfig?.clientPort || wsConfig?.port || null;
++  if (middlewareMode && !isWsServerSpecified) {
++    port ||= 24_678;
++  }
++  return port;
++};
++
+ // values injected into the `__HMR_*__` placeholders
+ function getHmrValues(
+   config: ResolvedConfig,
+@@ -230,18 +244,12 @@
+   const host = wsConfig?.host || null;
+   const protocol = wsConfig?.protocol || null;
+   const timeout = wsConfig?.timeout || 30_000;
+-  const isWsServerSpecified = !!wsConfig?.server;
+   const configName = path.basename(config.configFile || "vite.config.js");
+ 
+   const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+   const overlay = hmrConfig?.overlay !== false;
+ 
+-  // ws.clientPort -> ws.port
+-  // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+-  let port = wsConfig?.clientPort || wsConfig?.port || null;
+-  if (config.server.middlewareMode && !isWsServerSpecified) {
+-    port ||= 24_678;
+-  }
++  const port = resolveHmrPort(wsConfig, config.server.middlewareMode);
+ 
+   let directTarget = wsConfig?.host || resolvedServerHostname;
+   directTarget += `:${wsConfig?.port || resolvedServerPort}`;
+@@ -264,9 +272,9 @@
+   };
+ }
+ 
+-async function createClientConfigValueReplacer(
++const createClientConfigValueReplacer = async (
+   config: ResolvedConfig
+-): Promise<(code: string) => string> {
++): Promise<(code: string) => string> => {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+   const resolvedServerPort = config.server.port!;
+@@ -311,4 +319,4 @@
+       .replace(`__HMR_PARTIAL_ACCEPT__`, hmrPartialAcceptReplacement)
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
+-}
++};

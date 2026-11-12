@@ -1,0 +1,2376 @@
+{
+  "generatedBy": "scripts/topics/prompt-revision/compare.cjs",
+  "date": "2026-11-11",
+  "subjects": [
+    {
+      "base": "floating-promises",
+      "subject": "fp1",
+      "title": "fp1, a lost rejection (Hono's `createPool`)",
+      "linter": "ESLint, typescript-eslint with types, `no-misused-promises`",
+      "retryLoop": false,
+      "question": "Does the caller see a failure in a queued call? Before, it hung forever.",
+      "rounds": {
+        "old": "the subject's own topic, with the prompt of its day",
+        "new": "round one: the prompt reworded on 2026-11-11",
+        "round2": "not run"
+      },
+      "promptTsSha256": {
+        "new": [
+          "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db"
+        ],
+        "round2": []
+      },
+      "byAgent": {
+        "claude": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "caller hangs, unhandled rejection (original behavior)": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 3,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 3,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "rejects caller, slot still leaks": 4
+            }
+          },
+          "round2": {
+            "runs": 0,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {}
+          }
+        },
+        "codex": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "caller hangs, unhandled rejection (original behavior)": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "rejects caller, slot still leaks": 4
+            }
+          },
+          "round2": {
+            "runs": 0,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {}
+          }
+        }
+      },
+      "runs": {
+        "old": [
+          {
+            "runId": "fp1-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (statement)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 36,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (statement)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 17.5,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": ".catch that only rethrows, result dropped",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 69.2,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (statement)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.4,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (arrow body)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 22.3,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (arrow body)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (statement)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 27,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "caller hangs, unhandled rejection (original behavior)",
+            "detail": "void ×1 (arrow body)",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 16.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "new": [
+          {
+            "runId": "fp1-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 42.6,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "fp1-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 45.1,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "fp1-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 59.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "fp1-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 62,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 29.7,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 31.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 46.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "fp1-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "rejects caller, slot still leaks",
+            "detail": "none",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 30.2,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "round2": []
+      }
+    },
+    {
+      "base": "todo-comments",
+      "subject": "b-ox",
+      "title": "b-ox, a TODO recording a live bug (Vite's HMR prune)",
+      "linter": "Oxlint core + react, `no-warning-comments`",
+      "retryLoop": true,
+      "question": "Is the record of the bug still there?",
+      "rounds": {
+        "old": "the subject's own topic, with the prompt of its day",
+        "new": "round one: the prompt reworded on 2026-11-11",
+        "round2": "not run"
+      },
+      "promptTsSha256": {
+        "new": [
+          "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db"
+        ],
+        "round2": []
+      },
+      "byAgent": {
+        "claude": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "marker dropped, information kept": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 4,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "left for review (right)": 4
+            }
+          },
+          "round2": {
+            "runs": 0,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {}
+          }
+        },
+        "codex": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "marker dropped, information lost": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 4,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "left for review (right)": 4
+            }
+          },
+          "round2": {
+            "runs": 0,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {}
+          }
+        }
+      },
+      "runs": {
+        "old": [
+          {
+            "runId": "b-ox-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.303 (Claude Code)",
+            "models": null,
+            "outcome": "marker dropped, information kept",
+            "detail": "reworded to another tag",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 22.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.303 (Claude Code)",
+            "models": null,
+            "outcome": "marker dropped, information kept",
+            "detail": "marker dropped, text kept",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 31.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.303 (Claude Code)",
+            "models": null,
+            "outcome": "marker dropped, information kept",
+            "detail": "marker dropped, text kept",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 23.1,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.303 (Claude Code)",
+            "models": null,
+            "outcome": "marker dropped, information kept",
+            "detail": "reworded to another tag",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 26.1,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "marker dropped, information lost",
+            "detail": "comment deleted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 24.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "marker dropped, information lost",
+            "detail": "comment deleted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 22.6,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "marker dropped, information lost",
+            "detail": "comment deleted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "marker dropped, information lost",
+            "detail": "comment deleted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.4,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "new": [
+          {
+            "runId": "b-ox-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 18.2,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 13.8,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 19.1,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 16.4,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 13.6,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Codex. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 12.4,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Codex. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 11.8,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Codex. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "b-ox-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "left for review (right)",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 19,
+            "ultraciteOutro": "Fixed 0 of 1 issue with Codex. 1 left for you to decide.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "round2": []
+      }
+    },
+    {
+      "base": "length-limits",
+      "subject": "a",
+      "title": "a, a long function that reads top to bottom (Vite's client config)",
+      "linter": "Oxlint core with `max-lines-per-function` on",
+      "retryLoop": true,
+      "question": "Was the function left as it is, or split?",
+      "rounds": {
+        "old": "the subject's own topic, with the prompt of its day",
+        "new": "round one: the prompt reworded on 2026-11-11",
+        "round2": "round two: three lines of that prompt reworded again, 2026-11-12"
+      },
+      "promptTsSha256": {
+        "new": [
+          "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db"
+        ],
+        "round2": [
+          "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943"
+        ]
+      },
+      "byAgent": {
+        "claude": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 4,
+            "timedOut": 0,
+            "outcomes": {
+              "behaviour kept, limit cleared": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 3,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 3,
+            "retried": 4,
+            "timedOut": 0,
+            "outcomes": {
+              "behaviour kept, limit cleared": 4
+            }
+          },
+          "round2": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 4,
+            "timedOut": 0,
+            "outcomes": {
+              "behaviour kept, limit cleared": 4
+            }
+          }
+        },
+        "codex": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 4,
+            "timedOut": 0,
+            "outcomes": {
+              "behaviour kept, limit cleared": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 4,
+            "timedOut": 0,
+            "outcomes": {
+              "behaviour kept, limit cleared": 4
+            }
+          },
+          "round2": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 4,
+            "timedOut": 0,
+            "outcomes": {
+              "behaviour kept, limit cleared": 4
+            }
+          }
+        }
+      },
+      "runs": {
+        "old": [
+          {
+            "runId": "a-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 214.5,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 155.1,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 259.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 189.2,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 120.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 152.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 165.1,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 159.7,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "new": [
+          {
+            "runId": "a-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 191.5,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 202.1,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 168.3,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": false,
+            "attempts": 3,
+            "timedOut": false,
+            "wallSeconds": 276.4,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 81.3,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 114.4,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 89.5,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 99.2,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "round2": [
+          {
+            "runId": "a-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 277.6,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 201.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 199.8,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 242.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 91.9,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 127.7,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 91.3,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "behaviour kept, limit cleared",
+            "detail": "helpers extracted",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 115.7,
+            "ultraciteOutro": "Fixed 1 of 1 issue with Codex.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          }
+        ]
+      }
+    },
+    {
+      "base": "react-effects",
+      "subject": "a",
+      "title": "a, a missing dependency that is a real bug (Hono's `useSyncExternalStore`)",
+      "linter": "Oxlint react, `exhaustive-deps` and the compiler's effect rule",
+      "retryLoop": true,
+      "question": "Is the bug fixed without resubscribing on every render, or left with the change named?",
+      "rounds": {
+        "old": "the subject's own topic, with the prompt of its day",
+        "new": "round one: the prompt reworded on 2026-11-11",
+        "round2": "round two: three lines of that prompt reworded again, 2026-11-12"
+      },
+      "promptTsSha256": {
+        "new": [
+          "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db"
+        ],
+        "round2": [
+          "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943"
+        ]
+      },
+      "byAgent": {
+        "claude": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 1,
+            "timedOut": 0,
+            "outcomes": {
+              "partly fixed, resubscribes on every render": 3,
+              "bug kept, rule satisfied": 1
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 4,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "partly fixed, resubscribes on every render": 4
+            }
+          },
+          "round2": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 4,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "bug kept, left for review": 4
+            }
+          }
+        },
+        "codex": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "partly fixed, resubscribes on every render": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 0,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "partly fixed, resubscribes on every render": 4
+            }
+          },
+          "round2": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 4,
+            "relintClear": 0,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "bug kept, left for review": 4
+            }
+          }
+        }
+      },
+      "runs": {
+        "old": [
+          {
+            "runId": "a-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 59.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "bug kept, rule satisfied",
+            "detail": "a ref",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 2,
+            "timedOut": false,
+            "wallSeconds": 146.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 42.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.310 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 36.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 31.6,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 34,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 50,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 52.1,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "d4fd60cb27ffdd6f5201a4c39071a83396f2c4642ee1983f5bdb4fbd79b98a7e",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "new": [
+          {
+            "runId": "a-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 35.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 49.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 34.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 49.1,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "a-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 15,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.4,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 14.1,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "partly fixed, resubscribes on every render",
+            "detail": "added the dependencies as the rule asks",
+            "leftForReview": "none",
+            "good": false,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 17.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex.",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "round2": [
+          {
+            "runId": "a-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 21,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 24,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 24.7,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 25.8,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 21,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 19.8,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 33.1,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "a-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": null,
+            "outcome": "bug kept, left for review",
+            "detail": "unchanged",
+            "leftForReview": "all",
+            "good": true,
+            "relintClear": false,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.2,
+            "ultraciteOutro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          }
+        ]
+      }
+    },
+    {
+      "base": "dead-code",
+      "subject": "dc2",
+      "title": "dc2, the control: a leftover variable (Vite's static middleware)",
+      "linter": "ESLint core, `no-useless-assignment` and `sonarjs/no-dead-store`",
+      "retryLoop": false,
+      "question": "Is the leftover still deleted, with nothing left for review?",
+      "rounds": {
+        "old": "the subject's own topic, with the prompt of its day",
+        "new": "round one: the prompt reworded on 2026-11-11",
+        "round2": "round two: three lines of that prompt reworded again, 2026-11-12"
+      },
+      "promptTsSha256": {
+        "new": [
+          "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db"
+        ],
+        "round2": [
+          "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943"
+        ]
+      },
+      "byAgent": {
+        "claude": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "deleted the dead code; behavior identical": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 4,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "deleted the dead code; behavior identical": 4
+            }
+          },
+          "round2": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "deleted the dead code; behavior identical": 4
+            }
+          }
+        },
+        "codex": {
+          "old": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "deleted the dead code; behavior identical": 4
+            }
+          },
+          "new": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "deleted the dead code; behavior identical": 4
+            }
+          },
+          "round2": {
+            "runs": 4,
+            "saidLeftForReviewNone": 0,
+            "good": 4,
+            "leftForReview": 0,
+            "relintClear": 4,
+            "retried": 0,
+            "timedOut": 0,
+            "outcomes": {
+              "deleted the dead code; behavior identical": 4
+            }
+          }
+        }
+      },
+      "runs": {
+        "old": [
+          {
+            "runId": "dc2-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 16,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 15.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 15.6,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.296 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 40.1,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 32.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 26.2,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.155.1",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 51.1,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "8c5e6e7e4c26d4be5a3d219b138aa778ea283cac208bfcc964af49ec0da5a326",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "new": [
+          {
+            "runId": "dc2-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 31.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "dc2-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 29.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "dc2-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 30.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "dc2-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 44.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": true
+          },
+          {
+            "runId": "dc2-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 19.2,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 22.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 22.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 20.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca3284548cf16d0d2361e237d0770f2d102bddd0ee44c603b7972708acf0d9db",
+            "leftForReviewNoneLine": false
+          }
+        ],
+        "round2": [
+          {
+            "runId": "dc2-claude-1",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 32.4,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-claude-2",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 36.7,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-claude-3",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 30.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-claude-4",
+            "agent": "claude",
+            "cliVersion": "2.1.322 (Claude Code)",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 31.1,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-1",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 19.9,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-2",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 21.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-3",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 28.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          },
+          {
+            "runId": "dc2-codex-4",
+            "agent": "codex",
+            "cliVersion": "codex-cli 0.167.0",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "outcome": "deleted the dead code; behavior identical",
+            "detail": "",
+            "leftForReview": "none",
+            "good": true,
+            "relintClear": true,
+            "attempts": 1,
+            "timedOut": false,
+            "wallSeconds": 19.8,
+            "ultraciteOutro": "Fixed 2 of 2 issues with Codex. (derived)",
+            "promptTsSha256": "ca44ee2d0b834a7068a65ae7ba808ce374aa51b0beced585abbce9fe77b14943",
+            "leftForReviewNoneLine": false
+          }
+        ]
+      }
+    }
+  ]
+}

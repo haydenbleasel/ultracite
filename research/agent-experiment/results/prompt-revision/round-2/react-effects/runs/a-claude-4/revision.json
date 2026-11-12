@@ -1,0 +1,13 @@
+{
+  "runId": "a-claude-4",
+  "mirrorRevision": "v2",
+  "finalMessage": "I didn't change the file. Both issues report the same dependency array on line 78, and fixing it as the rule suggests would change when the effect runs.\n\nThe effect has an empty dependency list, so it subscribes once when the component mounts and never again. That is how the hono original works. The rule wants three dependencies added:\n\n- **`serverSnapshotIsUsed`** can be added safely. It comes from `useState` with no setter, so it never changes. But adding it alone doesn't clear either issue.\n- **`subscribe` and `getSnapshot`** are functions passed in by the caller. Callers often write them inline, which creates new functions on every render. Adding them would make the effect unsubscribe and resubscribe on every render. When the server snapshot is in use, it would also call `setState(getSnapshot())` each time.\n\nReact's own `useSyncExternalStore` does resubscribe when `subscribe` changes, so there's a case for matching it. But whether hono/jsx should drop its mount-once behavior is a design decision for the maintainers, not a lint cleanup.\n\nIf they decide to change it, the usual fix is:\n1. Add `subscribe` to the dependency list, so the hook resubscribes only when the store changes.\n2. Keep the latest `getSnapshot` in a ref that is updated on each render, and read it from the ref inside the effect.\n\nThat stops the hook from resubscribing just because `getSnapshot` changed, and it would no longer use the stale `getSnapshot` from the first render. That second part is also a behavior change, which is why I didn't make it here.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

@@ -1,0 +1,80 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,29 +220,37 @@
+   return () => jsonValue;
+ }
+ 
++// ws.clientPort -> ws.port
++// -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
++const resolveHmrPort = (
++  wsConfig: Exclude<ResolvedConfig["server"]["ws"], false>,
++  middlewareMode: boolean | undefined
++) => {
++  const isWsServerSpecified = !!wsConfig?.server;
++  let port = wsConfig?.clientPort || wsConfig?.port || null;
++  if (middlewareMode && !isWsServerSpecified) {
++    port ||= 24_678;
++  }
++  return port;
++};
++
+ function resolveHmrClientValues(
+   config: ResolvedConfig,
+-  resolvedServerHostname: string
++  resolvedServerHostname: string,
++  resolvedServerPort: number | undefined
+ ) {
+-  const resolvedServerPort = config.server.port!;
+   const devBase = config.base;
+ 
+   const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+   const host = wsConfig?.host || null;
+   const protocol = wsConfig?.protocol || null;
+   const timeout = wsConfig?.timeout || 30_000;
+-  const isWsServerSpecified = !!wsConfig?.server;
+   const hmrConfigName = path.basename(config.configFile || "vite.config.js");
+ 
+   const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+   const overlay = hmrConfig?.overlay !== false;
+ 
+-  // ws.clientPort -> ws.port
+-  // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+-  let port = wsConfig?.clientPort || wsConfig?.port || null;
+-  if (config.server.middlewareMode && !isWsServerSpecified) {
+-    port ||= 24_678;
+-  }
++  const port = resolveHmrPort(wsConfig, config.server.middlewareMode);
+ 
+   let directTarget = wsConfig?.host || resolvedServerHostname;
+   directTarget += `:${wsConfig?.port || resolvedServerPort}`;
+@@ -265,16 +273,20 @@
+   };
+ }
+ 
+-async function createClientConfigValueReplacer(
++const createClientConfigValueReplacer = async (
+   config: ResolvedConfig
+-): Promise<(code: string) => string> {
++): Promise<(code: string) => string> => {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+-  const resolvedServerPort = config.server.port!;
++  const resolvedServerPort = config.server.port;
+   const devBase = config.base;
+ 
+   const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+-  const hmr = resolveHmrClientValues(config, resolvedServerHostname);
++  const hmr = resolveHmrClientValues(
++    config,
++    resolvedServerHostname,
++    resolvedServerPort
++  );
+ 
+   const modeReplacement = escapeReplacement(config.mode);
+   const baseReplacement = escapeReplacement(devBase);
+@@ -311,4 +323,4 @@
+       .replace(`__HMR_PARTIAL_ACCEPT__`, hmrPartialAcceptReplacement)
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
+-}
++};

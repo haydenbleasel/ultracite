@@ -1,0 +1,11 @@
+--- a/index.ts
++++ b/index.ts
+@@ -75,7 +75,7 @@
+     return subscribe(() => {
+       setState(getSnapshot());
+     });
+-  }, []);
++  }, [serverSnapshotIsUsed, getSnapshot, subscribe]);
+ 
+   return state;
+ };

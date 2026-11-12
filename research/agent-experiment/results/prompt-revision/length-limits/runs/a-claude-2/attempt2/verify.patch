@@ -1,0 +1,13 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -224,7 +224,9 @@
+ // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+ const resolveHmrPort = (
+   config: ResolvedConfig,
+-  wsConfig: Exclude<ResolvedConfig["server"]["ws"], false | undefined> | undefined
++  wsConfig:
++    | Exclude<ResolvedConfig["server"]["ws"], false | undefined>
++    | undefined
+ ) => {
+   const isWsServerSpecified = !!wsConfig?.server;
+   let port = wsConfig?.clientPort || wsConfig?.port || null;

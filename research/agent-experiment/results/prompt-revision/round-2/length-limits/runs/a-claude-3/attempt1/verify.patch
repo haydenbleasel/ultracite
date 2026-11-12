@@ -1,0 +1,11 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -247,7 +247,7 @@
+   directTarget += `:${wsConfig?.port || resolvedServerPort}`;
+   directTarget += config.base;
+ 
+-  let base = config.base;
++  let { base } = config;
+   if (wsConfig?.path) {
+     base = path.posix.join(base, wsConfig.path);
+   }

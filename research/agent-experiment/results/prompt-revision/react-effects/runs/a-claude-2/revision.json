@@ -1,0 +1,10 @@
+{
+  "runId": "a-claude-2",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed both issues with one change in `index.ts:78`: the effect's dependency list was `[]` and is now `[serverSnapshotIsUsed, getSnapshot, subscribe]`. I didn't run the linter, per the rules; the re-lint will confirm.\n\nThe empty list was a real bug. The effect subscribed once on mount and never again, so:\n- **New `subscribe`:** if a caller passed a different `subscribe` function later, the hook stayed attached to the original store. React's own `useSyncExternalStore` re-subscribes in that case.\n- **New `getSnapshot`:** the store callback kept calling the `getSnapshot` from the first render. For example, if `getSnapshot` reads from props, like `() => store.get(id)`, changing `id` meant later store updates still set state from the old `id`.\n\nThe effect now re-subscribes whenever `subscribe` or `getSnapshot` changes. `serverSnapshotIsUsed` never changes (its setter is thrown away), so listing it does nothing at runtime.\n\nTwo side effects are worth knowing:\n- **Re-subscribing on every render:** this happens if a caller passes a new `getSnapshot` function each render, which is common. It's correct, but it does extra work. React's own version avoids this by keeping the latest `getSnapshot` in a ref and re-subscribing only when `subscribe` changes. That's a larger rewrite than a minimal fix, so I didn't do it.\n- **Stale value when `getSnapshot` changes:** the hook still won't re-read the store at that moment, because nothing refreshes the stored state then. The old value shows until the store next notifies. The original code already had this problem, and this change neither causes nor fixes it.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+  "ultraciteExitCode": 0,
+  "agentLabel": "Claude Code"
+}

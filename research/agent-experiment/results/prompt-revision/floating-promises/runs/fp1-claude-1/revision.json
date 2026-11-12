@@ -1,0 +1,10 @@
+{
+  "runId": "fp1-claude-1",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed issue 1 in `concurrent.ts`. This was a real bug, so I changed the behavior rather than just quieting the warning. I didn't run the linter or any tests; the file gets re-linted when this finishes.\n\n**The bug (line 72):** when the pool is full, `run` hands the caller a promise and retries later from a `setTimeout` callback. That callback returned the retry's promise, and nothing listened to it. If `fn` threw during a retry, the error went nowhere and the caller's promise never settled, so the caller would wait forever.\n\n**The fix:**\n- `run` now also keeps the outer promise's `reject` function and passes it to each retry, alongside `resolve`.\n- The `setTimeout` callback no longer returns anything. It calls `run(...).catch((error) => reject?.(error))`, so a failure in a retry now rejects the promise the caller is holding.\n- Successful runs behave exactly as before.\n\n**A separate problem I left alone:** if `fn` throws, the slot it took in the pool is never freed, because `pool.delete(marker)` only runs on success. That's true whether the call ran straight away or was queued. Lint didn't report it, so I didn't change it. The fix is to wrap `await fn()` in `try`/`finally` and do the delete in the `finally`.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": null,
+  "ultraciteExitCode": null,
+  "agentLabel": "Claude Code"
+}

@@ -1,0 +1,12 @@
+{
+  "runId": "b-ox-claude-1",
+  "mirrorRevision": "v2",
+  "finalMessage": "I left this one as it is and made no edit to `hmr.ts`.\n\nThe TODO at line 323 is still accurate. `prunePaths` only runs the prune callbacks (`pruneMap`). It never runs the dispose callbacks registered through `hot.dispose()` (`disposeMap`, set at line 186). Deleting the comment would hide unfinished work, and rewording it would only get it past the linter.\n\nDoing what the TODO asks is a behavior change, so it needs someone to decide on it:\n- **New calls:** pruned modules would start running their dispose callbacks, which they don't do today.\n- **Async:** dispose callbacks can return a Promise. To run them before the prune callbacks, as Vite's upstream client does, `prunePaths` would have to become `async` and return `Promise<void>`. Nothing in `hmr.ts` calls `prunePaths`, so the code that handles prune messages lives in another file and would need to `await` it. That change is outside this file.\n\nThe fix: make `prunePaths` async, first `await Promise.all(...)` over `this.disposeMap.get(path)?.(this.dataMap.get(path))` for each path, then run the existing prune callbacks. Update the caller outside this file to await it, and delete the TODO.\n\nLeft for review: 1",
+  "leftForReviewLine": "Left for review: 1",
+  "leftForReviewIssues": [
+    1
+  ],
+  "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

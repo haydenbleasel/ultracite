@@ -1,0 +1,116 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,53 +220,74 @@
+   return () => jsonValue;
+ }
+ 
+-async function createClientConfigValueReplacer(
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> {
+-  const resolvedServerHostname = (await resolveHostname(config.server.host))
+-    .name;
+-  const resolvedServerPort = config.server.port!;
+-  const devBase = config.base;
+-
+-  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+-
+-  const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+-  const host = wsConfig?.host || null;
+-  const protocol = wsConfig?.protocol || null;
+-  const timeout = wsConfig?.timeout || 30_000;
++// ws.clientPort -> ws.port
++// -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
++const resolveHmrClientPort = (
++  wsConfig: Extract<ResolvedConfig["server"]["ws"], object> | undefined,
++  middlewareMode: boolean | undefined
++) => {
+   const isWsServerSpecified = !!wsConfig?.server;
+-  const hmrConfigName = path.basename(config.configFile || "vite.config.js");
+-
+-  const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+-  const overlay = hmrConfig?.overlay !== false;
+-
+-  // ws.clientPort -> ws.port
+-  // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+   let port = wsConfig?.clientPort || wsConfig?.port || null;
+-  if (config.server.middlewareMode && !isWsServerSpecified) {
++  if (middlewareMode && !isWsServerSpecified) {
+     port ||= 24_678;
+   }
++  return port;
++};
+ 
++// values for the `__HMR_*__` placeholders, from `server.ws`, `server.hmr` and the config file
++const resolveHmrClientOptions = (
++  config: ResolvedConfig,
++  resolvedServerHostname: string
++) => {
++  const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
++  const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
++
++  const port = resolveHmrClientPort(wsConfig, config.server.middlewareMode);
++
+   let directTarget = wsConfig?.host || resolvedServerHostname;
+-  directTarget += `:${wsConfig?.port || resolvedServerPort}`;
+-  directTarget += devBase;
++  directTarget += `:${wsConfig?.port || config.server.port}`;
++  directTarget += config.base;
+ 
+-  let hmrBase = devBase;
++  let hmrBase = config.base;
+   if (wsConfig?.path) {
+     hmrBase = path.posix.join(hmrBase, wsConfig.path);
+   }
+ 
++  return {
++    base: hmrBase,
++    configName: path.basename(config.configFile || "vite.config.js"),
++    directTarget,
++    host: wsConfig?.host || null,
++    overlay: hmrConfig?.overlay !== false,
++    port,
++    protocol: wsConfig?.protocol || null,
++    timeout: wsConfig?.timeout || 30_000,
++  };
++};
++
++const createClientConfigValueReplacer = async (
++  config: ResolvedConfig
++): Promise<(code: string) => string> => {
++  const resolvedServerHostname = (await resolveHostname(config.server.host))
++    .name;
++  const resolvedServerPort = config.server.port!;
++  const devBase = config.base;
++
++  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
++
++  const hmr = resolveHmrClientOptions(config, resolvedServerHostname);
++
+   const modeReplacement = escapeReplacement(config.mode);
+   const baseReplacement = escapeReplacement(devBase);
+   const serverHostReplacement = escapeReplacement(serverHost);
+-  const hmrProtocolReplacement = escapeReplacement(protocol);
+-  const hmrHostnameReplacement = escapeReplacement(host);
+-  const hmrPortReplacement = escapeReplacement(port);
+-  const hmrDirectTargetReplacement = escapeReplacement(directTarget);
+-  const hmrBaseReplacement = escapeReplacement(hmrBase);
+-  const hmrTimeoutReplacement = escapeReplacement(timeout);
+-  const hmrEnableOverlayReplacement = escapeReplacement(overlay);
+-  const hmrConfigNameReplacement = escapeReplacement(hmrConfigName);
++  const hmrProtocolReplacement = escapeReplacement(hmr.protocol);
++  const hmrHostnameReplacement = escapeReplacement(hmr.host);
++  const hmrPortReplacement = escapeReplacement(hmr.port);
++  const hmrDirectTargetReplacement = escapeReplacement(hmr.directTarget);
++  const hmrBaseReplacement = escapeReplacement(hmr.base);
++  const hmrTimeoutReplacement = escapeReplacement(hmr.timeout);
++  const hmrEnableOverlayReplacement = escapeReplacement(hmr.overlay);
++  const hmrConfigNameReplacement = escapeReplacement(hmr.configName);
+   const hmrPartialAcceptReplacement = escapeReplacement(
+     config.experimental.hmrPartialAccept
+   );
+@@ -291,4 +312,4 @@
+       .replace(`__HMR_PARTIAL_ACCEPT__`, hmrPartialAcceptReplacement)
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
+-}
++};

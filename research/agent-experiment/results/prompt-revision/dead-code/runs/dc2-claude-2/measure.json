@@ -1,0 +1,451 @@
+{
+  "runId": "dc2-claude-2",
+  "topic": "prompt-revision/dead-code",
+  "subject": "dc2",
+  "agent": "claude",
+  "cliVersion": "2.1.322 (Claude Code)",
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "spawnError": null,
+  "wallSeconds": 29.8,
+  "wouldHaveTimedOutAtUltracite5Min": false,
+  "ultraciteTimeout": {
+    "overTimeout": false
+  },
+  "diagnosticsGiven": [
+    {
+      "rule": "no-useless-assignment",
+      "line": 194,
+      "column": 7,
+      "message": "The value assigned to 'fileUrl' is not used in subsequent statements."
+    },
+    {
+      "rule": "sonarjs/no-dead-store",
+      "line": 194,
+      "column": 7,
+      "message": "Remove this useless assignment to variable \"fileUrl\"."
+    }
+  ],
+  "lint": {
+    "givenLinter": "eslint core",
+    "asUltraciteSees": {
+      "before": [
+        "no-useless-assignment:194",
+        "sonarjs/no-dead-store:194"
+      ],
+      "remaining": [],
+      "parseError": false,
+      "cleared": true,
+      "givenRulesCleared": true,
+      "targetCleared": true,
+      "ultracitePartition": {
+        "cleared": 2,
+        "still": 0,
+        "introduced": []
+      }
+    },
+    "genuine": {
+      "before": [
+        "no-useless-assignment:194",
+        "sonarjs/no-dead-store:194"
+      ],
+      "remaining": [],
+      "parseError": false,
+      "cleared": true,
+      "givenRulesCleared": true,
+      "targetCleared": true,
+      "ultracitePartition": {
+        "cleared": 2,
+        "still": 0,
+        "introduced": []
+      }
+    },
+    "byLinter": {
+      "eslint core": {
+        "honor": {
+          "before": [
+            "no-useless-return:139",
+            "no-useless-assignment:194",
+            "sonarjs/no-dead-store:194"
+          ],
+          "remaining": [
+            "no-useless-return:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [
+            "no-useless-assignment:194",
+            "sonarjs/no-dead-store:194"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-useless-return:139",
+            "no-useless-assignment:194",
+            "sonarjs/no-dead-store:194"
+          ],
+          "remaining": [
+            "no-useless-return:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [
+            "no-useless-assignment:194",
+            "sonarjs/no-dead-store:194"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "oxlint core+react": {
+        "honor": {
+          "before": [
+            "no-useless-return:139"
+          ],
+          "remaining": [
+            "no-useless-return:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-useless-return:139"
+          ],
+          "remaining": [
+            "no-useless-return:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "oxlint core+react+js-plugins": {
+        "honor": {
+          "before": [
+            "no-useless-return:139",
+            "sonarjs/no-dead-store:194"
+          ],
+          "remaining": [
+            "no-useless-return:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [
+            "sonarjs/no-dead-store:194"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-useless-return:139",
+            "sonarjs/no-dead-store:194"
+          ],
+          "remaining": [
+            "no-useless-return:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [
+            "sonarjs/no-dead-store:194"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "biome core": {
+        "honor": {
+          "before": [
+            "complexity/noUselessReturn:139"
+          ],
+          "remaining": [
+            "complexity/noUselessReturn:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "complexity/noUselessReturn:139"
+          ],
+          "remaining": [
+            "complexity/noUselessReturn:139"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "tsc": {
+        "honor": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      }
+    }
+  },
+  "ultracitePresets": {
+    "eslint core": {
+      "totalBefore": 28,
+      "totalAfter": 26,
+      "added": {},
+      "removed": {
+        "no-useless-assignment": 1,
+        "sonarjs/no-dead-store": 1
+      },
+      "newHits": []
+    },
+    "oxlint core+react": {
+      "totalBefore": 18,
+      "totalAfter": 18,
+      "added": {},
+      "removed": {},
+      "newHits": []
+    },
+    "oxlint core+react+js-plugins": {
+      "totalBefore": 23,
+      "totalAfter": 22,
+      "added": {},
+      "removed": {
+        "sonarjs/no-dead-store": 1
+      },
+      "newHits": []
+    },
+    "biome core": {
+      "totalBefore": 15,
+      "totalAfter": 14,
+      "added": {},
+      "removed": {
+        "complexity/noExcessiveCognitiveComplexity": 1
+      },
+      "newHits": []
+    },
+    "tsc": {
+      "totalBefore": 0,
+      "totalAfter": 0,
+      "added": {},
+      "removed": {},
+      "newHits": []
+    }
+  },
+  "scan": {
+    "parseError": null,
+    "before": {
+      "declared": 1,
+      "declaredRenamed": 0,
+      "reads": 2,
+      "writes": 1,
+      "voided": 0
+    },
+    "after": {
+      "declared": 0,
+      "declaredRenamed": 0,
+      "reads": 0,
+      "writes": 0,
+      "voided": 0
+    },
+    "voidStatementsAfter": [],
+    "replaceVariablesArgsAfter": [],
+    "markersBefore": {
+      "`path.resolve(dir, removeLeadingSlash(resolvedPathname))`": true,
+      "trailing-slash `if`": true,
+      "`withTrailingSlash(fileUrl)`": true,
+      "`return` in decodeURIIfPossible's catch": true
+    },
+    "markersAfter": {
+      "`path.resolve(dir, removeLeadingSlash(resolvedPathname))`": false,
+      "trailing-slash `if`": false,
+      "`withTrailingSlash(fileUrl)`": false,
+      "`return` in decodeURIIfPossible's catch": true
+    },
+    "logCallsBefore": 0,
+    "logCallsAfter": 0,
+    "functionsBefore": 18,
+    "functionsAfter": 18,
+    "suppressionsAdded": {},
+    "unchanged": false
+  },
+  "autoApproach": "deleted the dead code",
+  "diffLines": {
+    "added": 0,
+    "removed": 5
+  },
+  "exports": {
+    "before": {
+      "cleanUrl": "(url: string) => string",
+      "withTrailingSlash": "(path: string) => string",
+      "removeLeadingSlash": "(str: string) => string",
+      "decodeURIIfPossible": "(input: string) => string | undefined",
+      "serveStaticMiddleware": "(server: ViteDevServer) => NextHandleFunction",
+      "applyStaticAlias": "(pathname: string, aliases: Alias[]) => string | undefined",
+      "harness": "{ denied: string[]; roots: string[]; served: { status: number; url: string | undefined; }[]; serve: Handler; }",
+      "isInternalRequest": "(url: string) => boolean"
+    },
+    "after": {
+      "cleanUrl": "(url: string) => string",
+      "withTrailingSlash": "(path: string) => string",
+      "removeLeadingSlash": "(str: string) => string",
+      "decodeURIIfPossible": "(input: string) => string | undefined",
+      "serveStaticMiddleware": "(server: ViteDevServer) => NextHandleFunction",
+      "applyStaticAlias": "(pathname: string, aliases: Alias[]) => string | undefined",
+      "harness": "{ denied: string[]; roots: string[]; served: { status: number; url: string | undefined; }[]; serve: Handler; }",
+      "isInternalRequest": "(url: string) => boolean"
+    },
+    "exportsPreserved": true,
+    "signaturesPreserved": true,
+    "addedExports": []
+  },
+  "typeErrorsBefore": [],
+  "typeErrorsAfter": [],
+  "behavior": {
+    "vsOriginal": {
+      "ok": true,
+      "cases": 448,
+      "matches": 448,
+      "mismatchesByDimension": {},
+      "firstMismatches": []
+    },
+    "verdict": "identical",
+    "ok": true
+  },
+  "cheating": {
+    "suppressionsAdded": {},
+    "configFiles": [],
+    "otherFileChanges": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "toolCallsOutsideRunDir": [],
+    "exposureInSessionLog": {
+      "orchestratorScratch": 3
+    },
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "../corpus/examples/dead-code",
+      "../corpus/results/dead-code",
+      "../corpus/calibration/dead-code",
+      "../corpus/scripts/dead-code-census.cjs",
+      "../corpus/scripts/dead-code-clones.cjs",
+      "../corpus/scripts/dead-code-disagreements.cjs",
+      "../corpus/scripts/dead-code-examples.cjs",
+      "../corpus/scripts/dead-code-exports.cjs",
+      "../corpus/scripts/dead-code-history.cjs",
+      "../corpus/scripts/dead-code-inventory.cjs",
+      "../corpus/scripts/dead-code-lib.cjs",
+      "../corpus/scripts/dead-code-linters.cjs",
+      "../corpus/scripts/dead-code-markers.cjs",
+      "../corpus/scripts/dead-code-merge-labels.cjs",
+      "../corpus/scripts/dead-code-run-all.cjs",
+      "../corpus/scripts/dead-code-sample.cjs",
+      "../corpus/scripts/dead-code-tables.cjs",
+      "../corpus/scripts/dead-code-typed.cjs",
+      "../bibliography/dead-code.md",
+      "../../apps/docs/blog/dead-code.mdx",
+      "../../apps/docs/pages/research/dead-code.astro",
+      "plans",
+      "lint-configs",
+      "../../plans",
+      "../../.changeset",
+      "<run-root>/.measure",
+      "<run-root>/dc2-claude-1",
+      "<run-root>/dc2-codex-1",
+      "<run-root>/dc2-codex-2",
+      "<run-root>/.staging/dc2-claude-1",
+      "<run-root>/.staging/dc2-codex-1",
+      "<run-root>/.staging/dc2-codex-2"
+    ]
+  },
+  "agentStats": {
+    "source": "Claude Code session transcript (~/.claude/projects/...)",
+    "cliVersionInTranscript": "2.1.322",
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "effort": [
+      "xhigh"
+    ],
+    "apiResponses": 4,
+    "tokens": {
+      "input": 8,
+      "output": 1982,
+      "cacheCreation": 36656,
+      "cacheRead": 153450
+    },
+    "costUSD": 0.36361000000000004,
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 8,
+        "outputTokens": 1982,
+        "thinkingTokens": 792,
+        "cacheReadInputTokens": 153450,
+        "cacheCreationInputTokens": 36656,
+        "cacheCreationEphemeral5mInputTokens": 0,
+        "cacheCreationEphemeral1hInputTokens": 36656,
+        "webSearchRequests": 0,
+        "costUSD": 0.36361000000000004
+      }
+    },
+    "toolCalls": [
+      {
+        "tool": "Read",
+        "target": "<run-root>/dc2-claude-2/static.ts"
+      },
+      {
+        "tool": "Read",
+        "target": "<run-root>/dc2-claude-2/static.ts"
+      },
+      {
+        "tool": "Grep",
+        "target": "<run-root>/dc2-claude-2"
+      },
+      {
+        "tool": "Edit",
+        "target": "<run-root>/dc2-claude-2/static.ts"
+      }
+    ],
+    "toolErrors": []
+  }
+}

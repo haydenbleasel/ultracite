@@ -1,0 +1,10 @@
+{
+  "runId": "a-claude-1",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed all three issues in `clientInjections.ts` without splitting anything further. I didn't run the linter or `tsc`, as instructed.\n\n1. **complexity (`resolveHmrClientOptions`, 25 → 16):** The function checked whether `wsConfig` was missing nine separate times, once per `wsConfig?.` access, and the complexity rule counts each one. Now `wsConfig` falls back to `{}` when `config.server.ws` isn't an object, so the \"is ws configured\" check happens once, in the ternary. The other accesses are plain `wsConfig.x`. Behavior is unchanged, because reading a property off `{}` gives the same `undefined` as `?.` on `undefined`. I gave `wsConfig` the type `Exclude<ResolvedConfig[\"server\"][\"ws\"], false | undefined>` so that `{}` type-checks against the ws options object.\n\n2. **func-style (line 263):** `createClientConfigValueReplacer` is now a `const` holding an `async` arrow function, with the same parameters, return type and body. It's only called from `buildStart`, which runs after the module has loaded. So it doesn't need to be hoisted, and moving from a declaration to a `const` changes nothing at runtime.\n\n3. **no-non-null-assertion (line 268):** The `!` was only there because the stand-in `ResolvedConfig` type at the top of the file declared `server.port` as optional. As I recall, Vite's real resolved server options make `port` required, defaulting to 5173. I didn't look this up, so it's worth confirming against Vite's source. I changed the stand-in type to `port: number`, so the assertion is no longer needed, and removed it. I also removed the matching `config.server.port!` that the previous edit had copied into `resolveHmrClientOptions`. Nothing else uses `server.port`, so the type change doesn't affect any other code.",
+  "leftForReviewLine": null,
+  "leftForReviewIssues": [],
+  "ultraciteOutro": "Fixed 1 of 1 issue with Claude Code.",
+  "ultraciteExitCode": 0,
+  "agentLabel": "Claude Code"
+}

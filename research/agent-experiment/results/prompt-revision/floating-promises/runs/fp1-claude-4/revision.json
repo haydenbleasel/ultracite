@@ -1,0 +1,10 @@
+{
+  "runId": "fp1-claude-4",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed issue 1 in `concurrent.ts` by making errors from queued tasks reach the caller. I didn't run the linter, as instructed.\n\n**The bug (line 72):** When the pool is full, `run` hands the caller a placeholder promise and retries the task later from a `setTimeout` callback. If the task threw during that retry, the error rejected a promise that nothing was listening to. The caller's promise could only ever resolve, so it stayed pending forever. On Node 15 and later, the unhandled rejection would also crash the process by default.\n\n**The fix:**\n- The placeholder promise now keeps its `reject` function as well as `resolve`.\n- `reject` is passed into each retry through a new optional fourth parameter on `run`, the same way `resolve` already is.\n- The `setTimeout` callback is now a block that returns nothing, and it catches the retry's failure with `.catch((error: unknown) => reject?.(error))`. A failing queued task now rejects the caller's promise, just as it would if it had run straight away.\n- I used a small arrow function rather than `.catch(reject)` because `reject` is typed as possibly `undefined`. Passing that in directly might not count as a real rejection handler, and the floating-promise check could flag it.\n\nWhen tasks succeed, nothing changes, and the `Pool` interface stays the same.\n\n**A related bug I left alone (not reported):** If `fn` throws, the slot it took in the pool is never given back, because the `pool.delete(marker)` code is skipped. That happens on both the immediate and the queued path, so every throwing task permanently shrinks the pool by one. The fix would be to wrap `await fn()` in `try`/`finally` so the slot is always released. I didn't make that change because it's outside the reported issue.",
+  "leftForReviewLine": null,
+  "leftForReviewIssues": [],
+  "ultraciteOutro": null,
+  "ultraciteExitCode": null,
+  "agentLabel": "Claude Code"
+}

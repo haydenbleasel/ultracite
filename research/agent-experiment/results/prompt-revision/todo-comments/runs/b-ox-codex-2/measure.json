@@ -1,0 +1,738 @@
+{
+  "runId": "b-ox-codex-2",
+  "topic": "prompt-revision/todo-comments",
+  "subject": "b-ox",
+  "base": "b",
+  "armId": "ox",
+  "arm": "B, a known bug, Oxlint default",
+  "config": "oxlint core+react",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.167.0",
+  "wallSeconds": 12.4,
+  "attemptCount": 1,
+  "stoppedBecause": "the agent left the rest for review",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 600000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 58,
+    "leftOutByFilter": {
+      "class-methods-use-this": 1,
+      "max-classes-per-file": 1,
+      "no-empty-function": 1,
+      "promise/prefer-await-to-callbacks": 11,
+      "typescript/method-signature-style": 15,
+      "typescript/no-explicit-any": 18,
+      "typescript/parameter-properties": 5,
+      "typescript/unified-signatures": 1,
+      "unicorn/no-array-for-each": 3,
+      "unicorn/no-await-expression-member": 1
+    },
+    "given": [
+      {
+        "rule": "no-warning-comments",
+        "line": 323,
+        "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+        "help": "Remove or rephrase this comment",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "2a592fd0b75e7b800f3b789d2cfad28082ea9a15cfe32569799fe6e3df1510fd",
+    "parseError": false,
+    "views": {
+      "oxlint core+react": {
+        "todoHonor": [
+          "no-warning-comments:323"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:323"
+        ],
+        "parseError": false,
+        "all": {
+          "class-methods-use-this": 1,
+          "max-classes-per-file": 1,
+          "no-empty-function": 1,
+          "no-warning-comments": 1,
+          "promise/prefer-await-to-callbacks": 11,
+          "typescript/method-signature-style": 15,
+          "typescript/no-explicit-any": 18,
+          "typescript/parameter-properties": 5,
+          "typescript/unified-signatures": 1,
+          "unicorn/no-array-for-each": 3,
+          "unicorn/no-await-expression-member": 1
+        },
+        "todoCleared": false
+      },
+      "oxlint core+react+js-plugins": {
+        "todoHonor": [
+          "no-warning-comments:323"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:323"
+        ],
+        "parseError": false,
+        "all": {
+          "class-methods-use-this": 1,
+          "github/array-foreach": 3,
+          "max-classes-per-file": 1,
+          "no-empty-function": 1,
+          "no-warning-comments": 1,
+          "promise/prefer-await-to-callbacks": 11,
+          "sonarjs/no-duplicate-string": 1,
+          "sonarjs/no-inconsistent-returns": 1,
+          "sonarjs/no-nested-template-literals": 1,
+          "typescript/method-signature-style": 15,
+          "typescript/no-explicit-any": 18,
+          "typescript/parameter-properties": 5,
+          "typescript/unified-signatures": 1,
+          "unicorn/no-array-for-each": 3,
+          "unicorn/no-await-expression-member": 1
+        },
+        "todoCleared": false
+      },
+      "eslint core": {
+        "todoHonor": [
+          "no-warning-comments:323"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:323"
+        ],
+        "parseError": false,
+        "all": {
+          "github/array-foreach": 3,
+          "max-classes-per-file": 1,
+          "no-warning-comments": 1,
+          "promise/prefer-await-to-callbacks": 10,
+          "sonarjs/no-duplicate-string": 1,
+          "sonarjs/no-inconsistent-returns": 1,
+          "sonarjs/no-nested-template-literals": 1,
+          "typescript/class-methods-use-this": 1,
+          "typescript/member-ordering": 4,
+          "typescript/method-signature-style": 15,
+          "typescript/no-empty-function": 1,
+          "typescript/no-explicit-any": 18,
+          "typescript/parameter-properties": 5,
+          "typescript/unified-signatures": 1,
+          "unicorn/consistent-class-member-order": 3,
+          "unicorn/no-await-expression-member": 1,
+          "unicorn/no-for-each": 3,
+          "unicorn/no-manually-wrapped-comments": 1,
+          "unicorn/prefer-early-return": 2,
+          "unicorn/single-line-block-comment-style": 3
+        },
+        "todoCleared": false
+      },
+      "biome core": {
+        "todoHonor": [],
+        "todoIgnore": [],
+        "parseError": false,
+        "all": {
+          "complexity/noForEach": 3,
+          "complexity/useOptionalChain": 1,
+          "style/noExcessiveClassesPerFile": 1,
+          "style/noParameterProperties": 5,
+          "style/noUnusedTemplateLiteral": 3,
+          "style/useConsistentMemberAccessibility": 15,
+          "style/useConsistentMethodSignatures": 15,
+          "style/useReadonlyClassProperties": 10,
+          "style/useThisInClassMethods": 1,
+          "style/useUnifiedTypeSignatures": 1,
+          "suspicious/noEmptyBlockStatements": 2,
+          "suspicious/noExplicitAny": 18,
+          "suspicious/noUnnecessaryConditions": 2,
+          "suspicious/useIterableCallbackReturn": 2
+        },
+        "todoCleared": true
+      }
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "changed": [],
+      "verdict": "same"
+    },
+    "comment": {
+      "edit": "unchanged",
+      "label": null,
+      "markerLines": [
+        "TODO Trigger their dispose callbacks."
+      ],
+      "contextLost": [],
+      "addedElsewhere": [],
+      "removedElsewhere": [],
+      "wordsKept": 1,
+      "info": {
+        "disposeMentioned": true,
+        "contextKept": true,
+        "revisitKept": true
+      },
+      "substanceKept": true,
+      "reminderKept": true,
+      "todoMarkersInFile": 1,
+      "todoMarkerLines": [
+        {
+          "line": 323,
+          "term": "TODO",
+          "position": "start"
+        }
+      ]
+    },
+    "codeChanged": false,
+    "suppressions": {
+      "eslint-disable": 1,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "NOSONAR": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "no-warning-comments L323"
+      ],
+      "retryIssues": null,
+      "leftForReview": {
+        "issues": [
+          "no-warning-comments L323"
+        ],
+        "explanation": "No changes made. The TODO is still accurate: `prunePaths()` invokes prune callbacks but not dispose callbacks. Implementing disposal would change runtime behavior; removing or rewording the comment would only hide the issue."
+      },
+      "leftForReviewShare": "all",
+      "wallSeconds": 12.4,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": true,
+      "agent": {
+        "exists": true,
+        "sha256": "2a592fd0b75e7b800f3b789d2cfad28082ea9a15cfe32569799fe6e3df1510fd",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [
+              "no-warning-comments:323"
+            ],
+            "todoIgnore": [
+              "no-warning-comments:323"
+            ],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "no-warning-comments": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": false
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [
+              "no-warning-comments:323"
+            ],
+            "todoIgnore": [
+              "no-warning-comments:323"
+            ],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "no-warning-comments": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": false
+          },
+          "eslint core": {
+            "todoHonor": [
+              "no-warning-comments:323"
+            ],
+            "todoIgnore": [
+              "no-warning-comments:323"
+            ],
+            "parseError": false,
+            "all": {
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "no-warning-comments": 1,
+              "promise/prefer-await-to-callbacks": 10,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/class-methods-use-this": 1,
+              "typescript/member-ordering": 4,
+              "typescript/method-signature-style": 15,
+              "typescript/no-empty-function": 1,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/consistent-class-member-order": 3,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-for-each": 3,
+              "unicorn/no-manually-wrapped-comments": 1,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/single-line-block-comment-style": 3
+            },
+            "todoCleared": false
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "complexity/noForEach": 3,
+              "complexity/useOptionalChain": 1,
+              "style/noExcessiveClassesPerFile": 1,
+              "style/noParameterProperties": 5,
+              "style/noUnusedTemplateLiteral": 3,
+              "style/useConsistentMemberAccessibility": 15,
+              "style/useConsistentMethodSignatures": 15,
+              "style/useReadonlyClassProperties": 10,
+              "style/useThisInClassMethods": 1,
+              "style/useUnifiedTypeSignatures": 1,
+              "suspicious/noEmptyBlockStatements": 2,
+              "suspicious/noExplicitAny": 18,
+              "suspicious/noUnnecessaryConditions": 2,
+              "suspicious/useIterableCallbackReturn": 2
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": false,
+          "ignore": false
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "unchanged",
+          "label": null,
+          "markerLines": [
+            "TODO Trigger their dispose callbacks."
+          ],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 1,
+          "info": {
+            "disposeMentioned": true,
+            "contextKept": true,
+            "revisitKept": true
+          },
+          "substanceKept": true,
+          "reminderKept": true,
+          "todoMarkersInFile": 1,
+          "todoMarkerLines": [
+            {
+              "line": 323,
+              "term": "TODO",
+              "position": "start"
+            }
+          ]
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 1,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "unchanged"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "2a592fd0b75e7b800f3b789d2cfad28082ea9a15cfe32569799fe6e3df1510fd",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [
+              "no-warning-comments:323"
+            ],
+            "todoIgnore": [
+              "no-warning-comments:323"
+            ],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "no-warning-comments": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": false
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [
+              "no-warning-comments:323"
+            ],
+            "todoIgnore": [
+              "no-warning-comments:323"
+            ],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "no-warning-comments": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": false
+          },
+          "eslint core": {
+            "todoHonor": [
+              "no-warning-comments:323"
+            ],
+            "todoIgnore": [
+              "no-warning-comments:323"
+            ],
+            "parseError": false,
+            "all": {
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "no-warning-comments": 1,
+              "promise/prefer-await-to-callbacks": 10,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/class-methods-use-this": 1,
+              "typescript/member-ordering": 4,
+              "typescript/method-signature-style": 15,
+              "typescript/no-empty-function": 1,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/consistent-class-member-order": 3,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-for-each": 3,
+              "unicorn/no-manually-wrapped-comments": 1,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/single-line-block-comment-style": 3
+            },
+            "todoCleared": false
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "complexity/noForEach": 3,
+              "complexity/useOptionalChain": 1,
+              "style/noExcessiveClassesPerFile": 1,
+              "style/noParameterProperties": 5,
+              "style/noUnusedTemplateLiteral": 3,
+              "style/useConsistentMemberAccessibility": 15,
+              "style/useConsistentMethodSignatures": 15,
+              "style/useReadonlyClassProperties": 10,
+              "style/useThisInClassMethods": 1,
+              "style/useUnifiedTypeSignatures": 1,
+              "suspicious/noEmptyBlockStatements": 2,
+              "suspicious/noExplicitAny": 18,
+              "suspicious/noUnnecessaryConditions": 2,
+              "suspicious/useIterableCallbackReturn": 2
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": false,
+          "ignore": false
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "unchanged",
+          "label": null,
+          "markerLines": [
+            "TODO Trigger their dispose callbacks."
+          ],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 1,
+          "info": {
+            "disposeMentioned": true,
+            "contextKept": true,
+            "revisitKept": true
+          },
+          "substanceKept": true,
+          "reminderKept": true,
+          "todoMarkersInFile": 1,
+          "todoMarkerLines": [
+            {
+              "line": 323,
+              "term": "TODO",
+              "position": "start"
+            }
+          ]
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 1,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "unchanged"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [
+          "no-warning-comments L323"
+        ],
+        "remainingDetail": [
+          {
+            "rule": "no-warning-comments",
+            "line": 323,
+            "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks."
+          }
+        ],
+        "vsThisAttempt": {
+          "cleared": [],
+          "still": [
+            "no-warning-comments"
+          ],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [],
+          "still": [
+            "no-warning-comments"
+          ],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 2,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 56200,
+          "cached_input_tokens": 39296,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 329,
+          "reasoning_output_tokens": 129,
+          "total_tokens": 56529
+        },
+        "tokensUsedReportedOnStderr": 17233,
+        "toolCalls": [
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g hmr.ts -g 'hmr.ts.51465ae6.json' -g '!node_modules' -g '!vendor'\",\"max_output_tokens\":2000}));\ntext(await tools.exec_command({cmd:\"c"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g hmr.ts -g 'hmr.ts.51465ae6.json' -g '!node_modules' -g '!vendor'\",\"max_output_tokens\":2000}));\ntext(await tools.exec_command({cmd:\"cat hmr.ts.51465ae6.json; sed -n '1,220p' hmr.ts; sed -n '220,420p' hmr.ts\",\"max_output_tokens\":10000",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": false,
+        "projectInstructionsLoaded": [],
+        "edits": [],
+        "finalMessage": "No changes made. The TODO is still accurate: `prunePaths()` invokes prune callbacks but not dispose callbacks. Implementing disposal would change runtime behavior; removing or rewording the comment would only hide the issue.\n\nLeft for review: 1",
+        "runtimeMentions": [
+          "Implementing disposal would change runtime behavior; removing or rewording the comment would only hide the issue."
+        ],
+        "meaningMentions": [
+          "The TODO is still accurate: `prunePaths()` invokes prune callbacks but not dispose callbacks.",
+          "I’ll read the diagnostic and surrounding code to see whether the TODO can be resolved within this file."
+        ],
+        "keepMentions": [
+          "Implementing disposal would change runtime behavior; removing or rewording the comment would only hide the issue.",
+          "Left for review: 1"
+        ],
+        "upstreamMentions": [],
+        "exposure": {
+          "mainCheckout": 4,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {},
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "final": {
+    "outcome": "unchanged",
+    "response": "left for review (right)",
+    "leftForReview": "all"
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 0,
+    "left": 1,
+    "remaining": 1,
+    "notes": [
+      "Codex left 1 issue for you to decide:\nNo changes made. The TODO is still accurate: `prunePaths()` invokes prune callbacks but not dispose callbacks. Implementing disposal would change runtime behavior; removing or rewording the comment would only hide the issue."
+    ],
+    "issueFixed": [
+      false
+    ],
+    "outro": "Fixed 0 of 1 issue with Codex. 1 left for you to decide.",
+    "exitCode": 1
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 17233,
+    "totalTokens": 56529
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "mainCheckout": 4,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {},
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "<run-root>/.staging/b-ox-codex-2/handoff",
+      "../corpus/examples/todo-comments",
+      "../corpus/results/todo-comments",
+      "../corpus/calibration/todo-comments",
+      "../corpus/scripts/todo-agent-runs.cjs",
+      "../corpus/scripts/todo-census.cjs",
+      "../corpus/scripts/todo-examples.cjs",
+      "../corpus/scripts/todo-history-clone.sh",
+      "../corpus/scripts/todo-history.cjs",
+      "../corpus/scripts/todo-inventory.cjs",
+      "../corpus/scripts/todo-issues.cjs",
+      "../corpus/scripts/todo-lib.cjs",
+      "../corpus/scripts/todo-linters.cjs",
+      "../corpus/scripts/todo-markers.cjs",
+      "../corpus/scripts/todo-oracle.cjs",
+      "../corpus/scripts/todo-rule-census.cjs",
+      "../corpus/scripts/todo-run-all.cjs",
+      "../corpus/scripts/todo-sample.cjs",
+      "../corpus/scripts/todo-tables.cjs",
+      "../../apps/docs/blog/todo-comments.mdx",
+      "../../apps/docs/pages/research/todo-comments.astro",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "../../plans",
+      "../../.changeset",
+      "<run-root>/.measure",
+      "<run-root>/b-ox-claude-1",
+      "<run-root>/b-ox-codex-1",
+      "<run-root>/.staging/b-ox-claude-1",
+      "<run-root>/.staging/b-ox-codex-1"
+    ]
+  }
+}

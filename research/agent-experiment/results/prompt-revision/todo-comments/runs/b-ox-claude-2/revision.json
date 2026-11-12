@@ -1,0 +1,12 @@
+{
+  "runId": "b-ox-claude-2",
+  "mirrorRevision": "v2",
+  "finalMessage": "I made no edits; issue 1 is left for review.\n\n**Issue 1 (line 323, `no-warning-comments`):** The TODO still describes missing behavior. `prunePaths` only runs the prune callbacks in `pruneMap`. It never runs the dispose callbacks stored in `this.disposeMap` for modules that are no longer imported. Deleting or rewording the comment would just hide that gap from the linter.\n\nResolving the TODO properly means implementing it, and that's a behavior change, not a style fix:\n- `prunePaths` would call `this.disposeMap.get(path)?.(this.dataMap.get(path))` for each path before running the prune callbacks.\n- Dispose callbacks can return a `Promise`, so they should be awaited. That would change the signature from `void` to `Promise<void>`, and callers outside this file would then need to await it.\n\nWhether pruned modules should start running their dispose hooks, and whether the API should become async, is a decision for the maintainers. Once someone implements it, the TODO can be removed.\n\nLeft for review: 1",
+  "leftForReviewLine": "Left for review: 1",
+  "leftForReviewIssues": [
+    1
+  ],
+  "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

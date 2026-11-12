@@ -1,0 +1,64 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "the root config `ultracite init` writes (env, extends [core, react], ignorePatterns) and its oxfmt.config (...ultracite)",
+  "filter": "TODO-family rules (no-warning-comments, sonarjs/todo-tag, sonarjs/fixme-tag), plus any other diagnostic not among the prepared subject's own (rule and message, diff.ts): a project that lints clean apart from the TODO. Every re-lint uses the same filter.",
+  "diagnosticsReported": 58,
+  "diagnosticsHandedOver": 1,
+  "leftOutByFilter": {
+    "class-methods-use-this": 1,
+    "max-classes-per-file": 1,
+    "no-empty-function": 1,
+    "promise/prefer-await-to-callbacks": 11,
+    "typescript/method-signature-style": 15,
+    "typescript/no-explicit-any": 18,
+    "typescript/parameter-properties": 5,
+    "typescript/unified-signatures": 1,
+    "unicorn/no-array-for-each": 3,
+    "unicorn/no-await-expression-member": 1
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "c985a3a7f2014bd58e2435455f8dcbcbea80c7f38643ca61ae0422e589f44978",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "b102d9276938f12e1c5dac850987481b3973f126878bcf804bad5280859a1c9a",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "a0e2264c563d3dc778a6fcd519c3030f02df24ac2b4a539bd82fd27647fd6581",
+    "diff.ts": "c9bc0f7973043c740fa68cf161b25f3d582130a03322be0d117f2c568446f847"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 3,
+      "fatal": false,
+      "file": "hmr.ts",
+      "help": "Remove or rephrase this comment",
+      "line": 323,
+      "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+      "raw": {
+        "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+        "code": "eslint(no-warning-comments)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html",
+        "help": "Remove or rephrase this comment",
+        "filename": "hmr.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 10071,
+              "length": 40,
+              "line": 323,
+              "column": 3
+            }
+          }
+        ]
+      },
+      "rule": "no-warning-comments",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+    }
+  ]
+}

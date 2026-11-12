@@ -1,0 +1,10 @@
+{
+  "runId": "a-claude-3",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed both issues with one change in `index.ts:78`. The effect's dependency list was `[]` and is now `[serverSnapshotIsUsed, getSnapshot, subscribe]`.\n\nThe missing dependencies were a real bug. With `[]`, the effect only ran on mount. If a component passed a different `subscribe` later (say, a store chosen from props), the hook stayed subscribed to the old store. Its callback also kept calling the first `getSnapshot`, so state came from the wrong source. React's `useSyncExternalStore`, whose API this hook copies, re-subscribes when a new `subscribe` is passed. The new list gives the same behaviour.\n\n- **Behaviour change:** when the caller's `subscribe` and `getSnapshot` are stable functions, which is the usual case, nothing changes. If a caller passes new functions on every render, the hook now unsubscribes and re-subscribes after each render. That's the same cost React's own hook documents for an inline `subscribe`.\n- **`serverSnapshotIsUsed`:** this comes from `useState` and is never updated, so listing it never causes an extra run.\n- **Remaining gap:** when the store changes and the server snapshot isn't in use, state isn't re-read straight away. It stays on the old store's value until the new store reports a change. That was true before this edit too, and fixing it would mean reworking the hook rather than just completing the dependency list.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+  "ultraciteExitCode": 0,
+  "agentLabel": "Claude Code"
+}

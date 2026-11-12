@@ -1,0 +1,13 @@
+{
+  "runId": "a-claude-2",
+  "mirrorRevision": "v2",
+  "finalMessage": "I left both issues unchanged and made no edits. Both rules want the same fix: add `subscribe`, `getSnapshot` and `serverSnapshotIsUsed` to the `useEffect` dependency array at line 78. Two of those would change when the effect runs, and nothing shows that change is intended.\n\n- **`serverSnapshotIsUsed` is safe to add.** It comes from `useState` and its setter is thrown away, so it never changes. But adding only this one would clear neither issue.\n- **`subscribe` and `getSnapshot` are the problem.** Right now the effect runs once on mount: it subscribes once and unsubscribes on unmount. Callers often pass inline functions, which are new on every render. With these two in the array, the hook would unsubscribe and resubscribe after every render.\n  - When `serverSnapshotIsUsed` is true, every re-run would also call `setState(getSnapshot())`. If `getSnapshot` returns a fresh object each time, that could cause a render loop.\n\nThe rule is pointing at a real gap. The subscription callback at line 76 keeps the `getSnapshot` from the first render, and the hook never resubscribes when `subscribe` changes. React's own `useSyncExternalStore` handles both. The proper fix is to adopt those semantics: resubscribe when `subscribe` changes, and always read the latest `getSnapshot`, for example through a ref. That changes how the hook behaves, so it's a decision for the people who own the code. This file is a copy of hono's `src/jsx/hooks/index.ts`, so the change would most naturally be made there. Doing it here as a lint fix would be out of scope.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

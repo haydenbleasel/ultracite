@@ -1,0 +1,37 @@
+--- a/concurrent.ts
++++ b/concurrent.ts
+@@ -62,15 +62,12 @@
+   }
+ 
+   const pool: Set<{}> = new Set()
+-  const run = async <T>(
+-    fn: () => T,
+-    promise?: Promise<T>,
+-    resolve?: (result: T) => void
+-  ): Promise<T> => {
++  const run = async <T>(fn: () => T): Promise<T> => {
+     if (pool.size >= (concurrency as number)) {
+-      promise ||= new Promise<T>((r) => (resolve = r))
+-      setTimeout(() => run(fn, promise, resolve))
+-      return promise
++      await new Promise<void>((resolve) => {
++        setTimeout(() => resolve())
++      })
++      return run(fn)
+     }
+     const marker = {}
+     pool.add(marker)
+@@ -80,12 +77,7 @@
+     } else {
+       pool.delete(marker)
+     }
+-    if (resolve) {
+-      resolve(result)
+-      return promise as Promise<T>
+-    } else {
+-      return result
+-    }
++    return result
+   }
+   return { run }
+ }

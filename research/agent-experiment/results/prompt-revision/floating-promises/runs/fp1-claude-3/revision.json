@@ -1,0 +1,10 @@
+{
+  "runId": "fp1-claude-3",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed issue 1 in `concurrent.ts`. The linter flagged a real bug, so the fix changes behavior on purpose.\n\n**The bug:** when the pool is full, `run` queues the task with `setTimeout(() => run(fn, promise, resolve))` and gives the caller `promise`. That promise only had a `resolve` handle. If the queued `fn` threw or rejected, the promise from the retried `run` was dropped. Two things followed:\n- The caller's promise never settled, so `await pool.run(...)` hung forever.\n- The rejection went unhandled, which crashes the process by default in Node.\n\n**The fix (lines 65–79):**\n- When `run` creates the shared promise, it now keeps both `resolve` and `reject`.\n- `run` takes a new optional fourth parameter for `reject` and passes it along on each retry, as it already did with `resolve`.\n- The `setTimeout` callback now has a block body, so it returns nothing. Inside it, any rejection from the retried `run` goes to `reject`, so the caller's promise rejects with the original error.\n\nSuccessful tasks and tasks run straight away (pool not full) behave as before. The public `Pool` interface is unchanged.\n\nI left one related bug alone because it's outside this lint issue. If `fn` throws, `pool.delete(marker)` never runs, so that task's slot in the pool is never freed. Enough failing tasks will fill the pool, and every later task will keep being re-queued forever. Wrapping `await fn()` in `try/finally` would fix it.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": null,
+  "ultraciteExitCode": null,
+  "agentLabel": "Claude Code"
+}

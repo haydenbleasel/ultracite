@@ -1,0 +1,28 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -273,15 +273,21 @@
+   };
+ }
+ 
+-const createClientConfigValueReplacer = async (
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> => {
++async function resolveServerHost(config: ResolvedConfig) {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+   const resolvedServerPort = config.server.port;
++  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${config.base}`;
++  return { resolvedServerHostname, resolvedServerPort, serverHost };
++}
++
++const createClientConfigValueReplacer = async (
++  config: ResolvedConfig
++): Promise<(code: string) => string> => {
++  const { resolvedServerHostname, resolvedServerPort, serverHost } =
++    await resolveServerHost(config);
+   const devBase = config.base;
+ 
+-  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+   const hmr = resolveHmrClientValues(
+     config,
+     resolvedServerHostname,

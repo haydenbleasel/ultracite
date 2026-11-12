@@ -1,0 +1,10 @@
+{
+  "runId": "fp1-claude-2",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed issue 1 in `concurrent.ts`. The rule had found a real bug, not just a style problem.\n\n**The bug:** when the pool is full, `run` hands the caller a placeholder promise and retries later from a `setTimeout` callback. The promise that retry returned was thrown away. So if `fn` threw during a delayed run, the placeholder promise never settled: the caller waited forever, and the error surfaced as an unhandled rejection instead.\n\n**The fix** (`concurrent.ts:65-80`):\n- `run` now takes an optional `reject` as well as `resolve`, and the placeholder promise saves both.\n- Each retry passes `reject` along, and the timer callback now runs `run(fn, promise, resolve, reject).catch(reject)`. An error from a delayed run now rejects the caller's promise, the same way it already did when the pool wasn't full.\n\nI didn't use `void run(...)`. It would quiet the rule, but the error would still be lost.\n\nNothing changes when `fn` succeeds, or when the pool has room.\n\nOne related problem I left alone because it wasn't reported: if `fn` throws, its slot in the pool is never freed, on either path. Each failure permanently lowers the pool's capacity by one. Fixing it would mean wrapping `await fn()` in `try`/`finally` so the slot is always freed.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": null,
+  "ultraciteExitCode": null,
+  "agentLabel": "Claude Code"
+}

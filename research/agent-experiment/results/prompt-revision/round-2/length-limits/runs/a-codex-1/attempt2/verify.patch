@@ -1,0 +1,15 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -253,7 +253,11 @@
+   const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+   const overlay = hmrConfig?.overlay !== false;
+ 
+-  const port = resolveWebSocketClientPort(config, wsConfig, isWsServerSpecified);
++  const port = resolveWebSocketClientPort(
++    config,
++    wsConfig,
++    isWsServerSpecified
++  );
+ 
+   let directTarget = wsConfig?.host || resolvedServerHostname;
+   directTarget += `:${wsConfig?.port || resolvedServerPort}`;

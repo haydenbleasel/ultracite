@@ -1026,6 +1026,10 @@ async function runWithRetries() {
   const fixPassChanged = Object.keys(laidOut)
     .filter((k) => laidOut[k] !== handedOver[k])
     .sort();
+  // v2 of the mirror (the prompt-revision topic): diff.ts pairs reports by the line they're on,
+  // recorded when the linter ran. Earlier topics run v1, where this does nothing.
+  if (mirror.revision() === "v2")
+    mirror.recordSourceLines(collected.diagnostics, runDir);
   const groups = mirror.groupByFile(collected.diagnostics);
   const want = [
     {

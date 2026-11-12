@@ -1,0 +1,627 @@
+{
+  "runId": "fp1-codex-3",
+  "topic": "prompt-revision/floating-promises",
+  "subject": "fp1",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.167.0",
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "spawnError": null,
+  "wallSeconds": 46.9,
+  "wouldHaveTimedOutAtUltracite5Min": false,
+  "diagnosticsGiven": [
+    {
+      "rule": "@typescript-eslint/no-misused-promises",
+      "messageId": "voidReturnArgument",
+      "line": 72,
+      "column": 18,
+      "message": "Promise returned in function argument where a void return was expected."
+    }
+  ],
+  "lint": {
+    "asUltraciteSees": {
+      "parseError": false,
+      "remaining": [],
+      "cleared": true
+    },
+    "genuine": {
+      "parseError": false,
+      "remaining": [],
+      "cleared": true
+    }
+  },
+  "oxlintCrossCheck": {
+    "before": [
+      {
+        "rule": "typescript(no-misused-promises)",
+        "line": 72,
+        "message": "Promise returned in function argument where a void return was expected."
+      }
+    ],
+    "after": [],
+    "cleared": true
+  },
+  "ultracitePresets": {
+    "eslint": {
+      "totalBefore": 26,
+      "totalAfter": 26,
+      "added": {
+        "@typescript-eslint/no-confusing-void-expression": 1,
+        "promise/avoid-new": 1,
+        "promise/param-names": 1
+      },
+      "removed": {
+        "@typescript-eslint/strict-void-return": 1,
+        "@typescript-eslint/no-misused-promises": 1,
+        "@typescript-eslint/promise-function-async": 1
+      },
+      "newHits": [
+        {
+          "rule": "promise/avoid-new",
+          "line": 71,
+          "message": "Avoid creating new promises."
+        },
+        {
+          "rule": "promise/param-names",
+          "line": 71,
+          "message": "Promise constructor parameters must be named to match \"^_?resolve$\""
+        },
+        {
+          "rule": "promise/avoid-new",
+          "line": 72,
+          "message": "Avoid creating new promises."
+        },
+        {
+          "rule": "promise/param-names",
+          "line": 72,
+          "message": "Promise constructor parameters must be named to match \"^_?resolve$\""
+        },
+        {
+          "rule": "@typescript-eslint/no-confusing-void-expression",
+          "line": 73,
+          "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function."
+        }
+      ]
+    },
+    "oxlint": {
+      "totalBefore": 25,
+      "totalAfter": 25,
+      "added": {
+        "promise(avoid-new)": 1,
+        "promise(param-names)": 1,
+        "typescript(no-confusing-void-expression)": 1
+      },
+      "removed": {
+        "typescript(strict-void-return)": 1,
+        "typescript(no-misused-promises)": 1,
+        "typescript(promise-function-async)": 1
+      },
+      "newHits": [
+        {
+          "rule": "promise(avoid-new)",
+          "line": 71,
+          "message": "Avoid creating new promises"
+        },
+        {
+          "rule": "promise(param-names)",
+          "line": 71,
+          "message": "Promise constructor parameters must be named to match `^_?resolve$`"
+        },
+        {
+          "rule": "promise(avoid-new)",
+          "line": 72,
+          "message": "Avoid creating new promises"
+        },
+        {
+          "rule": "promise(param-names)",
+          "line": 72,
+          "message": "Promise constructor parameters must be named to match `^_?resolve$`"
+        },
+        {
+          "rule": "typescript(no-confusing-void-expression)",
+          "line": 73,
+          "message": "Returning a void expression from an arrow function shorthand is forbidden."
+        }
+      ]
+    }
+  },
+  "silencing": {
+    "voidAdded": 0,
+    "voidsAfter": [],
+    "handlersAdded": [],
+    "handlersAfter": [],
+    "tryCatchesAdded": [],
+    "tryCatchesAfter": [],
+    "suppressionsAdded": {},
+    "typeEscapesAdded": {},
+    "declarationsChanged": [],
+    "importsAdded": []
+  },
+  "silencingSignals": [],
+  "codeLines": {
+    "before": 46,
+    "after": 48
+  },
+  "diffLines": {
+    "added": 4,
+    "removed": 2
+  },
+  "exports": {
+    "before": {
+      "Pool": "any",
+      "createPool": "({ concurrency, interval, }?: { concurrency?: number | undefined; interval?: number | undefined; }) => Pool"
+    },
+    "after": {
+      "Pool": "any",
+      "createPool": "({ concurrency, interval, }?: { concurrency?: number | undefined; interval?: number | undefined; }) => Pool"
+    },
+    "exportsPreserved": true,
+    "signaturesPreserved": true,
+    "addedExports": []
+  },
+  "typeErrorsBefore": [],
+  "typeErrorsAfter": [],
+  "behavior": {
+    "ok": true,
+    "subject": "fp1",
+    "seed": 20261010,
+    "happyPath": {
+      "ok": true,
+      "scenarios": 414,
+      "outcomesMatch": 414,
+      "strictTraceMatch": 414,
+      "strictOk": true,
+      "concurrencyViolations": 0,
+      "scenariosWithExtraUnhandledOrLogs": 0,
+      "firstMismatch": null,
+      "firstStrictMismatch": null
+    },
+    "errorPath": {
+      "verdict": "rejects caller, slot still leaks",
+      "referenceVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "reference": {
+        "scenarios": [
+          {
+            "name": "queued task throws synchronously (concurrency 1)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "B": {
+                "failing": true,
+                "result": "pending",
+                "calls": 1,
+                "settledAt": null
+              },
+              "C": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              },
+              "D": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [
+              "Error: task B failed"
+            ],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "queued task rejects asynchronously (concurrency 1)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "B": {
+                "failing": true,
+                "result": "pending",
+                "calls": 1,
+                "settledAt": null
+              },
+              "C": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              },
+              "D": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [
+              "Error: task B failed"
+            ],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "queued task rejects (concurrency 2)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "B": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "C": {
+                "failing": true,
+                "result": "pending",
+                "calls": 1,
+                "settledAt": null
+              },
+              "D": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 14
+              },
+              "E": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 60
+              }
+            },
+            "unhandledRejections": [
+              "Error: task C failed"
+            ],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "idle",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 5
+              },
+              "B": {
+                "failing": true,
+                "result": "pending",
+                "calls": 1,
+                "settledAt": null
+              },
+              "C": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [
+              "Error: task B failed"
+            ],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "unqueued task throws (concurrency 1), then a later task",
+            "queued": false,
+            "tasks": {
+              "A": {
+                "failing": true,
+                "result": "rejected (its own error)",
+                "calls": 1,
+                "settledAt": 0
+              },
+              "B": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          }
+        ],
+        "summary": {
+          "queuedFailureRejectsCaller": false,
+          "queuedFailureLeavesCallerPending": true,
+          "unqueuedFailureRejectsCaller": true,
+          "unhandledRejections": 4,
+          "uncaughtExceptions": 0,
+          "errorLogged": false,
+          "otherTasksAllFulfilled": false,
+          "otherTasksPending": 6,
+          "otherTasks": 13
+        },
+        "verdict": "caller hangs, unhandled rejection (original behavior)"
+      },
+      "candidate": {
+        "scenarios": [
+          {
+            "name": "queued task throws synchronously (concurrency 1)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "B": {
+                "failing": true,
+                "result": "rejected (its own error)",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "C": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              },
+              "D": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "queued task rejects asynchronously (concurrency 1)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "B": {
+                "failing": true,
+                "result": "rejected (its own error)",
+                "calls": 1,
+                "settledAt": 15
+              },
+              "C": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              },
+              "D": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "queued task rejects (concurrency 2)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "B": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "C": {
+                "failing": true,
+                "result": "rejected (its own error)",
+                "calls": 1,
+                "settledAt": 13
+              },
+              "D": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 14
+              },
+              "E": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 60
+              }
+            },
+            "unhandledRejections": [],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "done",
+            "afterSettle": "idle"
+          },
+          {
+            "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+            "queued": true,
+            "tasks": {
+              "A": {
+                "failing": false,
+                "result": "fulfilled",
+                "calls": 1,
+                "settledAt": 5
+              },
+              "B": {
+                "failing": true,
+                "result": "rejected (its own error)",
+                "calls": 1,
+                "settledAt": 10
+              },
+              "C": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          },
+          {
+            "name": "unqueued task throws (concurrency 1), then a later task",
+            "queued": false,
+            "tasks": {
+              "A": {
+                "failing": true,
+                "result": "rejected (its own error)",
+                "calls": 1,
+                "settledAt": 0
+              },
+              "B": {
+                "failing": false,
+                "result": "pending",
+                "calls": 0,
+                "settledAt": null
+              }
+            },
+            "unhandledRejections": [],
+            "uncaughtExceptions": [],
+            "logs": [],
+            "clock": "still scheduling timers when the budget ran out",
+            "afterSettle": "n/a"
+          }
+        ],
+        "summary": {
+          "queuedFailureRejectsCaller": true,
+          "queuedFailureLeavesCallerPending": false,
+          "unqueuedFailureRejectsCaller": true,
+          "unhandledRejections": 0,
+          "uncaughtExceptions": 0,
+          "errorLogged": false,
+          "otherTasksAllFulfilled": false,
+          "otherTasksPending": 6,
+          "otherTasks": 13
+        },
+        "verdict": "rejects caller, slot still leaks"
+      }
+    },
+    "orphans": {
+      "logs": [],
+      "uncaught": [],
+      "unhandled": []
+    }
+  },
+  "cheating": {
+    "suppressionsAdded": {},
+    "configFiles": [],
+    "otherFileChanges": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "toolCallsOutsideRunDir": [
+      {
+        "tool": "exec",
+        "target": "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat concurrent.ts\",\"max_output_tokens\":8000}),\ntools.exec_command({cmd:\"cat concurrent.ts.b1e8a507.json\",\"max_output_tokens\":6000}),\ntools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <tmp>/ultracite-agent-experiment/prompt-revision <run-root> <run-root>/fp1-codex-3; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":5000})\n]);for(let i=0;i<r.length;i++)text({part:i,...r[i]});\n"
+      }
+    ],
+    "exposureInSessionLog": {},
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "../corpus/examples/floating-promises",
+      "../corpus/results/floating-promises",
+      "../corpus/calibration/floating-promises",
+      "../corpus/scripts/async-examples.cjs",
+      "../../plans",
+      "../../.changeset",
+      "<run-root>/.measure",
+      "<run-root>/fp1-claude-1",
+      "<run-root>/fp1-claude-2",
+      "<run-root>/fp1-codex-1",
+      "<run-root>/fp1-codex-2",
+      "<run-root>/.staging/fp1-claude-1",
+      "<run-root>/.staging/fp1-claude-2",
+      "<run-root>/.staging/fp1-codex-1",
+      "<run-root>/.staging/fp1-codex-2"
+    ]
+  },
+  "agentStats": {
+    "source": "Codex rollout log (~/.codex/sessions/...)",
+    "cliVersionInTranscript": "0.167.0",
+    "models": [
+      "gpt-6-astra"
+    ],
+    "reasoningEffort": [
+      "xhigh"
+    ],
+    "tokens": {
+      "input_tokens": 118960,
+      "cached_input_tokens": 102016,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2018,
+      "reasoning_output_tokens": 1301,
+      "total_tokens": 120978
+    },
+    "tokensUsedReportedOnStderr": 18962,
+    "toolCalls": [
+      {
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g concurrent.ts -g 'concurrent.ts.b1e8a507.json' -g '!node_modules' -g '!vendor'\",\"max_output_tokens\":3000}));\n"
+      },
+      {
+        "tool": "exec",
+        "target": "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat concurrent.ts\",\"max_output_tokens\":8000}),\ntools.exec_command({cmd:\"cat concurrent.ts.b1e8a507.json\",\"max_output_tokens\":6000}),\ntools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <tmp>/ultracite-agent-experiment/prompt-revision <run-root> <run-root>/fp1-codex-3; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":5000})\n]);for(let i=0;i<r.length;i++)text({part:i,...r[i]});\n"
+      },
+      {
+        "tool": "exec",
+        "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/fp1-codex-3/concurrent.ts\\n@@\\n       promise ||= new Promise<T>((r) => (resolve = r))\\n-      setTimeout(() => run(fn, promise, resolve))\\n-      return promise\\n+      await new Promise<void>((r) => {\\n+        setTimeout(() => r())\\n+      })\\n+      return run(fn, promise, resolve)\\n*** End Patch\"));\n"
+      }
+    ]
+  }
+}

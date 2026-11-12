@@ -1,0 +1,13 @@
+{
+  "runId": "a-claude-3",
+  "mirrorRevision": "v2",
+  "finalMessage": "I left the file unchanged. Both issues point at the same dependency list, and the usual fix would change when the effect runs.\n\nThe effect on lines 71–78 has an empty dependency list, so it runs only once, when the component mounts. It subscribes to the store once and keeps the `subscribe` and `getSnapshot` it got on the first render. The rules want three things added:\n\n- **`serverSnapshotIsUsed`** never changes, because its setter is never used. Adding it would be harmless, but on its own it doesn't clear either issue.\n- **`subscribe` and `getSnapshot`** are passed in by callers, often as inline functions that are new on every render. Adding them would make the effect unsubscribe and resubscribe on nearly every render. When the server snapshot was used, it would also call `setState(getSnapshot())` each time.\n\nThat is how React's own `useSyncExternalStore` behaves: it resubscribes when `subscribe` changes and always reads the current `getSnapshot`. So the change may well be right, but it's a design decision for this hook, not a lint fix. Copying the functions into refs to get around the rule would only hide the warning, and it would also change behavior by making the callback read the latest `getSnapshot`.\n\nTo fix it properly, add `[serverSnapshotIsUsed, getSnapshot, subscribe]` as the dependency list, once it's confirmed that resubscribing when those functions change is intended.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

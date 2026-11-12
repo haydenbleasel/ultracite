@@ -137,6 +137,30 @@ const EXPECTED = {
   "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9",
 };
 
+// The mirror has two revisions, picked with ULTRACITE_MIRROR (added with the prompt-revision
+// topic). "v1", the default, is the agent-fix code as every topic up to func-style ran it, kept
+// unchanged so their committed runs re-measure to the committed numbers. "v2" is the agent-fix
+// code the prompt-revision runs used: the working tree on 2026-11-11, on top of 8eb46ade, not yet
+// committed when they ran. It differs in four slices:
+//   - diff.ts: a diagnostic is matched by rule and message with standalone numbers left out, and
+//     within one rule and message by the text of the line it's on before file order;
+//   - index.ts: the last attempt's final message is shown unless it left issues for review, and
+//     the outro counts the issues left for a person;
+//   - run-agent.ts: AGENT_TIMEOUT_MS is 10 minutes (read from the source by `contract`);
+//   - linters.ts (Oxlint): a JS-plugin rule's help and URL are read from the plugin.
+const revision = () => process.env.ULTRACITE_MIRROR ?? "v1";
+
+const EXPECTED_V2 = {
+  ...EXPECTED,
+  "linters.ts oxlint":
+    "c985a3a7f2014bd58e2435455f8dcbcbea80c7f38643ca61ae0422e589f44978",
+  "index.ts fixFileGroup":
+    "b102d9276938f12e1c5dac850987481b3973f126878bcf804bad5280859a1c9a",
+  "run-agent.ts":
+    "a0e2264c563d3dc778a6fcd519c3030f02df24ac2b4a539bd82fd27647fd6581",
+  "diff.ts": "c9bc0f7973043c740fa68cf161b25f3d582130a03322be0d117f2c568446f847",
+};
+
 /**
  * Hashes every mirrored slice. `strict` (a new run) throws when one differs from EXPECTED;
  * otherwise the differences are returned, so a re-measurement can record them.
@@ -146,7 +170,8 @@ function checkSources({ strict = true } = {}) {
   const drift = [];
   for (const [name, slice] of Object.entries(SLICES)) {
     hashes[name] = sha256(slice());
-    if (hashes[name] !== EXPECTED[name]) {
+    const expected = revision() === "v2" ? EXPECTED_V2 : EXPECTED;
+    if (hashes[name] !== expected[name]) {
       drift.push(name);
     }
   }
@@ -255,6 +280,44 @@ function stripOxlintNotice(stdout) {
   return start > 0 ? stdout.slice(start) : stdout;
 }
 
+// linters.ts (v2): the plugins the js-plugins preset bridges, by the name their rules carry.
+// Ultracite loads them from the project being linted; the run directory has no node_modules, so
+// here they come from this repo's, which is where the harness's Oxlint loads them from too.
+const JS_PLUGIN_PACKAGES = new Map([
+  ["github", "eslint-plugin-github"],
+  ["react-doctor", "oxlint-plugin-react-doctor"],
+  ["sonarjs", "eslint-plugin-sonarjs"],
+]);
+const jsPlugins = new Map();
+function loadJsPlugin(packageName) {
+  const cached = jsPlugins.get(packageName);
+  if (cached !== undefined) {
+    return cached;
+  }
+  let plugin = null;
+  try {
+    const loaded = require(require.resolve(packageName, { paths: [REPO] }));
+    plugin = loaded.rules ? loaded : (loaded.default ?? null);
+  } catch {
+    plugin = null;
+  }
+  jsPlugins.set(packageName, plugin);
+  return plugin;
+}
+function jsPluginRuleDocs(ruleName) {
+  const separator = ruleName.indexOf("/");
+  const packageName = JS_PLUGIN_PACKAGES.get(ruleName.slice(0, separator));
+  if (separator === -1 || !packageName) {
+    return {};
+  }
+  const rule =
+    loadJsPlugin(packageName)?.rules?.[ruleName.slice(separator + 1)];
+  return {
+    help: rule?.meta?.docs?.description ?? rule?.recommendation,
+    url: rule?.meta?.docs?.url,
+  };
+}
+
 function parseOxlintDiagnostics(stdout) {
   const parsed = parseJsonOutput("oxlint", stripOxlintNotice(stdout));
   const diagnostics = [];
@@ -263,17 +326,22 @@ function parseOxlintDiagnostics(stdout) {
       continue;
     }
     const span = diagnostic.labels?.[0]?.span;
+    const rule = diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint";
+    const docs =
+      revision() !== "v2" || diagnostic.help || diagnostic.url
+        ? {}
+        : jsPluginRuleDocs(rule);
     diagnostics.push({
       column: span?.column ?? 1,
       fatal: isOxlintFatal(diagnostic),
       file: diagnostic.filename,
-      help: diagnostic.help,
+      help: diagnostic.help ?? docs.help,
       line: span?.line ?? 1,
       message: diagnostic.message ?? "",
       raw: diagnostic,
-      rule: diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint",
+      rule,
       severity: diagnostic.severity ?? "error",
-      url: diagnostic.url,
+      url: diagnostic.url ?? docs.url,
     });
   }
   return diagnostics;
@@ -614,10 +682,13 @@ function verifySafely(verify, file, cwd) {
   }
   try {
     const allRemaining = verify(file);
-    return {
-      error: null,
-      remaining: allRemaining.filter((diagnostic) => diagnostic.file === file),
-    };
+    const remaining = allRemaining.filter(
+      (diagnostic) => diagnostic.file === file
+    );
+    if (revision() === "v2") {
+      recordSourceLines(remaining, cwd);
+    }
+    return { error: null, remaining };
   } catch (error) {
     return {
       error: error instanceof Error ? error.message : String(error),
@@ -634,7 +705,7 @@ const diagnosticKey = (diagnostic) =>
  * diff.ts partitionByRemaining: `cleared` and `still` are originals, `introduced` and
  * `stillReported` are the fresh reports (with current line numbers).
  */
-function partitionByRemaining(original, remaining) {
+function partitionByRemainingV1(original, remaining) {
   const unmatched = new Map();
   for (const diagnostic of original) {
     const key = diagnosticKey(diagnostic);
@@ -664,6 +735,100 @@ function partitionByRemaining(original, remaining) {
     stillReported,
   };
 }
+
+// diff.ts (v2). The text of the line each diagnostic was reported on, as the file stood when the
+// linter ran, kept beside the diagnostics. `cwd` is the project root a relative path resolves from.
+const sourceLines = new WeakMap();
+function recordSourceLines(diagnostics, cwd) {
+  const files = new Map();
+  for (const diagnostic of diagnostics) {
+    let lines = files.get(diagnostic.file);
+    if (!lines) {
+      try {
+        lines = readFileSync(resolve(cwd, diagnostic.file), "utf8").split(
+          /\r?\n/u
+        );
+      } catch {
+        lines = [];
+      }
+      files.set(diagnostic.file, lines);
+    }
+    const text = lines[diagnostic.line - 1]?.trim();
+    if (text) {
+      sourceLines.set(diagnostic, text);
+    }
+  }
+}
+const NUMBER_RE = /\b\d+(?:\.\d+)?\b/gu;
+const diagnosticKeyV2 = (diagnostic) =>
+  `${diagnostic.rule}\u0000${diagnostic.message.replaceAll(NUMBER_RE, "#")}`;
+function groupByKey(diagnostics) {
+  const groups = new Map();
+  for (const diagnostic of diagnostics) {
+    const key = diagnosticKeyV2(diagnostic);
+    const group = groups.get(key);
+    if (group) {
+      group.push(diagnostic);
+      continue;
+    }
+    groups.set(key, [diagnostic]);
+  }
+  return groups;
+}
+function pairGroup(originals, fresh) {
+  const pairs = new Map();
+  const unpaired = new Set(originals);
+  for (const report of fresh) {
+    const text = sourceLines.get(report);
+    const match =
+      text === undefined
+        ? undefined
+        : [...unpaired].find((original) => sourceLines.get(original) === text);
+    if (match) {
+      unpaired.delete(match);
+      pairs.set(report, match);
+    }
+  }
+  for (const report of fresh) {
+    const [match] = unpaired;
+    if (!match) {
+      break;
+    }
+    if (!pairs.has(report)) {
+      unpaired.delete(match);
+      pairs.set(report, match);
+    }
+  }
+  return pairs;
+}
+/**
+ * diff.ts partitionByRemaining (v2). A diagnostic read back from a committed JSON file has no
+ * recorded source line, so a re-measurement pairs reports of one rule and message in file order;
+ * the number-free key applies either way.
+ */
+function partitionByRemainingV2(original, remaining) {
+  const originalGroups = groupByKey(original);
+  const pairs = new Map();
+  for (const [key, fresh] of groupByKey(remaining)) {
+    for (const [report, match] of pairGroup(
+      originalGroups.get(key) ?? [],
+      fresh
+    )) {
+      pairs.set(report, match);
+    }
+  }
+  const matched = new Set(pairs.values());
+  return {
+    cleared: original.filter((diagnostic) => !matched.has(diagnostic)),
+    introduced: remaining.filter((diagnostic) => !pairs.has(diagnostic)),
+    still: original.filter((diagnostic) => matched.has(diagnostic)),
+    stillReported: remaining.filter((diagnostic) => pairs.has(diagnostic)),
+  };
+}
+const partitionByRemaining = (original, remaining) =>
+  revision() === "v2"
+    ? partitionByRemainingV2(original, remaining)
+    : partitionByRemainingV1(original, remaining);
 
 /**
  * index.ts toRetryIssues: what's still reported against what the previous attempt was given. A
@@ -739,6 +904,51 @@ function describeLeftForReview(agentLabel, { explanation, issues }) {
  * those on lines of its own.
  */
 
+// index.ts (v2) describeFinalMessage: the end of the last attempt's final message.
+const AGENT_MESSAGE_MAX_LINES = 8;
+const AGENT_MESSAGE_MAX_LENGTH = 800;
+function describeFinalMessage(agentLabel, message) {
+  const lines = message.split("\n").filter((line) => line.trim().length > 0);
+  const kept = lines.slice(-AGENT_MESSAGE_MAX_LINES).join("\n");
+  const capped = kept.slice(-AGENT_MESSAGE_MAX_LENGTH).trimStart();
+  const cut =
+    lines.length > AGENT_MESSAGE_MAX_LINES ||
+    kept.length > AGENT_MESSAGE_MAX_LENGTH;
+  return `${agentLabel} said:\n${cut ? "… " : ""}${capped}`;
+}
+
+/**
+ * How many of the issues the agent left for review are still reported (index.ts fixFileGroup, v2).
+ * A run's meta.json keeps each left issue as "<rule> L<line>", not the diagnostic, so a
+ * re-measurement counts by rule: for each rule, the smaller of the issues left and the reports
+ * remaining. Diagnostics are partitioned as index.ts does.
+ */
+function leftStillReported(leftIssues, remaining) {
+  if (leftIssues.every((issue) => typeof issue !== "string")) {
+    return partitionByRemaining(leftIssues, remaining).stillReported.length;
+  }
+  const count = (names) => {
+    const counts = new Map();
+    for (const name of names) {
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    return counts;
+  };
+  const leftByRule = count(
+    leftIssues.map((issue) =>
+      typeof issue === "string" ? issue.replace(/ L\d+$/u, "") : issue.rule
+    )
+  );
+  const remainingByRule = count(remaining.map((d) => d.rule));
+  let total = 0;
+  for (const [rule, n] of leftByRule) {
+    total += Math.min(n, remainingByRule.get(rule) ?? 0);
+  }
+  return total;
+}
+
+// `finalMessage` (v2 only): the last attempt's final message, or "" when that attempt left issues
+// for review, as index.ts attemptFileFix passes it on.
 function fileOutcome({
   agentLabel,
   issues,
@@ -747,6 +957,7 @@ function fileOutcome({
   verified,
   timeoutMs,
   leftForReview = [],
+  finalMessage = "",
 }) {
   const notes = [];
   if (!agentResult.ok) {
@@ -786,12 +997,36 @@ function fileOutcome({
   for (const entry of leftForReview) {
     notes.push(describeLeftForReview(agentLabel, entry));
   }
+  const outro = `Fixed ${fixed} of ${issues.length} issue${issues.length === 1 ? "" : "s"} with ${agentLabel}.`;
+  if (revision() !== "v2") {
+    return {
+      fixed,
+      remaining,
+      notes,
+      issueFixed: issues.map((issue) => cleared.includes(issue)),
+      outro,
+      exitCode: remaining > 0 ? 1 : 0,
+    };
+  }
+  // v2: the final message goes after the left-for-review lines, and the outro counts the issues
+  // the agent left that are still reported (none when verification failed or the file doesn't parse).
+  if (finalMessage) {
+    notes.push(describeFinalMessage(agentLabel, finalMessage));
+  }
+  const left =
+    verified.remaining === null || verified.remaining.some((d) => d.fatal)
+      ? 0
+      : leftStillReported(
+          leftForReview.flatMap((entry) => entry.issues),
+          verified.remaining
+        );
   return {
     fixed,
+    left,
     remaining,
     notes,
     issueFixed: issues.map((issue) => cleared.includes(issue)),
-    outro: `Fixed ${fixed} of ${issues.length} issue${issues.length === 1 ? "" : "s"} with ${agentLabel}.`,
+    outro: `${outro}${left > 0 ? ` ${left} left for you to decide.` : ""}`,
     exitCode: remaining > 0 ? 1 : 0,
   };
 }
@@ -820,6 +1055,8 @@ module.exports = {
   toStylelintTargets,
   nextRetry,
   partitionByRemaining,
+  recordSourceLines,
+  revision,
   toOxlintRuleName,
   verifySafely,
 };

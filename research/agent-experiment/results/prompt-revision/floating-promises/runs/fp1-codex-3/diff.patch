@@ -1,0 +1,15 @@
+--- a/concurrent.ts
++++ b/concurrent.ts
+@@ -69,8 +69,10 @@
+   ): Promise<T> => {
+     if (pool.size >= (concurrency as number)) {
+       promise ||= new Promise<T>((r) => (resolve = r))
+-      setTimeout(() => run(fn, promise, resolve))
+-      return promise
++      await new Promise<void>((r) => {
++        setTimeout(() => r())
++      })
++      return run(fn, promise, resolve)
+     }
+     const marker = {}
+     pool.add(marker)

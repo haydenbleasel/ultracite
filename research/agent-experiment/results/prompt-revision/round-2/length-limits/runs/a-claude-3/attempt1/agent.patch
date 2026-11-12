@@ -1,0 +1,92 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,22 +220,18 @@
+   return () => jsonValue;
+ }
+ 
+-async function createClientConfigValueReplacer(
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> {
+-  const resolvedServerHostname = (await resolveHostname(config.server.host))
+-    .name;
+-  const resolvedServerPort = config.server.port!;
+-  const devBase = config.base;
+-
+-  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+-
++// values injected into the `__HMR_*__` placeholders
++function getHmrValues(
++  config: ResolvedConfig,
++  resolvedServerHostname: string,
++  resolvedServerPort: number
++) {
+   const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+   const host = wsConfig?.host || null;
+   const protocol = wsConfig?.protocol || null;
+   const timeout = wsConfig?.timeout || 30_000;
+   const isWsServerSpecified = !!wsConfig?.server;
+-  const hmrConfigName = path.basename(config.configFile || "vite.config.js");
++  const configName = path.basename(config.configFile || "vite.config.js");
+ 
+   const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+   const overlay = hmrConfig?.overlay !== false;
+@@ -249,24 +245,48 @@
+ 
+   let directTarget = wsConfig?.host || resolvedServerHostname;
+   directTarget += `:${wsConfig?.port || resolvedServerPort}`;
+-  directTarget += devBase;
++  directTarget += config.base;
+ 
+-  let hmrBase = devBase;
++  let base = config.base;
+   if (wsConfig?.path) {
+-    hmrBase = path.posix.join(hmrBase, wsConfig.path);
++    base = path.posix.join(base, wsConfig.path);
+   }
++
++  return {
++    base,
++    configName,
++    directTarget,
++    host,
++    overlay,
++    port,
++    protocol,
++    timeout,
++  };
++}
+ 
++async function createClientConfigValueReplacer(
++  config: ResolvedConfig
++): Promise<(code: string) => string> {
++  const resolvedServerHostname = (await resolveHostname(config.server.host))
++    .name;
++  const resolvedServerPort = config.server.port!;
++  const devBase = config.base;
++
++  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
++
++  const hmr = getHmrValues(config, resolvedServerHostname, resolvedServerPort);
++
+   const modeReplacement = escapeReplacement(config.mode);
+   const baseReplacement = escapeReplacement(devBase);
+   const serverHostReplacement = escapeReplacement(serverHost);
+-  const hmrProtocolReplacement = escapeReplacement(protocol);
+-  const hmrHostnameReplacement = escapeReplacement(host);
+-  const hmrPortReplacement = escapeReplacement(port);
+-  const hmrDirectTargetReplacement = escapeReplacement(directTarget);
+-  const hmrBaseReplacement = escapeReplacement(hmrBase);
+-  const hmrTimeoutReplacement = escapeReplacement(timeout);
+-  const hmrEnableOverlayReplacement = escapeReplacement(overlay);
+-  const hmrConfigNameReplacement = escapeReplacement(hmrConfigName);
++  const hmrProtocolReplacement = escapeReplacement(hmr.protocol);
++  const hmrHostnameReplacement = escapeReplacement(hmr.host);
++  const hmrPortReplacement = escapeReplacement(hmr.port);
++  const hmrDirectTargetReplacement = escapeReplacement(hmr.directTarget);
++  const hmrBaseReplacement = escapeReplacement(hmr.base);
++  const hmrTimeoutReplacement = escapeReplacement(hmr.timeout);
++  const hmrEnableOverlayReplacement = escapeReplacement(hmr.overlay);
++  const hmrConfigNameReplacement = escapeReplacement(hmr.configName);
+   const hmrPartialAcceptReplacement = escapeReplacement(
+     config.experimental.hmrPartialAccept
+   );

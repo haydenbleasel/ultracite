@@ -1,0 +1,23 @@
+--- a/concurrent.ts
++++ b/concurrent.ts
+@@ -65,11 +65,17 @@
+   const run = async <T>(
+     fn: () => T,
+     promise?: Promise<T>,
+-    resolve?: (result: T) => void
++    resolve?: (result: T) => void,
++    reject?: (reason: unknown) => void
+   ): Promise<T> => {
+     if (pool.size >= (concurrency as number)) {
+-      promise ||= new Promise<T>((r) => (resolve = r))
+-      setTimeout(() => run(fn, promise, resolve))
++      promise ||= new Promise<T>((res, rej) => {
++        resolve = res
++        reject = rej
++      })
++      setTimeout(() => {
++        run(fn, promise, resolve, reject).catch((error: unknown) => reject?.(error))
++      })
+       return promise
+     }
+     const marker = {}

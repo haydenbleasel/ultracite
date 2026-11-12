@@ -1,0 +1,10 @@
+{
+  "runId": "a-claude-4",
+  "mirrorRevision": "v2",
+  "finalMessage": "I fixed both issues by adding the three missing values to the effect's dependency list in `index.ts:78`: `[serverSnapshotIsUsed, getSnapshot, subscribe]`. I didn't run the linter, as instructed.\n\nThe empty list was a real bug. The hook subscribed once when the component first rendered and never again:\n- **`subscribe`:** if a caller passed a different `subscribe` (for example, to switch to another store based on props), the hook stayed attached to the old store. React's own `useSyncExternalStore` resubscribes when `subscribe` changes, and hono/jsx says it follows that API.\n- **`getSnapshot`:** the store-change callback kept calling the `getSnapshot` from the first render, so it could read the wrong value after props changed.\n- **`serverSnapshotIsUsed`:** this comes from `useState` and is never updated, so adding it changes nothing at runtime.\n\nThis does change behavior: if a caller writes `subscribe` or `getSnapshot` inline, the hook now unsubscribes and resubscribes on every render. That extra work is harmless, and React's docs already tell callers to keep `subscribe` stable for the same reason.\n\nThe fully correct alternative is what React's shim does: depend only on `subscribe` and read the latest `getSnapshot` through a ref. That's a larger rewrite, so I kept to the minimal fix.\n\nLeft for review: none",
+  "leftForReviewLine": "Left for review: none",
+  "leftForReviewIssues": [],
+  "ultraciteOutro": "Fixed 2 of 2 issues with Claude Code.",
+  "ultraciteExitCode": 0,
+  "agentLabel": "Claude Code"
+}
