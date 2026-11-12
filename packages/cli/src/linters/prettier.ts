@@ -74,6 +74,7 @@ interface PrettierExtras {
   ultraciteLocal: string;
 }
 
+// oxlint-disable-next-line complexity -- refactor when next touched: one conditional per plugin and option the generated Prettier config can include
 const generatePrettierConfig = (
   opts?: PrettierOptions,
   extras?: PrettierExtras

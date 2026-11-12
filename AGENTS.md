@@ -145,6 +145,20 @@ Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `drizzle
 
 Lint plugins have no peer ranges. `doctor` checks each plugin the project's config loads against its devDependency range (the one `init` and `upgrade` install), so bumping a plugin raises the floor doctor enforces. `src/configured-plugins.ts` decides which plugins a config loads, and `upgrade` reinstalls the same set, so anything doctor flags is something upgrade can fix. Keep the two reading from it.
 
+### Rules waiting on a release
+
+Some rules are off, or missing, only until a linter or plugin changes. Nothing else flags the day that happens, so check this list on every bump, act on anything that has moved, and remove the entry.
+
+| Tool | Rule | Waiting for | When it lands |
+| --- | --- | --- | --- |
+| Oxlint | `no-useless-assignment` | Leaving nursery | Enable it in core. Dead stores are ESLint-only until then. |
+| Biome | `noImpliedEval` | Leaving nursery | Enable it in core. Biome flags no `new Function` or string timers until then. |
+| Biome | `noFloatingPromises` | Leaving nursery | Enable it in `biome/type-aware`. `noVoid` is already off for it. |
+| Biome | `useConsistentFunctionStyle` | Leaving nursery | Enable it in core to match `func-style`. |
+| ESLint | `jsx-a11y/prefer-tag-over-role` | A release with the fix for [jsx-eslint/eslint-plugin-jsx-a11y#1102](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1102) (the rule crashes the run on an object-valued `role`) | Turn it back on and drop its parity allowlist entry. |
+| Oxlint | `unicorn/prefer-export-from` | [oxc-project/oxc#29318](https://github.com/oxc-project/oxc/issues/29318): its fix no longer dropping exports (`import { a } from "./x"; import { b } from "./y"; export { a, b };` under `--fix-suggestions` must keep `b`) | Turn it back on and drop its parity allowlist entry. |
+| typescript-eslint | `no-use-before-define` | Its planned deprecation ([typescript-eslint#11014](https://github.com/typescript-eslint/typescript-eslint/issues/11014)); a test fails when it lands | Turn the base rule back on for TypeScript files, since the preset drops deprecated rules. |
+
 `bun run bump-tools` updates the linter/formatter packages; `bun run bump-deps` updates everything else. Upgrading oxfmt has needed a clean reinstall (`rm -rf node_modules && bun install`) and a regenerated `patches/oxfmt@*.patch` in the past.
 
 ## Tests

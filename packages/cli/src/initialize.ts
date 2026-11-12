@@ -659,6 +659,7 @@ const zedExtensionHints: Partial<Record<Linter, string>> = {
   oxlint: "Oxc extension: https://zed.dev/extensions/oxc",
 };
 
+// oxlint-disable-next-line complexity -- refactor when next touched: branches on whether the settings file existed, the editor's extension and each formatter option
 export const upsertEditorConfig = async (
   editorId: string,
   linter: Linter = "biome",

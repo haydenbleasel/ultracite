@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 
-import { findLoadedJsPlugins, oxlint } from "../src/linters/oxlint";
+import {
+  addMissingOxlintEnv,
+  findLoadedJsPlugins,
+  lacksCoreEnv,
+  oxlint,
+} from "../src/linters/oxlint";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 // Helper to generate the expected oxlint config path
@@ -2154,6 +2159,88 @@ export default defineConfig({
 // An oxlint.config.ts that extends core plus the given lines.
 const coreConfigWith = (...lines: string[]): string =>
   ['import core from "ultracite/oxlint/core";', ...lines].join("\n");
+
+// What init wrote before it declared `env` on the root config.
+const configWithoutEnv = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+
+export default defineConfig({
+  extends: [core, react],
+  ignorePatterns: [...core.ignorePatterns, "generated/**"],
+  rules: { "no-console": "off" },
+});
+`;
+
+describe("oxlint env", () => {
+  test("a config that extends core without env lacks it", () => {
+    expect(lacksCoreEnv(configWithoutEnv)).toBe(true);
+  });
+
+  test("a config that declares env, its own or core's, doesn't", () => {
+    expect(
+      lacksCoreEnv(
+        configWithoutEnv.replace("extends:", "env: core.env,\n  extends:")
+      )
+    ).toBe(false);
+    expect(
+      lacksCoreEnv(
+        configWithoutEnv.replace(
+          "extends:",
+          "env: { browser: true },\n  extends:"
+        )
+      )
+    ).toBe(false);
+  });
+
+  test("a config that doesn't extend core, or doesn't parse, is left alone", () => {
+    expect(
+      lacksCoreEnv(`import { defineConfig } from "oxlint";
+
+export default defineConfig({ rules: {} });
+`)
+    ).toBe(false);
+    expect(lacksCoreEnv("export default defineConfig({")).toBe(false);
+  });
+
+  test("adds env and keeps everything else in the config", async () => {
+    const project = mockProject({ "./oxlint.config.ts": configWithoutEnv });
+
+    await expect(addMissingOxlintEnv()).resolves.toBe("oxlint.config.ts");
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("env: core.env,");
+    expect(content).toContain("extends: [core, react],");
+    expect(content).toContain(
+      'ignorePatterns: [...core.ignorePatterns, "generated/**"],'
+    );
+    expect(content).toContain('rules: { "no-console": "off" },');
+    expect(lacksCoreEnv(content)).toBe(false);
+  });
+
+  test("writes nothing when env is already declared", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": configWithoutEnv.replace(
+        "extends:",
+        "env: core.env,\n  extends:"
+      ),
+    });
+
+    await expect(addMissingOxlintEnv()).resolves.toBeNull();
+    expect(project.writeFile).not.toHaveBeenCalled();
+  });
+
+  test("leaves a project with an .oxlintrc.json for init to migrate", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json": "{}",
+      "./oxlint.config.ts": configWithoutEnv,
+    });
+
+    await expect(addMissingOxlintEnv()).resolves.toBeNull();
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.rm).not.toHaveBeenCalled();
+  });
+});
 
 describe("findLoadedJsPlugins", () => {
   test("finds nothing in a config that extends core alone", () => {

@@ -67,7 +67,4 @@ export default defineConfig({
       },
     },
   ],
-  rules: {
-    complexity: "off",
-  },
 });

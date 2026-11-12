@@ -26,7 +26,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 ### Modern JavaScript/TypeScript
 
-- Use arrow functions for callbacks and short functions
+- Write functions as arrow functions assigned to `const`, and define them above where they're used
 - Prefer `for...of` loops over `.forEach()` and indexed `for` loops
 - Use optional chaining (`?.`) and nullish coalescing (`??`) for safer property access
 - Prefer template literals over string concatenation
@@ -44,16 +44,19 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 - Use function components over class components
 - Call hooks at the top level only, never conditionally
-- Specify all dependencies in hook dependency arrays correctly
+- When a hook dependency rule fires, first check whether the effect is needed, and whether adding the dependency changes when it runs
 - Use the `key` prop for elements in iterables (prefer unique IDs over array indices)
 - Nest children between opening and closing tags instead of passing as props
 - Don't define components inside other components
-- Use semantic HTML and ARIA attributes for accessibility:
-  - Provide meaningful alt text for images
-  - Use proper heading hierarchy
-  - Add labels for form inputs
-  - Include keyboard event handlers alongside mouse events
-  - Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles
+
+### Accessibility
+
+- Use semantic HTML first; add ARIA only when no native element fits
+- Provide meaningful alt text for images
+- Use proper heading hierarchy
+- Add labels for form inputs
+- Make anything clickable a `<button>` or a link, so it works from the keyboard; don't add key handlers to a `<div>`
+- Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles
 
 ### Error Handling & Debugging
 
@@ -70,6 +73,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Prefer simple conditionals over nested ternary operators
 - Group related code together and separate concerns
 - Avoid import cycles; move shared code into a module both sides import
+- Don't leave TODO or FIXME comments in new code. For an existing one, do the task, delete it if it's done, or leave it; never reword it to get past the linter
 
 ### Security
 
@@ -82,8 +86,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 - Avoid spread syntax in accumulators within loops
 - Use top-level regex literals instead of creating them in loops
-- Prefer specific imports over namespace imports
-- Avoid barrel files (index files that re-export everything)
+- Avoid barrel files (index files that only re-export other modules) inside an app; a package's entry point is fine
 - Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags
 
 ### Framework-Specific Guidance

@@ -72,13 +72,15 @@ npx ultracite fix --claude
 npx ultracite fix --codex
 ```
 
-The flow: Ultracite runs its normal autofix pass, collects the remaining (unfixable) diagnostics, and then invokes the agent once per affected file with the full, untruncated diagnostics — including rule help text and documentation URLs. After each agent run, Ultracite re-lints the file and only marks an issue fixed if the diagnostic actually cleared. If any diagnostics survive, the agent gets up to two more attempts on that file, each with the fresh post-edit diagnostics and explicit feedback that the previous approach failed — so a superficial edit that dodges the symptom rather than the rule gets caught and retried instead of reported as fixed. The command exits non-zero if any issues remain, matching the plain `fix` contract.
+The flow: Ultracite runs its normal autofix pass, collects the remaining (unfixable) diagnostics, and then invokes the agent once per affected file with the full, untruncated diagnostics — including rule help text and documentation URLs. After each agent run, Ultracite re-lints the file and only marks an issue fixed if the diagnostic actually cleared. If any diagnostics survive, the agent gets up to two more attempts on that file, each with the fresh post-edit diagnostics and feedback on what the previous edit did: an issue that's still reported calls for a different approach, and a new one for finishing the fix. The command exits non-zero if any issues remain, matching the plain `fix` contract.
 
 Requirements and behavior:
 
 - `--claude` requires the [Claude Code CLI](https://claude.com/claude-code) (`npm install -g @anthropic-ai/claude-code`); `--codex` requires the [Codex CLI](https://github.com/openai/codex) (`npm install -g @openai/codex`). Both must be authenticated.
 - Agents run non-interactively with scoped permissions: Claude Code uses `claude -p --permission-mode acceptEdits` limited to read/edit tools (no shell access), and Codex runs in its workspace-write sandbox via `codex exec --sandbox workspace-write --skip-git-repo-check`, so it also works in a project that isn't a Git repository. The prompt is sent on stdin.
-- Each agent attempt gets a 5-minute budget, and the re-lint decides the outcome either way — even a failed or timed-out run gets credit for diagnostics it managed to clear. Whatever remains unfixed after the attempts is marked ✗ and the run continues with the next file.
+- The agent is told to leave an issue alone when clearing it would mean hiding the code from the rule, changing behavior that may be intended, or editing other files. It lists those issues, and Ultracite prints its reasons and doesn't retry them. They still count as remaining, so the command exits non-zero and the summary says how many were left for you to decide.
+- The end of the agent's final message is printed under each file, so you can see what it changed and anything it noticed, such as a likely bug it left in place.
+- Each agent attempt gets a 10-minute budget, and the re-lint decides the outcome either way — even a failed or timed-out run gets credit for diagnostics it managed to clear. Whatever remains unfixed after the attempts is marked ✗ and the run continues with the next file.
 - Other flags combine as usual, e.g. `npx ultracite fix --claude --unsafe`.
 
 ### Type-Aware Linting
@@ -87,7 +89,7 @@ Type-aware linting adds rules that use TypeScript's type system or a scan of the
 
 #### Biome
 
-For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`.
+For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUnresolvedImports`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`.
 
 ```bash title="Terminal"
 npx ultracite init --linter biome --type-aware
@@ -132,7 +134,7 @@ npx ultracite doctor
 
 Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt — and does the same for the lint plugins your config loads: the plugins of each Ultracite preset your `eslint.config.*` imports, or the Oxlint JS plugins your `oxlint.config.ts` loads. A tool or plugin that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash), and so does a plugin your config loads that isn't installed. A tool or plugin that is newer than the supported range only warns. Plugins your config doesn't load are left alone, even when another package installed them.
 
-For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both. Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's or plugin's version.
+For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both. It warns when an `oxlint.config.ts` extends the core preset without setting `env`: Oxlint doesn't inherit `env` through `extends`, so `no-implied-eval` and `no-eval` miss `setTimeout("code")` and `window.eval` until it's there. `npx ultracite upgrade` adds it. Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's or plugin's version.
 
 ### Upgrading
 

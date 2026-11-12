@@ -17,6 +17,7 @@ import type { InstalledPackage } from "../config-resolution";
 import { getConfiguredPlugins, pluginRuleSources } from "../configured-plugins";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
+import { lacksCoreEnv } from "../linters/oxlint";
 import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
 import {
@@ -44,6 +45,7 @@ const ESLINT_CHECK = "ESLint configuration";
 const PRETTIER_CHECK = "Prettier configuration";
 const STYLELINT_CHECK = "Stylelint configuration";
 const OXLINT_CHECK = "Oxlint configuration";
+const OXLINT_ENV_CHECK = "Oxlint environment";
 const OXFMT_CHECK = "oxfmt configuration";
 const ULTRACITE_DEP_CHECK = "Ultracite dependency";
 const CONFLICTING_TOOLS_CHECK = "Conflicting tools";
@@ -541,6 +543,46 @@ const checkOxlintConfig = (): DiagnosticCheck =>
     tool: "oxlint",
   });
 
+const TS_CONFIG_RE = /\.m?ts$/u;
+
+/**
+ * Oxlint doesn't inherit `env` through `extends` (oxc-project/oxc#20087), so
+ * a config that extends core has to declare it. Configs init wrote before it
+ * did so lint without the browser and Node globals, which two security rules
+ * depend on. Skipped for a config that doesn't extend core.
+ */
+const checkOxlintEnv = (): DiagnosticCheck | null => {
+  const found = findNearestFile(oxlintConfigNames);
+
+  if (!found || !TS_CONFIG_RE.test(found.fileName)) {
+    return null;
+  }
+
+  try {
+    const contents = readFileSync(found.path, "utf-8");
+
+    if (!contents.includes("ultracite/oxlint/core")) {
+      return null;
+    }
+
+    if (lacksCoreEnv(contents)) {
+      return {
+        message: `${found.fileName} extends the core preset but sets no \`env\`, which Oxlint doesn't inherit through \`extends\`. Without it \`no-implied-eval\` misses \`setTimeout("code")\` and \`no-eval\` misses \`window.eval\`. Run \`ultracite upgrade\` or \`ultracite init\` to add it`,
+        name: OXLINT_ENV_CHECK,
+        status: "warn",
+      };
+    }
+
+    return {
+      message: `${found.fileName} declares the environments the core preset needs`,
+      name: OXLINT_ENV_CHECK,
+      status: "pass",
+    };
+  } catch {
+    return null;
+  }
+};
+
 const checkOxfmtConfig = (): DiagnosticCheck =>
   checkOxcConfig({
     checkName: OXFMT_CHECK,
@@ -736,6 +778,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           name: "Oxlint version",
         },
         { fn: checkOxlintConfig, name: OXLINT_CHECK },
+        { fn: checkOxlintEnv, name: OXLINT_ENV_CHECK },
         {
           fn: () => checkToolInstallation("oxfmt", true),
           name: "oxfmt installation",

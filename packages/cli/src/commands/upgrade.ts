@@ -26,6 +26,7 @@ import {
   oxfmtFrameworkDevDependencies,
 } from "../dependencies";
 import type { FixAgent } from "../linter-args";
+import { addMissingOxlintEnv } from "../linters/oxlint";
 import {
   getRootInstallOptions,
   installFailedError,
@@ -494,6 +495,16 @@ export const upgrade = async (
   }
 
   await syncToolchain(linter, installOptions, packageManager);
+
+  // Configs init wrote before it declared `env` lint without the globals two
+  // security rules depend on, and nothing fails to say so.
+  const envConfig = linter === "oxlint" ? await addMissingOxlintEnv() : null;
+
+  if (envConfig) {
+    log.info(
+      `Added \`env\` to ${envConfig}. Oxlint doesn't inherit it through \`extends\`, so \`no-implied-eval\` and \`no-eval\` were missing string timers and \`window.eval\`.`
+    );
+  }
 
   const configurationUpdated = await updateConfiguration(linter, options.agent);
 

@@ -740,6 +740,7 @@ const readExtends = (
 
 // Split an existing oxlint.config.ts into the Ultracite presets it extends
 // and everything else, which is carried over as written.
+// oxlint-disable-next-line complexity -- refactor when next touched: one branch per kind of import, statement and config property an existing config can hold
 const readExistingConfig = (
   source: string,
   config: ConfigModule
@@ -920,6 +921,29 @@ const readExistingConfig = (
   return { extras, order, presets };
 };
 
+/**
+ * Whether a root config extends the core preset without declaring `env`.
+ * Oxlint doesn't carry `env` through `extends` (oxc-project/oxc#20087), so
+ * such a config runs `no-implied-eval` and `no-eval` without the browser and
+ * Node globals they need, and they miss string timers and `window.eval`.
+ * Configs init wrote before it declared `env` look like this.
+ */
+export const lacksCoreEnv = (contents: string): boolean => {
+  const parsed = parseConfigModule(contents);
+
+  if (parsed.kind !== "module") {
+    return false;
+  }
+
+  const existing = readExistingConfig(contents, parsed.module);
+
+  return (
+    existing !== null &&
+    existing.presets.includes(corePath) &&
+    !parsed.module.entries.some((entry) => entry.key === "env")
+  );
+};
+
 // The pre-parser way of finding presets, for a file init can't restructure:
 // default imports of Ultracite presets, then legacy string extends.
 const findPresetReferences = (contents: string): string[] => {
@@ -1060,6 +1084,7 @@ const isJsonObject = (value: JsonValue): value is JsonObject =>
  * generates, and its Ultracite extends become presets. Returns the extends
  * entries that can't be carried over (paths to other JSON configs).
  */
+// oxlint-disable-next-line complexity -- refactor when next touched: one branch per .oxlintrc.json key, each merged into the config differently
 const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
   const { extras, presets } = existing;
   const unmigrated: string[] = [];
@@ -1337,6 +1362,7 @@ export const oxlint = {
     workspaceConfigNames
       .map((name) => `${dir}/${name}`)
       .find((configPath) => exists(`./${configPath}`)) ?? null,
+  // oxlint-disable-next-line complexity -- refactor when next touched: a guard per config init can't update, then the js-plugins, type-aware, rename and migration cases
   update: async (opts?: OxlintOptions) => {
     const paths = resolveOxlintConfigPath();
     const configFile = fileName(paths.target);
@@ -1507,4 +1533,32 @@ export const oxlint = {
       );
     }
   },
+};
+
+/**
+ * Adds `env` to a root config that extends core without it, for
+ * `ultracite upgrade`. The rewrite is init's own update, so everything else
+ * in the config is carried over the way init carries it. Anything update
+ * would do more to than add a property (migrating .oxlintrc.json, renaming
+ * the file, replacing a config it can't read) is left for `ultracite init`.
+ */
+export const addMissingOxlintEnv = async (): Promise<string | null> => {
+  const paths = resolveOxlintConfigPath();
+
+  if (
+    paths.conflict ||
+    !paths.existing ||
+    paths.existing !== paths.target ||
+    exists(oxlintRcPath)
+  ) {
+    return null;
+  }
+
+  if (!lacksCoreEnv(await readFile(paths.existing, "utf-8"))) {
+    return null;
+  }
+
+  await oxlint.update();
+
+  return fileName(paths.target);
 };

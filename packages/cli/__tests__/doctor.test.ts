@@ -197,6 +197,32 @@ const pluginChecks = (
 const findCheck = (checks: DiagnosticCheck[], name: string) =>
   checks.find((check) => check.name === name);
 
+const oxlintConfigWithEnv = (
+  env: string
+) => `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({${env}
+  extends: [core],
+});
+`;
+
+// Doctor's env check for a project whose only file is this oxlint.config.ts.
+const checkOxlintEnv = (contents: string) => {
+  mock.module("node:fs", () => ({
+    accessSync: mock(() => {}),
+    existsSync: mock(
+      (filePath: string) =>
+        nodePath.basename(String(filePath)) === "oxlint.config.ts"
+    ),
+    readFileSync: mock(() => contents),
+  }));
+
+  return runDiagnostics("oxlint").find(
+    (result) => result.name === "Oxlint environment"
+  );
+};
+
 describe("doctor", () => {
   // ---------------------------------------------------------------------------
   // No linter detected
@@ -685,6 +711,21 @@ describe("doctor", () => {
       ),
       status: "fail",
     });
+  });
+
+  test("warns when the oxlint config extends core without env", () => {
+    const missing = checkOxlintEnv(oxlintConfigWithEnv(""));
+
+    expect(missing).toMatchObject({ status: "warn" });
+    expect(missing?.message).toContain("sets no `env`");
+    expect(missing?.message).toContain("ultracite upgrade");
+    expect(
+      checkOxlintEnv(oxlintConfigWithEnv("\n  env: core.env,"))
+    ).toMatchObject({ status: "pass" });
+    // Not a config that extends core, so there's nothing to check.
+    expect(
+      checkOxlintEnv('import next from "ultracite/oxlint/next";')
+    ).toBeUndefined();
   });
 
   test("finds .mts configs", () => {

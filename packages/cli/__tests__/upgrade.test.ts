@@ -13,6 +13,7 @@ import {
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
   OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../src/dependencies";
+import * as oxlintLinter from "../src/linters/oxlint";
 import * as schemas from "../src/schemas";
 import * as upgradeAgent from "../src/upgrade-agent";
 import * as upgradeGuides from "../src/upgrade-guides";
@@ -27,6 +28,7 @@ import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 const realNypm = { ...nypm };
 const realDoctor = { ...doctorModule };
 const realConfigResolution = { ...configResolution };
+const realOxlintLinter = { ...oxlintLinter };
 const realSchemas = { ...schemas };
 const realUtils = { ...utils };
 const realUpgradeAgent = { ...upgradeAgent };
@@ -40,11 +42,15 @@ const warn = mock((_message: string) => {
   // intentionally empty mock
 });
 
+const info = mock((_message: string) => {
+  // intentionally empty mock
+});
+
 mock.module("@clack/prompts", () => ({
   intro: mock(noop),
   log: {
     error: mock(noop),
-    info: mock(noop),
+    info,
     success: mock(noop),
     warn,
   },
@@ -93,6 +99,7 @@ afterAll(() => {
   mock.module("../src/utils", () => realUtils);
   mock.module("../src/config-resolution", () => realConfigResolution);
   mock.module("../src/schemas", () => realSchemas);
+  mock.module("../src/linters/oxlint", () => realOxlintLinter);
   mock.module("../src/commands/doctor", () => realDoctor);
   mock.module("../src/upgrade-agent", () => realUpgradeAgent);
   mock.module("../src/upgrade-guides", () => realUpgradeGuides);
@@ -115,6 +122,8 @@ interface Harness {
 
 interface SetupOptions {
   checks?: DiagnosticCheck[];
+  /** The Oxlint config upgrade adds `env` to, when one lacks it. */
+  envConfig?: string | null;
   /** What every install rejects with, when installs should fail. */
   installError?: Error;
   linter?: string | null;
@@ -129,6 +138,7 @@ interface SetupOptions {
 const setup = (options: SetupOptions = {}): Harness => {
   const {
     checks = [passingCheck],
+    envConfig = null,
     installError,
     leftAfterAgent = [],
     linter = "biome",
@@ -195,6 +205,10 @@ const setup = (options: SetupOptions = {}): Harness => {
     readPackageJson: mock(() =>
       Promise.resolve({ devDependencies: projectDependencies })
     ),
+  }));
+  mock.module("../src/linters/oxlint", () => ({
+    ...realOxlintLinter,
+    addMissingOxlintEnv: mock(() => Promise.resolve(envConfig)),
   }));
   mock.module("../src/commands/doctor", () => ({
     ...realDoctor,
@@ -335,6 +349,24 @@ describe("upgrade", () => {
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade()).rejects.toThrow("No linter configuration found");
+  });
+
+  test("says so when it adds env to an Oxlint config", async () => {
+    setup({
+      envConfig: "oxlint.config.ts",
+      linter: "oxlint",
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+    info.mockClear();
+
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
+    expect(
+      info.mock.calls.some(([message]) =>
+        String(message).includes("Added `env` to oxlint.config.ts")
+      )
+    ).toBe(true);
   });
 
   test("rejects an unsupported package manager", async () => {
