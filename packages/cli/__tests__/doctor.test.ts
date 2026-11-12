@@ -1761,4 +1761,29 @@ describe("doctor for Bun", () => {
     expect(checkNamed("oxlint version")).toMatchObject({ status: "fail" });
     expect(checkNamed("oxfmt version")).toBeUndefined();
   });
+
+  // Bun loads the config's JS plugins from node_modules like Oxlint does.
+  test("checks the JS plugins the Bun config loads", () => {
+    mockBunProject({
+      files: {
+        ...bunProjectFiles,
+        "oxlint.config.ts": bunOxlintConfig.replace(
+          'import core from "ultracite/oxlint/core";',
+          [
+            'import core from "ultracite/oxlint/core";',
+            'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";',
+            'const jsPlugins = selectJsPlugins(["react-doctor"]);',
+          ].join("\n")
+        ),
+      },
+      installed: { "oxlint-plugin-react-doctor": "0.9.18" },
+    });
+
+    expect(checkNamed("oxlint-plugin-react-doctor version")).toMatchObject({
+      message: expect.stringContaining(
+        "oxlint-plugin-react-doctor 0.9.18 is older"
+      ),
+      status: "fail",
+    });
+  });
 });

@@ -535,6 +535,36 @@ describe("upgrade", () => {
     ).toBe(false);
   });
 
+  test("reinstalls the JS plugins a Bun config loads, even when package.json doesn't list them", async () => {
+    const harness = setup({
+      linter: "bun",
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+
+    mockFileSystem({
+      [path.join(process.cwd(), "oxlint.config.ts")]: [
+        'import { defineConfig } from "ultracite/bun";',
+        'import core from "ultracite/oxlint/core";',
+        'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";',
+        'const jsPlugins = selectJsPlugins(["react-doctor"]);',
+      ].join("\n"),
+    });
+
+    try {
+      const { upgrade } = await loadUpgrade();
+
+      await expect(upgrade({ pm: "pnpm" })).resolves.toBe(0);
+    } finally {
+      restoreFileSystemMock();
+    }
+
+    const [, [toolchainPackages]] = harness.addDevDependency.mock.calls;
+
+    expect(toolchainPackages).toEqual([
+      `oxlint-plugin-react-doctor@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["oxlint-plugin-react-doctor"]}`,
+    ]);
+  });
+
   test("leaves overrides alone on package managers that only warn about peers", async () => {
     const harness = setup({
       linter: "eslint",

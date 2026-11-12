@@ -943,6 +943,10 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
         {
           fn: () => checkToolVersion("oxfmt", false),
           name: "oxfmt version",
+        },
+        {
+          fn: () => checkPluginVersions(linter),
+          name: PLUGIN_VERSIONS_CHECK,
         }
       );
       break;

@@ -372,7 +372,7 @@ const syncToolchain = async (
   // upgrade reinstalls every plugin doctor checks.
   const projectDependencies = await collectProjectDependencyNames();
 
-  if (linter === "oxlint") {
+  if (linter === "oxlint" || linter === "bun") {
     for (const plugin of getConfiguredOxlintJsPlugins()) {
       projectDependencies.add(plugin);
     }
