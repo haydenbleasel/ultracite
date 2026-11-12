@@ -4,8 +4,12 @@ import angularPlugin from "@angular-eslint/eslint-plugin";
 import angularTemplatePlugin from "@angular-eslint/eslint-plugin-template";
 import * as angularTemplateParser from "@angular-eslint/template-parser";
 
+import { version } from "../../shared/version.mjs";
 import { htmlConfig, scriptConfig } from "../core/eslint.config.mjs";
-import inlineScripts, { inlineScriptsFiles } from "./inline-scripts.mjs";
+import inlineScripts, {
+  dropBlockFilenames,
+  inlineScriptsFiles,
+} from "./inline-scripts.mjs";
 import angularTemplateRules from "./rules/angular-template.mjs";
 import angularRules from "./rules/angular.mjs";
 import withRanges from "./template-parser.mjs";
@@ -13,10 +17,31 @@ import withRanges from "./template-parser.mjs";
 // Core's rules read a JavaScript syntax tree, and some of them throw on the
 // tree Angular's template parser builds. `withRanges` gives its nodes the
 // `range` the jsdoc rules read, for when a project's config turns one back on
-// for every file.
+// for every file. The filename rule reads no syntax tree and stays on, so an
+// HTML file's name is checked as it is without this preset.
 const coreRulesOff = Object.fromEntries(
-  Object.keys(scriptConfig.rules).map((rule) => [rule, "off"])
+  Object.keys(scriptConfig.rules)
+    .filter((rule) => rule !== "github/filenames-match-regex")
+    .map((rule) => [rule, "off"])
 );
+
+const extractInlineHtml =
+  angularTemplatePlugin.processors["extract-inline-html"];
+
+// Hands each component's inline `template` to ESLint as an HTML file of its
+// own (`<file>.ts/1_inline-template-<file>.ts-1.component.html`), which the
+// config for HTML files lints like an external template, and reports what it
+// finds in the TypeScript file. The filename rule's reports on an inline
+// template are dropped, as the name is ESLint's.
+const inlineTemplates = {
+  ...extractInlineHtml,
+  meta: {
+    name: "ultracite/angular-inline-templates",
+    version: `${version}+angular-eslint@${angularTemplateParser.version}`,
+  },
+  postprocess: (blocks, filename) =>
+    extractInlineHtml.postprocess(dropBlockFilenames(blocks), filename),
+};
 
 const angular = [
   {
@@ -24,11 +49,8 @@ const angular = [
     plugins: {
       "@angular-eslint": angularPlugin,
     },
-    // Hands each component's inline `template` to ESLint as an HTML file of
-    // its own (`<file>.ts/1_inline-template-<file>.ts-1.component.html`),
-    // which the block below lints like an external template. The TypeScript
-    // file itself is linted as before.
-    processor: angularTemplatePlugin.processors["extract-inline-html"],
+    // The TypeScript file itself is linted as before.
+    processor: inlineTemplates,
     rules: {
       ...angularRules,
     },
@@ -36,8 +58,8 @@ const angular = [
   {
     // Every HTML file, not only `*.component.html`: current Angular doesn't
     // name templates that way (51 of the 298 templates in angular.dev's
-    // source do). A whole page, such as `src/index.html`, isn't a template:
-    // the processor lints only its inline scripts.
+    // source do). A whole page, such as `src/index.html`, is linted as one
+    // too, without the rules that only fit a template (see the processor).
     files: ["**/*.html"],
     languageOptions: {
       parser: withRanges(angularTemplateParser),
