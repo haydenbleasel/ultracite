@@ -1,0 +1,501 @@
+{
+  "items": [
+    {
+      "item": 1,
+      "kind": "else-if: extended",
+      "note": "a branch added to an else-if chain during a refactor",
+      "permalink": "https://github.com/vercel/next.js/blob/08b18704b79e5c419f32256220a107bc4ace075e/packages/next/src/server/app-render/dynamic-rendering.ts#L569-L598",
+      "repo": "next.js",
+      "sha": "08b18704b79e5c419f32256220a107bc4ace075e",
+      "verdict": "correct"
+    },
+    {
+      "item": 4,
+      "kind": "else-if: extended (from a lone if)",
+      "note": "an else-if added to a lone if (next.config.ts support); pure insertion",
+      "permalink": "https://github.com/vercel/next.js/blob/dad4c32332041270ecc378e78ec6eeef9183c9ea/packages/next/src/server/config.ts#L996-L1011",
+      "repo": "next.js",
+      "sha": "dad4c32332041270ecc378e78ec6eeef9183c9ea",
+      "verdict": "correct"
+    },
+    {
+      "item": 7,
+      "kind": "else-if: introduced",
+      "note": "new function in a ReDoS fix",
+      "permalink": "https://github.com/honojs/hono/blob/50869562980628b2984f73e064bb80691e5286bc/src/utils/accept.ts#L109-L148",
+      "repo": "hono",
+      "sha": "50869562980628b2984f73e064bb80691e5286bc",
+      "verdict": "correct"
+    },
+    {
+      "item": 10,
+      "kind": "ternary: introduced",
+      "note": "new helper function; the ternary moved here from buildAppStaticPaths (item 19)",
+      "permalink": "https://github.com/vercel/next.js/blob/c3e6680bfd245d840d479ba3ba1d0b1a570a19b1/packages/next/src/build/static-paths/app.ts#L275-L281",
+      "repo": "next.js",
+      "sha": "c3e6680bfd245d840d479ba3ba1d0b1a570a19b1",
+      "verdict": "correct"
+    },
+    {
+      "item": 12,
+      "kind": "ternary: introduced",
+      "note": "new function",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/1acf66edabc2ac5bbd4aed0714aed7dca7cc2aab/packages/element/src/newElement.ts#L233-L237",
+      "repo": "excalidraw",
+      "sha": "1acf66edabc2ac5bbd4aed0714aed7dca7cc2aab",
+      "verdict": "correct"
+    },
+    {
+      "item": 13,
+      "kind": "else-if: removed-otherwise",
+      "note": "the chain's tests were edited (`HTMLElement` to `ownerWindow.HTMLElement`), which reads as removed plus introduced",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/e1bb9ff8f8931e783c11d104abb8967ac6605c9a/packages/excalidraw/wysiwyg/textWysiwyg.tsx#L935",
+      "repo": "excalidraw",
+      "sha": "e1bb9ff8f8931e783c11d104abb8967ac6605c9a",
+      "verdict": "wrong"
+    },
+    {
+      "item": 16,
+      "kind": "else-if: removed-with-function",
+      "note": "function deleted",
+      "permalink": "https://github.com/vitejs/vite/blob/f9d92130fa79c638f77a3a8e6e55506f185d5a49/packages/vite/src/node/plugins/resolve.ts#L1528",
+      "repo": "vite",
+      "sha": "f9d92130fa79c638f77a3a8e6e55506f185d5a49",
+      "verdict": "correct"
+    },
+    {
+      "item": 19,
+      "kind": "ternary: removed-otherwise",
+      "note": "not rewritten: extracted into the new helper calculateFallbackMode (item 10)",
+      "permalink": "https://github.com/vercel/next.js/blob/c3e6680bfd245d840d479ba3ba1d0b1a570a19b1/packages/next/src/build/static-paths/app.ts#L855",
+      "repo": "next.js",
+      "sha": "c3e6680bfd245d840d479ba3ba1d0b1a570a19b1",
+      "verdict": "partly"
+    },
+    {
+      "item": 20,
+      "kind": "ternary: removed-otherwise",
+      "note": "converted to a switch, but inside a new arrow function, so the same-function check missed it",
+      "permalink": "https://github.com/withastro/astro/blob/fcece3658697248ab58f77b3d4a8b14d362f3c47/packages/astro/src/core/render-context.ts#L93",
+      "repo": "astro",
+      "sha": "fcece3658697248ab58f77b3d4a8b14d362f3c47",
+      "verdict": "wrong"
+    },
+    {
+      "item": 21,
+      "kind": "ternary: removed-otherwise",
+      "note": "removed in a bug fix; the nested ternary's Uint8Array branch sent the whole underlying buffer",
+      "permalink": "https://github.com/honojs/hono/blob/745c2919b6a6003b4fa772f0a011471dbeef4a88/src/helper/websocket/index.ts#L72",
+      "repo": "hono",
+      "sha": "745c2919b6a6003b4fa772f0a011471dbeef4a88",
+      "verdict": "correct"
+    },
+    {
+      "item": 22,
+      "kind": "else-if: shortened-to-lone",
+      "note": "one branch of a two-branch chain removed",
+      "permalink": "https://github.com/vercel/next.js/blob/9d596b1502bf7d370265c41786893fa6cd5c66b0/packages/next/src/lib/turbopack-warning.ts#L174-L180",
+      "repo": "next.js",
+      "sha": "9d596b1502bf7d370265c41786893fa6cd5c66b0",
+      "verdict": "correct"
+    },
+    {
+      "item": 25,
+      "kind": "else-if: shortened",
+      "note": "a branch removed",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/eb959128ac1543e7f6ea1c4f1935b9899a3e1b9b/packages/excalidraw/components/App.tsx#L4945-L5062",
+      "repo": "excalidraw",
+      "sha": "eb959128ac1543e7f6ea1c4f1935b9899a3e1b9b",
+      "verdict": "correct"
+    },
+    {
+      "item": 28,
+      "kind": "ternary: extended (from one)",
+      "note": "a one-level ternary gained a branch; the formatter re-indented the existing alternate",
+      "permalink": "https://github.com/vercel/next.js/blob/c131314bcf0cf21c5d5624b2cf8c6dbf07375abd/packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance.tsx#L269-L273",
+      "repo": "next.js",
+      "sha": "c131314bcf0cf21c5d5624b2cf8c6dbf07375abd",
+      "verdict": "correct"
+    },
+    {
+      "item": 29,
+      "kind": "ternary: extended (from one)",
+      "note": "a branch inserted into a chain; two new lines, nothing else changed",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/c10499eebb6267f24c056a03c5daf436aada0446/packages/excalidraw/components/App.tsx#L7014-L7025",
+      "repo": "excalidraw",
+      "sha": "c10499eebb6267f24c056a03c5daf436aada0446",
+      "verdict": "correct"
+    },
+    {
+      "item": 30,
+      "kind": "ternary: extended (from one)",
+      "note": "a one-line ternary gained a branch and was reflowed onto five lines",
+      "permalink": "https://github.com/vercel/next.js/blob/31b78bbed91c538e6cf196faad0a37afdfae7e70/packages/next/src/next-devtools/dev-overlay/components/request-insights/request-insights-panel.tsx#L365-L369",
+      "repo": "next.js",
+      "sha": "31b78bbed91c538e6cf196faad0a37afdfae7e70",
+      "verdict": "correct"
+    },
+    {
+      "item": 31,
+      "kind": "else-if: converted-from from ternary",
+      "note": "an else-if chain appears in new code; the removed ternary sharing a test isn't clearly what it replaced",
+      "permalink": "https://github.com/vercel/next.js/blob/93bb2799fe43cf7b2967569f78ed3e7a2438dbf1/packages/next/src/build/adapter/build-complete.ts#L1501-L1511",
+      "repo": "next.js",
+      "sha": "93bb2799fe43cf7b2967569f78ed3e7a2438dbf1",
+      "verdict": "partly"
+    },
+    {
+      "item": 32,
+      "kind": "else-if: converted-from from ternary",
+      "note": "a bug fix that needed a third case turned `pathname === '/' ? '/index' : pathname` into an if/else-if chain",
+      "permalink": "https://github.com/vercel/next.js/blob/5261ed8db95d4b056f0ed6fb1788a17dabc4b166/packages/next/src/shared/lib/turbopack/manifest-loader.ts#L486-L492",
+      "repo": "next.js",
+      "sha": "5261ed8db95d4b056f0ed6fb1788a17dabc4b166",
+      "verdict": "correct"
+    },
+    {
+      "item": 33,
+      "kind": "else-if: converted-from from ternary",
+      "note": "a nested ternary choosing cacheDir became an if/else-if chain while adding a case",
+      "permalink": "https://github.com/vitejs/vite/blob/4417b4f305623b2850bd6ae6553834c017694672/packages/vite/src/node/config.ts#L1752-L1761",
+      "repo": "vite",
+      "sha": "4417b4f305623b2850bd6ae6553834c017694672",
+      "verdict": "correct"
+    },
+    {
+      "item": 34,
+      "kind": "else-if: converted to switch",
+      "note": "an else-if chain became a switch while adding the 'auto' value",
+      "permalink": "https://github.com/vercel/next.js/blob/4173ca260e2841e05bc49004b6b15ab4e8b77929/packages/next/src/server/config.ts#L431",
+      "repo": "next.js",
+      "sha": "4173ca260e2841e05bc49004b6b15ab4e8b77929",
+      "verdict": "correct"
+    },
+    {
+      "item": 35,
+      "kind": "else-if: converted to switch",
+      "note": "else-if chains on workUnitStore.type replaced by exhaustive switches (the commit's stated aim)",
+      "permalink": "https://github.com/vercel/next.js/blob/1c1d9b5fdcebc7b0ff6e1b3ce91954d3c50e5c64/packages/next/src/server/node-environment-extensions/utils.tsx#L15",
+      "repo": "next.js",
+      "sha": "1c1d9b5fdcebc7b0ff6e1b3ce91954d3c50e5c64",
+      "verdict": "correct"
+    },
+    {
+      "item": 36,
+      "kind": "else-if: converted to switch",
+      "note": "same commit as item 35",
+      "permalink": "https://github.com/vercel/next.js/blob/1c1d9b5fdcebc7b0ff6e1b3ce91954d3c50e5c64/packages/next/src/server/app-render/dynamic-rendering.ts#L148",
+      "repo": "next.js",
+      "sha": "1c1d9b5fdcebc7b0ff6e1b3ce91954d3c50e5c64",
+      "verdict": "correct"
+    },
+    {
+      "item": 40,
+      "kind": "ternary: shrunk",
+      "note": "two branches removed from a JSX chain",
+      "permalink": "https://github.com/vercel/next.js/blob/e9990a6a866ad34c7fa372ffa075e76953deefd7/packages/next/src/client/components/react-dev-overlay/app/ReactDevOverlay.tsx#L70-L103",
+      "repo": "next.js",
+      "sha": "e9990a6a866ad34c7fa372ffa075e76953deefd7",
+      "verdict": "correct"
+    },
+    {
+      "item": 41,
+      "kind": "ternary: shrunk",
+      "note": "a branch removed while the hostname logic was restructured",
+      "permalink": "https://github.com/withastro/astro/blob/1d9e910a0308ef9699694a2871b3d71b6f5c3383/packages/astro/src/core/app/node.ts#L70-L74",
+      "repo": "astro",
+      "sha": "1d9e910a0308ef9699694a2871b3d71b6f5c3383",
+      "verdict": "correct"
+    },
+    {
+      "item": 43,
+      "kind": "ternary: converted to switch",
+      "note": "a JSX ternary chain on errorDetails.variant became a switch while adding a variant",
+      "permalink": "https://github.com/vercel/next.js/blob/43273a1d21a35646ec43230e05727e18ac258396/packages/next/src/next-devtools/dev-overlay/container/errors.tsx#L966",
+      "repo": "next.js",
+      "sha": "43273a1d21a35646ec43230e05727e18ac258396",
+      "verdict": "correct"
+    },
+    {
+      "item": 44,
+      "kind": "ternary: converted to switch",
+      "note": "the inline nested ternary was replaced by a variable that a new switch assigns",
+      "permalink": "https://github.com/vercel/next.js/blob/b0b7a429b931b08eb33b18f5c31caf25864004b0/packages/next/src/client/components/segment-cache/cache.ts#L2913",
+      "repo": "next.js",
+      "sha": "b0b7a429b931b08eb33b18f5c31caf25864004b0",
+      "verdict": "correct"
+    },
+    {
+      "item": 45,
+      "kind": "ternary: converted to switch",
+      "note": "same commit: a new switch on fetchStrategy replaced the nested ternary",
+      "permalink": "https://github.com/vercel/next.js/blob/b0b7a429b931b08eb33b18f5c31caf25864004b0/packages/next/src/client/components/segment-cache/cache.ts#L2949",
+      "repo": "next.js",
+      "sha": "b0b7a429b931b08eb33b18f5c31caf25864004b0",
+      "verdict": "correct"
+    },
+    {
+      "item": 46,
+      "kind": "ternary: reduced-to-one",
+      "note": "a revert removed one branch",
+      "permalink": "https://github.com/vercel/next.js/blob/658037358cf4c9813648e3a9b1c70d7e414c87ff/packages/next/src/server/response-cache/utils.ts#L11-L20",
+      "repo": "next.js",
+      "sha": "658037358cf4c9813648e3a9b1c70d7e414c87ff",
+      "verdict": "correct"
+    },
+    {
+      "item": 47,
+      "kind": "ternary: reduced-to-one",
+      "note": "a refactor removed the nested part",
+      "permalink": "https://github.com/honojs/hono/blob/ae99d86d8916f44990e5ea52fb619339d12fed58/src/client/client.ts#L84",
+      "repo": "hono",
+      "sha": "ae99d86d8916f44990e5ea52fb619339d12fed58",
+      "verdict": "correct"
+    },
+    {
+      "item": 48,
+      "kind": "ternary: reduced-to-one",
+      "note": "a refactor removed the nested part",
+      "permalink": "https://github.com/vercel/next.js/blob/8fa15f4c77d6e89bdd0e273f73ebd7ed1b334861/packages/next/src/build/webpack-config.ts#L446-L455",
+      "repo": "next.js",
+      "sha": "8fa15f4c77d6e89bdd0e273f73ebd7ed1b334861",
+      "verdict": "correct"
+    },
+    {
+      "item": 49,
+      "kind": "ternary: converted to if",
+      "note": "nested ternary rewritten as an if/else-if chain (labelled `if`)",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/a3b90897b5d770a27d53773db670ddfda983ae85/packages/element/src/binding.ts#L884",
+      "repo": "excalidraw",
+      "sha": "a3b90897b5d770a27d53773db670ddfda983ae85",
+      "verdict": "correct"
+    },
+    {
+      "item": 50,
+      "kind": "ternary: converted to if",
+      "note": "nested ternary rewritten as separate if statements setting bit flags",
+      "permalink": "https://github.com/vercel/next.js/blob/df247d1b518179f1cd9cf028461d25fee025f488/packages/next/src/server/app-render/create-flight-router-state-from-loader-tree.ts#L59",
+      "repo": "next.js",
+      "sha": "df247d1b518179f1cd9cf028461d25fee025f488",
+      "verdict": "correct"
+    },
+    {
+      "item": 51,
+      "kind": "ternary: converted to if",
+      "note": "a ternary chain picking one error became if statements collecting every error (a behaviour change, intended)",
+      "permalink": "https://github.com/vercel/next.js/blob/e674165f365590225f61bf80e29a278fcd6fee73/packages/next/src/server/lib/router-utils/setup-dev-bundler.ts#L1107",
+      "repo": "next.js",
+      "sha": "e674165f365590225f61bf80e29a278fcd6fee73",
+      "verdict": "correct"
+    },
+    {
+      "item": 52,
+      "kind": "ternary: converted to else-if",
+      "note": "nested ternary rewritten as `let` plus if/else-if",
+      "permalink": "https://github.com/vercel/next.js/blob/8d6c076d1420df10afda9b0cf9314a3560b7976e/packages/next/src/build/index.ts#L4064",
+      "repo": "next.js",
+      "sha": "8d6c076d1420df10afda9b0cf9314a3560b7976e",
+      "verdict": "correct"
+    },
+    {
+      "item": 53,
+      "kind": "ternary: converted to else-if",
+      "note": "nested ternary rewritten as `let` plus if/else-if while adding cases",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4dc205537cf6a0d356a3d284697e4cc345346c18/packages/excalidraw/actions/actionFinalize.tsx#L83",
+      "repo": "excalidraw",
+      "sha": "4dc205537cf6a0d356a3d284697e4cc345346c18",
+      "verdict": "correct"
+    },
+    {
+      "item": 55,
+      "kind": "ternary: reduced-to-one to if",
+      "note": "reduced to one level is right; the `if added` note comes from an if whose condition was edited",
+      "permalink": "https://github.com/vercel/next.js/blob/40dd4ce4f58183111e79f408f6bbf22c7ba24a16/packages/next/src/server/lib/incremental-cache/file-system-cache.ts#L392",
+      "repo": "next.js",
+      "sha": "40dd4ce4f58183111e79f408f6bbf22c7ba24a16",
+      "verdict": "partly"
+    },
+    {
+      "item": 56,
+      "kind": "ternary: reduced-to-one to if",
+      "note": "the nested part became an if/else",
+      "permalink": "https://github.com/vercel/next.js/blob/7569c8087a7480334e02c789138fd67290097e9e/packages/next/src/build/progress.ts#L79",
+      "repo": "next.js",
+      "sha": "7569c8087a7480334e02c789138fd67290097e9e",
+      "verdict": "correct"
+    },
+    {
+      "item": 57,
+      "kind": "ternary: reduced-to-one to if",
+      "note": "a nested ternary became `let` plus if/else-if while adding the `call` case",
+      "permalink": "https://github.com/trpc/trpc/blob/d1652d1bc0a9ff3e3d286a4bf69c116621c165f8/packages/server/src/unstable-core-do-not-import/createProxy.ts#L28",
+      "repo": "trpc",
+      "sha": "d1652d1bc0a9ff3e3d286a4bf69c116621c165f8",
+      "verdict": "correct"
+    },
+    {
+      "item": 58,
+      "kind": "ternary: extended",
+      "note": "a merge commit that rewrote the function; matched as the same tree",
+      "permalink": "https://github.com/honojs/hono/blob/b0c2d90eb07fefa6c06dc556c97ed8ecffc8b2c0/src/router/reg-exp-router/node.ts#L63-L71",
+      "repo": "hono",
+      "sha": "b0c2d90eb07fefa6c06dc556c97ed8ecffc8b2c0",
+      "verdict": "partly"
+    },
+    {
+      "item": 59,
+      "kind": "ternary: extended",
+      "note": "a branch inserted into a five-member JSX chain; two new lines, nothing else changed",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/792ea3a06c60079229f36819d8695af7d563832a/packages/excalidraw/components/Toolbar.tsx#L97-L109",
+      "repo": "excalidraw",
+      "sha": "792ea3a06c60079229f36819d8695af7d563832a",
+      "verdict": "correct"
+    },
+    {
+      "item": 60,
+      "kind": "ternary: extended",
+      "note": "branches added to a chain",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/c99e81678bd13eb34c4f027472e8cd0b4121ba4d/packages/excalidraw/components/MobileToolBar.tsx#L177-L191",
+      "repo": "excalidraw",
+      "sha": "c99e81678bd13eb34c4f027472e8cd0b4121ba4d",
+      "verdict": "correct"
+    },
+    {
+      "item": 61,
+      "kind": "else-if: converted to ternary",
+      "note": "the if/else stayed; a ternary was added inside one branch",
+      "permalink": "https://github.com/vercel/next.js/blob/f4449e8fa58d137a82bb3667eedfff80466de3ae/packages/next/src/server/use-cache/use-cache-wrapper.ts#L3233",
+      "repo": "next.js",
+      "sha": "f4449e8fa58d137a82bb3667eedfff80466de3ae",
+      "verdict": "partly"
+    },
+    {
+      "item": 62,
+      "kind": "else-if: converted to ternary",
+      "note": "nested if/else became a lookup object indexed by a ternary, not a plain ternary",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/f1a79b73df5b9883f940417861a4f5fb879a3f02/packages/excalidraw/renderer/interactiveScene.ts#L2035",
+      "repo": "excalidraw",
+      "sha": "f1a79b73df5b9883f940417861a4f5fb879a3f02",
+      "verdict": "partly"
+    },
+    {
+      "item": 63,
+      "kind": "else-if: converted to ternary",
+      "note": "the whole function was rewritten",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/e4c70cb6c6493c816da94ec23188321854296e64/packages/excalidraw/components/App.tsx#L4391",
+      "repo": "excalidraw",
+      "sha": "e4c70cb6c6493c816da94ec23188321854296e64",
+      "verdict": "partly"
+    },
+    {
+      "item": 64,
+      "kind": "ternary: converted-from from if",
+      "note": "a new nested ternary in new code; an unrelated if sharing a test was removed",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/1acf66edabc2ac5bbd4aed0714aed7dca7cc2aab/packages/element/src/dragElements.ts#L368",
+      "repo": "excalidraw",
+      "sha": "1acf66edabc2ac5bbd4aed0714aed7dca7cc2aab",
+      "verdict": "wrong"
+    },
+    {
+      "item": 65,
+      "kind": "ternary: converted-from from if",
+      "note": "an if's test moved into a new nested ternary that computes the value the if now checks",
+      "permalink": "https://github.com/vercel/next.js/blob/dfa7f4f71317462806b20be5141d1ea5f9a997c3/packages/next/src/client/components/segment-cache/cache.ts#L3785-L3789",
+      "repo": "next.js",
+      "sha": "dfa7f4f71317462806b20be5141d1ea5f9a997c3",
+      "verdict": "partly"
+    },
+    {
+      "item": 66,
+      "kind": "ternary: converted-from from if",
+      "note": "if/else on route.isPPREnabled became part of a nested ternary choosing a fetch strategy",
+      "permalink": "https://github.com/vercel/next.js/blob/65db12fee15bb33b3464b73e193863e44d888cf0/packages/next/src/client/components/segment-cache/scheduler.ts#L405-L409",
+      "repo": "next.js",
+      "sha": "65db12fee15bb33b3464b73e193863e44d888cf0",
+      "verdict": "correct"
+    },
+    {
+      "item": 68,
+      "kind": "ternary: reduced-to-one to switch",
+      "note": "a nested ternary became a switch with a single ternary inside, while adding a format",
+      "permalink": "https://github.com/withastro/astro/blob/6e29a172f153d15fac07320488fae01dece71748/packages/astro/src/core/build/generate.ts#L389",
+      "repo": "astro",
+      "sha": "6e29a172f153d15fac07320488fae01dece71748",
+      "verdict": "correct"
+    },
+    {
+      "item": 70,
+      "kind": "ternary: converted-from from else-if",
+      "note": "an else-if chain with early returns became a nested ternary (a performance change)",
+      "permalink": "https://github.com/honojs/hono/blob/43fe52ce33caf9652f693256a0a04090c3ecf59f/src/jsx/dom/render.ts#L274-L278",
+      "repo": "hono",
+      "sha": "43fe52ce33caf9652f693256a0a04090c3ecf59f",
+      "verdict": "correct"
+    },
+    {
+      "item": 71,
+      "kind": "else-if: converted to nested-ternary",
+      "note": "same commit as item 70, seen from the else-if side",
+      "permalink": "https://github.com/honojs/hono/blob/43fe52ce33caf9652f693256a0a04090c3ecf59f/src/jsx/dom/render.ts#L274",
+      "repo": "hono",
+      "sha": "43fe52ce33caf9652f693256a0a04090c3ecf59f",
+      "verdict": "correct"
+    },
+    {
+      "item": 72,
+      "kind": "else-if: converted to lookup",
+      "note": "a large refactor; the lookup that appeared is unrelated",
+      "permalink": "https://github.com/withastro/astro/blob/fd17f4a40b83d14350dce691aeb79d87e8fcaf40/packages/astro/src/core/routing/manifest/create.ts#L361",
+      "repo": "astro",
+      "sha": "fd17f4a40b83d14350dce691aeb79d87e8fcaf40",
+      "verdict": "wrong"
+    },
+    {
+      "item": 73,
+      "kind": "else-if: converted to lookup",
+      "note": "the function was rewritten around esbuild",
+      "permalink": "https://github.com/withastro/astro/blob/e72efd6a9a1e2a70488fd225529617ffd8418534/packages/astro/src/vite-plugin-env/index.ts#L101",
+      "repo": "astro",
+      "sha": "e72efd6a9a1e2a70488fd225529617ffd8418534",
+      "verdict": "wrong"
+    },
+    {
+      "item": 74,
+      "kind": "else-if: converted to lookup",
+      "note": "the chain was restructured; `form[key]` on a `const form = {}` map was counted as a lookup",
+      "permalink": "https://github.com/honojs/hono/blob/0c1e89964ee3d40ac0c0167858f0ec35eb1b6ebf/src/validator/validator.ts#L111",
+      "repo": "hono",
+      "sha": "0c1e89964ee3d40ac0c0167858f0ec35eb1b6ebf",
+      "verdict": "wrong"
+    },
+    {
+      "item": 76,
+      "kind": "ternary: converted to guard-returns",
+      "note": "a returned nested ternary became guard returns with comments, in a bug fix",
+      "permalink": "https://github.com/vercel/next.js/blob/dd5705464732f10abb21ae2dd3a0fb48c5c51400/packages/next/src/client/components/router-reducer/create-router-cache-key.ts#L8",
+      "repo": "next.js",
+      "sha": "dd5705464732f10abb21ae2dd3a0fb48c5c51400",
+      "verdict": "correct"
+    },
+    {
+      "item": 77,
+      "kind": "ternary: converted-from from switch",
+      "note": "the function was rewritten; the removed switch isn't what the new ternary replaced",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/0ffeaeaecfc77a952c3468ad81f56f1c7489177a/packages/excalidraw/element/binding.ts#L1808-L1822",
+      "repo": "excalidraw",
+      "sha": "0ffeaeaecfc77a952c3468ad81f56f1c7489177a",
+      "verdict": "partly"
+    },
+    {
+      "item": 78,
+      "kind": "ternary: converted-from from lookup",
+      "note": "the lookup was replaced by a helper call; the nested ternary is new code",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/b9cfbc2077a89b54a6ab73c262e260da50b59bcc/src/element/bounds.ts#L575-L579",
+      "repo": "excalidraw",
+      "sha": "b9cfbc2077a89b54a6ab73c262e260da50b59bcc",
+      "verdict": "wrong"
+    }
+  ],
+  "note": "Hand input, one rater (the Claude model that ran nested-ternaries-history.cjs). The sample (out/nested-ternaries/history/event-sample.json, seed 20261111, up to three non-mass events per kind) has 78 events; these are the 55 that were read, chosen to cover every ternary kind and the conversion kinds of else-if chains (the else-if introduced/extended/removed kinds were checked more lightly). Each verdict compares the event's label with the commit's diff: correct, partly (the direction is right but the kind or the construct is off), wrong.",
+  "rater": "rater 1 (Claude)"
+}

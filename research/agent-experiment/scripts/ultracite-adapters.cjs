@@ -148,7 +148,30 @@ const EXPECTED = {
 //     the outro counts the issues left for a person;
 //   - run-agent.ts: AGENT_TIMEOUT_MS is 10 minutes (read from the source by `contract`);
 //   - linters.ts (Oxlint): a JS-plugin rule's help and URL are read from the plugin.
+// "v3" (added with the nested-ternaries topic, which selects it) is the agent-fix code at 9743dfcb,
+// after d51d2433 (#866, "keep agent-fix pairing local") and 872f9376 (#871, "agent-fix matching
+// edge cases"). It is v2 with three slices changed:
+//   - diff.ts: a diagnostic's message keeps its numbers, except a limit rule's (every number) and
+//     numbers that point at a line or count repeats in any rule's; recordSourceLines keeps the
+//     whole file as the linter read it (trimmed lines), not one line, and returns the diagnostics;
+//     within one rule and message, a fresh report is paired with an original on an unchanged line
+//     first, then with the original whose place (between the nearest lines that occur once in both
+//     files) it sits in, then in file order, and an original fixed where it stood leaves a report
+//     elsewhere new; leftovers that differ only in numbers are paired when they're on the
+//     original's line, unchanged, where the edit left it (pairOnSameLine). fingerprintSources and
+//     releaseSourceLines are for the second and later files of a multi-file run;
+//   - index.ts: verifySafely matches and returns what recordSourceLines returns; runAgentFix
+//     records each file's issues at its turn (fingerprinting the later files' first), not every
+//     file's at the handoff, and lets go of a file's lines once it's done (outside the hashed
+//     slice);
+//   - linters.ts (Oxlint): a JS-plugin rule's help is read from the plugin as Oxlint resolves it
+//     from the config it lints with (`-c`, the nearest config, or the working directory). The
+//     harness's Oxlint resolves plugins from this repo through its configs, so the mirror keeps
+//     v2's lookup; this topic's config loads no JS plugin.
+// v1 and v2 are unchanged: no code path of theirs reads anything v3 adds.
 const revision = () => process.env.ULTRACITE_MIRROR ?? "v1";
+// v2 and v3 share every change v2 made, except where v3 differs (above).
+const atLeastV2 = () => revision() === "v2" || revision() === "v3";
 
 const EXPECTED_V2 = {
   ...EXPECTED,
@@ -161,6 +184,22 @@ const EXPECTED_V2 = {
   "diff.ts": "c9bc0f7973043c740fa68cf161b25f3d582130a03322be0d117f2c568446f847",
 };
 
+// The slices at 9743dfcb (unchanged at cfa365be); run-agent.ts is v2's.
+const EXPECTED_V3 = {
+  ...EXPECTED_V2,
+  "linters.ts oxlint":
+    "0ef3470758be684d866bc8ae22a7d84c38027cdf16c2281e83fe5a3d558596d2",
+  "index.ts fixFileGroup":
+    "826f76ae5436e14076375b0f2c6c04711adbd804e75a454634094a8ca0c42428",
+  "diff.ts": "d8a0c826f8142f686440655c7f460a44aad87546b7107217383244fb0484a51a",
+};
+const expectedHashes = () =>
+  revision() === "v3"
+    ? EXPECTED_V3
+    : revision() === "v2"
+      ? EXPECTED_V2
+      : EXPECTED;
+
 /**
  * Hashes every mirrored slice. `strict` (a new run) throws when one differs from EXPECTED;
  * otherwise the differences are returned, so a re-measurement can record them.
@@ -170,7 +209,7 @@ function checkSources({ strict = true } = {}) {
   const drift = [];
   for (const [name, slice] of Object.entries(SLICES)) {
     hashes[name] = sha256(slice());
-    const expected = revision() === "v2" ? EXPECTED_V2 : EXPECTED;
+    const expected = expectedHashes();
     if (hashes[name] !== expected[name]) {
       drift.push(name);
     }
@@ -328,7 +367,7 @@ function parseOxlintDiagnostics(stdout) {
     const span = diagnostic.labels?.[0]?.span;
     const rule = diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint";
     const docs =
-      revision() !== "v2" || diagnostic.help || diagnostic.url
+      !atLeastV2() || diagnostic.help || diagnostic.url
         ? {}
         : jsPluginRuleDocs(rule);
     diagnostics.push({
@@ -682,9 +721,12 @@ function verifySafely(verify, file, cwd) {
   }
   try {
     const allRemaining = verify(file);
-    const remaining = allRemaining.filter(
+    const ownFile = allRemaining.filter(
       (diagnostic) => diagnostic.file === file
     );
+    // v3: what recordSourceLines returns is what's matched and handed over.
+    const remaining =
+      revision() === "v3" ? recordSourceLinesV3(ownFile, cwd) : ownFile;
     if (revision() === "v2") {
       recordSourceLines(remaining, cwd);
     }
@@ -825,10 +867,295 @@ function partitionByRemainingV2(original, remaining) {
     stillReported: remaining.filter((diagnostic) => pairs.has(diagnostic)),
   };
 }
-const partitionByRemaining = (original, remaining) =>
-  revision() === "v2"
+// diff.ts (v3), at 9743dfcb. Copied function by function; `cwd` is the project root a relative
+// path resolves from (the CLI reads it relative to process.cwd(), the project root). Line and
+// column spans shift as soon as the agent edits the file, so a diagnostic is matched by its rule and
+// message, and reports of one rule and message are told apart by the file each linter run read.
+const LINE_BREAK_RE_V3 = /\r?\n/u;
+const POSITION_RE = /(?<=\b(?:line|column|col)\s+)\d+\b|\b\d+(?=\s+times\b)/giu;
+const LIMIT_RULE_RE =
+  /(?:^|\/)(?:(?:jsx-)?max-[\w-]+|(?:[\w-]+-)?complexity|nested-control-flow|noExcessive\w+|useMax\w+)$/u;
+const KEY_SEPARATOR = "\u0000";
+// The file each diagnostic was reported in ({ lines, unique }), beside the diagnostics.
+const snapshotsV3 = new WeakMap();
+// Every snapshot taken of a file, so they can be let go once it's fixed.
+const snapshotsByFileV3 = new Map();
+// Where each report whose file is read later was ({ around, line }), until recordSourceLines.
+const fingerprintsV3 = new WeakMap();
+const readLinesV3 = (file, cwd) => {
+  try {
+    return readFileSync(resolve(cwd, file), "utf8")
+      .split(LINE_BREAK_RE_V3)
+      .map((line) => line.trim());
+  } catch {
+    return [];
+  }
+};
+function uniqueLines(snapshot) {
+  if (snapshot.unique) return snapshot.unique;
+  const unique = new Map();
+  const seen = new Set();
+  for (const [index, line] of snapshot.lines.entries()) {
+    if (seen.has(line)) {
+      unique.delete(line);
+    } else if (line) {
+      seen.add(line);
+      unique.set(line, index);
+    }
+  }
+  snapshot.unique = unique;
+  return unique;
+}
+const linesAround = (lines, index) =>
+  [lines[index - 1] ?? "", lines[index] ?? "", lines[index + 1] ?? ""].join(
+    KEY_SEPARATOR
+  );
+function fingerprintAt(lines, index) {
+  const around = linesAround(lines, index);
+  const start = (lines[index - 1] ?? "").length + KEY_SEPARATOR.length;
+  return {
+    around,
+    line: around.slice(start, start + (lines[index] ?? "").length),
+  };
+}
+function placeLines(lines) {
+  const places = new Map();
+  for (const index of lines.keys()) {
+    const around = linesAround(lines, index);
+    places.set(around, places.has(around) ? undefined : index);
+  }
+  return places;
+}
+function findLine(snapshot, index, { around, line }, places) {
+  if (linesAround(snapshot.lines, index) === around) return index;
+  const moved = places().get(around);
+  if (moved !== undefined) return moved;
+  if ((snapshot.lines[index] ?? "") === line) return index;
+  return uniqueLines(snapshot).get(line);
+}
+/** diff.ts fingerprintSources: for reports whose file is read later than the linter ran. */
+function fingerprintSources(diagnostics, cwd) {
+  const files = new Map();
+  for (const diagnostic of diagnostics) {
+    const lines =
+      files.get(diagnostic.file) ?? readLinesV3(diagnostic.file, cwd);
+    files.set(diagnostic.file, lines);
+    fingerprintsV3.set(diagnostic, fingerprintAt(lines, diagnostic.line - 1));
+  }
+}
+/**
+ * diff.ts recordSourceLines: remembers the file behind each diagnostic and returns the diagnostics
+ * to match and hand over (a fingerprinted report an edit moved comes back as a copy on the line
+ * it's on now). `textOf(file)`, when given, supplies a file's text instead of reading it (the
+ * harness's re-measurement, from the committed copy of the file as that linter run read it).
+ */
+function recordSourceLinesV3(diagnostics, cwd, textOf = null) {
+  const files = new Map();
+  const places = new Map();
+  const snapshotOf = (file) => {
+    const read = files.get(file);
+    if (read) return read;
+    const snapshot = {
+      lines: textOf
+        ? String(textOf(file) ?? "")
+            .split(LINE_BREAK_RE_V3)
+            .map((line) => line.trim())
+        : readLinesV3(file, cwd),
+    };
+    const taken = snapshotsByFileV3.get(file) ?? [];
+    files.set(file, snapshot);
+    taken.push(snapshot);
+    snapshotsByFileV3.set(file, taken);
+    return snapshot;
+  };
+  const placesOf = (snapshot) => {
+    const placed = places.get(snapshot) ?? placeLines(snapshot.lines);
+    places.set(snapshot, placed);
+    return placed;
+  };
+  return diagnostics.map((diagnostic) => {
+    const snapshot = snapshotOf(diagnostic.file);
+    const fingerprint = fingerprintsV3.get(diagnostic);
+    const index = diagnostic.line - 1;
+    fingerprintsV3.delete(diagnostic);
+    const line = fingerprint
+      ? findLine(snapshot, index, fingerprint, () => placesOf(snapshot))
+      : index;
+    if (line === undefined) return diagnostic;
+    const current =
+      line === index ? diagnostic : { ...diagnostic, line: line + 1 };
+    snapshotsV3.set(current, snapshot);
+    return current;
+  });
+}
+/** diff.ts releaseSourceLines: lets go of every snapshot of a file. */
+function releaseSourceLines(file) {
+  for (const snapshot of snapshotsByFileV3.get(file) ?? []) {
+    snapshot.lines = [];
+    snapshot.unique = undefined;
+  }
+  snapshotsByFileV3.delete(file);
+}
+const sourceLineV3 = (diagnostic) =>
+  snapshotsV3.get(diagnostic)?.lines[diagnostic.line - 1] || undefined;
+function diagnosticKeyV3(diagnostic) {
+  const message = diagnostic.message.replaceAll(
+    LIMIT_RULE_RE.test(diagnostic.rule) ? NUMBER_RE : POSITION_RE,
+    "#"
+  );
+  return `${diagnostic.rule}${KEY_SEPARATOR}${message}`;
+}
+const looseKeyV3 = (diagnostic) =>
+  `${diagnostic.rule}${KEY_SEPARATOR}${diagnostic.message.replaceAll(NUMBER_RE, "#")}`;
+function groupByKeyV3(diagnostics, keyOf) {
+  const groups = new Map();
+  for (const diagnostic of diagnostics) {
+    const key = keyOf(diagnostic);
+    const group = groups.get(key);
+    if (group) {
+      group.push(diagnostic);
+      continue;
+    }
+    groups.set(key, [diagnostic]);
+  }
+  return groups;
+}
+function anchorPositions(before, after) {
+  const beforeLines = uniqueLines(before);
+  const afterLines = uniqueLines(after);
+  return before.lines.map((line) =>
+    beforeLines.has(line) ? afterLines.get(line) : undefined
+  );
+}
+function lineWindow(original, after, anchors) {
+  const before = snapshotsV3.get(original);
+  const index = original.line - 1;
+  if (
+    !before ||
+    index < 0 ||
+    index >= before.lines.length ||
+    LIMIT_RULE_RE.test(original.rule)
+  )
+    return null;
+  const positions = anchors.get(before) ?? anchorPositions(before, after);
+  anchors.set(before, positions);
+  const lower =
+    positions.findLast(
+      (position, line) => line < index && position !== undefined
+    ) ?? -1;
+  const upper =
+    positions.find(
+      (position, line) => line > index && position !== undefined
+    ) ?? after.lines.length;
+  const hasCode = after.lines.some(
+    (line, position) => position > lower && position < upper && line !== ""
+  );
+  return hasCode ? { lower, upper } : null;
+}
+function placeOriginals(originals, reports) {
+  const [firstReport] = reports;
+  const after = firstReport ? snapshotsV3.get(firstReport) : undefined;
+  const anchors = new Map();
+  return originals.map((original) => {
+    const window = after ? lineWindow(original, after, anchors) : null;
+    const place =
+      window &&
+      ((report) =>
+        snapshotsV3.get(report) === after &&
+        window.lower < report.line - 1 &&
+        report.line - 1 < window.upper);
+    return [original, place];
+  });
+}
+function pairGroupV3(originals, fresh) {
+  const pairs = new Map();
+  const matched = new Set();
+  const pair = (report, original) => {
+    pairs.set(report, original);
+    matched.add(original);
+  };
+  for (const report of fresh) {
+    const text = sourceLineV3(report);
+    const match =
+      text === undefined
+        ? undefined
+        : originals.find(
+            (original) =>
+              !matched.has(original) && sourceLineV3(original) === text
+          );
+    if (match) pair(report, match);
+  }
+  const reports = fresh.filter((report) => !pairs.has(report));
+  const open = placeOriginals(
+    originals.filter((original) => !matched.has(original)),
+    reports
+  ).filter(([, place]) => place === null || reports.some(place));
+  for (const [original, place] of open) {
+    const report =
+      place &&
+      reports.find((candidate) => !pairs.has(candidate) && place(candidate));
+    if (report) pair(report, original);
+  }
+  const rest = open.filter(([original]) => !matched.has(original));
+  const unplaced = reports.filter((report) => !pairs.has(report));
+  for (const [index, [original]] of rest.entries()) {
+    const report = unplaced[index];
+    if (!report) break;
+    pair(report, original);
+  }
+  return pairs;
+}
+function pairOnSameLine(originals, fresh) {
+  const pairs = new Map();
+  for (const [original, place] of placeOriginals(originals, fresh)) {
+    const text = sourceLineV3(original);
+    const report =
+      place &&
+      text !== undefined &&
+      fresh.find(
+        (candidate) =>
+          !pairs.has(candidate) &&
+          place(candidate) &&
+          sourceLineV3(candidate) === text
+      );
+    if (report) pairs.set(report, original);
+  }
+  return pairs;
+}
+function pairByKey(original, remaining, keyOf, pairing) {
+  const originalGroups = groupByKeyV3(original, keyOf);
+  const pairs = new Map();
+  for (const [key, fresh] of groupByKeyV3(remaining, keyOf))
+    for (const [report, match] of pairing(originalGroups.get(key) ?? [], fresh))
+      pairs.set(report, match);
+  return pairs;
+}
+/** diff.ts partitionByRemaining (v3). */
+function partitionByRemainingV3(original, remaining) {
+  const pairs = pairByKey(original, remaining, diagnosticKeyV3, pairGroupV3);
+  const paired = new Set(pairs.values());
+  const loosePairs = pairByKey(
+    original.filter((diagnostic) => !paired.has(diagnostic)),
+    remaining.filter((diagnostic) => !pairs.has(diagnostic)),
+    looseKeyV3,
+    pairOnSameLine
+  );
+  for (const [report, match] of loosePairs) pairs.set(report, match);
+  const matched = new Set(pairs.values());
+  return {
+    cleared: original.filter((diagnostic) => !matched.has(diagnostic)),
+    introduced: remaining.filter((diagnostic) => !pairs.has(diagnostic)),
+    still: original.filter((diagnostic) => matched.has(diagnostic)),
+    stillReported: remaining.filter((diagnostic) => pairs.has(diagnostic)),
+  };
+}
+
+const partitionByRemaining = (original, remaining) => {
+  if (revision() === "v3") return partitionByRemainingV3(original, remaining);
+  return revision() === "v2"
     ? partitionByRemainingV2(original, remaining)
     : partitionByRemainingV1(original, remaining);
+};
 
 /**
  * index.ts toRetryIssues: what's still reported against what the previous attempt was given. A
@@ -947,7 +1274,7 @@ function leftStillReported(leftIssues, remaining) {
   return total;
 }
 
-// `finalMessage` (v2 only): the last attempt's final message, or "" when that attempt left issues
+// `finalMessage` (v2 and v3): the last attempt's final message, or "" when that attempt left issues
 // for review, as index.ts attemptFileFix passes it on.
 function fileOutcome({
   agentLabel,
@@ -998,7 +1325,7 @@ function fileOutcome({
     notes.push(describeLeftForReview(agentLabel, entry));
   }
   const outro = `Fixed ${fixed} of ${issues.length} issue${issues.length === 1 ? "" : "s"} with ${agentLabel}.`;
-  if (revision() !== "v2") {
+  if (!atLeastV2()) {
     return {
       fixed,
       remaining,
@@ -1056,6 +1383,10 @@ module.exports = {
   nextRetry,
   partitionByRemaining,
   recordSourceLines,
+  // v3 (diff.ts at 9743dfcb): recordSourceLines returns the diagnostics to match and hand over.
+  recordSourceLinesV3,
+  fingerprintSources,
+  releaseSourceLines,
   revision,
   toOxlintRuleName,
   verifySafely,

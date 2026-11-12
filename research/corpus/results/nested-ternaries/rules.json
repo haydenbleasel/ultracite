@@ -1,0 +1,1321 @@
+{
+  "generated": "2026-11-12T04:37:35.504Z",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  },
+  "oxlint": {
+    "core": {
+      "no-nested-ternary": "error",
+      "no-ternary": "off",
+      "no-unneeded-ternary": "error",
+      "no-negated-condition": "error",
+      "no-else-return": "error",
+      "no-lonely-if": "error",
+      "curly": "error",
+      "complexity": "error",
+      "prefer-const": "error",
+      "func-style": [
+        "error",
+        "expression"
+      ],
+      "no-use-before-define": [
+        "error",
+        {
+          "variables": false
+        }
+      ],
+      "unicorn/no-nested-ternary": "off",
+      "unicorn/prefer-ternary": "error",
+      "unicorn/prefer-logical-operator-over-ternary": "error",
+      "unicorn/no-negated-condition": "error",
+      "unicorn/no-lonely-if": "error",
+      "unicorn/no-useless-undefined": [
+        "error",
+        {
+          "checkArguments": false
+        }
+      ]
+    },
+    "js-plugins": {
+      "sonarjs/no-nested-conditional": "error",
+      "sonarjs/cognitive-complexity": [
+        "error",
+        20
+      ],
+      "sonarjs/prefer-single-boolean-return": "error",
+      "sonarjs/no-collapsible-if": "error",
+      "sonarjs/prefer-immediate-return": "error",
+      "sonarjs/no-redundant-jump": "error",
+      "react-doctor/rendering-conditional-render": "error"
+    },
+    "react": {
+      "react/jsx-no-useless-fragment": "error"
+    }
+  },
+  "oxlintComments": {
+    "core: no-use-before-define": "`variables: false` skips a reference from inside a function to a variable declared later in an outer scope, which can't run before the declaration does unless the function is called during load. Functions that call each other have no order that satisfies the default. A use in the same scope, and a function or class used before it, still report. https://www.ultracite.ai/research/func-style",
+    "core: unicorn/no-nested-ternary": "Its fixer wraps the inner ternary in parentheses that oxfmt strips, so every `fix` run ping-pongs. eslint-config-prettier disables it for the same reason; the core `no-nested-ternary` still reports the construct.",
+    "core: unicorn/no-useless-undefined": "A required parameter typed `T | undefined` has to be passed `undefined` explicitly, and the rule's autofix deletes it into a TS2554 error (#851). The rule can't see parameter types, so skip call arguments. Not a TypeScript-only override: oxlint applies a preset's overrides after the user's own `rules`, so it would undo their settings.",
+    "js-plugins: sonarjs/cognitive-complexity": "The same number as Biome's noExcessiveCognitiveComplexity limit, but the two score functions differently, so the limits aren't equivalent."
+  },
+  "oxlintRules": [
+    {
+      "category": "restriction",
+      "fix": "none",
+      "rule": "eslint/complexity",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "fixable_fix",
+      "rule": "eslint/curly",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "pending",
+      "rule": "eslint/func-style",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "conditional_fix",
+      "rule": "eslint/no-else-return",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "pending",
+      "rule": "eslint/no-lonely-if",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "fixable_fix",
+      "rule": "eslint/no-negated-condition",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "eslint/no-nested-ternary",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "eslint/no-ternary",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "fix": "fixable_dangerous_fix",
+      "rule": "eslint/no-unneeded-ternary",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "fix": "none",
+      "rule": "eslint/no-use-before-define",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "conditional_fix",
+      "rule": "eslint/prefer-const",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "fixable_suggestion",
+      "rule": "react/jsx-no-useless-fragment",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "pending",
+      "rule": "unicorn/no-lonely-if",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "fixable_fix",
+      "rule": "unicorn/no-negated-condition",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "conditional_fix",
+      "rule": "unicorn/no-nested-ternary",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "fixable_fix",
+      "rule": "unicorn/no-useless-undefined",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "fixable_suggestion",
+      "rule": "unicorn/prefer-logical-operator-over-ternary",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "pending",
+      "rule": "unicorn/prefer-ternary",
+      "typeAware": false
+    }
+  ],
+  "eslint": {
+    "core: src/example.ts": {
+      "no-nested-ternary": [
+        2
+      ],
+      "no-ternary": [
+        0
+      ],
+      "no-unneeded-ternary": [
+        2,
+        {
+          "defaultAssignment": true
+        }
+      ],
+      "no-negated-condition": [
+        2
+      ],
+      "no-else-return": [
+        2,
+        {
+          "allowElseIf": true
+        }
+      ],
+      "no-lonely-if": [
+        2
+      ],
+      "curly": [
+        2,
+        "all"
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "prefer-const": [
+        2,
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": false,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": false,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "unicorn/no-nested-ternary": [
+        0
+      ],
+      "unicorn/prefer-ternary": [
+        2,
+        "always",
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/prefer-logical-operator-over-ternary": [
+        2
+      ],
+      "unicorn/no-negated-condition": [
+        2
+      ],
+      "unicorn/no-lonely-if": [
+        2
+      ],
+      "unicorn/no-useless-undefined": [
+        2,
+        {
+          "checkArguments": false,
+          "checkArrowFunctionBody": true
+        }
+      ],
+      "sonarjs/no-nested-conditional": [
+        2
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/prefer-single-boolean-return": [
+        2
+      ],
+      "sonarjs/no-collapsible-if": [
+        2
+      ],
+      "sonarjs/prefer-immediate-return": [
+        2
+      ],
+      "sonarjs/no-redundant-jump": [
+        2
+      ],
+      "unicorn/prefer-minimal-ternary": [
+        2,
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/no-unnecessary-nested-ternary": [
+        2
+      ],
+      "@stylistic/multiline-ternary": [
+        0
+      ],
+      "multiline-ternary": [
+        0
+      ],
+      "operator-linebreak": [
+        0
+      ],
+      "no-mixed-operators": [
+        0
+      ],
+      "react/jsx-no-leaked-render": "(not configured)",
+      "react/jsx-no-useless-fragment": "(not configured)"
+    },
+    "core: src/example.js": {
+      "no-nested-ternary": [
+        2
+      ],
+      "no-ternary": [
+        0
+      ],
+      "no-unneeded-ternary": [
+        2,
+        {
+          "defaultAssignment": true
+        }
+      ],
+      "no-negated-condition": [
+        2
+      ],
+      "no-else-return": [
+        2,
+        {
+          "allowElseIf": true
+        }
+      ],
+      "no-lonely-if": [
+        2
+      ],
+      "curly": [
+        2,
+        "all"
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "prefer-const": [
+        2,
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": false,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        2,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": false,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "unicorn/no-nested-ternary": [
+        0
+      ],
+      "unicorn/prefer-ternary": [
+        2,
+        "always",
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/prefer-logical-operator-over-ternary": [
+        2
+      ],
+      "unicorn/no-negated-condition": [
+        2
+      ],
+      "unicorn/no-lonely-if": [
+        2
+      ],
+      "unicorn/no-useless-undefined": [
+        2,
+        {
+          "checkArguments": false,
+          "checkArrowFunctionBody": true
+        }
+      ],
+      "sonarjs/no-nested-conditional": [
+        2
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/prefer-single-boolean-return": [
+        2
+      ],
+      "sonarjs/no-collapsible-if": [
+        2
+      ],
+      "sonarjs/prefer-immediate-return": [
+        2
+      ],
+      "sonarjs/no-redundant-jump": [
+        2
+      ],
+      "unicorn/prefer-minimal-ternary": [
+        2,
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/no-unnecessary-nested-ternary": [
+        2
+      ],
+      "@stylistic/multiline-ternary": [
+        0
+      ],
+      "multiline-ternary": [
+        0
+      ],
+      "operator-linebreak": [
+        0
+      ],
+      "no-mixed-operators": [
+        0
+      ],
+      "react/jsx-no-leaked-render": "(not configured)",
+      "react/jsx-no-useless-fragment": "(not configured)"
+    },
+    "core: src/example.test.ts": {
+      "no-nested-ternary": [
+        2
+      ],
+      "no-ternary": [
+        0
+      ],
+      "no-unneeded-ternary": [
+        2,
+        {
+          "defaultAssignment": true
+        }
+      ],
+      "no-negated-condition": [
+        2
+      ],
+      "no-else-return": [
+        2,
+        {
+          "allowElseIf": true
+        }
+      ],
+      "no-lonely-if": [
+        2
+      ],
+      "curly": [
+        2,
+        "all"
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "prefer-const": [
+        2,
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": false,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": false,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "unicorn/no-nested-ternary": [
+        0
+      ],
+      "unicorn/prefer-ternary": [
+        2,
+        "always",
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/prefer-logical-operator-over-ternary": [
+        2
+      ],
+      "unicorn/no-negated-condition": [
+        2
+      ],
+      "unicorn/no-lonely-if": [
+        2
+      ],
+      "unicorn/no-useless-undefined": [
+        2,
+        {
+          "checkArguments": false,
+          "checkArrowFunctionBody": true
+        }
+      ],
+      "sonarjs/no-nested-conditional": [
+        2
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/prefer-single-boolean-return": [
+        2
+      ],
+      "sonarjs/no-collapsible-if": [
+        2
+      ],
+      "sonarjs/prefer-immediate-return": [
+        2
+      ],
+      "sonarjs/no-redundant-jump": [
+        2
+      ],
+      "unicorn/prefer-minimal-ternary": [
+        2,
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/no-unnecessary-nested-ternary": [
+        2
+      ],
+      "@stylistic/multiline-ternary": [
+        0
+      ],
+      "multiline-ternary": [
+        0
+      ],
+      "operator-linebreak": [
+        0
+      ],
+      "no-mixed-operators": [
+        0
+      ],
+      "react/jsx-no-leaked-render": "(not configured)",
+      "react/jsx-no-useless-fragment": "(not configured)"
+    },
+    "core+react: src/example.tsx": {
+      "no-nested-ternary": [
+        2
+      ],
+      "no-ternary": [
+        0
+      ],
+      "no-unneeded-ternary": [
+        2,
+        {
+          "defaultAssignment": true
+        }
+      ],
+      "no-negated-condition": [
+        2
+      ],
+      "no-else-return": [
+        2,
+        {
+          "allowElseIf": true
+        }
+      ],
+      "no-lonely-if": [
+        2
+      ],
+      "curly": [
+        2,
+        "all"
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "prefer-const": [
+        2,
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": false,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": false,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "unicorn/no-nested-ternary": [
+        0
+      ],
+      "unicorn/prefer-ternary": [
+        2,
+        "always",
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/prefer-logical-operator-over-ternary": [
+        2
+      ],
+      "unicorn/no-negated-condition": [
+        2
+      ],
+      "unicorn/no-lonely-if": [
+        2
+      ],
+      "unicorn/no-useless-undefined": [
+        2,
+        {
+          "checkArguments": false,
+          "checkArrowFunctionBody": true
+        }
+      ],
+      "sonarjs/no-nested-conditional": [
+        2
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/prefer-single-boolean-return": [
+        2
+      ],
+      "sonarjs/no-collapsible-if": [
+        2
+      ],
+      "sonarjs/prefer-immediate-return": [
+        2
+      ],
+      "sonarjs/no-redundant-jump": [
+        2
+      ],
+      "unicorn/prefer-minimal-ternary": [
+        2,
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/no-unnecessary-nested-ternary": [
+        2
+      ],
+      "@stylistic/multiline-ternary": [
+        0
+      ],
+      "multiline-ternary": [
+        0
+      ],
+      "operator-linebreak": [
+        0
+      ],
+      "no-mixed-operators": [
+        0
+      ],
+      "react/jsx-no-leaked-render": [
+        2
+      ],
+      "react/jsx-no-useless-fragment": [
+        2
+      ]
+    },
+    "core+react: src/example.jsx": {
+      "no-nested-ternary": [
+        2
+      ],
+      "no-ternary": [
+        0
+      ],
+      "no-unneeded-ternary": [
+        2,
+        {
+          "defaultAssignment": true
+        }
+      ],
+      "no-negated-condition": [
+        2
+      ],
+      "no-else-return": [
+        2,
+        {
+          "allowElseIf": true
+        }
+      ],
+      "no-lonely-if": [
+        2
+      ],
+      "curly": [
+        2,
+        "all"
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "prefer-const": [
+        2,
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": false,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        2,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": false,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "unicorn/no-nested-ternary": [
+        0
+      ],
+      "unicorn/prefer-ternary": [
+        2,
+        "always",
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/prefer-logical-operator-over-ternary": [
+        2
+      ],
+      "unicorn/no-negated-condition": [
+        2
+      ],
+      "unicorn/no-lonely-if": [
+        2
+      ],
+      "unicorn/no-useless-undefined": [
+        2,
+        {
+          "checkArguments": false,
+          "checkArrowFunctionBody": true
+        }
+      ],
+      "sonarjs/no-nested-conditional": [
+        2
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/prefer-single-boolean-return": [
+        2
+      ],
+      "sonarjs/no-collapsible-if": [
+        2
+      ],
+      "sonarjs/prefer-immediate-return": [
+        2
+      ],
+      "sonarjs/no-redundant-jump": [
+        2
+      ],
+      "unicorn/prefer-minimal-ternary": [
+        2,
+        {
+          "checkVaryingBase": true,
+          "checkComputedMemberAccess": true
+        }
+      ],
+      "unicorn/no-unnecessary-nested-ternary": [
+        2
+      ],
+      "@stylistic/multiline-ternary": [
+        0
+      ],
+      "multiline-ternary": [
+        0
+      ],
+      "operator-linebreak": [
+        0
+      ],
+      "no-mixed-operators": [
+        0
+      ],
+      "react/jsx-no-leaked-render": [
+        2
+      ],
+      "react/jsx-no-useless-fragment": [
+        2
+      ]
+    }
+  },
+  "optionDrift": [],
+  "eslintMeta": {
+    "no-nested-ternary": {
+      "defaultOptions": null,
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "noNestedTernary": "Do not nest ternary expressions."
+      }
+    },
+    "no-ternary": {
+      "defaultOptions": null,
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "noTernaryOperator": "Ternary operator used."
+      }
+    },
+    "no-unneeded-ternary": {
+      "defaultOptions": [
+        {
+          "defaultAssignment": true
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "unnecessaryConditionalExpression": "Unnecessary use of boolean literals in conditional expression.",
+        "unnecessaryConditionalAssignment": "Unnecessary use of conditional expression for default assignment."
+      }
+    },
+    "no-negated-condition": {
+      "defaultOptions": null,
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "unexpectedNegated": "Unexpected negated condition."
+      }
+    },
+    "no-else-return": {
+      "defaultOptions": [
+        {
+          "allowElseIf": true
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "unexpected": "Unnecessary 'else' after 'return'."
+      }
+    },
+    "no-lonely-if": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "unexpectedLonelyIf": "Unexpected if as the only statement in an else block."
+      }
+    },
+    "curly": {
+      "defaultOptions": [
+        "all"
+      ],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "missingCurlyAfter": "Expected { after '{{name}}'.",
+        "missingCurlyAfterCondition": "Expected { after '{{name}}' condition.",
+        "unexpectedCurlyAfter": "Unnecessary { after '{{name}}'.",
+        "unexpectedCurlyAfterCondition": "Unnecessary { after '{{name}}' condition."
+      }
+    },
+    "complexity": {
+      "defaultOptions": [
+        20
+      ],
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "complex": "{{name}} has a complexity of {{complexity}}. Maximum allowed is {{max}}."
+      }
+    },
+    "prefer-const": {
+      "defaultOptions": [
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "useConst": "'{{name}}' is never reassigned. Use 'const' instead."
+      }
+    },
+    "func-style": {
+      "defaultOptions": [
+        "expression",
+        {
+          "allowArrowFunctions": false,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "expression": "Expected a function expression.",
+        "declaration": "Expected a function declaration."
+      }
+    },
+    "no-use-before-define": {
+      "defaultOptions": [
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "usedBeforeDefined": "'{{name}}' was used before it was defined."
+      }
+    },
+    "unicorn/no-nested-ternary": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "too-deep": "Do not nest ternary expressions.",
+        "should-parenthesized": "Nested ternary expression should be parenthesized."
+      }
+    },
+    "unicorn/prefer-ternary": {
+      "defaultOptions": [
+        "always",
+        {
+          "checkVaryingBase": false,
+          "checkComputedMemberAccess": false
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": true,
+      "messages": {
+        "prefer-ternary": "This `if` statement can be replaced by a ternary expression.",
+        "prefer-ternary/suggestion": "Use a ternary expression."
+      }
+    },
+    "unicorn/prefer-logical-operator-over-ternary": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": true,
+      "messages": {
+        "prefer-logical-operator-over-ternary/error": "Prefer using a logical operator over a ternary.",
+        "prefer-logical-operator-over-ternary/optional-chain-error": "Prefer using optional chaining over a ternary.",
+        "prefer-logical-operator-over-ternary/suggestion": "Switch to `{{operator}}` operator.",
+        "prefer-logical-operator-over-ternary/optional-chain-suggestion": "Switch to optional chaining."
+      }
+    },
+    "unicorn/no-negated-condition": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "no-negated-condition": "Unexpected negated condition."
+      }
+    },
+    "unicorn/no-lonely-if": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "no-lonely-if": "Unexpected `if` as the only statement in a `if` block without `else`."
+      }
+    },
+    "unicorn/no-useless-undefined": {
+      "defaultOptions": [
+        {
+          "checkArguments": true,
+          "checkArrowFunctionBody": true
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": true,
+      "messages": {
+        "no-useless-undefined": "Do not use useless `undefined`.",
+        "no-useless-undefined/suggestion": "Use the indexed access directly."
+      }
+    },
+    "sonarjs/no-nested-conditional": {
+      "defaultOptions": [],
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "extractTernary": "Extract this nested ternary operation into an independent statement."
+      }
+    },
+    "sonarjs/cognitive-complexity": {
+      "defaultOptions": [
+        15
+      ],
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "refactorFunction": "Refactor this function to reduce its Cognitive Complexity from {{complexityAmount}} to the {{threshold}} allowed.",
+        "sonarRuntime": "{{sonarRuntimeData}}"
+      }
+    },
+    "sonarjs/prefer-single-boolean-return": {
+      "defaultOptions": [],
+      "fixable": null,
+      "hasSuggestions": true,
+      "messages": {
+        "replaceIfThenElseByReturn": "Replace this if-then-else flow by a single return statement.",
+        "suggest": "Replace with single return statement",
+        "suggestCast": "Replace with single return statement using \"!!\" cast",
+        "suggestBoolean": "Replace with single return statement without cast (condition should be boolean!)"
+      }
+    },
+    "sonarjs/no-collapsible-if": {
+      "defaultOptions": [],
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "mergeNestedIfStatement": "Merge this if statement with the nested one.",
+        "sonarRuntime": "{{sonarRuntimeData}}"
+      }
+    },
+    "sonarjs/prefer-immediate-return": {
+      "defaultOptions": [],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "doImmediateAction": "Immediately {{action}} this expression instead of assigning it to the temporary variable \"{{variable}}\"."
+      }
+    },
+    "sonarjs/no-redundant-jump": {
+      "defaultOptions": [],
+      "fixable": null,
+      "hasSuggestions": true,
+      "messages": {
+        "removeRedundantJump": "Remove this redundant jump.",
+        "suggestJumpRemoval": "Remove this redundant jump"
+      }
+    },
+    "unicorn/prefer-minimal-ternary": {
+      "defaultOptions": [
+        {
+          "checkVaryingBase": false,
+          "checkComputedMemberAccess": false
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": true,
+      "messages": {
+        "prefer-minimal-ternary": "Move the ternary into the varying part of the expression."
+      }
+    },
+    "unicorn/no-unnecessary-nested-ternary": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "no-unnecessary-nested-ternary": "Do not use unnecessary nested ternary expressions."
+      }
+    },
+    "multiline-ternary": {
+      "defaultOptions": null,
+      "fixable": "whitespace",
+      "hasSuggestions": false,
+      "messages": {
+        "expectedTestCons": "Expected newline between test and consequent of ternary expression.",
+        "expectedConsAlt": "Expected newline between consequent and alternate of ternary expression.",
+        "unexpectedTestCons": "Unexpected newline between test and consequent of ternary expression.",
+        "unexpectedConsAlt": "Unexpected newline between consequent and alternate of ternary expression."
+      }
+    },
+    "operator-linebreak": {
+      "defaultOptions": null,
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "operatorAtBeginning": "'{{operator}}' should be placed at the beginning of the line.",
+        "operatorAtEnd": "'{{operator}}' should be placed at the end of the line.",
+        "badLinebreak": "Bad line breaking before and after '{{operator}}'.",
+        "noLinebreak": "There should be no line break before or after '{{operator}}'."
+      }
+    },
+    "no-mixed-operators": {
+      "defaultOptions": null,
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "unexpectedMixedOperator": "Unexpected mix of '{{leftOperator}}' and '{{rightOperator}}'. Use parentheses to clarify the intended order of operations."
+      }
+    }
+  },
+  "eslintComments": {
+    "eslint.mjs: no-use-before-define": "`variables: false` skips a reference from inside a function to a variable declared later in an outer scope; functions that call each other have no order that satisfies the default. Matches oxlint.",
+    "sonarjs.mjs: sonarjs/cognitive-complexity": "The same number as Biome's noExcessiveCognitiveComplexity limit, but the two score functions differently, so the limits aren't equivalent.",
+    "unicorn.mjs: unicorn/no-nested-ternary": "Its fixer wraps the inner ternary in parentheses that Prettier strips, so every `fix` run ping-pongs. eslint-config-prettier turns it off for the same reason; the core `no-nested-ternary` still reports.",
+    "unicorn.mjs: unicorn/no-useless-undefined": "Upstream already skips call arguments in TypeScript files, since a required `T | undefined` parameter needs an explicit `undefined` (#851). Matches oxlint, which skips them everywhere.",
+    "unicorn.mjs: unicorn/prefer-minimal-ternary": "Also merge branches that differ only in the callee or a computed member, as in (test ? a : b)(value). Both options are off by default upstream, and prefer-ternary takes the same two.",
+    "eslint.config.mjs: curly": "eslint-config-prettier disables these defensively, but they don't conflict with our Prettier settings and the oxlint config enforces them alongside oxfmt."
+  },
+  "biome": {
+    "core": {
+      "complexity/noUselessTernary": "error",
+      "complexity/noExcessiveCognitiveComplexity": {
+        "level": "error",
+        "options": {
+          "maxAllowedComplexity": 20
+        }
+      },
+      "complexity/noExcessiveCognitiveComplexity (override [\"**__tests__*\"])": "off",
+      "complexity/useSimplifiedLogicExpression": "error",
+      "complexity/noUselessUndefinedInitialization": "error",
+      "style/noNestedTernary": "error",
+      "style/noNegationElse": "error",
+      "style/noUselessElse": "error",
+      "style/useCollapsedIf": "error",
+      "style/useCollapsedElseIf": "error",
+      "style/useBlockStatements": {
+        "fix": "safe",
+        "level": "error"
+      },
+      "style/useConst": "error"
+    }
+  },
+  "biomeExplain": {
+    "noUselessTernary": {
+      "category": "lint/complexity/noUselessTernary",
+      "defaultSeverity": "info",
+      "fix": "unsafe",
+      "recommended": true,
+      "since": "1.5.0"
+    },
+    "noExcessiveCognitiveComplexity": {
+      "category": "lint/complexity/noExcessiveCognitiveComplexity",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "1.0.0"
+    },
+    "useSimplifiedLogicExpression": {
+      "category": "lint/complexity/useSimplifiedLogicExpression",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": false,
+      "since": "1.0.0"
+    },
+    "noUselessUndefinedInitialization": {
+      "category": "lint/complexity/noUselessUndefinedInitialization",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": true,
+      "since": "1.7.2"
+    },
+    "noLeakedRender": {
+      "category": "lint/suspicious/noLeakedRender",
+      "defaultSeverity": "warn",
+      "fix": "none",
+      "recommended": false,
+      "since": "2.3.8"
+    },
+    "noTernary": {
+      "category": "lint/style/noTernary",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "2.3.8"
+    },
+    "noNestedTernary": {
+      "category": "lint/style/noNestedTernary",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "1.9.3"
+    },
+    "noNegationElse": {
+      "category": "lint/style/noNegationElse",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": false,
+      "since": "1.0.0"
+    },
+    "noUselessElse": {
+      "category": "lint/style/noUselessElse",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": false,
+      "since": "1.3.0"
+    },
+    "useCollapsedIf": {
+      "category": "lint/style/useCollapsedIf",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": false,
+      "since": "1.9.4"
+    },
+    "useCollapsedElseIf": {
+      "category": "lint/style/useCollapsedElseIf",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": false,
+      "since": "1.1.0"
+    },
+    "useBlockStatements": {
+      "category": "lint/style/useBlockStatements",
+      "defaultSeverity": "warn",
+      "fix": "unsafe",
+      "recommended": false,
+      "since": "1.0.0"
+    },
+    "useConst": {
+      "category": "lint/style/useConst",
+      "defaultSeverity": "warn",
+      "fix": "safe",
+      "recommended": true,
+      "since": "1.0.0"
+    }
+  },
+  "formatters": {
+    "oxfmt": {
+      "experimentalTernaries": "(not set)",
+      "printWidth": 80
+    },
+    "prettier": {
+      "experimentalTernaries": "(not set)",
+      "printWidth": 80
+    }
+  },
+  "prompt": [
+    "`Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: ${jsonPath}`,",
+    "- Edit only the file above. Do not create, delete, or modify any other file. If the proper fix needs changes outside this file (an import cycle, a barrel file), don't work around it here: leave the issue for review and say what the fix is.",
+    "- Make the minimal change that resolves each issue. For a style rule, keep runtime behavior the same. When a rule reports a bug (a lost rejection, a missing `await`), fixing that behavior is the point. If a fix would change behavior and it isn't clear that's intended, leave the issue for review and say why.",
+    "- Fix the underlying problem. An edit that only hides the code from the rule (rewording it, re-spelling it, an equivalent construct) is not a fix, even if the linter goes quiet. If that's the only way to clear an issue, leave it for review.",
+    "- The JSON file has each rule's help text, which describes the usual fix. When that fix doesn't fit this code (a TODO that's still true, key or declaration order the code depends on), leaving the issue for review is a valid result: the minimal change can be no change.",
+    "- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.",
+    "`- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. To leave an issue for review, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like \\`${LEFT_FOR_REVIEW_LABEL}: 2, 3\\`. Leave that line out when you left nothing.`,"
+  ],
+  "agentRulesTemplate": [
+    "- Call hooks at the top level only, never conditionally",
+    "- Nest children between opening and closing tags instead of passing as props",
+    "- Prefer early returns over nested conditionals for error cases",
+    "- Use early returns to reduce nesting",
+    "- Prefer simple conditionals over nested ternary operators",
+    "- Keep test suites reasonably flat - avoid excessive \\`describe\\` nesting"
+  ],
+  "skillStandards": [
+    "- Call hooks at the top level only, never conditionally",
+    "- Nest children between opening and closing tags instead of passing as props",
+    "- Prefer early returns over nested conditionals for error cases",
+    "- Use early returns to reduce nesting",
+    "- Prefer simple conditionals over nested ternary operators",
+    "- Keep test suites reasonably flat — avoid excessive `describe` nesting"
+  ]
+}

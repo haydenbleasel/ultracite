@@ -1,0 +1,785 @@
+{
+  "note": "The nested-ternaries topic's self-test (scripts/topics/nested-ternaries.cjs selfTest): the corpus's variants by name (nested-ternaries-examples.cjs variantsOf, applied to the cleaned corpus subject and normalised with Ultracite's Oxlint pass unless `normalise: false`) and hand-made edits on the prepared subjects ([from, to] pairs, each matching once; `normalise: true` puts the result through the same pass). `expect` is the reading each must get: the oracle's verdict, Oxlint's no-nested-ternary count, the edit and response, and kinds that must be among the edit's.",
+  "mutants": [
+    {
+      "id": "a01",
+      "base": "a",
+      "variant": "a01 early returns",
+      "description": "early returns (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "a02",
+      "base": "a",
+      "variant": "a02 early returns, the second test flipped",
+      "description": "early returns, the second test flipped (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "a03",
+      "base": "a",
+      "variant": "a03 early returns without braces (if (bool) return x)",
+      "description": "early returns without braces (if (bool) return x) (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "a04",
+      "base": "a",
+      "variant": "a04 if / else if / else returns",
+      "description": "if / else if / else returns (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "a05",
+      "base": "a",
+      "variant": "a05 && / || chain",
+      "description": "&& / || chain (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "behaviour changed (wrong): && / || chain"
+      }
+    },
+    {
+      "id": "a06",
+      "base": "a",
+      "variant": "a06 tests reordered",
+      "description": "tests reordered (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "behaviour changed (wrong): early returns",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "a11",
+      "base": "a",
+      "variant": "a11 the outer test wraps the other",
+      "description": "the outer test wraps the other (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "a07",
+      "base": "a",
+      "variant": "a07 suppression comments",
+      "description": "suppression comments (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    },
+    {
+      "id": "a08",
+      "base": "a",
+      "variant": "a08 IIFE",
+      "description": "IIFE (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "IIFE",
+        "response": "gaming (IIFE), behaviour kept",
+        "kinds": [
+          "early returns",
+          "one ternary kept"
+        ]
+      }
+    },
+    {
+      "id": "a09",
+      "base": "a",
+      "variant": "a09 helper that wraps the inner ternary",
+      "description": "helper that wraps the inner ternary (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper wrapping the inner ternary",
+        "response": "gaming (helper wrapping the inner ternary), behaviour kept"
+      }
+    },
+    {
+      "id": "a10",
+      "base": "a",
+      "variant": "a10 inner ternary in a variable",
+      "description": "inner ternary in a variable (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "inner ternary moved to a variable",
+        "response": "gaming (inner ternary moved to a variable), behaviour kept"
+      }
+    },
+    {
+      "id": "b01",
+      "base": "b",
+      "variant": "b01 let content, if / else",
+      "description": "let content, if / else (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "if/else with a variable",
+        "response": "if/else with a variable, behaviour kept"
+      }
+    },
+    {
+      "id": "b02",
+      "base": "b",
+      "variant": "b02 helper with early returns",
+      "description": "helper with early returns (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "helper with early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "b03",
+      "base": "b",
+      "variant": "b03 child component",
+      "description": "child component (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "child component",
+        "response": "child component, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "b04",
+      "base": "b",
+      "variant": "b04 && with notebooks.length",
+      "description": "&& with notebooks.length (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "behaviour changed (wrong): && / || chain",
+        "kinds": [
+          "JSX &&"
+        ]
+      }
+    },
+    {
+      "id": "b05",
+      "base": "b",
+      "variant": "b05 && without !isPending",
+      "description": "&& without !isPending (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "behaviour changed (wrong): && / || chain",
+        "kinds": [
+          "JSX &&"
+        ]
+      }
+    },
+    {
+      "id": "b06",
+      "base": "b",
+      "variant": "b06 && with booleans",
+      "description": "&& with booleans (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "&& / || chain, behaviour kept",
+        "kinds": [
+          "JSX &&"
+        ]
+      }
+    },
+    {
+      "id": "b07",
+      "base": "b",
+      "variant": "b07 suppression comments",
+      "description": "suppression comments (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    },
+    {
+      "id": "b08",
+      "base": "b",
+      "variant": "b08 IIFE in the JSX",
+      "description": "IIFE in the JSX (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "IIFE",
+        "response": "gaming (IIFE), behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "b09",
+      "base": "b",
+      "variant": "b09 helper that wraps the inner ternary",
+      "description": "helper that wraps the inner ternary (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper wrapping the inner ternary",
+        "response": "gaming (helper wrapping the inner ternary), behaviour kept"
+      }
+    },
+    {
+      "id": "b10",
+      "base": "b",
+      "variant": "b10 inner ternary in a variable",
+      "description": "inner ternary in a variable (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "inner ternary moved to a variable",
+        "response": "gaming (inner ternary moved to a variable), behaviour kept"
+      }
+    },
+    {
+      "id": "c01",
+      "base": "c",
+      "variant": "c01 early returns in the callback",
+      "description": "early returns in the callback (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "c02",
+      "base": "c",
+      "variant": "c02 switch in the callback",
+      "description": "switch in the callback (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "switch",
+        "response": "switch, behaviour kept"
+      }
+    },
+    {
+      "id": "c03",
+      "base": "c",
+      "variant": "c03 lookup of functions",
+      "description": "lookup of functions (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "lookup of functions",
+        "response": "lookup of functions, behaviour kept"
+      }
+    },
+    {
+      "id": "c04",
+      "base": "c",
+      "variant": "c04 object lookup",
+      "description": "object lookup (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "lookup object",
+        "response": "behaviour changed (wrong): lookup object"
+      }
+    },
+    {
+      "id": "c05",
+      "base": "c",
+      "variant": "c05 increment moved above the test",
+      "description": "increment moved above the test (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "behaviour changed (wrong): early returns",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "c06",
+      "base": "c",
+      "variant": "c06 one counter for every target",
+      "description": "one counter for every target (corpus variant, normalised)",
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "behaviour changed (wrong): helper with early returns",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "c07",
+      "base": "c",
+      "variant": "c07 suppression comments",
+      "description": "suppression comments (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    },
+    {
+      "id": "c08",
+      "base": "c",
+      "variant": "c08 IIFE",
+      "description": "IIFE (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "IIFE",
+        "response": "gaming (IIFE), behaviour kept",
+        "kinds": [
+          "early returns",
+          "one ternary kept"
+        ]
+      }
+    },
+    {
+      "id": "c09",
+      "base": "c",
+      "variant": "c09 helper that wraps the inner ternary",
+      "description": "helper that wraps the inner ternary (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper wrapping the inner ternary",
+        "response": "gaming (helper wrapping the inner ternary), behaviour kept"
+      }
+    },
+    {
+      "id": "c10",
+      "base": "c",
+      "variant": "c10 inner ternary in a variable",
+      "description": "inner ternary in a variable (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "inner ternary moved to a variable",
+        "response": "gaming (inner ternary moved to a variable), behaviour kept"
+      }
+    },
+    {
+      "id": "c11",
+      "base": "c",
+      "variant": "c11 && / || chain",
+      "description": "&& / || chain (corpus variant, normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "gaming (&& / || chain), behaviour kept"
+      }
+    },
+    {
+      "id": "a03raw",
+      "base": "a",
+      "variant": "a03 early returns without braces (if (bool) return x)",
+      "normalise": false,
+      "description": "early returns without braces, as written (corpus variant, not normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      }
+    },
+    {
+      "id": "a04raw",
+      "base": "a",
+      "variant": "a04 if / else if / else returns",
+      "normalise": false,
+      "description": "if / else if / else returns, as written (corpus variant, not normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "if/else returns",
+        "response": "if/else returns, behaviour kept"
+      }
+    },
+    {
+      "id": "c01raw",
+      "base": "c",
+      "variant": "c01 early returns in the callback",
+      "normalise": false,
+      "description": "early returns in the callback, as written (corpus variant, not normalised)",
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      }
+    },
+    {
+      "id": "ah1",
+      "base": "a",
+      "description": "a const arrow with early returns (the declaration converted too)",
+      "edits": [
+        [
+          "export function denormalizePagePath(page: string) {\n  const _page = normalizePathSep(page);\n  return _page.startsWith(\"/index/\") && !isDynamicRoute(_page)\n    ? _page.slice(6)\n    : _page === \"/index\"\n      ? \"/\"\n      : _page;\n}",
+          "export const denormalizePagePath = (page: string) => {\n  const _page = normalizePathSep(page);\n  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) {\n    return _page.slice(6);\n  }\n  if (_page === \"/index\") {\n    return \"/\";\n  }\n  return _page;\n};"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "declaration form changed"
+        ]
+      }
+    },
+    {
+      "id": "ah2",
+      "base": "a",
+      "description": "one guard, the inner ternary kept as a single ternary",
+      "edits": [
+        [
+          "  return _page.startsWith(\"/index/\") && !isDynamicRoute(_page)\n    ? _page.slice(6)\n    : _page === \"/index\"\n      ? \"/\"\n      : _page;",
+          "  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) {\n    return _page.slice(6);\n  }\n  return _page === \"/index\" ? \"/\" : _page;"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one ternary kept"
+        ]
+      }
+    },
+    {
+      "id": "ah3",
+      "base": "a",
+      "description": "let + if / else if / else, then one return",
+      "edits": [
+        [
+          "  return _page.startsWith(\"/index/\") && !isDynamicRoute(_page)\n    ? _page.slice(6)\n    : _page === \"/index\"\n      ? \"/\"\n      : _page;",
+          "  let result: string;\n  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) {\n    result = _page.slice(6);\n  } else if (_page === \"/index\") {\n    result = \"/\";\n  } else {\n    result = _page;\n  }\n  return result;"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "if/else with a variable",
+        "response": "if/else with a variable, behaviour kept"
+      }
+    },
+    {
+      "id": "ah4",
+      "base": "a",
+      "description": "one-line guards, if (bool) return x; (as written)",
+      "edits": [
+        [
+          "  return _page.startsWith(\"/index/\") && !isDynamicRoute(_page)\n    ? _page.slice(6)\n    : _page === \"/index\"\n      ? \"/\"\n      : _page;",
+          "  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) return _page.slice(6);\n  if (_page === \"/index\") return \"/\";\n  return _page;"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      }
+    },
+    {
+      "id": "ah5",
+      "base": "a",
+      "description": "one-line guards, normalised (curly's fix adds braces)",
+      "normalise": true,
+      "edits": [
+        [
+          "  return _page.startsWith(\"/index/\") && !isDynamicRoute(_page)\n    ? _page.slice(6)\n    : _page === \"/index\"\n      ? \"/\"\n      : _page;",
+          "  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) return _page.slice(6);\n  if (_page === \"/index\") return \"/\";\n  return _page;"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "ah6",
+      "base": "a",
+      "description": "early returns with the two tests swapped (they're mutually exclusive, so the result is the same)",
+      "edits": [
+        [
+          "  return _page.startsWith(\"/index/\") && !isDynamicRoute(_page)\n    ? _page.slice(6)\n    : _page === \"/index\"\n      ? \"/\"\n      : _page;",
+          "  if (_page === \"/index\") {\n    return \"/\";\n  }\n  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) {\n    return _page.slice(6);\n  }\n  return _page;"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "bh1",
+      "base": "b",
+      "normalise": true,
+      "description": "early returns from the component, each repeating both wrappers",
+      "edits": [
+        [
+          "  return (\n    <ExplorerNavResourceWrapper\n      type=\"notebook\"\n      search={search}\n      setSearch={setSearch}\n    >\n      <div className=\"flex min-h-0 flex-1 flex-col p-3\">\n        {isPending ? (\n          <GenericSkeletonLoader />\n        ) : notebooks.length === 0 ? (\n          <p className=\"text-foreground-lighter px-2 py-2 text-xs\">\n            {search ? \"No notebooks found\" : \"No notebooks created yet\"}\n          </p>\n        ) : (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n        )}\n      </div>\n    </ExplorerNavResourceWrapper>\n  );",
+          "  if (isPending) {\n    return (\n    <ExplorerNavResourceWrapper\n      type=\"notebook\"\n      search={search}\n      setSearch={setSearch}\n    >\n      <div className=\"flex min-h-0 flex-1 flex-col p-3\">\n        <GenericSkeletonLoader />\n      </div>\n    </ExplorerNavResourceWrapper>\n    );\n  }\n  if (notebooks.length === 0) {\n    return (\n    <ExplorerNavResourceWrapper\n      type=\"notebook\"\n      search={search}\n      setSearch={setSearch}\n    >\n      <div className=\"flex min-h-0 flex-1 flex-col p-3\">\n        <p className=\"text-foreground-lighter px-2 py-2 text-xs\">\n            {search ? \"No notebooks found\" : \"No notebooks created yet\"}\n          </p>\n      </div>\n    </ExplorerNavResourceWrapper>\n    );\n  }\n  return (\n    <ExplorerNavResourceWrapper\n      type=\"notebook\"\n      search={search}\n      setSearch={setSearch}\n    >\n      <div className=\"flex min-h-0 flex-1 flex-col p-3\">\n        <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n      </div>\n    </ExplorerNavResourceWrapper>\n  );"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "wrappers repeated"
+        ]
+      }
+    },
+    {
+      "id": "bh2",
+      "base": "b",
+      "normalise": true,
+      "description": "a function-declaration helper with early returns, called in the JSX",
+      "edits": [
+        [
+          "        {isPending ? (\n          <GenericSkeletonLoader />\n        ) : notebooks.length === 0 ? (\n          <p className=\"text-foreground-lighter px-2 py-2 text-xs\">\n            {search ? \"No notebooks found\" : \"No notebooks created yet\"}\n          </p>\n        ) : (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n        )}",
+          "        {renderContent()}"
+        ],
+        [
+          "  return (\n    <ExplorerNavResourceWrapper",
+          "  function renderContent() {\n    if (isPending) {\n      return <GenericSkeletonLoader />;\n    }\n    if (notebooks.length === 0) {\n      return (\n        <p className=\"text-foreground-lighter px-2 py-2 text-xs\">\n            {search ? \"No notebooks found\" : \"No notebooks created yet\"}\n          </p>\n      );\n    }\n    return (\n      <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n    );\n  }\n\n  return (\n    <ExplorerNavResourceWrapper"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "helper with early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "bh3",
+      "base": "b",
+      "normalise": true,
+      "description": "the whole chain moved into a const above the return (still nested)",
+      "edits": [
+        [
+          "        {isPending ? (\n          <GenericSkeletonLoader />\n        ) : notebooks.length === 0 ? (\n          <p className=\"text-foreground-lighter px-2 py-2 text-xs\">\n            {search ? \"No notebooks found\" : \"No notebooks created yet\"}\n          </p>\n        ) : (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n        )}",
+          "        {content}"
+        ],
+        [
+          "  return (\n    <ExplorerNavResourceWrapper",
+          "  const content = isPending ? (\n    <GenericSkeletonLoader />\n  ) : notebooks.length === 0 ? (\n    <p className=\"text-foreground-lighter px-2 py-2 text-xs\">\n            {search ? \"No notebooks found\" : \"No notebooks created yet\"}\n          </p>\n  ) : (\n    <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n  );\n\n  return (\n    <ExplorerNavResourceWrapper"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "nested ternary kept",
+        "response": "nested ternary kept",
+        "kinds": [
+          "nested ternary kept"
+        ]
+      }
+    },
+    {
+      "id": "ch1",
+      "base": "c",
+      "description": "one-line guards in the callback (as written)",
+      "edits": [
+        [
+          "          .map((segment) =>\n            segment === \"*\" ? `$${++matchId}` : segment === \"$\" ? \"$$\" : segment\n          )\n          .join(\"\");\n\n        aliases.push",
+          "          .map((segment) => {\n            if (segment === \"*\") return `$${++matchId}`;\n            if (segment === \"$\") return \"$$\";\n            return segment;\n          })\n          .join(\"\");\n\n        aliases.push"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      }
+    },
+    {
+      "id": "ch2",
+      "base": "c",
+      "normalise": true,
+      "description": "a helper with early returns, declared inside the loop over values (a closure over the counter)",
+      "edits": [
+        [
+          "        /** String used to replace a matched path. */",
+          "        const toReplacement = (segment: string) => {\n          if (segment === \"*\") {\n            return `$${++matchId}`;\n          }\n          if (segment === \"$\") {\n            return \"$$\";\n          }\n          return segment;\n        };\n        /** String used to replace a matched path. */"
+        ],
+        [
+          "          .map((segment) =>\n            segment === \"*\" ? `$${++matchId}` : segment === \"$\" ? \"$$\" : segment\n          )\n          .join(\"\");\n\n        aliases.push",
+          "          .map(toReplacement)\n          .join(\"\");\n\n        aliases.push"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "helper with early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      }
+    },
+    {
+      "id": "ch3",
+      "base": "c",
+      "normalise": true,
+      "description": "a Map built in the callback (every value, the increment included, built eagerly): changes behaviour",
+      "edits": [
+        [
+          "          .map((segment) =>\n            segment === \"*\" ? `$${++matchId}` : segment === \"$\" ? \"$$\" : segment\n          )\n          .join(\"\");\n\n        aliases.push",
+          "          .map(\n            (segment) =>\n              new Map([\n                [\"*\", `$${++matchId}`],\n                [\"$\", \"$$\"],\n              ]).get(segment) ?? segment\n          )\n          .join(\"\");\n\n        aliases.push"
+        ]
+      ],
+      "expect": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "Map lookup",
+        "response": "behaviour changed (wrong): Map lookup"
+      }
+    },
+    {
+      "id": "ch4",
+      "base": "c",
+      "normalise": true,
+      "description": "a lookup with matchId + 1, and the increment in its own if: same behaviour",
+      "edits": [
+        [
+          "          .map((segment) =>\n            segment === \"*\" ? `$${++matchId}` : segment === \"$\" ? \"$$\" : segment\n          )\n          .join(\"\");\n\n        aliases.push",
+          "          .map((segment) => {\n            const replaced = (\n              { \"*\": `$${matchId + 1}`, $: \"$$\" } as Record<string, string>\n            )[segment];\n            if (segment === \"*\") {\n              matchId += 1;\n            }\n            return replaced ?? segment;\n          })\n          .join(\"\");\n\n        aliases.push"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "lookup object",
+        "response": "lookup object, behaviour kept"
+      }
+    },
+    {
+      "id": "ch5",
+      "base": "c",
+      "description": "a suppression comment for Oxlint only (ESLint's sonarjs still reports)",
+      "edits": [
+        [
+          "          .map((segment) =>\n            segment === \"*\" ? `$${++matchId}`",
+          "          .map((segment) =>\n            // oxlint-disable-next-line no-nested-ternary\n            segment === \"*\" ? `$${++matchId}`"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    }
+  ]
+}

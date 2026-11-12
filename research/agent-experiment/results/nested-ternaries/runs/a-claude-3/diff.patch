@@ -1,0 +1,19 @@
+--- a/denormalize-page-path.ts
++++ b/denormalize-page-path.ts
+@@ -47,9 +47,11 @@
+  */
+ export function denormalizePagePath(page: string) {
+   const _page = normalizePathSep(page);
+-  return _page.startsWith("/index/") && !isDynamicRoute(_page)
+-    ? _page.slice(6)
+-    : _page === "/index"
+-      ? "/"
+-      : _page;
++  if (_page.startsWith("/index/") && !isDynamicRoute(_page)) {
++    return _page.slice(6);
++  }
++  if (_page === "/index") {
++    return "/";
++  }
++  return _page;
+ }

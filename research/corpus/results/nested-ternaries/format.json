@@ -1,0 +1,597 @@
+{
+  "generated": "2026-11-12T05:12:39.860Z",
+  "mismatched": [],
+  "note": "See the header of nested-ternaries-format.cjs. raw: the files as written; oxfmt, prettier, prettier-experimental: formatted copies. Per version, for the nested ternaries ESLint reports (source, external repos): lines spanned (by depth), nested conditionals whose test starts its own line, indentation of those lines past the ternary's first line (indentMax, in spaces; indentSteps 1 means every nested test sits at one indentation, a flat list), and trees with a parenthesised nested conditional. pingPong: unicorn/no-nested-ternary's fix then a formatter, on the files where the fix would add parentheses.",
+  "pingPong": {
+    "oxlint fix + oxfmt": {
+      "changedByFix": 515,
+      "cycles": 512,
+      "files": 515,
+      "notCycling": [
+        "vscode/src/vs/editor/common/model/tokens/treeSitter/treeSitterTokenizationImpl.ts",
+        "supabase/apps/studio/components/ui/CardButton.tsx",
+        "supabase/apps/studio/pages/api/platform/storage/[ref]/buckets/index.ts"
+      ]
+    },
+    "eslint fix + prettier": {
+      "changedByFix": 515,
+      "cycles": 497,
+      "files": 515,
+      "notCycling": [
+        "zod/packages/zod/src/v3/types.ts",
+        "hono/src/adapter/aws-lambda/handler.ts",
+        "hono/src/utils/color.ts",
+        "vite/packages/vite/src/node/cli.ts",
+        "vite/packages/vite/src/node/plugins/esbuild.ts",
+        "excalidraw/packages/element/src/binding.ts",
+        "excalidraw/packages/excalidraw/components/ConvertElementTypePopup.tsx",
+        "excalidraw/packages/excalidraw/data/restore.ts",
+        "excalidraw/packages/excalidraw/tests/renderOverrides.test.tsx",
+        "next.js/packages/next/src/build/babel/plugins/next-ssg-transform.ts"
+      ]
+    },
+    "oxlint fix + prettier": {
+      "changedByFix": 515,
+      "cycles": 513,
+      "files": 515,
+      "notCycling": [
+        "vscode/src/vs/editor/common/model/tokens/treeSitter/treeSitterTokenizationImpl.ts",
+        "supabase/apps/studio/pages/api/platform/storage/[ref]/buckets/index.ts"
+      ]
+    },
+    "eslint fix + oxfmt": {
+      "changedByFix": 515,
+      "cycles": 496,
+      "files": 515,
+      "notCycling": [
+        "zod/packages/zod/src/v3/types.ts",
+        "hono/src/adapter/aws-lambda/handler.ts",
+        "hono/src/utils/color.ts",
+        "vite/packages/vite/src/node/cli.ts",
+        "vite/packages/vite/src/node/plugins/esbuild.ts",
+        "excalidraw/packages/element/src/binding.ts",
+        "excalidraw/packages/excalidraw/components/ConvertElementTypePopup.tsx",
+        "excalidraw/packages/excalidraw/data/restore.ts",
+        "excalidraw/packages/excalidraw/tests/renderOverrides.test.tsx",
+        "next.js/packages/next/src/build/babel/plugins/next-ssg-transform.ts"
+      ]
+    }
+  },
+  "pingPongFiles": 515,
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  },
+  "versions": {
+    "raw": {
+      "source": {
+        "byDepth": {
+          "2": {
+            "max": 322,
+            "mean": 12.72,
+            "median": 5,
+            "n": 779,
+            "p90": 29,
+            "sum": 9908
+          },
+          "3": {
+            "max": 146,
+            "mean": 18.56,
+            "median": 7,
+            "n": 124,
+            "p90": 40,
+            "sum": 2302
+          },
+          "4": {
+            "max": 219,
+            "mean": 37.77,
+            "median": 11,
+            "n": 26,
+            "p90": 60,
+            "sum": 982
+          },
+          "5+": {
+            "max": 83,
+            "mean": 26.92,
+            "median": 15,
+            "n": 13,
+            "p90": 39,
+            "sum": 350
+          }
+        },
+        "chains": {
+          "flatIndent": 58,
+          "singleLine": 1,
+          "steppedIndent": 56,
+          "threePlus": 115
+        },
+        "indentMax": {
+          "max": 8,
+          "mean": 1.53,
+          "median": 2,
+          "n": 942,
+          "p90": 4,
+          "sum": 1442
+        },
+        "lines": {
+          "max": 322,
+          "mean": 14.38,
+          "median": 5,
+          "n": 942,
+          "p90": 34,
+          "sum": 13542
+        },
+        "multiline": 793,
+        "nestedOnOwnLine": {
+          "all": 584,
+          "none": 346
+        },
+        "parenthesizedTrees": 72,
+        "total": 942
+      },
+      "tests": {
+        "byDepth": {
+          "2": {
+            "max": 49,
+            "mean": 15.86,
+            "median": 5,
+            "n": 14,
+            "p90": 48,
+            "sum": 222
+          },
+          "3": {
+            "max": 7,
+            "mean": 4,
+            "median": 1,
+            "n": 2,
+            "p90": 1,
+            "sum": 8
+          },
+          "4": null,
+          "5+": null
+        },
+        "chains": {
+          "flatIndent": 0,
+          "singleLine": 1,
+          "steppedIndent": 1,
+          "threePlus": 2
+        },
+        "indentMax": {
+          "max": 4,
+          "mean": 1.13,
+          "median": 0,
+          "n": 16,
+          "p90": 2,
+          "sum": 18
+        },
+        "lines": {
+          "max": 49,
+          "mean": 14.38,
+          "median": 5,
+          "n": 16,
+          "p90": 48,
+          "sum": 230
+        },
+        "multiline": 12,
+        "nestedOnOwnLine": {
+          "all": 8,
+          "none": 8
+        },
+        "parenthesizedTrees": 1,
+        "total": 16
+      }
+    },
+    "oxfmt": {
+      "source": {
+        "byDepth": {
+          "2": {
+            "max": 354,
+            "mean": 14.45,
+            "median": 5,
+            "n": 779,
+            "p90": 32,
+            "sum": 11255
+          },
+          "3": {
+            "max": 176,
+            "mean": 21.15,
+            "median": 7,
+            "n": 124,
+            "p90": 49,
+            "sum": 2622
+          },
+          "4": {
+            "max": 251,
+            "mean": 42,
+            "median": 18,
+            "n": 26,
+            "p90": 71,
+            "sum": 1092
+          },
+          "5+": {
+            "max": 89,
+            "mean": 28.31,
+            "median": 15,
+            "n": 13,
+            "p90": 46,
+            "sum": 368
+          }
+        },
+        "chains": {
+          "flatIndent": 50,
+          "singleLine": 0,
+          "steppedIndent": 65,
+          "threePlus": 115
+        },
+        "indentMax": {
+          "max": 16,
+          "mean": 1.74,
+          "median": 2,
+          "n": 942,
+          "p90": 4,
+          "sum": 1638
+        },
+        "lines": {
+          "max": 354,
+          "mean": 16.28,
+          "median": 5,
+          "n": 942,
+          "p90": 38,
+          "sum": 15337
+        },
+        "multiline": 872,
+        "nestedOnOwnLine": {
+          "all": 661,
+          "none": 269
+        },
+        "parenthesizedTrees": 44,
+        "total": 942
+      },
+      "tests": {
+        "byDepth": {
+          "2": {
+            "max": 49,
+            "mean": 16.43,
+            "median": 5,
+            "n": 14,
+            "p90": 48,
+            "sum": 230
+          },
+          "3": {
+            "max": 7,
+            "mean": 7,
+            "median": 7,
+            "n": 2,
+            "p90": 7,
+            "sum": 14
+          },
+          "4": null,
+          "5+": null
+        },
+        "chains": {
+          "flatIndent": 0,
+          "singleLine": 0,
+          "steppedIndent": 2,
+          "threePlus": 2
+        },
+        "indentMax": {
+          "max": 4,
+          "mean": 1.63,
+          "median": 2,
+          "n": 16,
+          "p90": 2,
+          "sum": 26
+        },
+        "lines": {
+          "max": 49,
+          "mean": 15.25,
+          "median": 5,
+          "n": 16,
+          "p90": 48,
+          "sum": 244
+        },
+        "multiline": 15,
+        "nestedOnOwnLine": {
+          "all": 11,
+          "none": 5
+        },
+        "parenthesizedTrees": 0,
+        "total": 16
+      }
+    },
+    "prettier": {
+      "source": {
+        "byDepth": {
+          "2": {
+            "max": 354,
+            "mean": 14.45,
+            "median": 5,
+            "n": 779,
+            "p90": 32,
+            "sum": 11255
+          },
+          "3": {
+            "max": 176,
+            "mean": 21.15,
+            "median": 7,
+            "n": 124,
+            "p90": 49,
+            "sum": 2622
+          },
+          "4": {
+            "max": 251,
+            "mean": 42,
+            "median": 18,
+            "n": 26,
+            "p90": 71,
+            "sum": 1092
+          },
+          "5+": {
+            "max": 89,
+            "mean": 28.31,
+            "median": 15,
+            "n": 13,
+            "p90": 46,
+            "sum": 368
+          }
+        },
+        "chains": {
+          "flatIndent": 50,
+          "singleLine": 0,
+          "steppedIndent": 65,
+          "threePlus": 115
+        },
+        "indentMax": {
+          "max": 16,
+          "mean": 1.74,
+          "median": 2,
+          "n": 942,
+          "p90": 4,
+          "sum": 1640
+        },
+        "lines": {
+          "max": 354,
+          "mean": 16.28,
+          "median": 5,
+          "n": 942,
+          "p90": 38,
+          "sum": 15337
+        },
+        "multiline": 872,
+        "nestedOnOwnLine": {
+          "all": 661,
+          "none": 269
+        },
+        "parenthesizedTrees": 44,
+        "total": 942
+      },
+      "tests": {
+        "byDepth": {
+          "2": {
+            "max": 49,
+            "mean": 16.43,
+            "median": 5,
+            "n": 14,
+            "p90": 48,
+            "sum": 230
+          },
+          "3": {
+            "max": 7,
+            "mean": 7,
+            "median": 7,
+            "n": 2,
+            "p90": 7,
+            "sum": 14
+          },
+          "4": null,
+          "5+": null
+        },
+        "chains": {
+          "flatIndent": 0,
+          "singleLine": 0,
+          "steppedIndent": 2,
+          "threePlus": 2
+        },
+        "indentMax": {
+          "max": 4,
+          "mean": 1.63,
+          "median": 2,
+          "n": 16,
+          "p90": 2,
+          "sum": 26
+        },
+        "lines": {
+          "max": 49,
+          "mean": 15.25,
+          "median": 5,
+          "n": 16,
+          "p90": 48,
+          "sum": 244
+        },
+        "multiline": 15,
+        "nestedOnOwnLine": {
+          "all": 11,
+          "none": 5
+        },
+        "parenthesizedTrees": 0,
+        "total": 16
+      }
+    },
+    "prettier-experimental": {
+      "source": {
+        "byDepth": {
+          "2": {
+            "max": 350,
+            "mean": 13.61,
+            "median": 5,
+            "n": 779,
+            "p90": 30,
+            "sum": 10603
+          },
+          "3": {
+            "max": 174,
+            "mean": 19.7,
+            "median": 7,
+            "n": 124,
+            "p90": 45,
+            "sum": 2443
+          },
+          "4": {
+            "max": 251,
+            "mean": 40.58,
+            "median": 18,
+            "n": 26,
+            "p90": 69,
+            "sum": 1055
+          },
+          "5+": {
+            "max": 87,
+            "mean": 26.69,
+            "median": 13,
+            "n": 13,
+            "p90": 55,
+            "sum": 347
+          }
+        },
+        "chains": {
+          "flatIndent": 115,
+          "singleLine": 0,
+          "steppedIndent": 0,
+          "threePlus": 115
+        },
+        "indentMax": {
+          "max": 6,
+          "mean": 0.49,
+          "median": 0,
+          "n": 942,
+          "p90": 2,
+          "sum": 460
+        },
+        "lines": {
+          "max": 350,
+          "mean": 15.34,
+          "median": 5,
+          "n": 942,
+          "p90": 37,
+          "sum": 14448
+        },
+        "multiline": 942,
+        "nestedOnOwnLine": {
+          "all": 942,
+          "none": 0
+        },
+        "parenthesizedTrees": 0,
+        "total": 942
+      },
+      "tests": {
+        "byDepth": {
+          "2": {
+            "max": 46,
+            "mean": 15.29,
+            "median": 5,
+            "n": 14,
+            "p90": 45,
+            "sum": 214
+          },
+          "3": {
+            "max": 4,
+            "mean": 4,
+            "median": 4,
+            "n": 2,
+            "p90": 4,
+            "sum": 8
+          },
+          "4": null,
+          "5+": null
+        },
+        "chains": {
+          "flatIndent": 2,
+          "singleLine": 0,
+          "steppedIndent": 0,
+          "threePlus": 2
+        },
+        "indentMax": {
+          "max": 2,
+          "mean": 0.25,
+          "median": 0,
+          "n": 16,
+          "p90": 0,
+          "sum": 4
+        },
+        "lines": {
+          "max": 46,
+          "mean": 13.88,
+          "median": 5,
+          "n": 16,
+          "p90": 45,
+          "sum": 222
+        },
+        "multiline": 16,
+        "nestedOnOwnLine": {
+          "all": 16,
+          "none": 0
+        },
+        "parenthesizedTrees": 0,
+        "total": 16
+      }
+    }
+  },
+  "change": {
+    "oxfmt": {
+      "grew": 274,
+      "lineChange": {
+        "max": 42,
+        "mean": 1.91,
+        "median": 0,
+        "n": 942,
+        "p90": 5,
+        "sum": 1795
+      },
+      "same": 666,
+      "shrank": 2
+    },
+    "prettier": {
+      "grew": 274,
+      "lineChange": {
+        "max": 42,
+        "mean": 1.91,
+        "median": 0,
+        "n": 942,
+        "p90": 5,
+        "sum": 1795
+      },
+      "same": 666,
+      "shrank": 2
+    },
+    "prettier-experimental": {
+      "grew": 344,
+      "lineChange": {
+        "max": 41,
+        "mean": 0.96,
+        "median": 0,
+        "n": 942,
+        "p90": 4,
+        "sum": 906
+      },
+      "same": 200,
+      "shrank": 398
+    }
+  }
+}

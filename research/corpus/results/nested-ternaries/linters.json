@@ -1,0 +1,4627 @@
+{
+  "generated": "2026-11-12T05:26:13.699Z",
+  "note": "See the header of nested-ternaries-linters.cjs. Views: eslint/* from the census pass (Ultracite's options), oxlint/* each rule alone (sonarjs through Oxlint's JS plugins), biome/* each rule alone. unitCounts: trees (or indirect nestings) each view flags in raw mode. perTree: how many reports a flagged tree gets. disagreements: units one view flags and the other doesn't, with the reason from the inventory.",
+  "repos": {
+    "hono": {
+      "neutralised": {
+        "raw": 188,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "biome/style/noUselessElse": 50,
+            "eslint/unicorn/prefer-ternary": 49,
+            "oxlint/sonarjs/no-nested-conditional": 40,
+            "eslint/sonarjs/no-nested-conditional": 40,
+            "oxlint/no-nested-ternary": 29,
+            "biome/style/noNestedTernary": 29,
+            "eslint/no-nested-ternary": 29,
+            "oxlint/no-else-return": 28,
+            "eslint/no-else-return": 28,
+            "oxlint/unicorn/no-nested-ternary": 24,
+            "eslint/unicorn/no-nested-ternary": 24,
+            "oxlint/no-negated-condition": 22,
+            "oxlint/unicorn/no-negated-condition": 22,
+            "biome/style/noNegationElse": 22,
+            "oxlint/unicorn/prefer-ternary": 19,
+            "eslint/unicorn/prefer-minimal-ternary": 8,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 1,
+            "oxlint/no-unneeded-ternary": 1,
+            "biome/complexity/noUselessTernary": 1,
+            "eslint/no-unneeded-ternary": 1
+          },
+          "reported": {
+            "biome/style/noUselessElse": 50,
+            "eslint/unicorn/prefer-ternary": 49,
+            "oxlint/sonarjs/no-nested-conditional": 40,
+            "eslint/sonarjs/no-nested-conditional": 40,
+            "oxlint/no-nested-ternary": 29,
+            "biome/style/noNestedTernary": 29,
+            "eslint/no-nested-ternary": 29,
+            "oxlint/no-else-return": 28,
+            "eslint/no-else-return": 28,
+            "oxlint/unicorn/no-nested-ternary": 24,
+            "eslint/unicorn/no-nested-ternary": 24,
+            "oxlint/no-negated-condition": 22,
+            "oxlint/unicorn/no-negated-condition": 22,
+            "biome/style/noNegationElse": 22,
+            "oxlint/unicorn/prefer-ternary": 19,
+            "eslint/unicorn/prefer-minimal-ternary": 8,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 1,
+            "oxlint/no-unneeded-ternary": 1,
+            "biome/complexity/noUselessTernary": 1,
+            "eslint/no-unneeded-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 29,
+          "biomeReports": 29,
+          "eslintReports": 29,
+          "eslintReportsParent": 29,
+          "nestedBranches": 31,
+          "parents": 29
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 25,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 25,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 25,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 6,
+            "onlyBSignatures": {
+              "indirect:alternate:TemplateLiteral": 4,
+              "indirect:alternate:LogicalExpression": 1,
+              "indirect:consequent:CallExpression": 1
+            },
+            "onlyBExamples": [
+              "src/jsx/streaming.ts:5",
+              "src/jsx/dom/render.ts:10",
+              "src/utils/url.ts:9",
+              "src/jsx/components.ts:3",
+              "src/router/linear-router/router.ts:0"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 22,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 31,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 21,
+            "2": 4
+          },
+          "eslint/no-nested-ternary": {
+            "1": 21,
+            "2": 4
+          },
+          "eslint/sonarjs": {
+            "1": 24,
+            "2": 5,
+            "3": 2
+          },
+          "eslint/unicorn": {
+            "1": 20,
+            "2": 2
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 21,
+            "2": 4
+          },
+          "oxlint/sonarjs": {
+            "1": 24,
+            "2": 5,
+            "3": 2
+          },
+          "oxlint/unicorn": {
+            "1": 20,
+            "2": 2
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 25,
+          "eslint/no-nested-ternary": 25,
+          "eslint/sonarjs": 31,
+          "eslint/unicorn": 22,
+          "oxlint/no-nested-ternary": 25,
+          "oxlint/sonarjs": 31,
+          "oxlint/unicorn": 22,
+          "all": 31,
+          "withDirectNesting": 25
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 35,
+            "biome/style/noUselessElse": 10,
+            "oxlint/no-else-return": 3,
+            "eslint/no-else-return": 3,
+            "oxlint/unicorn/prefer-ternary": 2,
+            "oxlint/no-negated-condition": 1,
+            "oxlint/unicorn/no-negated-condition": 1,
+            "biome/style/noNegationElse": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 35,
+            "biome/style/noUselessElse": 10,
+            "oxlint/no-else-return": 3,
+            "eslint/no-else-return": 3,
+            "oxlint/unicorn/prefer-ternary": 2,
+            "oxlint/no-negated-condition": 1,
+            "oxlint/unicorn/no-negated-condition": 1,
+            "biome/style/noNegationElse": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 3
+    },
+    "zod": {
+      "neutralised": {
+        "raw": 17,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 286,
+            "biome/style/noUselessElse": 52,
+            "oxlint/no-else-return": 29,
+            "eslint/no-else-return": 29,
+            "oxlint/sonarjs/no-nested-conditional": 27,
+            "eslint/sonarjs/no-nested-conditional": 27,
+            "oxlint/no-nested-ternary": 26,
+            "biome/style/noNestedTernary": 26,
+            "eslint/no-nested-ternary": 26,
+            "oxlint/unicorn/no-nested-ternary": 24,
+            "eslint/unicorn/no-nested-ternary": 24,
+            "oxlint/no-negated-condition": 18,
+            "oxlint/unicorn/no-negated-condition": 18,
+            "biome/style/noNegationElse": 18,
+            "oxlint/unicorn/prefer-ternary": 12,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 7,
+            "eslint/unicorn/prefer-minimal-ternary": 7,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 2,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 286,
+            "biome/style/noUselessElse": 52,
+            "oxlint/no-else-return": 29,
+            "eslint/no-else-return": 29,
+            "oxlint/sonarjs/no-nested-conditional": 27,
+            "eslint/sonarjs/no-nested-conditional": 27,
+            "oxlint/no-nested-ternary": 26,
+            "biome/style/noNestedTernary": 26,
+            "eslint/no-nested-ternary": 26,
+            "oxlint/unicorn/no-nested-ternary": 24,
+            "eslint/unicorn/no-nested-ternary": 24,
+            "oxlint/no-negated-condition": 18,
+            "oxlint/unicorn/no-negated-condition": 18,
+            "biome/style/noNegationElse": 18,
+            "oxlint/unicorn/prefer-ternary": 12,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 7,
+            "eslint/unicorn/prefer-minimal-ternary": 7,
+            "biome/suppressions/unused": 3,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 2,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 26,
+          "biomeReports": 26,
+          "eslintReports": 26,
+          "eslintReportsParent": 26,
+          "nestedBranches": 27,
+          "parents": 26
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 23,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 22,
+            "2": 2
+          },
+          "eslint/no-nested-ternary": {
+            "1": 22,
+            "2": 2
+          },
+          "eslint/sonarjs": {
+            "1": 22,
+            "2": 1,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 22,
+            "2": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 22,
+            "2": 2
+          },
+          "oxlint/sonarjs": {
+            "1": 22,
+            "2": 1,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 22,
+            "2": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 24,
+          "eslint/no-nested-ternary": 24,
+          "eslint/sonarjs": 24,
+          "eslint/unicorn": 23,
+          "oxlint/no-nested-ternary": 24,
+          "oxlint/sonarjs": 24,
+          "oxlint/unicorn": 23,
+          "all": 25,
+          "withDirectNesting": 24
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "oxlint/sonarjs/no-nested-conditional": 8,
+            "eslint/sonarjs/no-nested-conditional": 8,
+            "oxlint/no-nested-ternary": 6,
+            "biome/style/noNestedTernary": 6,
+            "eslint/no-nested-ternary": 6,
+            "biome/style/noUselessElse": 4,
+            "oxlint/unicorn/no-nested-ternary": 3,
+            "eslint/unicorn/no-nested-ternary": 3,
+            "eslint/unicorn/prefer-ternary": 3,
+            "oxlint/no-else-return": 2,
+            "eslint/no-else-return": 2,
+            "eslint/unicorn/prefer-minimal-ternary": 2,
+            "oxlint/no-negated-condition": 1,
+            "oxlint/unicorn/no-negated-condition": 1,
+            "biome/style/noNegationElse": 1
+          },
+          "reported": {
+            "oxlint/sonarjs/no-nested-conditional": 8,
+            "eslint/sonarjs/no-nested-conditional": 8,
+            "oxlint/no-nested-ternary": 6,
+            "biome/style/noNestedTernary": 6,
+            "eslint/no-nested-ternary": 6,
+            "biome/style/noUselessElse": 4,
+            "oxlint/unicorn/no-nested-ternary": 3,
+            "eslint/unicorn/no-nested-ternary": 3,
+            "eslint/unicorn/prefer-ternary": 3,
+            "biome/suppressions/unused": 3,
+            "oxlint/no-else-return": 2,
+            "eslint/no-else-return": 2,
+            "eslint/unicorn/prefer-minimal-ternary": 2,
+            "oxlint/no-negated-condition": 1,
+            "oxlint/unicorn/no-negated-condition": 1,
+            "biome/style/noNegationElse": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 6,
+          "biomeReports": 6,
+          "eslintReports": 6,
+          "eslintReportsParent": 6,
+          "nestedBranches": 6,
+          "parents": 6
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 2,
+            "onlyBSignatures": {
+              "indirect:alternate:CallExpression": 1,
+              "indirect:alternate:BinaryExpression": 1
+            },
+            "onlyBExamples": [
+              "packages/zod/src/v4/core/tests/compile-differential.test.ts:3",
+              "packages/zod/src/v4/core/tests/email-regex.test.ts:0"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 3,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 6,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 2,
+            "2": 2
+          },
+          "eslint/no-nested-ternary": {
+            "1": 2,
+            "2": 2
+          },
+          "eslint/sonarjs": {
+            "1": 4,
+            "2": 2
+          },
+          "eslint/unicorn": {
+            "1": 3
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 2,
+            "2": 2
+          },
+          "oxlint/sonarjs": {
+            "1": 4,
+            "2": 2
+          },
+          "oxlint/unicorn": {
+            "1": 3
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 4,
+          "eslint/no-nested-ternary": 4,
+          "eslint/sonarjs": 6,
+          "eslint/unicorn": 3,
+          "oxlint/no-nested-ternary": 4,
+          "oxlint/sonarjs": 6,
+          "oxlint/unicorn": 3,
+          "all": 6,
+          "withDirectNesting": 4
+        },
+        "unjoined": {}
+      },
+      "seconds": 5
+    },
+    "trpc": {
+      "neutralised": {
+        "raw": 121,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 40,
+            "eslint/unicorn/prefer-minimal-ternary": 13,
+            "oxlint/no-negated-condition": 7,
+            "oxlint/unicorn/no-negated-condition": 7,
+            "biome/style/noNegationElse": 7,
+            "oxlint/unicorn/prefer-ternary": 5,
+            "biome/style/noUselessElse": 3,
+            "oxlint/no-nested-ternary": 2,
+            "oxlint/unicorn/no-nested-ternary": 2,
+            "oxlint/sonarjs/no-nested-conditional": 2,
+            "biome/style/noNestedTernary": 2,
+            "eslint/no-nested-ternary": 2,
+            "eslint/unicorn/no-nested-ternary": 2,
+            "eslint/sonarjs/no-nested-conditional": 2,
+            "oxlint/no-else-return": 2,
+            "eslint/no-else-return": 2,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 40,
+            "eslint/unicorn/prefer-minimal-ternary": 13,
+            "oxlint/no-negated-condition": 7,
+            "oxlint/unicorn/no-negated-condition": 7,
+            "biome/style/noNegationElse": 7,
+            "oxlint/unicorn/prefer-ternary": 5,
+            "biome/style/noUselessElse": 3,
+            "oxlint/no-nested-ternary": 2,
+            "oxlint/unicorn/no-nested-ternary": 2,
+            "oxlint/sonarjs/no-nested-conditional": 2,
+            "biome/style/noNestedTernary": 2,
+            "eslint/no-nested-ternary": 2,
+            "eslint/unicorn/no-nested-ternary": 2,
+            "eslint/sonarjs/no-nested-conditional": 2,
+            "oxlint/no-else-return": 2,
+            "eslint/no-else-return": 2,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 2,
+          "biomeReports": 2,
+          "eslintReports": 2,
+          "eslintReportsParent": 2,
+          "nestedBranches": 2,
+          "parents": 2
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 2,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 2,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 2,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 2,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 2,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 2
+          },
+          "eslint/no-nested-ternary": {
+            "1": 2
+          },
+          "eslint/sonarjs": {
+            "1": 2
+          },
+          "eslint/unicorn": {
+            "1": 2
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 2
+          },
+          "oxlint/sonarjs": {
+            "1": 2
+          },
+          "oxlint/unicorn": {
+            "1": 2
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 2,
+          "eslint/no-nested-ternary": 2,
+          "eslint/sonarjs": 2,
+          "eslint/unicorn": 2,
+          "oxlint/no-nested-ternary": 2,
+          "oxlint/sonarjs": 2,
+          "oxlint/unicorn": 2,
+          "all": 2,
+          "withDirectNesting": 2
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 53,
+            "oxlint/no-negated-condition": 12,
+            "oxlint/unicorn/no-negated-condition": 12,
+            "biome/style/noNegationElse": 12,
+            "oxlint/no-nested-ternary": 10,
+            "oxlint/unicorn/no-nested-ternary": 10,
+            "oxlint/sonarjs/no-nested-conditional": 10,
+            "biome/style/noNestedTernary": 10,
+            "eslint/no-nested-ternary": 10,
+            "eslint/unicorn/no-nested-ternary": 10,
+            "eslint/sonarjs/no-nested-conditional": 10,
+            "oxlint/unicorn/prefer-ternary": 3
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 53,
+            "oxlint/no-negated-condition": 12,
+            "oxlint/unicorn/no-negated-condition": 12,
+            "biome/style/noNegationElse": 12,
+            "oxlint/no-nested-ternary": 10,
+            "oxlint/unicorn/no-nested-ternary": 10,
+            "oxlint/sonarjs/no-nested-conditional": 10,
+            "biome/style/noNestedTernary": 10,
+            "eslint/no-nested-ternary": 10,
+            "eslint/unicorn/no-nested-ternary": 10,
+            "eslint/sonarjs/no-nested-conditional": 10,
+            "oxlint/unicorn/prefer-ternary": 3
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 10,
+          "biomeReports": 10,
+          "eslintReports": 10,
+          "eslintReportsParent": 10,
+          "nestedBranches": 10,
+          "parents": 10
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 5,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 5,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 5,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 5,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 5,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          },
+          "eslint/sonarjs": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 1,
+            "2": 3,
+            "3": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 5,
+          "eslint/no-nested-ternary": 5,
+          "eslint/sonarjs": 5,
+          "eslint/unicorn": 5,
+          "oxlint/no-nested-ternary": 5,
+          "oxlint/sonarjs": 5,
+          "oxlint/unicorn": 5,
+          "all": 5,
+          "withDirectNesting": 5
+        },
+        "unjoined": {}
+      },
+      "seconds": 3
+    },
+    "vite": {
+      "neutralised": {
+        "raw": 30,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 90,
+            "biome/style/noUselessElse": 82,
+            "oxlint/no-else-return": 51,
+            "eslint/no-else-return": 51,
+            "oxlint/unicorn/prefer-ternary": 45,
+            "oxlint/no-negated-condition": 39,
+            "oxlint/unicorn/no-negated-condition": 39,
+            "biome/style/noNegationElse": 39,
+            "oxlint/sonarjs/no-nested-conditional": 33,
+            "eslint/sonarjs/no-nested-conditional": 33,
+            "oxlint/no-nested-ternary": 28,
+            "biome/style/noNestedTernary": 28,
+            "eslint/no-nested-ternary": 28,
+            "eslint/unicorn/prefer-minimal-ternary": 27,
+            "oxlint/unicorn/no-nested-ternary": 26,
+            "eslint/unicorn/no-nested-ternary": 26,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 90,
+            "biome/style/noUselessElse": 82,
+            "oxlint/no-else-return": 51,
+            "eslint/no-else-return": 51,
+            "oxlint/unicorn/prefer-ternary": 45,
+            "oxlint/no-negated-condition": 39,
+            "oxlint/unicorn/no-negated-condition": 39,
+            "biome/style/noNegationElse": 39,
+            "oxlint/sonarjs/no-nested-conditional": 33,
+            "eslint/sonarjs/no-nested-conditional": 33,
+            "oxlint/no-nested-ternary": 28,
+            "biome/style/noNestedTernary": 28,
+            "eslint/no-nested-ternary": 28,
+            "eslint/unicorn/prefer-minimal-ternary": 27,
+            "oxlint/unicorn/no-nested-ternary": 26,
+            "eslint/unicorn/no-nested-ternary": 26,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 28,
+          "biomeReports": 28,
+          "eslintReports": 28,
+          "eslintReportsParent": 28,
+          "nestedBranches": 29,
+          "parents": 28
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 3,
+            "onlyBSignatures": {
+              "indirect:consequent:CallExpression": 2,
+              "indirect:consequent:TemplateLiteral": 1
+            },
+            "onlyBExamples": [
+              "packages/vite/src/node/config.ts:19",
+              "packages/vite/src/node/plugins/worker.ts:10",
+              "packages/vite/src/node/plugins/css.ts:17"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 24,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 27,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 20,
+            "2": 4
+          },
+          "eslint/no-nested-ternary": {
+            "1": 20,
+            "2": 4
+          },
+          "eslint/sonarjs": {
+            "1": 22,
+            "2": 4,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 22,
+            "2": 2
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 20,
+            "2": 4
+          },
+          "oxlint/sonarjs": {
+            "1": 22,
+            "2": 4,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 22,
+            "2": 2
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 24,
+          "eslint/no-nested-ternary": 24,
+          "eslint/sonarjs": 27,
+          "eslint/unicorn": 24,
+          "oxlint/no-nested-ternary": 24,
+          "oxlint/sonarjs": 27,
+          "oxlint/unicorn": 24,
+          "all": 32,
+          "withDirectNesting": 24
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "biome/style/noUselessElse": 5,
+            "eslint/unicorn/prefer-ternary": 5,
+            "oxlint/no-else-return": 3,
+            "eslint/no-else-return": 3,
+            "oxlint/unicorn/prefer-ternary": 2
+          },
+          "reported": {
+            "biome/style/noUselessElse": 5,
+            "eslint/unicorn/prefer-ternary": 5,
+            "oxlint/no-else-return": 3,
+            "eslint/no-else-return": 3,
+            "oxlint/unicorn/prefer-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 2
+    },
+    "astro": {
+      "neutralised": {
+        "raw": 25,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 179,
+            "biome/style/noUselessElse": 157,
+            "oxlint/no-else-return": 88,
+            "eslint/no-else-return": 88,
+            "oxlint/unicorn/prefer-ternary": 82,
+            "oxlint/no-negated-condition": 46,
+            "oxlint/unicorn/no-negated-condition": 46,
+            "biome/style/noNegationElse": 45,
+            "oxlint/sonarjs/no-nested-conditional": 41,
+            "eslint/sonarjs/no-nested-conditional": 41,
+            "oxlint/no-nested-ternary": 32,
+            "biome/style/noNestedTernary": 32,
+            "eslint/no-nested-ternary": 32,
+            "oxlint/unicorn/no-nested-ternary": 30,
+            "eslint/unicorn/no-nested-ternary": 30,
+            "eslint/unicorn/prefer-minimal-ternary": 27,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 21,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 7,
+            "oxlint/no-unneeded-ternary": 2,
+            "biome/complexity/noUselessTernary": 2,
+            "eslint/no-unneeded-ternary": 2
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 179,
+            "biome/style/noUselessElse": 157,
+            "oxlint/no-else-return": 88,
+            "eslint/no-else-return": 88,
+            "oxlint/unicorn/prefer-ternary": 82,
+            "oxlint/no-negated-condition": 46,
+            "oxlint/unicorn/no-negated-condition": 46,
+            "biome/style/noNegationElse": 45,
+            "oxlint/sonarjs/no-nested-conditional": 41,
+            "eslint/sonarjs/no-nested-conditional": 41,
+            "oxlint/no-nested-ternary": 32,
+            "biome/style/noNestedTernary": 32,
+            "eslint/no-nested-ternary": 32,
+            "oxlint/unicorn/no-nested-ternary": 30,
+            "eslint/unicorn/no-nested-ternary": 30,
+            "eslint/unicorn/prefer-minimal-ternary": 27,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 21,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 7,
+            "biome/suppressions/unused": 3,
+            "oxlint/no-unneeded-ternary": 2,
+            "biome/complexity/noUselessTernary": 2,
+            "eslint/no-unneeded-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 32,
+          "biomeReports": 32,
+          "eslintReports": 32,
+          "eslintReportsParent": 32,
+          "nestedBranches": 32,
+          "parents": 32
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 32,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 32,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 32,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 6,
+            "onlyBSignatures": {
+              "indirect:alternate:TemplateLiteral": 2,
+              "indirect:consequent:TemplateLiteral": 2,
+              "indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 1,
+              "indirect:consequent:BinaryExpression": 1
+            },
+            "onlyBExamples": [
+              "packages/astro/src/core/app/node.ts:10",
+              "packages/astro/src/core/errors/errors-data.ts:1",
+              "packages/astro/src/core/middleware/vite-plugin.ts:2",
+              "packages/astro/src/runtime/server/jsx.ts:2",
+              "packages/astro/src/runtime/server/render/script.ts:0"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 30,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 38,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 32
+          },
+          "eslint/no-nested-ternary": {
+            "1": 32
+          },
+          "eslint/sonarjs": {
+            "1": 37,
+            "4": 1
+          },
+          "eslint/unicorn": {
+            "1": 30
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 32
+          },
+          "oxlint/sonarjs": {
+            "1": 37,
+            "4": 1
+          },
+          "oxlint/unicorn": {
+            "1": 30
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 32,
+          "eslint/no-nested-ternary": 32,
+          "eslint/sonarjs": 38,
+          "eslint/unicorn": 30,
+          "oxlint/no-nested-ternary": 32,
+          "oxlint/sonarjs": 38,
+          "oxlint/unicorn": 30,
+          "all": 39,
+          "withDirectNesting": 32
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 42,
+            "oxlint/unicorn/prefer-ternary": 6,
+            "oxlint/no-negated-condition": 3,
+            "oxlint/unicorn/no-negated-condition": 3,
+            "biome/style/noNegationElse": 3,
+            "eslint/unicorn/prefer-minimal-ternary": 3,
+            "oxlint/no-nested-ternary": 1,
+            "oxlint/unicorn/no-nested-ternary": 1,
+            "oxlint/sonarjs/no-nested-conditional": 1,
+            "biome/style/noNestedTernary": 1,
+            "eslint/no-nested-ternary": 1,
+            "eslint/unicorn/no-nested-ternary": 1,
+            "eslint/sonarjs/no-nested-conditional": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 42,
+            "oxlint/unicorn/prefer-ternary": 6,
+            "oxlint/no-negated-condition": 3,
+            "oxlint/unicorn/no-negated-condition": 3,
+            "biome/style/noNegationElse": 3,
+            "eslint/unicorn/prefer-minimal-ternary": 3,
+            "biome/suppressions/unused": 2,
+            "oxlint/no-nested-ternary": 1,
+            "oxlint/unicorn/no-nested-ternary": 1,
+            "oxlint/sonarjs/no-nested-conditional": 1,
+            "biome/style/noNestedTernary": 1,
+            "eslint/no-nested-ternary": 1,
+            "eslint/unicorn/no-nested-ternary": 1,
+            "eslint/sonarjs/no-nested-conditional": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 1,
+          "biomeReports": 1,
+          "eslintReports": 1,
+          "eslintReportsParent": 1,
+          "nestedBranches": 1,
+          "parents": 1
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 1
+          },
+          "eslint/sonarjs": {
+            "1": 1
+          },
+          "eslint/unicorn": {
+            "1": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 1
+          },
+          "oxlint/unicorn": {
+            "1": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 1,
+          "eslint/no-nested-ternary": 1,
+          "eslint/sonarjs": 1,
+          "eslint/unicorn": 1,
+          "oxlint/no-nested-ternary": 1,
+          "oxlint/sonarjs": 1,
+          "oxlint/unicorn": 1,
+          "all": 1,
+          "withDirectNesting": 1
+        },
+        "unjoined": {}
+      },
+      "seconds": 8
+    },
+    "excalidraw": {
+      "neutralised": {
+        "raw": 35,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 198,
+            "oxlint/sonarjs/no-nested-conditional": 188,
+            "eslint/sonarjs/no-nested-conditional": 188,
+            "eslint/unicorn/prefer-minimal-ternary": 146,
+            "oxlint/no-nested-ternary": 140,
+            "biome/style/noNestedTernary": 140,
+            "eslint/no-nested-ternary": 140,
+            "oxlint/unicorn/no-nested-ternary": 132,
+            "eslint/unicorn/no-nested-ternary": 132,
+            "oxlint/no-negated-condition": 102,
+            "oxlint/unicorn/no-negated-condition": 102,
+            "biome/style/noNegationElse": 101,
+            "biome/style/noUselessElse": 69,
+            "oxlint/unicorn/prefer-ternary": 45,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 21,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 17,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 3,
+            "oxlint/no-else-return": 2,
+            "eslint/no-else-return": 2
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 197,
+            "oxlint/sonarjs/no-nested-conditional": 188,
+            "eslint/sonarjs/no-nested-conditional": 188,
+            "eslint/unicorn/prefer-minimal-ternary": 146,
+            "oxlint/no-nested-ternary": 140,
+            "biome/style/noNestedTernary": 140,
+            "eslint/no-nested-ternary": 140,
+            "oxlint/unicorn/no-nested-ternary": 132,
+            "eslint/unicorn/no-nested-ternary": 132,
+            "oxlint/no-negated-condition": 102,
+            "oxlint/unicorn/no-negated-condition": 102,
+            "biome/style/noNegationElse": 101,
+            "biome/style/noUselessElse": 69,
+            "oxlint/unicorn/prefer-ternary": 45,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 21,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 17,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 3,
+            "oxlint/no-else-return": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 140,
+          "biomeReports": 140,
+          "eslintReports": 140,
+          "eslintReportsParent": 140,
+          "nestedBranches": 155,
+          "parents": 140
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 114,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 114,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 114,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 27,
+            "onlyBSignatures": {
+              "indirect:alternate:CallExpression": 5,
+              "indirect:alternate:BinaryExpression": 5,
+              "indirect:consequent:BinaryExpression": 5,
+              "indirect:consequent:CallExpression": 5,
+              "indirect:alternate:BinaryExpression indirect:alternate:CallExpression indirect:consequent:CallExpression": 2,
+              "indirect:consequent:LogicalExpression": 1,
+              "indirect:test:MemberExpression": 1,
+              "indirect:consequent:TemplateLiteral": 1,
+              "direct:test": 1,
+              "indirect:alternate:LogicalExpression": 1
+            },
+            "onlyBExamples": [
+              "packages/element/src/shape.ts:0",
+              "packages/excalidraw/components/App.text.ts:4",
+              "packages/excalidraw/actions/actionProperties.tsx:4",
+              "packages/element/src/elbowArrow.ts:41",
+              "packages/element/src/elbowArrow.ts:43"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 114,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 141,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 98,
+            "2": 14,
+            "6": 1,
+            "8": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 98,
+            "2": 14,
+            "6": 1,
+            "8": 1
+          },
+          "eslint/sonarjs": {
+            "1": 107,
+            "2": 29,
+            "3": 3,
+            "6": 1,
+            "8": 1
+          },
+          "eslint/unicorn": {
+            "1": 96,
+            "2": 18
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 98,
+            "2": 14,
+            "6": 1,
+            "8": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 107,
+            "2": 29,
+            "3": 3,
+            "6": 1,
+            "8": 1
+          },
+          "oxlint/unicorn": {
+            "1": 96,
+            "2": 18
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 114,
+          "eslint/no-nested-ternary": 114,
+          "eslint/sonarjs": 141,
+          "eslint/unicorn": 114,
+          "oxlint/no-nested-ternary": 114,
+          "oxlint/sonarjs": 141,
+          "oxlint/unicorn": 114,
+          "all": 160,
+          "withDirectNesting": 115
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-minimal-ternary": 6,
+            "oxlint/sonarjs/no-nested-conditional": 4,
+            "eslint/sonarjs/no-nested-conditional": 4,
+            "eslint/unicorn/prefer-ternary": 4,
+            "oxlint/no-nested-ternary": 1,
+            "oxlint/unicorn/no-nested-ternary": 1,
+            "biome/style/noNestedTernary": 1,
+            "eslint/no-nested-ternary": 1,
+            "eslint/unicorn/no-nested-ternary": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-minimal-ternary": 6,
+            "oxlint/sonarjs/no-nested-conditional": 4,
+            "eslint/sonarjs/no-nested-conditional": 4,
+            "eslint/unicorn/prefer-ternary": 4,
+            "oxlint/no-nested-ternary": 1,
+            "oxlint/unicorn/no-nested-ternary": 1,
+            "biome/style/noNestedTernary": 1,
+            "eslint/no-nested-ternary": 1,
+            "eslint/unicorn/no-nested-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 1,
+          "biomeReports": 1,
+          "eslintReports": 1,
+          "eslintReportsParent": 1,
+          "nestedBranches": 1,
+          "parents": 1
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 2,
+            "onlyBSignatures": {
+              "direct:test indirect:consequent:Property:broken": 1,
+              "indirect:consequent:TemplateLiteral": 1
+            },
+            "onlyBExamples": [
+              "packages/excalidraw/tests/helpers/api.ts:2",
+              "packages/excalidraw/tests/test-utils.ts:3"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 3,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 1
+          },
+          "eslint/sonarjs": {
+            "1": 2,
+            "2": 1
+          },
+          "eslint/unicorn": {
+            "1": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 2,
+            "2": 1
+          },
+          "oxlint/unicorn": {
+            "1": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 1,
+          "eslint/no-nested-ternary": 1,
+          "eslint/sonarjs": 3,
+          "eslint/unicorn": 1,
+          "oxlint/no-nested-ternary": 1,
+          "oxlint/sonarjs": 3,
+          "oxlint/unicorn": 1,
+          "all": 3,
+          "withDirectNesting": 2
+        },
+        "unjoined": {}
+      },
+      "seconds": 6
+    },
+    "next.js": {
+      "neutralised": {
+        "raw": 137,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 465,
+            "biome/style/noUselessElse": 344,
+            "oxlint/no-negated-condition": 314,
+            "oxlint/unicorn/no-negated-condition": 314,
+            "biome/style/noNegationElse": 308,
+            "oxlint/sonarjs/no-nested-conditional": 233,
+            "eslint/sonarjs/no-nested-conditional": 233,
+            "oxlint/no-nested-ternary": 186,
+            "biome/style/noNestedTernary": 186,
+            "eslint/no-nested-ternary": 186,
+            "oxlint/no-else-return": 178,
+            "eslint/no-else-return": 178,
+            "oxlint/unicorn/prefer-ternary": 170,
+            "oxlint/unicorn/no-nested-ternary": 165,
+            "eslint/unicorn/no-nested-ternary": 165,
+            "eslint/unicorn/prefer-minimal-ternary": 136,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 26,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 11,
+            "biome/syntax/correctness/noTypeOnlyImportAttributes": 6,
+            "oxlint/no-unneeded-ternary": 5,
+            "biome/complexity/noUselessTernary": 5,
+            "eslint/no-unneeded-ternary": 5,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 3
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 465,
+            "biome/style/noUselessElse": 344,
+            "oxlint/no-negated-condition": 314,
+            "oxlint/unicorn/no-negated-condition": 314,
+            "biome/style/noNegationElse": 308,
+            "oxlint/sonarjs/no-nested-conditional": 233,
+            "eslint/sonarjs/no-nested-conditional": 233,
+            "oxlint/no-nested-ternary": 186,
+            "biome/style/noNestedTernary": 186,
+            "eslint/no-nested-ternary": 186,
+            "oxlint/no-else-return": 178,
+            "eslint/no-else-return": 178,
+            "oxlint/unicorn/prefer-ternary": 170,
+            "oxlint/unicorn/no-nested-ternary": 165,
+            "eslint/unicorn/no-nested-ternary": 165,
+            "eslint/unicorn/prefer-minimal-ternary": 136,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 26,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 11,
+            "biome/syntax/correctness/noTypeOnlyImportAttributes": 6,
+            "oxlint/no-unneeded-ternary": 5,
+            "biome/complexity/noUselessTernary": 5,
+            "eslint/no-unneeded-ternary": 5,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 3
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 186,
+          "biomeReports": 186,
+          "eslintReports": 186,
+          "eslintReportsParent": 186,
+          "nestedBranches": 191,
+          "parents": 186
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 164,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 164,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 164,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 29,
+            "onlyBSignatures": {
+              "indirect:consequent:TemplateLiteral": 16,
+              "indirect:alternate:TemplateLiteral": 5,
+              "indirect:consequent:CallExpression": 2,
+              "indirect:test:LogicalExpression": 1,
+              "indirect:alternate:LogicalExpression": 1,
+              "indirect:consequent:BinaryExpression indirect:consequent:TemplateLiteral": 1,
+              "indirect:alternate:CallExpression": 1,
+              "indirect:consequent:BinaryExpression": 1,
+              "indirect:consequent:MemberExpression": 1
+            },
+            "onlyBExamples": [
+              "packages/next/src/build/webpack/plugins/next-types-plugin/index.ts:5",
+              "packages/next/src/build/webpack/loaders/next-style-loader/index.ts:3",
+              "packages/next/src/build/webpack/loaders/next-style-loader/index.ts:7",
+              "packages/next/src/build/webpack/loaders/next-style-loader/index.ts:11",
+              "packages/next/src/build/adapter/build-complete.ts:50"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 160,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 193,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 146,
+            "2": 14,
+            "3": 4
+          },
+          "eslint/no-nested-ternary": {
+            "1": 146,
+            "2": 14,
+            "3": 4
+          },
+          "eslint/sonarjs": {
+            "1": 162,
+            "2": 23,
+            "3": 7,
+            "4": 1
+          },
+          "eslint/unicorn": {
+            "1": 155,
+            "2": 5
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 146,
+            "2": 14,
+            "3": 4
+          },
+          "oxlint/sonarjs": {
+            "1": 162,
+            "2": 23,
+            "3": 7,
+            "4": 1
+          },
+          "oxlint/unicorn": {
+            "1": 155,
+            "2": 5
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 164,
+          "eslint/no-nested-ternary": 164,
+          "eslint/sonarjs": 193,
+          "eslint/unicorn": 160,
+          "oxlint/no-nested-ternary": 164,
+          "oxlint/sonarjs": 193,
+          "oxlint/unicorn": 160,
+          "all": 216,
+          "withDirectNesting": 164
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 2,
+            "oxlint/unicorn/prefer-ternary": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 2,
+            "oxlint/unicorn/prefer-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 12
+    },
+    "vscode": {
+      "neutralised": {
+        "raw": 28,
+        "reported": 0
+      },
+      "set": "core",
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 354,
+            "biome/style/noUselessElse": 175,
+            "oxlint/unicorn/prefer-ternary": 118,
+            "oxlint/no-else-return": 110,
+            "eslint/no-else-return": 110,
+            "oxlint/no-negated-condition": 43,
+            "oxlint/unicorn/no-negated-condition": 43,
+            "eslint/unicorn/prefer-minimal-ternary": 39,
+            "biome/style/noNegationElse": 37,
+            "biome/parse": 37,
+            "oxlint/sonarjs/no-nested-conditional": 21,
+            "eslint/sonarjs/no-nested-conditional": 21,
+            "oxlint/no-nested-ternary": 18,
+            "biome/style/noNestedTernary": 18,
+            "eslint/no-nested-ternary": 18,
+            "oxlint/unicorn/no-nested-ternary": 7,
+            "eslint/unicorn/no-nested-ternary": 7,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 7,
+            "oxlint/no-unneeded-ternary": 6,
+            "biome/complexity/noUselessTernary": 6,
+            "eslint/no-unneeded-ternary": 6
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 354,
+            "biome/style/noUselessElse": 175,
+            "oxlint/unicorn/prefer-ternary": 118,
+            "oxlint/no-else-return": 110,
+            "eslint/no-else-return": 110,
+            "oxlint/no-negated-condition": 43,
+            "oxlint/unicorn/no-negated-condition": 43,
+            "eslint/unicorn/prefer-minimal-ternary": 39,
+            "biome/style/noNegationElse": 37,
+            "biome/parse": 37,
+            "oxlint/sonarjs/no-nested-conditional": 21,
+            "eslint/sonarjs/no-nested-conditional": 21,
+            "oxlint/no-nested-ternary": 18,
+            "biome/style/noNestedTernary": 18,
+            "eslint/no-nested-ternary": 18,
+            "oxlint/unicorn/no-nested-ternary": 7,
+            "eslint/unicorn/no-nested-ternary": 7,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 7,
+            "oxlint/no-unneeded-ternary": 6,
+            "biome/complexity/noUselessTernary": 6,
+            "eslint/no-unneeded-ternary": 6
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 18,
+          "biomeReports": 18,
+          "eslintReports": 18,
+          "eslintReportsParent": 18,
+          "nestedBranches": 20,
+          "parents": 18
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 16,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 16,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 16,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 1,
+            "onlyBSignatures": {
+              "indirect:alternate:BinaryExpression": 1
+            },
+            "onlyBExamples": [
+              "src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/diffAlgorithm.ts:1"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 7,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 17,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 15,
+            "3": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 15,
+            "3": 1
+          },
+          "eslint/sonarjs": {
+            "1": 14,
+            "2": 2,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 7
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 15,
+            "3": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 14,
+            "2": 2,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 7
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 16,
+          "eslint/no-nested-ternary": 16,
+          "eslint/sonarjs": 17,
+          "eslint/unicorn": 7,
+          "oxlint/no-nested-ternary": 16,
+          "oxlint/sonarjs": 17,
+          "oxlint/unicorn": 7,
+          "all": 17,
+          "withDirectNesting": 16
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {},
+          "reported": {}
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 2
+    },
+    "shadcn": {
+      "neutralised": {
+        "raw": 0,
+        "reported": 0
+      },
+      "set": "react",
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "oxlint/no-negated-condition": 2,
+            "oxlint/unicorn/no-negated-condition": 2,
+            "biome/style/noNegationElse": 2,
+            "eslint/unicorn/prefer-minimal-ternary": 2,
+            "oxlint/no-nested-ternary": 1,
+            "oxlint/unicorn/no-nested-ternary": 1,
+            "oxlint/sonarjs/no-nested-conditional": 1,
+            "biome/style/noNestedTernary": 1,
+            "eslint/no-nested-ternary": 1,
+            "eslint/unicorn/no-nested-ternary": 1,
+            "eslint/sonarjs/no-nested-conditional": 1,
+            "eslint/unicorn/prefer-ternary": 1
+          },
+          "reported": {
+            "oxlint/no-negated-condition": 2,
+            "oxlint/unicorn/no-negated-condition": 2,
+            "biome/style/noNegationElse": 2,
+            "eslint/unicorn/prefer-minimal-ternary": 2,
+            "oxlint/no-nested-ternary": 1,
+            "oxlint/unicorn/no-nested-ternary": 1,
+            "oxlint/sonarjs/no-nested-conditional": 1,
+            "biome/style/noNestedTernary": 1,
+            "eslint/no-nested-ternary": 1,
+            "eslint/unicorn/no-nested-ternary": 1,
+            "eslint/sonarjs/no-nested-conditional": 1,
+            "eslint/unicorn/prefer-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 1,
+          "biomeReports": 1,
+          "eslintReports": 1,
+          "eslintReportsParent": 1,
+          "nestedBranches": 1,
+          "parents": 1
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 1,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 1
+          },
+          "eslint/sonarjs": {
+            "1": 1
+          },
+          "eslint/unicorn": {
+            "1": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 1
+          },
+          "oxlint/unicorn": {
+            "1": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 1,
+          "eslint/no-nested-ternary": 1,
+          "eslint/sonarjs": 1,
+          "eslint/unicorn": 1,
+          "oxlint/no-nested-ternary": 1,
+          "oxlint/sonarjs": 1,
+          "oxlint/unicorn": 1,
+          "all": 1,
+          "withDirectNesting": 1
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {},
+          "reported": {}
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 1
+    },
+    "radix": {
+      "neutralised": {
+        "raw": 21,
+        "reported": 0
+      },
+      "set": "react",
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 24,
+            "oxlint/no-negated-condition": 16,
+            "oxlint/unicorn/no-negated-condition": 16,
+            "biome/style/noNegationElse": 16,
+            "biome/style/noUselessElse": 16,
+            "oxlint/sonarjs/no-nested-conditional": 15,
+            "eslint/sonarjs/no-nested-conditional": 15,
+            "oxlint/no-nested-ternary": 14,
+            "biome/style/noNestedTernary": 14,
+            "eslint/no-nested-ternary": 14,
+            "eslint/unicorn/prefer-minimal-ternary": 13,
+            "oxlint/unicorn/no-nested-ternary": 11,
+            "eslint/unicorn/no-nested-ternary": 11,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 11,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "oxlint/unicorn/prefer-ternary": 5,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 24,
+            "oxlint/no-negated-condition": 16,
+            "oxlint/unicorn/no-negated-condition": 16,
+            "biome/style/noNegationElse": 16,
+            "biome/style/noUselessElse": 16,
+            "oxlint/sonarjs/no-nested-conditional": 15,
+            "eslint/sonarjs/no-nested-conditional": 15,
+            "oxlint/no-nested-ternary": 14,
+            "biome/style/noNestedTernary": 14,
+            "eslint/no-nested-ternary": 14,
+            "eslint/unicorn/prefer-minimal-ternary": 13,
+            "oxlint/unicorn/no-nested-ternary": 11,
+            "eslint/unicorn/no-nested-ternary": 11,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 11,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "oxlint/unicorn/prefer-ternary": 5,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 14,
+          "biomeReports": 14,
+          "eslintReports": 14,
+          "eslintReportsParent": 14,
+          "nestedBranches": 14,
+          "parents": 14
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 12,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 12,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 12,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 1,
+            "onlyBSignatures": {
+              "indirect:consequent:BinaryExpression": 1
+            },
+            "onlyBExamples": [
+              "packages/react/slider/src/slider.tsx:29"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 13,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 11,
+            "3": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 11,
+            "3": 1
+          },
+          "eslint/sonarjs": {
+            "1": 12,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 11
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 11,
+            "3": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 12,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 11
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 12,
+          "eslint/no-nested-ternary": 12,
+          "eslint/sonarjs": 13,
+          "eslint/unicorn": 11,
+          "oxlint/no-nested-ternary": 12,
+          "oxlint/sonarjs": 13,
+          "oxlint/unicorn": 11,
+          "all": 15,
+          "withDirectNesting": 12
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {},
+          "reported": {}
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 2
+    },
+    "react-aria": {
+      "neutralised": {
+        "raw": 134,
+        "reported": 0
+      },
+      "set": "react",
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "oxlint/no-negated-condition": 43,
+            "oxlint/unicorn/no-negated-condition": 43,
+            "biome/style/noNegationElse": 43,
+            "eslint/unicorn/prefer-ternary": 28,
+            "eslint/unicorn/prefer-minimal-ternary": 12,
+            "oxlint/unicorn/prefer-ternary": 8,
+            "biome/style/noUselessElse": 6,
+            "oxlint/unicorn/no-nested-ternary": 5,
+            "oxlint/sonarjs/no-nested-conditional": 5,
+            "eslint/unicorn/no-nested-ternary": 5,
+            "eslint/sonarjs/no-nested-conditional": 5,
+            "oxlint/no-nested-ternary": 4,
+            "biome/style/noNestedTernary": 4,
+            "eslint/no-nested-ternary": 4,
+            "oxlint/no-else-return": 3,
+            "eslint/no-else-return": 3,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "oxlint/no-negated-condition": 43,
+            "oxlint/unicorn/no-negated-condition": 43,
+            "biome/style/noNegationElse": 43,
+            "eslint/unicorn/prefer-ternary": 28,
+            "eslint/unicorn/prefer-minimal-ternary": 12,
+            "oxlint/unicorn/prefer-ternary": 8,
+            "biome/style/noUselessElse": 6,
+            "oxlint/unicorn/no-nested-ternary": 5,
+            "oxlint/sonarjs/no-nested-conditional": 5,
+            "eslint/unicorn/no-nested-ternary": 5,
+            "eslint/sonarjs/no-nested-conditional": 5,
+            "oxlint/no-nested-ternary": 4,
+            "biome/style/noNestedTernary": 4,
+            "eslint/no-nested-ternary": 4,
+            "oxlint/no-else-return": 3,
+            "eslint/no-else-return": 3,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 4,
+          "biomeReports": 4,
+          "eslintReports": 4,
+          "eslintReportsParent": 4,
+          "nestedBranches": 5,
+          "parents": 4
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 4,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 4
+          },
+          "eslint/no-nested-ternary": {
+            "1": 4
+          },
+          "eslint/sonarjs": {
+            "1": 3,
+            "2": 1
+          },
+          "eslint/unicorn": {
+            "1": 3,
+            "2": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 4
+          },
+          "oxlint/sonarjs": {
+            "1": 3,
+            "2": 1
+          },
+          "oxlint/unicorn": {
+            "1": 3,
+            "2": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 4,
+          "eslint/no-nested-ternary": 4,
+          "eslint/sonarjs": 4,
+          "eslint/unicorn": 4,
+          "oxlint/no-nested-ternary": 4,
+          "oxlint/sonarjs": 4,
+          "oxlint/unicorn": 4,
+          "all": 4,
+          "withDirectNesting": 4
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "biome/style/noUselessElse": 11,
+            "eslint/unicorn/prefer-ternary": 11,
+            "oxlint/unicorn/prefer-ternary": 9,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "oxlint/no-negated-condition": 5,
+            "oxlint/unicorn/no-negated-condition": 5,
+            "biome/style/noNegationElse": 5,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "biome/style/noUselessElse": 11,
+            "eslint/unicorn/prefer-ternary": 11,
+            "oxlint/unicorn/prefer-ternary": 9,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "oxlint/no-negated-condition": 5,
+            "oxlint/unicorn/no-negated-condition": 5,
+            "biome/style/noNegationElse": 5,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 2
+    },
+    "supabase": {
+      "neutralised": {
+        "raw": 114,
+        "reported": 0
+      },
+      "set": "react",
+      "sha": "09f80f528ec47569841408a81668dff90525c48a",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "oxlint/sonarjs/no-nested-conditional": 785,
+            "eslint/sonarjs/no-nested-conditional": 785,
+            "oxlint/no-nested-ternary": 684,
+            "biome/style/noNestedTernary": 684,
+            "eslint/no-nested-ternary": 684,
+            "oxlint/no-negated-condition": 645,
+            "oxlint/unicorn/no-negated-condition": 645,
+            "biome/style/noNegationElse": 550,
+            "oxlint/unicorn/no-nested-ternary": 498,
+            "eslint/unicorn/no-nested-ternary": 498,
+            "eslint/unicorn/prefer-ternary": 470,
+            "biome/style/noUselessElse": 271,
+            "oxlint/no-else-return": 165,
+            "eslint/no-else-return": 165,
+            "oxlint/unicorn/prefer-ternary": 103,
+            "eslint/unicorn/prefer-minimal-ternary": 73,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 51,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 27,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 11,
+            "oxlint/no-unneeded-ternary": 6,
+            "biome/complexity/noUselessTernary": 6,
+            "eslint/no-unneeded-ternary": 6
+          },
+          "reported": {
+            "oxlint/sonarjs/no-nested-conditional": 785,
+            "eslint/sonarjs/no-nested-conditional": 785,
+            "oxlint/no-nested-ternary": 684,
+            "biome/style/noNestedTernary": 684,
+            "eslint/no-nested-ternary": 684,
+            "oxlint/no-negated-condition": 645,
+            "oxlint/unicorn/no-negated-condition": 645,
+            "biome/style/noNegationElse": 550,
+            "oxlint/unicorn/no-nested-ternary": 498,
+            "eslint/unicorn/no-nested-ternary": 498,
+            "eslint/unicorn/prefer-ternary": 470,
+            "biome/style/noUselessElse": 271,
+            "oxlint/no-else-return": 165,
+            "eslint/no-else-return": 165,
+            "oxlint/unicorn/prefer-ternary": 103,
+            "eslint/unicorn/prefer-minimal-ternary": 73,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 51,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 27,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 11,
+            "oxlint/no-unneeded-ternary": 6,
+            "biome/complexity/noUselessTernary": 6,
+            "eslint/no-unneeded-ternary": 6
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 684,
+          "biomeReports": 684,
+          "eslintReports": 684,
+          "eslintReportsParent": 684,
+          "nestedBranches": 702,
+          "parents": 684
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 474,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 474,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 474,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 52,
+            "onlyBSignatures": {
+              "indirect:consequent:TemplateLiteral": 18,
+              "indirect:alternate:TemplateLiteral": 13,
+              "indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 7,
+              "indirect:alternate:BinaryExpression": 3,
+              "indirect:alternate:MemberExpression": 3,
+              "indirect:consequent:MemberExpression": 2,
+              "indirect:alternate:CallExpression": 1,
+              "indirect:alternate:TemplateLiteral indirect:consequent:JSXExpressionContainer:broken indirect:consequent:TemplateLiteral": 1,
+              "indirect:consequent:CallExpression": 1,
+              "indirect:alternate:JSXExpressionContainer:broken indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 1,
+              "indirect:consequent:BinaryExpression": 1,
+              "indirect:alternate:JSXExpressionContainer:broken indirect:alternate:TemplateLiteral indirect:consequent:JSXExpressionContainer:broken": 1
+            },
+            "onlyBExamples": [
+              "apps/studio/components/interfaces/Advisors/AdvisorRules.utils.tsx:1",
+              "apps/studio/components/grid/components/header/filter/FilterPopoverPrimitive.tsx:0",
+              "apps/studio/components/interfaces/Database/Publications/PublicationsList.tsx:3",
+              "apps/studio/components/interfaces/BranchManagement/Overview.tsx:3",
+              "apps/studio/components/interfaces/Auth/Users/UserOverview.tsx:3"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 441,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 526,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 337,
+            "2": 94,
+            "3": 24,
+            "4": 12,
+            "5": 4,
+            "6": 2,
+            "7": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 337,
+            "2": 94,
+            "3": 24,
+            "4": 12,
+            "5": 4,
+            "6": 2,
+            "7": 1
+          },
+          "eslint/sonarjs": {
+            "1": 361,
+            "2": 113,
+            "3": 27,
+            "4": 13,
+            "5": 8,
+            "6": 3,
+            "7": 1
+          },
+          "eslint/unicorn": {
+            "1": 400,
+            "2": 32,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 337,
+            "2": 94,
+            "3": 24,
+            "4": 12,
+            "5": 4,
+            "6": 2,
+            "7": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 361,
+            "2": 113,
+            "3": 27,
+            "4": 13,
+            "5": 8,
+            "6": 3,
+            "7": 1
+          },
+          "oxlint/unicorn": {
+            "1": 396,
+            "2": 36,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 474,
+          "eslint/no-nested-ternary": 474,
+          "eslint/sonarjs": 526,
+          "eslint/unicorn": 441,
+          "oxlint/no-nested-ternary": 474,
+          "oxlint/sonarjs": 526,
+          "oxlint/unicorn": 441,
+          "all": 583,
+          "withDirectNesting": 474
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 9,
+            "eslint/unicorn/prefer-minimal-ternary": 2,
+            "biome/style/noUselessElse": 1,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 9,
+            "eslint/unicorn/prefer-minimal-ternary": 2,
+            "biome/style/noUselessElse": 1,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 20
+    },
+    "ultracite": {
+      "neutralised": {
+        "raw": 32,
+        "reported": 0
+      },
+      "set": "dogfood",
+      "sha": "cfa365be0a5446943faa1c23ecc244c788df36cc",
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 16,
+            "eslint/unicorn/prefer-minimal-ternary": 6,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 16,
+            "eslint/unicorn/prefer-minimal-ternary": 6,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 87,
+            "eslint/unicorn/prefer-minimal-ternary": 7
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 87,
+            "eslint/unicorn/prefer-minimal-ternary": 7
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      },
+      "seconds": 2
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  },
+  "messages": {
+    "oxlint/no-else-return": {
+      "Unnecessary `else` after `return`. | help: Remove the `else` block, moving its contents outside of the `if` statement.": 680
+    },
+    "biome/style/noUselessElse": {
+      "This else clause is unnecessary.": 1256
+    },
+    "eslint/no-else-return": {
+      "Unnecessary 'else' after 'return'.": 680
+    },
+    "oxlint/no-negated-condition": {
+      "Unexpected negated condition. | help: Remove the negation operator and switch the consequent and alternate branches.": 1319
+    },
+    "oxlint/unicorn/no-negated-condition": {
+      "Unexpected negated condition. | help: Remove the negation operator and switch the consequent and alternate branches.": 1319
+    },
+    "biome/style/noNegationElse": {
+      "Invert blocks when performing a negation test.": 1210
+    },
+    "oxlint/no-nested-ternary": {
+      "Do not nest ternary expressions. | help: Refactor nested ternary expressions into if-else statements for better readability.": 1182
+    },
+    "oxlint/unicorn/no-nested-ternary": {
+      "Unexpected nested ternary expression without parentheses. | help: Add parentheses around the nested ternary expression.": 768,
+      "Unexpected deeply nested ternary expression. | help: Avoid nesting ternary expressions for more than one level.": 172
+    },
+    "oxlint/sonarjs/no-nested-conditional": {
+      "Extract this nested ternary operation into an independent statement.": 1414
+    },
+    "biome/style/noNestedTernary": {
+      "Do not nest ternary expressions.": 1182
+    },
+    "eslint/unicorn/prefer-ternary": {
+      "This `if` statement can be replaced by a ternary expression.": 2451
+    },
+    "eslint/no-nested-ternary": {
+      "Do not nest ternary expressions.": 1182
+    },
+    "eslint/unicorn/no-nested-ternary": {
+      "Nested ternary expression should be parenthesized.": 768,
+      "Do not nest ternary expressions.": 172
+    },
+    "eslint/sonarjs/no-nested-conditional": {
+      "Extract this nested ternary operation into an independent statement.": 1414
+    },
+    "eslint/unicorn/prefer-logical-operator-over-ternary": {
+      "Prefer using a logical operator over a ternary.": 154
+    },
+    "oxlint/unicorn/prefer-ternary": {
+      "Prefer ternary expressions over simple `if-else` statements. | help: Rewrite this `if`/`else` as a ternary expression.": 635
+    },
+    "oxlint/unicorn/prefer-logical-operator-over-ternary": {
+      "Prefer using a logical operator over a ternary. | help: Switch to \"||\" or \"??\" operator": 67
+    },
+    "eslint/unicorn/prefer-minimal-ternary": {
+      "Move the ternary into the varying part of the expression.": 529
+    },
+    "eslint/unicorn/no-unnecessary-nested-ternary": {
+      "Do not use unnecessary nested ternary expressions.": 18
+    },
+    "oxlint/no-unneeded-ternary": {
+      "Unnecessary use of boolean literals in conditional expression | help: Remove this ternary operator": 20
+    },
+    "biome/complexity/noUselessTernary": {
+      "Unnecessary use of boolean literals in conditional expression.": 20
+    },
+    "eslint/no-unneeded-ternary": {
+      "Unnecessary use of boolean literals in conditional expression.": 20
+    },
+    "biome/syntax/correctness/noTypeOnlyImportAttributes": {
+      "Import attributes cannot be used with a type-only import.": 6
+    },
+    "biome/parse": {
+      "Decorators are not valid here.": 37
+    }
+  },
+  "pooled": {
+    "corpus": {
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 1661,
+            "biome/style/noUselessElse": 932,
+            "oxlint/no-negated-condition": 591,
+            "oxlint/unicorn/no-negated-condition": 591,
+            "oxlint/sonarjs/no-nested-conditional": 585,
+            "eslint/sonarjs/no-nested-conditional": 585,
+            "biome/style/noNegationElse": 577,
+            "oxlint/unicorn/prefer-ternary": 496,
+            "oxlint/no-else-return": 488,
+            "eslint/no-else-return": 488,
+            "oxlint/no-nested-ternary": 461,
+            "biome/style/noNestedTernary": 461,
+            "eslint/no-nested-ternary": 461,
+            "oxlint/unicorn/no-nested-ternary": 410,
+            "eslint/unicorn/no-nested-ternary": 410,
+            "eslint/unicorn/prefer-minimal-ternary": 403,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 87,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 38,
+            "biome/parse": 37,
+            "oxlint/no-unneeded-ternary": 14,
+            "biome/complexity/noUselessTernary": 14,
+            "eslint/no-unneeded-ternary": 14,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 7,
+            "biome/syntax/correctness/noTypeOnlyImportAttributes": 6
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 1660,
+            "biome/style/noUselessElse": 932,
+            "oxlint/no-negated-condition": 591,
+            "oxlint/unicorn/no-negated-condition": 591,
+            "oxlint/sonarjs/no-nested-conditional": 585,
+            "eslint/sonarjs/no-nested-conditional": 585,
+            "biome/style/noNegationElse": 577,
+            "oxlint/unicorn/prefer-ternary": 496,
+            "oxlint/no-else-return": 488,
+            "eslint/no-else-return": 486,
+            "oxlint/no-nested-ternary": 461,
+            "biome/style/noNestedTernary": 461,
+            "eslint/no-nested-ternary": 461,
+            "oxlint/unicorn/no-nested-ternary": 410,
+            "eslint/unicorn/no-nested-ternary": 410,
+            "eslint/unicorn/prefer-minimal-ternary": 403,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 87,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 38,
+            "biome/parse": 37,
+            "oxlint/no-unneeded-ternary": 14,
+            "biome/complexity/noUselessTernary": 14,
+            "eslint/no-unneeded-ternary": 14,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 7,
+            "biome/suppressions/unused": 6,
+            "biome/syntax/correctness/noTypeOnlyImportAttributes": 6
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 461,
+          "biomeReports": 461,
+          "eslintReports": 461,
+          "eslintReportsParent": 461,
+          "nestedBranches": 487,
+          "parents": 461
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 401,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 401,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 401,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 72,
+            "onlyBSignatures": {
+              "indirect:consequent:TemplateLiteral": 20,
+              "indirect:alternate:TemplateLiteral": 11,
+              "indirect:consequent:CallExpression": 10,
+              "indirect:consequent:BinaryExpression": 7,
+              "indirect:alternate:CallExpression": 6,
+              "indirect:alternate:BinaryExpression": 6,
+              "indirect:alternate:LogicalExpression": 3,
+              "indirect:alternate:BinaryExpression indirect:alternate:CallExpression indirect:consequent:CallExpression": 2,
+              "indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 1,
+              "indirect:consequent:LogicalExpression": 1,
+              "indirect:test:MemberExpression": 1,
+              "direct:test": 1,
+              "indirect:test:LogicalExpression": 1,
+              "indirect:consequent:BinaryExpression indirect:consequent:TemplateLiteral": 1,
+              "indirect:consequent:MemberExpression": 1
+            },
+            "onlyBExamples": [
+              "hono/src/jsx/streaming.ts:5",
+              "hono/src/jsx/dom/render.ts:10",
+              "hono/src/utils/url.ts:9",
+              "hono/src/jsx/components.ts:3",
+              "hono/src/router/linear-router/router.ts:0"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 382,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 473,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 356,
+            "2": 38,
+            "3": 5,
+            "6": 1,
+            "8": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 356,
+            "2": 38,
+            "3": 5,
+            "6": 1,
+            "8": 1
+          },
+          "eslint/sonarjs": {
+            "1": 390,
+            "2": 64,
+            "3": 15,
+            "4": 2,
+            "6": 1,
+            "8": 1
+          },
+          "eslint/unicorn": {
+            "1": 354,
+            "2": 28
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 356,
+            "2": 38,
+            "3": 5,
+            "6": 1,
+            "8": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 390,
+            "2": 64,
+            "3": 15,
+            "4": 2,
+            "6": 1,
+            "8": 1
+          },
+          "oxlint/unicorn": {
+            "1": 354,
+            "2": 28
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 401,
+          "eslint/no-nested-ternary": 401,
+          "eslint/sonarjs": 473,
+          "eslint/unicorn": 382,
+          "oxlint/no-nested-ternary": 401,
+          "oxlint/sonarjs": 473,
+          "oxlint/unicorn": 382,
+          "all": 522,
+          "withDirectNesting": 402
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 144,
+            "oxlint/sonarjs/no-nested-conditional": 23,
+            "eslint/sonarjs/no-nested-conditional": 23,
+            "biome/style/noUselessElse": 19,
+            "oxlint/no-nested-ternary": 18,
+            "biome/style/noNestedTernary": 18,
+            "eslint/no-nested-ternary": 18,
+            "oxlint/no-negated-condition": 17,
+            "oxlint/unicorn/no-negated-condition": 17,
+            "biome/style/noNegationElse": 17,
+            "oxlint/unicorn/no-nested-ternary": 15,
+            "eslint/unicorn/no-nested-ternary": 15,
+            "oxlint/unicorn/prefer-ternary": 14,
+            "eslint/unicorn/prefer-minimal-ternary": 11,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 144,
+            "oxlint/sonarjs/no-nested-conditional": 23,
+            "eslint/sonarjs/no-nested-conditional": 23,
+            "biome/style/noUselessElse": 19,
+            "oxlint/no-nested-ternary": 18,
+            "biome/style/noNestedTernary": 18,
+            "eslint/no-nested-ternary": 18,
+            "oxlint/no-negated-condition": 17,
+            "oxlint/unicorn/no-negated-condition": 17,
+            "biome/style/noNegationElse": 17,
+            "oxlint/unicorn/no-nested-ternary": 15,
+            "eslint/unicorn/no-nested-ternary": 15,
+            "oxlint/unicorn/prefer-ternary": 14,
+            "eslint/unicorn/prefer-minimal-ternary": 11,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "biome/suppressions/unused": 5
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 18,
+          "biomeReports": 18,
+          "eslintReports": 18,
+          "eslintReportsParent": 18,
+          "nestedBranches": 18,
+          "parents": 18
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 4,
+            "onlyBSignatures": {
+              "indirect:alternate:CallExpression": 1,
+              "indirect:alternate:BinaryExpression": 1,
+              "direct:test indirect:consequent:Property:broken": 1,
+              "indirect:consequent:TemplateLiteral": 1
+            },
+            "onlyBExamples": [
+              "zod/packages/zod/src/v4/core/tests/compile-differential.test.ts:3",
+              "zod/packages/zod/src/v4/core/tests/email-regex.test.ts:0",
+              "excalidraw/packages/excalidraw/tests/helpers/api.ts:2",
+              "excalidraw/packages/excalidraw/tests/test-utils.ts:3"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 10,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 15,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 5,
+            "2": 5,
+            "3": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 5,
+            "2": 5,
+            "3": 1
+          },
+          "eslint/sonarjs": {
+            "1": 8,
+            "2": 6,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 6,
+            "2": 3,
+            "3": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 5,
+            "2": 5,
+            "3": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 8,
+            "2": 6,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 6,
+            "2": 3,
+            "3": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 11,
+          "eslint/no-nested-ternary": 11,
+          "eslint/sonarjs": 15,
+          "eslint/unicorn": 10,
+          "oxlint/no-nested-ternary": 11,
+          "oxlint/sonarjs": 15,
+          "oxlint/unicorn": 10,
+          "all": 15,
+          "withDirectNesting": 12
+        },
+        "unjoined": {}
+      }
+    },
+    "external": {
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 2184,
+            "oxlint/sonarjs/no-nested-conditional": 1391,
+            "eslint/sonarjs/no-nested-conditional": 1391,
+            "oxlint/no-negated-condition": 1297,
+            "oxlint/unicorn/no-negated-condition": 1297,
+            "biome/style/noUselessElse": 1225,
+            "biome/style/noNegationElse": 1188,
+            "oxlint/no-nested-ternary": 1164,
+            "biome/style/noNestedTernary": 1164,
+            "eslint/no-nested-ternary": 1164,
+            "oxlint/unicorn/no-nested-ternary": 925,
+            "eslint/unicorn/no-nested-ternary": 925,
+            "oxlint/no-else-return": 664,
+            "eslint/no-else-return": 664,
+            "oxlint/unicorn/prefer-ternary": 612,
+            "eslint/unicorn/prefer-minimal-ternary": 503,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 151,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 67,
+            "biome/parse": 37,
+            "oxlint/no-unneeded-ternary": 20,
+            "biome/complexity/noUselessTernary": 20,
+            "eslint/no-unneeded-ternary": 20,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 18,
+            "biome/syntax/correctness/noTypeOnlyImportAttributes": 6
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 2183,
+            "oxlint/sonarjs/no-nested-conditional": 1391,
+            "eslint/sonarjs/no-nested-conditional": 1391,
+            "oxlint/no-negated-condition": 1297,
+            "oxlint/unicorn/no-negated-condition": 1297,
+            "biome/style/noUselessElse": 1225,
+            "biome/style/noNegationElse": 1188,
+            "oxlint/no-nested-ternary": 1164,
+            "biome/style/noNestedTernary": 1164,
+            "eslint/no-nested-ternary": 1164,
+            "oxlint/unicorn/no-nested-ternary": 925,
+            "eslint/unicorn/no-nested-ternary": 925,
+            "oxlint/no-else-return": 664,
+            "eslint/no-else-return": 662,
+            "oxlint/unicorn/prefer-ternary": 612,
+            "eslint/unicorn/prefer-minimal-ternary": 503,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 151,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 67,
+            "biome/parse": 37,
+            "oxlint/no-unneeded-ternary": 20,
+            "biome/complexity/noUselessTernary": 20,
+            "eslint/no-unneeded-ternary": 20,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 18,
+            "biome/suppressions/unused": 6,
+            "biome/syntax/correctness/noTypeOnlyImportAttributes": 6
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 1164,
+          "biomeReports": 1164,
+          "eslintReports": 1164,
+          "eslintReportsParent": 1164,
+          "nestedBranches": 1209,
+          "parents": 1164
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 892,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 892,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 892,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 125,
+            "onlyBSignatures": {
+              "indirect:consequent:TemplateLiteral": 38,
+              "indirect:alternate:TemplateLiteral": 24,
+              "indirect:consequent:CallExpression": 11,
+              "indirect:consequent:BinaryExpression": 9,
+              "indirect:alternate:BinaryExpression": 9,
+              "indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 8,
+              "indirect:alternate:CallExpression": 7,
+              "indirect:alternate:LogicalExpression": 3,
+              "indirect:consequent:MemberExpression": 3,
+              "indirect:alternate:MemberExpression": 3,
+              "indirect:alternate:BinaryExpression indirect:alternate:CallExpression indirect:consequent:CallExpression": 2,
+              "indirect:consequent:LogicalExpression": 1,
+              "indirect:test:MemberExpression": 1,
+              "direct:test": 1,
+              "indirect:test:LogicalExpression": 1,
+              "indirect:consequent:BinaryExpression indirect:consequent:TemplateLiteral": 1,
+              "indirect:alternate:TemplateLiteral indirect:consequent:JSXExpressionContainer:broken indirect:consequent:TemplateLiteral": 1,
+              "indirect:alternate:JSXExpressionContainer:broken indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 1,
+              "indirect:alternate:JSXExpressionContainer:broken indirect:alternate:TemplateLiteral indirect:consequent:JSXExpressionContainer:broken": 1
+            },
+            "onlyBExamples": [
+              "hono/src/jsx/streaming.ts:5",
+              "hono/src/jsx/dom/render.ts:10",
+              "hono/src/utils/url.ts:9",
+              "hono/src/jsx/components.ts:3",
+              "hono/src/router/linear-router/router.ts:0"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 839,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 1017,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 709,
+            "2": 132,
+            "3": 30,
+            "4": 12,
+            "5": 4,
+            "6": 3,
+            "7": 1,
+            "8": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 709,
+            "2": 132,
+            "3": 30,
+            "4": 12,
+            "5": 4,
+            "6": 3,
+            "7": 1,
+            "8": 1
+          },
+          "eslint/sonarjs": {
+            "1": 767,
+            "2": 178,
+            "3": 43,
+            "4": 15,
+            "5": 8,
+            "6": 4,
+            "7": 1,
+            "8": 1
+          },
+          "eslint/unicorn": {
+            "1": 769,
+            "2": 61,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 709,
+            "2": 132,
+            "3": 30,
+            "4": 12,
+            "5": 4,
+            "6": 3,
+            "7": 1,
+            "8": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 767,
+            "2": 178,
+            "3": 43,
+            "4": 15,
+            "5": 8,
+            "6": 4,
+            "7": 1,
+            "8": 1
+          },
+          "oxlint/unicorn": {
+            "1": 765,
+            "2": 65,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 892,
+          "eslint/no-nested-ternary": 892,
+          "eslint/sonarjs": 1017,
+          "eslint/unicorn": 839,
+          "oxlint/no-nested-ternary": 892,
+          "oxlint/sonarjs": 1017,
+          "oxlint/unicorn": 839,
+          "all": 1125,
+          "withDirectNesting": 893
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 164,
+            "biome/style/noUselessElse": 31,
+            "oxlint/sonarjs/no-nested-conditional": 23,
+            "eslint/sonarjs/no-nested-conditional": 23,
+            "oxlint/unicorn/prefer-ternary": 23,
+            "oxlint/no-negated-condition": 22,
+            "oxlint/unicorn/no-negated-condition": 22,
+            "biome/style/noNegationElse": 22,
+            "oxlint/no-nested-ternary": 18,
+            "biome/style/noNestedTernary": 18,
+            "eslint/no-nested-ternary": 18,
+            "oxlint/no-else-return": 16,
+            "eslint/no-else-return": 16,
+            "oxlint/unicorn/no-nested-ternary": 15,
+            "eslint/unicorn/no-nested-ternary": 15,
+            "eslint/unicorn/prefer-minimal-ternary": 13,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 164,
+            "biome/style/noUselessElse": 31,
+            "oxlint/sonarjs/no-nested-conditional": 23,
+            "eslint/sonarjs/no-nested-conditional": 23,
+            "oxlint/unicorn/prefer-ternary": 23,
+            "oxlint/no-negated-condition": 22,
+            "oxlint/unicorn/no-negated-condition": 22,
+            "biome/style/noNegationElse": 22,
+            "oxlint/no-nested-ternary": 18,
+            "biome/style/noNestedTernary": 18,
+            "eslint/no-nested-ternary": 18,
+            "oxlint/no-else-return": 16,
+            "eslint/no-else-return": 16,
+            "oxlint/unicorn/no-nested-ternary": 15,
+            "eslint/unicorn/no-nested-ternary": 15,
+            "eslint/unicorn/prefer-minimal-ternary": 13,
+            "biome/suppressions/unused": 5,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 18,
+          "biomeReports": 18,
+          "eslintReports": 18,
+          "eslintReportsParent": 18,
+          "nestedBranches": 18,
+          "parents": 18
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 11,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 4,
+            "onlyBSignatures": {
+              "indirect:alternate:CallExpression": 1,
+              "indirect:alternate:BinaryExpression": 1,
+              "direct:test indirect:consequent:Property:broken": 1,
+              "indirect:consequent:TemplateLiteral": 1
+            },
+            "onlyBExamples": [
+              "zod/packages/zod/src/v4/core/tests/compile-differential.test.ts:3",
+              "zod/packages/zod/src/v4/core/tests/email-regex.test.ts:0",
+              "excalidraw/packages/excalidraw/tests/helpers/api.ts:2",
+              "excalidraw/packages/excalidraw/tests/test-utils.ts:3"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 10,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 15,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 5,
+            "2": 5,
+            "3": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 5,
+            "2": 5,
+            "3": 1
+          },
+          "eslint/sonarjs": {
+            "1": 8,
+            "2": 6,
+            "3": 1
+          },
+          "eslint/unicorn": {
+            "1": 6,
+            "2": 3,
+            "3": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 5,
+            "2": 5,
+            "3": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 8,
+            "2": 6,
+            "3": 1
+          },
+          "oxlint/unicorn": {
+            "1": 6,
+            "2": 3,
+            "3": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 11,
+          "eslint/no-nested-ternary": 11,
+          "eslint/sonarjs": 15,
+          "eslint/unicorn": 10,
+          "oxlint/no-nested-ternary": 11,
+          "oxlint/sonarjs": 15,
+          "oxlint/unicorn": 10,
+          "all": 15,
+          "withDirectNesting": 12
+        },
+        "unjoined": {}
+      }
+    },
+    "react": {
+      "source": {
+        "byLinterRule": {
+          "raw": {
+            "oxlint/sonarjs/no-nested-conditional": 806,
+            "eslint/sonarjs/no-nested-conditional": 806,
+            "oxlint/no-negated-condition": 706,
+            "oxlint/unicorn/no-negated-condition": 706,
+            "oxlint/no-nested-ternary": 703,
+            "biome/style/noNestedTernary": 703,
+            "eslint/no-nested-ternary": 703,
+            "biome/style/noNegationElse": 611,
+            "eslint/unicorn/prefer-ternary": 523,
+            "oxlint/unicorn/no-nested-ternary": 515,
+            "eslint/unicorn/no-nested-ternary": 515,
+            "biome/style/noUselessElse": 293,
+            "oxlint/no-else-return": 176,
+            "eslint/no-else-return": 176,
+            "oxlint/unicorn/prefer-ternary": 116,
+            "eslint/unicorn/prefer-minimal-ternary": 100,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 64,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 29,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 11,
+            "oxlint/no-unneeded-ternary": 6,
+            "biome/complexity/noUselessTernary": 6,
+            "eslint/no-unneeded-ternary": 6
+          },
+          "reported": {
+            "oxlint/sonarjs/no-nested-conditional": 806,
+            "eslint/sonarjs/no-nested-conditional": 806,
+            "oxlint/no-negated-condition": 706,
+            "oxlint/unicorn/no-negated-condition": 706,
+            "oxlint/no-nested-ternary": 703,
+            "biome/style/noNestedTernary": 703,
+            "eslint/no-nested-ternary": 703,
+            "biome/style/noNegationElse": 611,
+            "eslint/unicorn/prefer-ternary": 523,
+            "oxlint/unicorn/no-nested-ternary": 515,
+            "eslint/unicorn/no-nested-ternary": 515,
+            "biome/style/noUselessElse": 293,
+            "oxlint/no-else-return": 176,
+            "eslint/no-else-return": 176,
+            "oxlint/unicorn/prefer-ternary": 116,
+            "eslint/unicorn/prefer-minimal-ternary": 100,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 64,
+            "oxlint/unicorn/prefer-logical-operator-over-ternary": 29,
+            "eslint/unicorn/no-unnecessary-nested-ternary": 11,
+            "oxlint/no-unneeded-ternary": 6,
+            "biome/complexity/noUselessTernary": 6,
+            "eslint/no-unneeded-ternary": 6
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 703,
+          "biomeReports": 703,
+          "eslintReports": 703,
+          "eslintReportsParent": 703,
+          "nestedBranches": 722,
+          "parents": 703
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 491,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 491,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 491,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 53,
+            "onlyBSignatures": {
+              "indirect:consequent:TemplateLiteral": 18,
+              "indirect:alternate:TemplateLiteral": 13,
+              "indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 7,
+              "indirect:alternate:BinaryExpression": 3,
+              "indirect:alternate:MemberExpression": 3,
+              "indirect:consequent:BinaryExpression": 2,
+              "indirect:consequent:MemberExpression": 2,
+              "indirect:alternate:CallExpression": 1,
+              "indirect:alternate:TemplateLiteral indirect:consequent:JSXExpressionContainer:broken indirect:consequent:TemplateLiteral": 1,
+              "indirect:consequent:CallExpression": 1,
+              "indirect:alternate:JSXExpressionContainer:broken indirect:alternate:TemplateLiteral indirect:consequent:TemplateLiteral": 1,
+              "indirect:alternate:JSXExpressionContainer:broken indirect:alternate:TemplateLiteral indirect:consequent:JSXExpressionContainer:broken": 1
+            },
+            "onlyBExamples": [
+              "radix/packages/react/slider/src/slider.tsx:29",
+              "supabase/apps/studio/components/interfaces/Advisors/AdvisorRules.utils.tsx:1",
+              "supabase/apps/studio/components/grid/components/header/filter/FilterPopoverPrimitive.tsx:0",
+              "supabase/apps/studio/components/interfaces/Database/Publications/PublicationsList.tsx:3",
+              "supabase/apps/studio/components/interfaces/BranchManagement/Overview.tsx:3"
+            ]
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 457,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 544,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {
+            "1": 353,
+            "2": 94,
+            "3": 25,
+            "4": 12,
+            "5": 4,
+            "6": 2,
+            "7": 1
+          },
+          "eslint/no-nested-ternary": {
+            "1": 353,
+            "2": 94,
+            "3": 25,
+            "4": 12,
+            "5": 4,
+            "6": 2,
+            "7": 1
+          },
+          "eslint/sonarjs": {
+            "1": 377,
+            "2": 114,
+            "3": 28,
+            "4": 13,
+            "5": 8,
+            "6": 3,
+            "7": 1
+          },
+          "eslint/unicorn": {
+            "1": 415,
+            "2": 33,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          },
+          "oxlint/no-nested-ternary": {
+            "1": 353,
+            "2": 94,
+            "3": 25,
+            "4": 12,
+            "5": 4,
+            "6": 2,
+            "7": 1
+          },
+          "oxlint/sonarjs": {
+            "1": 377,
+            "2": 114,
+            "3": 28,
+            "4": 13,
+            "5": 8,
+            "6": 3,
+            "7": 1
+          },
+          "oxlint/unicorn": {
+            "1": 411,
+            "2": 37,
+            "3": 7,
+            "4": 1,
+            "5": 1
+          }
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 491,
+          "eslint/no-nested-ternary": 491,
+          "eslint/sonarjs": 544,
+          "eslint/unicorn": 457,
+          "oxlint/no-nested-ternary": 491,
+          "oxlint/sonarjs": 544,
+          "oxlint/unicorn": 457,
+          "all": 603,
+          "withDirectNesting": 491
+        },
+        "unjoined": {}
+      },
+      "tests": {
+        "byLinterRule": {
+          "raw": {
+            "eslint/unicorn/prefer-ternary": 20,
+            "biome/style/noUselessElse": 12,
+            "oxlint/unicorn/prefer-ternary": 9,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "oxlint/no-negated-condition": 5,
+            "oxlint/unicorn/no-negated-condition": 5,
+            "biome/style/noNegationElse": 5,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2,
+            "eslint/unicorn/prefer-minimal-ternary": 2
+          },
+          "reported": {
+            "eslint/unicorn/prefer-ternary": 20,
+            "biome/style/noUselessElse": 12,
+            "oxlint/unicorn/prefer-ternary": 9,
+            "oxlint/no-else-return": 8,
+            "eslint/no-else-return": 8,
+            "oxlint/no-negated-condition": 5,
+            "oxlint/unicorn/no-negated-condition": 5,
+            "biome/style/noNegationElse": 5,
+            "eslint/unicorn/prefer-logical-operator-over-ternary": 2,
+            "eslint/unicorn/prefer-minimal-ternary": 2
+          }
+        },
+        "conditionalLevel": {
+          "biomeReportsNestedBranch": 0,
+          "biomeReports": 0,
+          "eslintReports": 0,
+          "eslintReportsParent": 0,
+          "nestedBranches": 0,
+          "parents": 0
+        },
+        "disagreements": {
+          "eslint/no-nested-ternary vs oxlint/no-nested-ternary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs biome/noNestedTernary": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/no-nested-ternary vs eslint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/unicorn vs oxlint/unicorn": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          },
+          "eslint/sonarjs vs oxlint/sonarjs": {
+            "both": 0,
+            "onlyA": 0,
+            "onlyASignatures": {},
+            "onlyAExamples": [],
+            "onlyB": 0,
+            "onlyBSignatures": {},
+            "onlyBExamples": []
+          }
+        },
+        "perTree": {
+          "biome/noNestedTernary": {},
+          "eslint/no-nested-ternary": {},
+          "eslint/sonarjs": {},
+          "eslint/unicorn": {},
+          "oxlint/no-nested-ternary": {},
+          "oxlint/sonarjs": {},
+          "oxlint/unicorn": {}
+        },
+        "unitCounts": {
+          "biome/noNestedTernary": 0,
+          "eslint/no-nested-ternary": 0,
+          "eslint/sonarjs": 0,
+          "eslint/unicorn": 0,
+          "oxlint/no-nested-ternary": 0,
+          "oxlint/sonarjs": 0,
+          "oxlint/unicorn": 0,
+          "all": 0,
+          "withDirectNesting": 0
+        },
+        "unjoined": {}
+      }
+    }
+  },
+  "preferTernary": {
+    "both": {
+      "if-else:return": 199,
+      "if-else:assign": 180,
+      "if-else:await": 3
+    },
+    "branchHasTernary": {
+      "eslint": 0,
+      "oxlint": 27
+    },
+    "branchValueIsTernary": {
+      "eslint": 0,
+      "oxlint": 0
+    },
+    "branchValueIsTernaryExamples": [],
+    "branchHasTernaryExamples": [
+      {
+        "eslint": false,
+        "form": "if-else:return",
+        "oxlint": true,
+        "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/types.ts#L4639"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign-op",
+        "oxlint": true,
+        "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/shared/forwardConsole.ts#L180"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/importMetaGlob.ts#L659"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:return",
+        "oxlint": true,
+        "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/asset.ts#L361"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:return",
+        "oxlint": true,
+        "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/assets/vite-plugin-assets.ts#L346"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/jsx.ts#L167"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L1910"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/binding.ts#L583"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign-op",
+        "oxlint": true,
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/loaders/lightningcss-loader/src/codegen.ts#L48"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-dev.ts#L652"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/scheduler.ts#L1390"
+      },
+      {
+        "eslint": false,
+        "form": "if-else:assign",
+        "oxlint": true,
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/create-component-tree.tsx#L1080"
+      }
+    ],
+    "eslintOnly": {
+      "flat-return": 1440,
+      "if-else:call": 199,
+      "if-only:return": 89,
+      "let-plus-if": 73,
+      "if-else:assign": 1
+    },
+    "multiline": {
+      "eslint": 1778,
+      "oxlint": 612
+    },
+    "note": "External source, raw. One row per reported if statement. form: if-else:<consequent>/<alternate> (single statements), flat-return (`if (a) return x; return y;`), let-plus-if, else-if, if-only. branchHasTernary: a branch (or, for flat-return, the following return) already holds a conditional outside nested functions, so the ternary would contain one (often through an object or call, which no-nested-ternary doesn't report). branchValueIsTernary: the value a branch returns or assigns is itself a conditional, so converting would nest it directly, which no-nested-ternary reports.",
+    "oxlintOnly": {
+      "if-else:assign": 110,
+      "if-else:return": 69,
+      "if-else:assign-op": 31,
+      "if-else:await": 12,
+      "if-else:throw": 6,
+      "if-else:return/return-void": 1,
+      "if-else:expression": 1
+    },
+    "total": {
+      "eslint": 2184,
+      "oxlint": 612
+    }
+  }
+}

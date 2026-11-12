@@ -1,0 +1,1351 @@
+{
+  "generated": "2026-11-12T05:01:04.020Z",
+  "note": "See the header of nested-ternaries-markers.cjs. configs: lint and format configs at the pinned commit, with lines naming these rules (kind rule), shared-config and category lines (kind shared) and comments naming a rule (kind comment); `applies` lists the measured directories a config sits above. shared: what installed shared configs set. directives: disable comments in the measured files naming one of these rules.",
+  "repos": {
+    "zod": {
+      "configs": [
+        {
+          "applies": [
+            "packages/zod/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "biome.jsonc",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 22,
+              "text": "\"recommended\": true,",
+              "added": {
+                "date": "2025-05-19",
+                "message": "Zod 4 (#4074)\n\n* feat(lang): Added initial Azerbaijani locale (#4158)\n\n* feat(lang): Added initial Azerbaijani locale\n\n* Format\n\n---------\n\nCo-authored-by: Colin McDonnell <colinmcd94@gmail.com>\n\n* fix(docs): Typo fro (#4157)\n\n* Fix broken logo link (#3974)\n\n* Fix broken logo link\n\n* Use absolute URL\n\n* Absolute url\n\n---------\n\nCo-authored-by: Colin McDonnell <colinmcd94@gmail.com>\n\n* Add packages/docs\n\n* Remove packages/docs\n\n* Clean up zodmini exports with underscores\n\n* Add precommit format\n\n* Fix error generic\n\n* Fix optionality docs\n\n* tweak (#4173)\n\nCo-authored-by: Colin McDonnell <colinmcd94@gmail.com>\n\n* fix: dev:play script to use play.ts instead of playground.ts (#4177)\n\n* Optimize `extendShape` (#4150)\n\nCo-authored-by: Anders Hejlsberg <andersh@microsoft.com>\n\n* 3.24.3\n\n* add back packages/docs\n\n* Update\n\n* Update benchmark\n\n* Refactor `Extend` to preserve declaration links (#4155)\n\n* Refactor `ExtendShape` to preserve declaration links\n\n* fix type issues\n\n* Simplify aliases\n\n* Fix lint\n\n* Fix\n\n* Update benchmarks\n\n---------\n\nCo-authored-by: Colin McDonnell <colinmcd94@gmail.com>\n\n* Fix en.ts\n\n* 0.5.2\n\n* 0.6.0\n\n* Fix enum type portability\n\n* Clean up passthrough schemas in toJSONSchema\n\n* 0.6.3\n\n* v4: fix typos in basics guide (#4211)\n\n- Removed redundant whitespaces before `string()` method\n- Fixed typo in the note to `.parse()` method\n\n* v4: fix typo in defining schemas section (#4219)\n\n* fix migration guide typos (#4205)\n\n* partial record\n\n* Clean up toJSONSchem",
+                "sha": "85928549a7c2aff851d8625588ed7aa2e394831f"
+              },
+              "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/biome.jsonc#L22"
+            }
+          ],
+          "tool": "biome"
+        }
+      ],
+      "history": true,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "hono": {
+      "configs": [
+        {
+          "applies": [
+            "src"
+          ],
+          "appliesToMeasured": true,
+          "file": "vite.config.ts",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 106,
+              "text": "categories: { correctness: 'off', },",
+              "added": null,
+              "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/vite.config.ts#L106"
+            }
+          ],
+          "tool": "vite-plus"
+        }
+      ],
+      "history": true,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "trpc": {
+      "configs": [
+        {
+          "applies": [
+            "packages/client/src",
+            "packages/next/src",
+            "packages/openapi/src",
+            "packages/react-query/src",
+            "packages/server/src",
+            "packages/tanstack-react-query/src",
+            "packages/upgrade/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 10,
+              "text": "reactHooks.configs.flat.recommended,",
+              "added": {
+                "date": "2026-09-12",
+                "message": "build(deps): upgrade eslint to v10 (#7576)\n\nLayer 5 of a stacked dependency upgrade. Stacked on #7575.\n\n| package | from | to |\n| --- | --- | --- |\n| `eslint` | ^9.26.0 | **^10.10.0** |\n| `typescript-eslint` | ^8.32 | ^8.70.0 |\n| `eslint-plugin-unicorn` | 64.0.0 | ^74.0.0 |\n| `eslint-plugin-react-hooks` | **6.0.0-rc.1** | ^7.1.1 |\n| `@eslint/compat` | ^2.0.0 | ^2.1.1 |\n\n`eslint-plugin-react` stays at 7.37.5 — there's no newer release. Note\nthis also gets us off a release-candidate prerelease of\n`eslint-plugin-react-hooks`.\n\n### Config migration\n- **`reactHooks.configs.recommended` is eslintrc-shaped again in v7**\nand makes ESLint 10 fail outright (`A config object has a \"plugins\" key\ndefined as an array of strings`). The flat config moved to\n`configs.flat.recommended`. Same fix applied to the two example configs\nthat wire this up themselves.\n- **`react-hooks/react-compiler` no longer exists.** v7 split it into\n~14 granular rules (`purity`, `immutability`, `refs`,\n`set-state-in-effect`, `use-memo`, …) that `flat.recommended` enables.\nThe rule entry and two stale `eslint-disable` comments referencing it\nare removed.\n- **`unicorn/filename-case` gets `checkDirectories: false`.** unicorn 74\nstarted checking directory names and flagged deliberate ones\n(`__tests__`, `aws-lambda`, `node-http`, `app-dir`). This keeps the rule\nscoped to filenames, as before.\n- **`max-params` now counts parameters of function _types_.** The single\nhit is `setQueriesData`, which mirrors TanStack Query's ",
+                "sha": "352da1c27149e389204fc4dfa12507adfd8a4a78"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L10"
+            },
+            {
+              "kind": "shared",
+              "line": 18,
+              "text": "extends: [",
+              "added": {
+                "date": "2024-10-30",
+                "message": "chore(deps): modernize deps & tooling (#6164)",
+                "sha": "84e267ebb09195257a6b1e88dff237af929b3f7f"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L18"
+            },
+            {
+              "kind": "shared",
+              "line": 19,
+              "text": "...tseslint.configs.recommended,",
+              "added": {
+                "date": "2024-10-30",
+                "message": "chore(deps): modernize deps & tooling (#6164)",
+                "sha": "84e267ebb09195257a6b1e88dff237af929b3f7f"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L19"
+            },
+            {
+              "kind": "shared",
+              "line": 20,
+              "text": "...tseslint.configs.recommendedTypeChecked,",
+              "added": {
+                "date": "2024-10-30",
+                "message": "chore(deps): modernize deps & tooling (#6164)",
+                "sha": "84e267ebb09195257a6b1e88dff237af929b3f7f"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L20"
+            },
+            {
+              "kind": "shared",
+              "line": 21,
+              "text": "...tseslint.configs.stylisticTypeChecked,",
+              "added": {
+                "date": "2024-10-30",
+                "message": "chore(deps): modernize deps & tooling (#6164)",
+                "sha": "84e267ebb09195257a6b1e88dff237af929b3f7f"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L21"
+            },
+            {
+              "kind": "shared",
+              "line": 24,
+              "text": "...reactPlugin.configs['jsx-runtime'].rules,",
+              "added": {
+                "date": "2024-10-30",
+                "message": "chore(deps): modernize deps & tooling (#6164)",
+                "sha": "84e267ebb09195257a6b1e88dff237af929b3f7f"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L24"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "packages/client/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/client/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 17,
+              "text": "\"eslintConfig\": {\"rules\":{\"no-restricted-imports\":[\"error\",\"@trpc/client\"]}}",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/package.json#L17"
+            }
+          ],
+          "tool": "eslint (package.json)"
+        },
+        {
+          "applies": [
+            "packages/next/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/next/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 17,
+              "text": "\"eslintConfig\": {\"rules\":{\"react-hooks/exhaustive-deps\":\"error\",\"no-restricted-imports\":[\"error\",\"@trpc/next\"]}}",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/next/package.json#L17"
+            }
+          ],
+          "tool": "eslint (package.json)"
+        },
+        {
+          "applies": [
+            "packages/openapi/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/openapi/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 19,
+              "text": "\"eslintConfig\": {\"rules\":{\"no-restricted-imports\":[\"error\",\"@trpc/openapi\"]}}",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/openapi/package.json#L19"
+            }
+          ],
+          "tool": "eslint (package.json)"
+        },
+        {
+          "applies": [
+            "packages/react-query/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/react-query/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 77,
+              "text": "\"eslintConfig\": {\"rules\":{\"react-hooks/exhaustive-deps\":\"error\",\"no-restricted-imports\":[\"error\",\"@trpc/react-query\"]}}",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/package.json#L77"
+            }
+          ],
+          "tool": "eslint (package.json)"
+        },
+        {
+          "applies": [
+            "packages/tanstack-react-query/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/tanstack-react-query/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 47,
+              "text": "\"eslintConfig\": {\"rules\":{\"react-hooks/exhaustive-deps\":\"error\",\"no-restricted-imports\":[\"error\",\"@trpc/tanstack-react-query\"],\"@typescript-eslint/prefer-function-type\":\"off\"}}",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/package.json#L47"
+            }
+          ],
+          "tool": "eslint (package.json)"
+        },
+        {
+          "applies": [
+            "packages/client/src",
+            "packages/next/src",
+            "packages/openapi/src",
+            "packages/react-query/src",
+            "packages/server/src",
+            "packages/tanstack-react-query/src",
+            "packages/upgrade/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "prettier.config.js",
+          "lines": [],
+          "tool": "prettier"
+        }
+      ],
+      "history": true,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "vite": {
+      "configs": [
+        {
+          "applies": [
+            "packages/vite/src"
+          ],
+          "appliesToMeasured": true,
+          "file": ".oxfmtrc.json",
+          "lines": [],
+          "tool": "oxfmt"
+        },
+        {
+          "applies": [
+            "packages/vite/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 29,
+              "text": "eslint.configs.recommended,",
+              "added": {
+                "date": "2024-05-27",
+                "message": "chore: move to eslint flat config (#16743)",
+                "sha": "8f167653ede5d61f9d08ffa86c91e218557199ae"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L29"
+            },
+            {
+              "kind": "shared",
+              "line": 30,
+              "text": "...tseslint.configs.recommended,",
+              "added": {
+                "date": "2024-05-27",
+                "message": "chore: move to eslint flat config (#16743)",
+                "sha": "8f167653ede5d61f9d08ffa86c91e218557199ae"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L30"
+            },
+            {
+              "kind": "shared",
+              "line": 31,
+              "text": "...tseslint.configs.stylistic,",
+              "added": {
+                "date": "2024-05-27",
+                "message": "chore: move to eslint flat config (#16743)",
+                "sha": "8f167653ede5d61f9d08ffa86c91e218557199ae"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L31"
+            },
+            {
+              "kind": "shared",
+              "line": 32,
+              "text": "...(shouldTypeCheck ? tseslint.configs.recommendedTypeCheckedOnly : []),",
+              "added": {
+                "date": "2026-04-20",
+                "message": "build: improve typecheck and linting (#22230)",
+                "sha": "3770a53064e8da27d4cb8d595a2b038413e6abdb"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L32"
+            },
+            {
+              "kind": "shared",
+              "line": 33,
+              "text": "...(shouldTypeCheck ? tseslint.configs.stylisticTypeCheckedOnly : []),",
+              "added": {
+                "date": "2026-04-20",
+                "message": "build: improve typecheck and linting (#22230)",
+                "sha": "3770a53064e8da27d4cb8d595a2b038413e6abdb"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L33"
+            },
+            {
+              "kind": "shared",
+              "line": 34,
+              "text": "pluginRegExp.configs['flat/recommended'],",
+              "added": {
+                "date": "2024-05-27",
+                "message": "chore: move to eslint flat config (#16743)",
+                "sha": "8f167653ede5d61f9d08ffa86c91e218557199ae"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L34"
+            },
+            {
+              "kind": "shared",
+              "line": 107,
+              "text": "{ allowInterfaces: 'with-single-extends' },",
+              "added": {
+                "date": "2024-08-05",
+                "message": "chore: bump typescript-eslint to v8 (#17624)\n\nCo-authored-by: Anthony Fu <github@antfu.me>",
+                "sha": "d1891fda026d27f53409dec97e156a59da609196"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L107"
+            },
+            {
+              "kind": "shared",
+              "line": 305,
+              "text": "extends: [tseslint.configs.disableTypeChecked],",
+              "added": {
+                "date": "2026-04-20",
+                "message": "build: improve typecheck and linting (#22230)",
+                "sha": "3770a53064e8da27d4cb8d595a2b038413e6abdb"
+              },
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L305"
+            }
+          ],
+          "tool": "eslint"
+        }
+      ],
+      "history": true,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "astro": {
+      "configs": [
+        {
+          "applies": [
+            "packages/astro/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "biome.jsonc",
+          "lines": [],
+          "tool": "biome"
+        },
+        {
+          "applies": [
+            "packages/astro/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 39,
+              "text": "...tseslint.configs.recommendedTypeChecked,",
+              "added": {
+                "date": "2024-04-15",
+                "message": "lint: upgrade eslint to version 9 (#10730)",
+                "sha": "6ebd81dbc45d4acae6b099583916bb91236e668e"
+              },
+              "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/eslint.config.js#L39"
+            },
+            {
+              "kind": "shared",
+              "line": 40,
+              "text": "...tseslint.configs.stylisticTypeChecked,",
+              "added": {
+                "date": "2024-04-15",
+                "message": "lint: upgrade eslint to version 9 (#10730)",
+                "sha": "6ebd81dbc45d4acae6b099583916bb91236e668e"
+              },
+              "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/eslint.config.js#L40"
+            },
+            {
+              "kind": "shared",
+              "line": 41,
+              "text": "regexpEslint.configs['flat/recommended'],",
+              "added": {
+                "date": "2024-08-02",
+                "message": "Remove more unused code (#11598)",
+                "sha": "69d54b4bf26b1c738ea2342da7abe998baeafaee"
+              },
+              "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/eslint.config.js#L41"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "packages/astro/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "prettier.config.mjs",
+          "lines": [],
+          "tool": "prettier"
+        }
+      ],
+      "history": true,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "excalidraw": {
+      "configs": [
+        {
+          "applies": [
+            "packages/excalidraw",
+            "packages/element/src",
+            "packages/common/src",
+            "packages/math/src",
+            "packages/utils/src"
+          ],
+          "appliesToMeasured": true,
+          "file": ".eslintrc.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "\"extends\": [\"@excalidraw/eslint-config\", \"react-app\"],",
+              "added": {
+                "date": "2021-03-02",
+                "message": "chore: Use @excalidraw/eslint-config (#3142)",
+                "sha": "418589e7ad3edabda6403f66b728a65d35ed4451"
+              },
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/.eslintrc.json#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "excalidraw-app/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 42,
+              "text": "\"prettier\": \"@excalidraw/prettier-config\"",
+              "added": {
+                "date": "2023-12-07",
+                "message": "build: move build process and excalidraw-app dependencies in its own package.json (#7021)\n\n* build: move build process and excalidraw-app dependencies in its own package.json\r\n\r\n* fix\r\n\r\n* fix public path\r\n\r\n* move bug-issue-template to excalidraw-app\r\n\r\n* make env vars accessible in excalidraw app\r\n\r\n* update build script\r\n\r\n* install when building\r\n\r\n* add ts ignore\r\n\r\n* fix build-version script\r\n\r\n* update config in vercel.json\r\n\r\n* add vercel config for example\r\n\r\n* fix vercel config\r\n\r\n* update install script in vercel\r\n\r\n* update install script in lint.yml\r\n\r\n* update install script in test workflows\r\n\r\n* push locales to locales folder pwa\r\n\r\n* add favicons to manifest\r\n\r\n* move react to peer deps in editor\r\n\r\n* fix ts\r\n\r\n* Enable vite intellisense\r\n\r\n* add global.d.ts for excalidraw-app\r\n\r\n* remove console.log\r\n\r\n* remove react, react-dom and vite from excalidraw-app deps\r\n\r\n* increase size limit",
+                "sha": "f14ad61bd0108fc6adfa2f06b64d2c3d75cdb6a5"
+              },
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/excalidraw-app/package.json#L42"
+            }
+          ],
+          "tool": "prettier (package.json)"
+        },
+        {
+          "applies": [
+            "packages/excalidraw",
+            "packages/element/src",
+            "packages/common/src",
+            "packages/math/src",
+            "packages/utils/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 50,
+              "text": "\"prettier\": \"@excalidraw/prettier-config\"",
+              "added": {
+                "date": "2021-02-25",
+                "message": "chore: Use @excalidraw/prettier-config (#3122)",
+                "sha": "2ba6088e979a9cfa16807ad3f4e37807c9411f6f"
+              },
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/package.json#L50"
+            }
+          ],
+          "tool": "prettier (package.json)"
+        },
+        {
+          "applies": [
+            "packages/common/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/common/.eslintrc.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "\"extends\": [\"../eslintrc.base.json\"]",
+              "added": {
+                "date": "2025-03-26",
+                "message": "refactor: separate elements logic into a standalone package (#9285)",
+                "sha": "432a46ef9ee13afe47530e857a259acde4d0fd59"
+              },
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/common/.eslintrc.json#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "packages/element/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/element/.eslintrc.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "\"extends\": [\"../eslintrc.base.json\"]",
+              "added": {
+                "date": "2025-03-26",
+                "message": "refactor: separate elements logic into a standalone package (#9285)",
+                "sha": "432a46ef9ee13afe47530e857a259acde4d0fd59"
+              },
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/.eslintrc.json#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "packages/excalidraw",
+            "packages/element/src",
+            "packages/common/src",
+            "packages/math/src",
+            "packages/utils/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "packages/eslintrc.base.json",
+          "lines": [],
+          "tool": "eslint"
+        }
+      ],
+      "history": true,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "next.js": {
+      "configs": [
+        {
+          "applies": [
+            "packages/next/src"
+          ],
+          "appliesToMeasured": true,
+          "file": ".prettierrc.json",
+          "lines": [],
+          "tool": "prettier"
+        },
+        {
+          "applies": [
+            "packages/next/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 23,
+              "text": "recommendedConfig: js.configs.recommended,",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L23"
+            },
+            {
+              "kind": "shared",
+              "line": 24,
+              "text": "allConfig: js.configs.all,",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L24"
+            },
+            {
+              "kind": "rule",
+              "line": 126,
+              "rules": [
+                "no-mixed-operators"
+              ],
+              "text": "'no-mixed-operators': [ 'error', { groups: [ ['&', '|', '^', '~', '<<', '>>', '>>>'], ['==', '!=', '===', '!==', '>', '>=', '<', '<='], ['&&', '||'], ['in', 'instanceof'], ],  allowSamePrecedence: false, }, ],",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L126"
+            },
+            {
+              "kind": "shared",
+              "line": 296,
+              "text": "extends: compat.extends('plugin:jest/recommended'),",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L296"
+            },
+            {
+              "kind": "shared",
+              "line": 331,
+              "text": "extends: [tseslint.configs.recommended, tseslint.configs.stylistic],",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L331"
+            },
+            {
+              "kind": "shared",
+              "line": 544,
+              "text": "extends: compat.extends('plugin:eslint-plugin/recommended'),",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L544"
+            },
+            {
+              "kind": "shared",
+              "line": 578,
+              "text": "extends: compat.extends('plugin:mdx/recommended'),",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L578"
+            },
+            {
+              "kind": "shared",
+              "line": 591,
+              "text": "extends: [reactHooks.configs.flat['recommended']],",
+              "added": {
+                "date": "2025-10-13",
+                "message": "Use ESLint Flat Config (#84800)",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L591"
+            }
+          ],
+          "tool": "eslint"
+        }
+      ],
+      "history": true,
+      "missing": 36,
+      "missingApplies": [],
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "vscode": {
+      "configs": [
+        {
+          "applies": [
+            "src/vs/editor/common"
+          ],
+          "appliesToMeasured": true,
+          "file": "eslint.config.js",
+          "lines": [],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "extensions/copilot/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 6944,
+              "text": "\"prettier\": {\"useTabs\":true,\"tabWidth\":4,\"singleQuote\":true}",
+              "added": null,
+              "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/extensions/copilot/package.json#L6944"
+            }
+          ],
+          "tool": "prettier (package.json)"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "extensions/debug-auto-launch/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 38,
+              "text": "\"prettier\": {\"printWidth\":100,\"trailingComma\":\"all\",\"singleQuote\":true,\"arrowParens\":\"avoid\"}",
+              "added": null,
+              "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/extensions/debug-auto-launch/package.json#L38"
+            }
+          ],
+          "tool": "prettier (package.json)"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "extensions/tunnel-forwarding/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 49,
+              "text": "\"prettier\": {\"printWidth\":100,\"trailingComma\":\"all\",\"singleQuote\":true,\"arrowParens\":\"avoid\"}",
+              "added": null,
+              "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/extensions/tunnel-forwarding/package.json#L49"
+            }
+          ],
+          "tool": "prettier (package.json)"
+        }
+      ],
+      "history": true,
+      "missing": 19,
+      "missingApplies": [],
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "core"
+    },
+    "shadcn": {
+      "configs": [
+        {
+          "applies": [
+            "apps/v4/registry/new-york-v4/ui",
+            "apps/v4/registry/new-york-v4/blocks"
+          ],
+          "appliesToMeasured": true,
+          "file": ".eslintrc.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 4,
+              "text": "\"extends\": [",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L4"
+            },
+            {
+              "kind": "shared",
+              "line": 5,
+              "text": "\"next/core-web-vitals\",",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L5"
+            },
+            {
+              "kind": "shared",
+              "line": 7,
+              "text": "\"prettier\",",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L7"
+            },
+            {
+              "kind": "shared",
+              "line": 8,
+              "text": "\"plugin:tailwindcss/recommended\"",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L8"
+            },
+            {
+              "kind": "shared",
+              "line": 22,
+              "text": "\"next\": {",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L22"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "apps/v4/registry/new-york-v4/ui",
+            "apps/v4/registry/new-york-v4/blocks"
+          ],
+          "appliesToMeasured": true,
+          "file": "apps/v4/eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 1,
+              "text": "import nextVitals from \"eslint-config-next/core-web-vitals\"",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/eslint.config.mjs#L1"
+            },
+            {
+              "kind": "shared",
+              "line": 12,
+              "text": "...tseslint.configs.recommended,",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/eslint.config.mjs#L12"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "apps/v4/registry/new-york-v4/ui",
+            "apps/v4/registry/new-york-v4/blocks"
+          ],
+          "appliesToMeasured": true,
+          "file": "apps/v4/package.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 132,
+              "text": "\"prettier\": {\"endOfLine\":\"lf\",\"semi\":false,\"singleQuote\":false,\"tabWidth\":2,\"trailingComma\":\"es5\",\"importOrder\":[\"^(react/(.*)$)|^(react$)\",\"^(next/(.*)$)|^(next$)\",\"<THIRD_PARTY_MODULES>\",\"\",\"^types$\",\"^@/types/(.*)$\",\"^@/config/(.*)$\",\"^@/lib/(.*)$\",\"^@/hooks/(.*)$\",\"^@/components/ui/(.*)$\",\"^@/components/(.*)$\",\"^@/registry/(.*)$\",\"^@/styles/(.*)$\",\"^@/app/(.*)$\",\"^@/www/(.*)$\",\"\",\"^[./]\"],\"imp",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/package.json#L132"
+            }
+          ],
+          "tool": "prettier (package.json)"
+        },
+        {
+          "applies": [
+            "apps/v4/registry/new-york-v4/ui",
+            "apps/v4/registry/new-york-v4/blocks"
+          ],
+          "appliesToMeasured": true,
+          "file": "prettier.config.cjs",
+          "lines": [],
+          "tool": "prettier"
+        }
+      ],
+      "history": false,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "react"
+    },
+    "radix": {
+      "configs": [
+        {
+          "applies": [
+            "packages/react"
+          ],
+          "appliesToMeasured": true,
+          "file": ".oxfmtrc.json",
+          "lines": [],
+          "tool": "oxfmt"
+        },
+        {
+          "applies": [
+            "packages/react"
+          ],
+          "appliesToMeasured": true,
+          "file": ".oxlintrc.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 4,
+              "text": "\"categories\": { \"correctness\": \"off\" },",
+              "added": null,
+              "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L4"
+            }
+          ],
+          "tool": "oxlint"
+        }
+      ],
+      "history": false,
+      "missing": 4,
+      "missingApplies": [],
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "react"
+    },
+    "react-aria": {
+      "configs": [
+        {
+          "applies": [
+            "packages/react-aria-components/src"
+          ],
+          "appliesToMeasured": true,
+          "file": ".oxfmtrc.json",
+          "lines": [],
+          "tool": "oxfmt"
+        },
+        {
+          "applies": [
+            "packages/react-aria-components/src"
+          ],
+          "appliesToMeasured": true,
+          "file": ".oxlintrc.json",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 11,
+              "text": "\"categories\": { \"correctness\": \"off\" },",
+              "added": null,
+              "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L11"
+            },
+            {
+              "kind": "rule",
+              "line": 149,
+              "rules": [
+                "no-nested-ternary"
+              ],
+              "text": "\"no-nested-ternary\": \"off\",",
+              "added": null,
+              "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L149"
+            },
+            {
+              "kind": "rule",
+              "line": 150,
+              "rules": [
+                "no-unneeded-ternary"
+              ],
+              "text": "\"no-unneeded-ternary\": \"error\",",
+              "added": null,
+              "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L150"
+            }
+          ],
+          "tool": "oxlint"
+        }
+      ],
+      "history": false,
+      "missing": 246,
+      "missingApplies": [],
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "react",
+      "ghHistory": {
+        "configs": [
+          {
+            "commits": 6,
+            "created": {
+              "date": "2026-05-12",
+              "message": "chore: Migrate from eslint to oxlint (#10049)\n\n* chore: Migrate from eslint to oxlint\n\n* Format jsdoc\n\n* Add back dep on eslint for tests\n\n* missing dep\n\n* Fix example formatting\n\n* clean up\n\n* fix formatting",
+              "sha": "b55427c9a59a0c8dae04ff68bb6d1ee4cf08e181"
+            },
+            "file": ".oxlintrc.json",
+            "linesAtCreation": [
+              {
+                "present": true,
+                "text": "\"no-nested-ternary\": \"off\","
+              },
+              {
+                "present": true,
+                "text": "\"no-unneeded-ternary\": \"error\","
+              }
+            ],
+            "parent": "f6f4206fc7884d0fd7983b108a58f82bb32b4d88",
+            "parentEslintLines": [
+              {
+                "file": "eslint.config.mjs",
+                "line": 154,
+                "text": "'no-nested-ternary': ERROR,"
+              },
+              {
+                "file": "eslint.config.mjs",
+                "line": 156,
+                "text": "'no-unneeded-ternary': ERROR,"
+              }
+            ]
+          }
+        ],
+        "treeFiles": [
+          {
+            "file": "packages/react-aria-components/src/Sheet.tsx",
+            "firstCommit": {
+              "date": "2026-10-02",
+              "sha": "d976503a3d480248b352a570e5b080fce51c8bab",
+              "subject": "feat: React Aria Sheet component (#10674)"
+            },
+            "nestedTernaries": 4
+          }
+        ]
+      }
+    },
+    "supabase": {
+      "configs": [
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "apps/design-system/eslint.config.cjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "const supabaseConfig = require('eslint-config-supabase/next')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/design-system/eslint.config.cjs#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "apps/design-system/registry/.eslintrc.json",
+          "lines": [],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "apps/learn/eslint.config.cjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "const supabaseConfig = require('eslint-config-supabase/next')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/learn/eslint.config.cjs#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "apps/studio/components",
+            "apps/studio/pages"
+          ],
+          "appliesToMeasured": true,
+          "file": "apps/studio/eslint.config.cjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 9,
+              "text": "const supabaseConfig = require('eslint-config-supabase/next')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L9"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "apps/ui-library/eslint.config.cjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "const supabaseConfig = require('eslint-config-supabase/next')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/ui-library/eslint.config.cjs#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "apps/www/eslint.config.cjs",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 2,
+              "text": "const supabaseConfig = require('eslint-config-supabase/next')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/www/eslint.config.cjs#L2"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [],
+          "appliesToMeasured": false,
+          "file": "packages/eslint-config-supabase/next.js",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 3,
+              "text": "const prettierConfig = require('eslint-config-prettier/flat')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L3"
+            },
+            {
+              "kind": "shared",
+              "line": 4,
+              "text": "const { default: turboConfig } = require('eslint-config-turbo/flat')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L4"
+            },
+            {
+              "kind": "shared",
+              "line": 7,
+              "text": "const nextCoreWebVitals = require('eslint-config-next/core-web-vitals')",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L7"
+            },
+            {
+              "kind": "shared",
+              "line": 84,
+              "text": "tanstackQuery.configs['flat/recommended'],",
+              "added": null,
+              "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L84"
+            }
+          ],
+          "tool": "eslint"
+        },
+        {
+          "applies": [
+            "apps/studio/components",
+            "apps/studio/pages"
+          ],
+          "appliesToMeasured": true,
+          "file": "prettier.config.mjs",
+          "lines": [],
+          "tool": "prettier"
+        }
+      ],
+      "history": false,
+      "missing": 1,
+      "missingApplies": [],
+      "sha": "09f80f528ec47569841408a81668dff90525c48a",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "react"
+    },
+    "ultracite": {
+      "configs": [
+        {
+          "applies": [
+            "packages/cli/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "oxfmt.config.ts",
+          "lines": [],
+          "tool": "oxfmt"
+        },
+        {
+          "applies": [
+            "packages/cli/src"
+          ],
+          "appliesToMeasured": true,
+          "file": "oxlint.config.ts",
+          "lines": [
+            {
+              "kind": "shared",
+              "line": 11,
+              "text": "extends: [core, react, astro, antislop],",
+              "added": null,
+              "permalink": "https://github.com/haydenbleasel/ultracite/blob/cfa365be0a5446943faa1c23ecc244c788df36cc/oxlint.config.ts#L11"
+            }
+          ],
+          "tool": "oxlint"
+        }
+      ],
+      "history": false,
+      "missing": 0,
+      "missingApplies": [],
+      "sha": "cfa365be0a5446943faa1c23ecc244c788df36cc",
+      "directives": [],
+      "directivesByRule": {},
+      "set": "dogfood"
+    }
+  },
+  "rules": [
+    "no-nested-ternary",
+    "no-unnecessary-nested-ternary",
+    "no-ternary",
+    "prefer-ternary",
+    "prefer-minimal-ternary",
+    "no-unneeded-ternary",
+    "prefer-logical-operator-over-ternary",
+    "multiline-ternary",
+    "operator-linebreak",
+    "no-mixed-operators",
+    "no-nested-conditional",
+    "no-negated-condition",
+    "jsx-no-leaked-render",
+    "noNestedTernary",
+    "noUselessTernary",
+    "noNegationElse",
+    "noLeakedRender",
+    "experimentalTernaries"
+  ],
+  "shared": {
+    "@eslint/js all": {
+      "no-negated-condition": "error",
+      "no-nested-ternary": "error",
+      "no-ternary": "error",
+      "no-unneeded-ternary": "error"
+    },
+    "@eslint/js recommended": {},
+    "eslint-config-prettier": {
+      "@stylistic/no-mixed-operators": 0,
+      "@stylistic/js/no-mixed-operators": 0,
+      "@stylistic/multiline-ternary": "off",
+      "@stylistic/operator-linebreak": "off",
+      "@stylistic/js/multiline-ternary": "off",
+      "@stylistic/js/operator-linebreak": "off",
+      "unicorn/no-nested-ternary": "off",
+      "vue/multiline-ternary": "off",
+      "vue/operator-linebreak": "off",
+      "multiline-ternary": "off",
+      "no-mixed-operators": 0,
+      "operator-linebreak": "off"
+    },
+    "eslint-plugin-sonarjs recommended": {
+      "sonarjs/no-nested-conditional": "error",
+      "sonarjs/jsx-no-leaked-render": "error"
+    },
+    "eslint-plugin-unicorn recommended": {
+      "no-negated-condition": "off",
+      "no-nested-ternary": "off",
+      "unicorn/no-negated-condition": "error",
+      "unicorn/no-nested-ternary": "error",
+      "unicorn/no-unnecessary-nested-ternary": "error",
+      "unicorn/prefer-logical-operator-over-ternary": "error",
+      "unicorn/prefer-minimal-ternary": "error",
+      "unicorn/prefer-ternary": "error"
+    },
+    "eslint-plugin-unicorn unopinionated": {
+      "no-negated-condition": "off",
+      "unicorn/no-negated-condition": "error",
+      "unicorn/no-nested-ternary": "off",
+      "unicorn/no-unnecessary-nested-ternary": "error",
+      "unicorn/prefer-logical-operator-over-ternary": "error",
+      "unicorn/prefer-minimal-ternary": "error",
+      "unicorn/prefer-ternary": "error"
+    },
+    "eslint-plugin-unicorn all": {
+      "no-negated-condition": "off",
+      "no-nested-ternary": "off",
+      "unicorn/no-negated-condition": "error",
+      "unicorn/no-nested-ternary": "error",
+      "unicorn/no-unnecessary-nested-ternary": "error",
+      "unicorn/prefer-logical-operator-over-ternary": "error",
+      "unicorn/prefer-minimal-ternary": "error",
+      "unicorn/prefer-ternary": "error"
+    },
+    "oxlint categories": {
+      "eslint/no-negated-condition": {
+        "category": "pedantic",
+        "default": false,
+        "fix": "fixable_fix"
+      },
+      "eslint/no-nested-ternary": {
+        "category": "style",
+        "default": false,
+        "fix": "none"
+      },
+      "eslint/no-ternary": {
+        "category": "style",
+        "default": false,
+        "fix": "none"
+      },
+      "eslint/no-unneeded-ternary": {
+        "category": "suspicious",
+        "default": false,
+        "fix": "fixable_dangerous_fix"
+      },
+      "unicorn/no-negated-condition": {
+        "category": "pedantic",
+        "default": false,
+        "fix": "fixable_fix"
+      },
+      "unicorn/no-nested-ternary": {
+        "category": "style",
+        "default": false,
+        "fix": "conditional_fix"
+      },
+      "unicorn/prefer-logical-operator-over-ternary": {
+        "category": "style",
+        "default": false,
+        "fix": "fixable_suggestion"
+      },
+      "unicorn/prefer-ternary": {
+        "category": "style",
+        "default": false,
+        "fix": "pending"
+      }
+    },
+    "biome recommended": {
+      "noNestedTernary": false,
+      "noUselessTernary": true,
+      "noNegationElse": false,
+      "noLeakedRender": false
+    },
+    "versions": {
+      "@eslint/js": "10.0.1",
+      "eslint-config-prettier": "10.1.8",
+      "eslint-plugin-sonarjs": "4.2.2",
+      "eslint-plugin-unicorn": "79.0.0"
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  }
+}

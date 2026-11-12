@@ -471,6 +471,48 @@ FUNC_STYLE_TMP=<scratch dir> node research/corpus/scripts/func-style-run-all.cjs
 
 The method, findings and caveats are in `corpus/results/func-style/REPORT.md`.
 
+### Nested ternaries (thirteenth post)
+
+The nested-ternaries scripts are prefixed `nested-ternaries-` and share `nested-ternaries-lib.cjs`. It holds the topic's paths, the inventory (one ESLint `Linter` pass per file with the TypeScript parser: every conditional expression and the ternary tree it belongs to, where the tree sits, how its tests and branches look, every TypeScript conditional type, every if/else chain and guard chain, and every function's sonarjs cognitive complexity), and the real ESLint rules in the same pass with Ultracite's options, so their reports join to the inventory exactly. A ternary tree is a maximal group of conditionals joined through a direct test, consequent or alternate (parentheses aren't nodes; a TypeScript wrapper ends the tree, as it does for ESLint's rule); one with two or more conditionals is a nested ternary.
+
+The rules: `no-nested-ternary` (Oxlint core and ESLint core), `unicorn/no-nested-ternary` (off in both, because its fix adds parentheses the formatter removes), `sonarjs/no-nested-conditional` (ESLint core, Oxlint js-plugins), Biome's `noNestedTernary`, and for context `unicorn/prefer-ternary` (Ultracite's options in ESLint), `unicorn/prefer-logical-operator-over-ternary`, `no-unneeded-ternary`, `no-negated-condition`, `no-else-return`, `no-lonely-if`, `curly`, ESLint's `unicorn/prefer-minimal-ternary` and `unicorn/no-unnecessary-nested-ternary`, Biome's `noUselessTernary`, `noNegationElse`, `noUselessElse`, `useCollapsedIf`, `useCollapsedElseIf` and `useBlockStatements`, and cognitive complexity.
+
+The eight corpus repos are measured as in every topic, the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set, and Ultracite's CLI apart. Source and tests are kept apart (`length-lib.cjs`'s test collection). History uses the TODO post's history clones.
+
+| Script | What it does |
+| --- | --- |
+| `nested-ternaries-rules.cjs` | The rules per linter and preset: every Oxlint preset and `oxlint --rules` (fix kinds), ESLint resolved with `calculateConfigForFile` for `.ts`, `.js`, `.tsx`, `.jsx` and a test file, each rule's meta, every Biome preset with `biome explain`, the formatters' ternary options, and the agent prompt's and AGENTS.md template's lines. Fails if the census's options drift from the preset. |
+| `nested-ternaries-census.cjs` | The inventory for every file of every repo: depth, shape (chain, consequent, test, mixed), parentheses, position (return, concise arrow body, initializer, assignment or expression statement, JSX child or attribute, argument, template, property, default parameter, class field, …) and what that allows (early returns, statements in place, or only an extraction), inside JSX or not, the tests (one discriminant compared with constants, thresholds, unrelated), what each branch is and what evaluating it eagerly would do; conditionals nested through other expressions; conditional types; if/else chains, ternary-shaped ones and guard chains. Checks that ESLint's `no-nested-ternary`, `unicorn/no-nested-ternary` and `sonarjs/no-nested-conditional` report exactly the conditionals the inventory predicts. |
+| `nested-ternaries-linters.cjs` | Each rule alone in Oxlint (sonarjs through its JS plugins) and Biome, on mirrors with disable directives neutralised and as written, plus the census's ESLint reports; every nested-ternary diagnostic joined to its conditional and its outermost group, every disagreement given a signature, every message and help text, and every `prefer-ternary` report joined to the shape of its if statement. |
+| `nested-ternaries-calibration.cjs` | `calibration/nested-ternaries/` (46 cases) through Oxlint (each rule alone, init's config, with js-plugins), ESLint (the census pass and the core and react presets), Biome (each rule alone and the presets), sonarjs, Biome and cyclomatic complexity, Oxfmt and Prettier (with and without `experimentalTernaries`), and every `ultracite fix` path; the unicorn fix and formatter ping-pong; and 13 runnable behaviour cases (`behaviour/`) comparing a ternary with its lookup, switch, `&&`, variable and helper rewrites in Node. |
+| `nested-ternaries-format.cjs` | Every file with a nested ternary formatted with Oxfmt (Ultracite's preset) and Prettier (Ultracite's config, with and without `experimentalTernaries`): lines per nested ternary, whether each nested test starts its own line, indentation; and the ping-pong on the corpus. |
+| `nested-ternaries-rewrite.cjs` | Every reported nested ternary rewritten on copies, one tree per copy, in each way that applies: early returns, `let` plus if/else, if/else statements, a local helper, a lookup object, a lookup of thunks and a switch. For each: parses, lines added after Oxfmt, the enclosing function's cognitive complexity before and after (and the helper's), what Ultracite's Oxlint, ESLint and Biome presets add, what each `ultracite fix` path gives back inside the rewritten code (marked with comments), and static signs of a behaviour change. |
+| `nested-ternaries-fixes.cjs` | Two fixes that write conditionals, alone on the corpus: `react/jsx-no-leaked-render`'s (ESLint react preset) and the nested ternaries it creates, and Oxlint's `prefer-logical-operator-over-ternary` under `--fix-dangerously` on every `x ? x : …`. |
+| `nested-ternaries-history.cjs` | `--events`: nested ternaries and else-if chains introduced, extended, converted and removed in three years of mainline commits. `--diffsize`: the lines a commit changes when it adds one branch to each. `--keywords`: commits that mention ternaries, nesting or precedence, read by hand (`history-labels.json`). `--track`, `--analyse`: `length-history.cjs`'s tracking and bug fixes with size controlled. Only `git log`/`git show`, with `GIT_NO_LAZY_FETCH=1`. |
+| `nested-ternaries-markers.cjs` | Each repo's lint and format configs at its pinned commit for these rules (with the commit that added each line), shared configs that imply them, and disable comments naming them. |
+| `nested-ternaries-sample.cjs` | The hand classification: 80 reported nested ternaries in five strata (frozen in `sample.json`); `--worksheet`, `--print` (the blind subset of 36), `--compute` (both raters, weighted shares, κ). |
+| `nested-ternaries-agent-runs.cjs` | Conditional expressions in every committed agent-experiment run: ternaries and nested ternaries added, if/else turned into ternaries and back, the reports and retries they caused. |
+| `nested-ternaries-oracle.cjs` | The behaviour oracle for the three subjects: transpiles a subject and its stub (JSX through a stub `createElement`), imports it in a fresh Node process, runs seeded scenarios through its exports (B is rendered to a tree), and compares traces. |
+| `nested-ternaries-examples.cjs` | Checks the subjects' verbatim lines against their commits, lints them with Ultracite's Oxlint, ESLint and Biome presets, type-checks them, and runs the oracle on 32 hand-made variants (right responses, tempting ones and gaming moves). |
+| `nested-ternaries-tables.cjs` | Generates `results/nested-ternaries/tables.md`. |
+| `nested-ternaries-run-all.cjs` | Runs all of the above in order, and the shared rule census. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+NESTED_TERNARIES_TMP=<scratch dir> node research/corpus/scripts/nested-ternaries-run-all.cjs   # about 40 min; --skip-history, --skip-census, --skip-rewrite
+```
+
+- **The inventory predicts the rules.** In every repo, ESLint's `no-nested-ternary` (1,164 reports), `unicorn/no-nested-ternary` (925) and `sonarjs/no-nested-conditional` (1,391) report exactly the conditionals the inventory predicts, and every Oxlint and Biome report joins to a conditional.
+- **Copies outside `out/`.** Mirrors, rewrites, fix passes, formatted copies, calibration and oracle runs live under `$NESTED_TERNARIES_TMP` (default: the system temp directory's `ultracite-research-nested-ternaries/`), because Ultracite's presets ignore `**/out`. The js-plugins root config is written under `out/nested-ternaries/configs/` (so its plugin specifiers resolve) and removed at the end; the shared census's `oxlint.config.mjs` is removed by `nested-ternaries-run-all.cjs`.
+- **The rewrites are mechanical.** They're what an autofix or a careful person would write first, with braces, a helper named `selectN` and no type annotations added; they don't pick better names or simplify conditions. The fix-pass measure counts conditionals between `/*NT{*/` and `/*}NT*/` markers, so only what a fix does to the rewritten code counts.
+- **The calibration runs code.** Its behaviour cases are this repo's own files, transpiled and imported in a fresh Node process. Nothing from a clone runs; the subjects' oracle runs this repo's copies with stubs.
+- **The hand labels are Claude models.** Rater 1 (a fork of the measuring session) labelled all 80 items from a worksheet that shows the automatic labels; rater 2, a separate subagent working blind, labelled 36. `history-labels.json` and `history-event-check.json` have one rater.
+- **Hand inputs:** `history-labels.json`, `history-event-check.json`, and the rater labels (`out/nested-ternaries/labels-rater{1,2}.json`, kept in `classifications.json`).
+- **No shared script changed.** The topic reads `collect-files.cjs`, `tools.cjs`, `length-lib.cjs`, `dead-code-lib.cjs`, `sort-keys-lib.cjs` and `length-history.cjs` (its exported `track` and `logistic`), and runs `rule-census.cjs` unchanged with `CORPUS_REPO_LISTS=repos-accessibility.json`.
+
+The method, findings and caveats are in `corpus/results/nested-ternaries/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -1246,3 +1288,83 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
 - `harness-tests/func-style/mutants.json` (new): 34 mutants.
 - `.gitignore` comments name the topic; the per-attempt patterns cover its logs.
 - **Earlier topics, re-measured, re-aggregated and self-tested from their committed runs:** every self-test passes, and no shared script changed. Against the committed files they show only the known drift: tool versions, 947ca03e, `sonarjs/void-use`, Unicorn 79 and Biome 2.6 rules, Biome's shorter barrel message, and `hasSessionLog` where the session logs aren't in this worktree.
+
+### Nested ternaries (thirteenth post)
+
+Ultracite turns `no-nested-ternary` on in Oxlint and ESLint core, and Biome's `noNestedTernary`. No linter fixes a nested ternary, so `ultracite fix --claude` or `--codex` is what rewrites one in a real project. This topic asks whether the agent rewrites without changing behaviour, picks a rewrite that fits the position, avoids the rewrites that look equivalent and aren't, and what Ultracite's other rules and fix passes do to its edit. The user's project is exactly what `ultracite init --linter oxlint --frameworks react` leaves; the rule is on there already.
+
+Subjects are three files from `corpus/examples/nested-ternaries/`:
+
+- **a:** Next.js's `denormalize-page-path.ts`: a two-test chain that is the function's return value. Right: early returns or if/else, in the same test order.
+- **b:** Supabase Studio's `ExplorerNavNotebooks.tsx`: a loading / empty / list chain, a JSX child inside two wrappers, where no statement can go. Right: a variable or helper above the return, or a child component. `notebooks.length &&` renders `0`.
+- **c:** Astro's `vite-plugin-config-alias` `getConfigAlias`: a chain in a `.map` callback whose first branch runs `++matchId`. Right: a block body with early returns, a switch or a lookup of functions. An object lookup increments the counter for every character.
+
+**The run dir is what `ultracite init --linter oxlint --frameworks react` leaves.** `prepareSubjects` runs the CLI's own `init` (under Bun, `--frameworks react --skip-install --yes`) for Oxlint, Biome and ESLint in scratch projects, and fails if Oxlint's config doesn't extend the React preset. Init's files are kept in `subjects/nested-ternaries/init/`; Oxlint's files as the fix pass formats them, the subjects' `tsconfig.json` and each subject's stub module (`stubs.ts`, or `stubs.tsx` for B) make up `run-files/` and the subject folders. Oxlint's two configs and Biome's are stored with a `.txt` suffix.
+
+**Subjects.** `prepareSubjects`:
+
+- **Strips the header.** It removes the `stripFields` fields and the subject line. `TEXT_EDITS` cut B's `Components:` field (it listed the chain's branches) and C's `Function:` sentence about numbered capture references to an identification, and rewrite "copied verbatim", the license lines that pointed into `research/`, the stubs' headers, B's stub notes about the oracle and C's `ADDED for the behaviour oracle`.
+- **Renames the stub modules.** The corpus names them `nested-ternaries-<id>-stubs`, which names the topic; the run dir calls them `stubs`, and the oracle is handed the corpus name back.
+- **Checks every comment line** of the subject and its stub against 21 patterns: the construct, the rewrites, the traps (evaluation, `&&`, `0`, the counter), judgement words, review, the tools, the analysis and the history's PRs and commits. One stub directive (`biome-ignore lint/style/noNamespace`) is allowed by name. The same patterns match 46, 44 and 51 lines of the unstripped subjects.
+- **Normalises** with Ultracite's Oxlint pass until nothing changes, and checks that the oracle's trace equals the corpus subject's (B's ignoring class order in `className`, which Oxfmt sorts), that each normalised stub module gives the same trace as the corpus's in its place, that `tsc` is clean, and that the handoff is exactly one `no-nested-ternary`.
+
+**The handoff is filtered** in the collect and in every re-lint, as in the six previous topics: the rule, plus any diagnostic that isn't the prepared project's own, by rule and message. A real project would hand over 2, 2 and 6 issues in the subject (C's `no-plusplus` on the very line). Here the filter never acted: every run cleared the rule in one attempt and added nothing Oxlint reports.
+
+**Retry loop:** `runWithRetries`, with `scripts/ultracite-adapters.cjs` at a new "v3" revision, which this topic selects. The CLI's agent-fix code changed after the func-style runs (#866, #871), and v3 ports it: `diff.ts`'s line-aware matching (each report's file as the linter read it, places between unique lines, number-free leftovers on the same line), `verifySafely` returning what `recordSourceLines` returns, and the per-file recording in `runAgentFix`. The self-test runs the port against `diff.ts` itself on nine edits, and Ultracite's real Oxlint adapter next to the mirror on 52 inputs; all agree. A re-measurement rebuilds each report's file from the run's committed copies, so retry decisions reproduce. v1 and v2 are unchanged.
+
+**Measurement.** Each attempt is measured as the agent left the file and as verify left it:
+
+- **Lint, inline config honoured and ignored, in three views:** Oxlint (init's config, core and react), ESLint (init's core and react: `no-nested-ternary`, `sonarjs/no-nested-conditional`, `unicorn/prefer-ternary` with Ultracite's options, `curly`, `no-else-return`, `react/jsx-no-leaked-render`; React Doctor's rules left out of every count) and Biome (core and react). The nested-ternary rules, 49 conditional rules, and every rule a state adds.
+- **`tsc`**, strict, with the stub module and Node's types.
+- **The oracle:** exactly, and ignoring key order, class order and a regular expression's printed flags.
+- **The edit, from the AST:** guards and whether each is the one-line `if (bool) return x;`, if/else returns, `let` + if/else, helpers, child components, switches, lookups, IIFEs, `&&`/`||` (and a `.length &&` in JSX), a ternary moved into a const, the nested trees left, C's counter and where each update of it runs, B's wrappers, cognitive complexity with the corpus's scorer, lines, and everything else that changed.
+- **Ultracite's partition**, the recomputed retry decision, and what it would print (the outro, the notes, the end of the agent's final message).
+- **From the session log:** commands run or refused, searches for tests, reads of an installed Astro or Next.js, the final message and progress messages, sentences about evaluation order, side effects, the counter, `0`, the default branch, readability and reasons, and exposure.
+
+The hand classification is in `classifications.json`. It includes a reader judgement (easier, about the same or harder to follow) by two raters from a blind packet: rater 1 is the model that ran the experiment, rater 2 a separate subagent that saw only the code.
+
+**The deterministic paths.** `aggregate` runs `ultracite fix` and `--unsafe` with Oxlint, Biome and ESLint on each subject, as upstream wrote it and as handed over (30), and on every run's final file (120), through the mirror and Ultracite's real adapters, which agree in all 150.
+
+**Oracle:** `corpus/scripts/nested-ternaries-oracle.cjs`, imported unchanged. The self-test has 52 cases, all as expected:
+
+- the three prepared subjects;
+- the corpus's 32 variants, made by `nested-ternaries-examples.cjs`'s own `variantsOf` without running the script, from the cleaned subject, then normalised, and 3 of them as written. Their verdicts, differing counts and Oxlint counts match `examples.json`;
+- 14 hand-made mutants.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=nested-ternaries
+node scripts/prepare-subjects.cjs        # subjects/nested-ternaries/ (runs ultracite init --frameworks react for each linter; stripped, checked, normalised; ~1 min)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (52), the diff.ts port (9) and the mirror against the CLI (52) -> results/nested-ternaries/oracle-self-test.json (~5 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a:claude:1 b:codex:1 c:claude:1 ...   # 4 of each subject and agent
+node scripts/aggregate.cjs               # results.json, with the deterministic paths, the passes on the final files and the mutant matrix (~10 min)
+node scripts/report-tables.cjs > results/nested-ternaries/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.29–0.44 a run (median $0.30, $3.88 for 12 runs).
+- Codex used 16.2k–31.6k tokens a run as reported (median 17.7k).
+- Runs took 14.5–47 s, one attempt each, and measuring one takes about 20 seconds.
+- The pilot (one run per agent on C) is in `results/nested-ternaries/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's nested-ternaries examples, results and calibration, every `nested-ternaries-*` corpus script, and the whole corpus `out/`, `repos/` (history clones included) and `biome-input/`;
+- `research/bibliography/nested-ternaries.md` and the bibliography README;
+- `plans/`, `lint-configs/`, the temp directory's `ultracite-research-*` folders and the other topics' run roots;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: the orchestrating session's scratchpad, other sessions' scratchpads and job logs that mention the topic (regular files only: some task outputs are symlinks to live transcripts, which `chmod` would follow), the main checkout's plans, corpus clones and `lint-configs`, and the other worktrees' corpus `repos/` and `out/`.
+
+`node_modules` isn't locked, though the main checkout's has Astro 7.3.2's built `vite-plugin-config-alias` and the Bun cache has Next.js 16.x's `denormalize-page-path.js`, both with the same nested ternary. Reads were checked instead, and there were none.
+
+The method, numbers and caveats are in `agent-experiment/results/nested-ternaries/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/nested-ternaries.cjs` (new). It imports the corpus's `nested-ternaries-oracle.cjs` and `nested-ternaries-lib.cjs` unchanged and reads `nested-ternaries-examples.cjs`'s `variantsOf` without running the script.
+- `scripts/ultracite-adapters.cjs`: the "v3" revision (the CLI at 9743dfcb), selected with `ULTRACITE_MIRROR=v3`. v1 and v2 are unchanged.
+- `scripts/run-one.mjs`: under v3 only, the handed-over group is what `recordSourceLines` returns, and `meta.json` records the mirror's revision.
+- `harness-tests/nested-ternaries/mutants.json` (new): 49 mutants.
+- `.gitignore` comments name the topic; the per-attempt patterns cover its logs.
+- **Earlier topics,** re-measured, self-tested and re-aggregated from their committed runs before and after these changes: before and after match exactly for all eleven and prompt-revision (func-style's self-test once differed in two mirror comparisons under parallel load, from Oxlint's report order; alone it is identical). No committed run's response, outcome or oracle verdict changes. Five self-tests fail on the current repo before and after alike, for reasons that predate this topic (accessibility's strict v1 hash check, todo-comments' JS-plugin help, and sort-keys', length-limits' and func-style's variants since key sorting went off in 37ead86b). Against the committed files every topic shows drift from commits made after its runs: 3e83844c Oxlint 1.90, 6675a904 Oxfmt 0.75, 79d73d9e Biome 2.6.4, 3572b864 the ESLint plugins, 7a2d831c, 8eb46ade and 37ead86b the presets, and `hasSessionLog` where the session logs aren't in this worktree.

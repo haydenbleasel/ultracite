@@ -1,0 +1,20 @@
+Fix the lint issues below in a single file. They were reported by Ultracite and could not be fixed automatically.
+
+File: <run-root>/c-claude-2/index.ts
+
+Issues:
+1. line 93, col 13 — no-nested-ternary: Do not nest ternary expressions.
+
+Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: <run-root>/c-claude-2/index.ts.a123abce.json
+
+Rules:
+- Edit only the file above. Do not create, delete, or modify any other file. If the proper fix needs changes outside this file (an import cycle, a barrel file), don't work around it here: leave the issue for review and say what the fix is.
+- Make the minimal change that resolves each issue. For a style rule, keep runtime behavior the same. When a rule reports a bug (a lost rejection, a missing `await`), fixing that behavior is the point. If a fix would change behavior and it isn't clear that's intended, leave the issue for review and say why.
+- Fix the underlying problem. An edit that only hides the code from the rule (rewording it, re-spelling it, an equivalent construct) is not a fix, even if the linter goes quiet. If that's the only way to clear an issue, leave it for review.
+- The JSON file has each rule's help text, which describes the usual fix. When that fix doesn't fit this code (a TODO that's still true, key or declaration order the code depends on), leaving the issue for review is a valid result: the minimal change can be no change.
+- Before adding a dependency to a hook, check whether it changes when the effect or memo runs. If it does and that isn't clearly intended, leave the issue for review.
+- Before splitting a function to meet a size limit, decide whether the split makes the code easier to read. If it doesn't, leave the issue for review.
+- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.
+- Do not reformat unrelated code.
+- Don't run the linter or other commands to check your edit. The file is re-linted when you finish, and you get another attempt if anything is still reported.
+- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. To leave an issue for review, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like `Left for review: 2, 3`. Leave that line out when you left nothing.

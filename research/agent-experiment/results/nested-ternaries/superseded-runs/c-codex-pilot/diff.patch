@@ -1,0 +1,21 @@
+--- a/index.ts
++++ b/index.ts
+@@ -89,9 +89,15 @@
+         const replacement = [
+           ...normalizePath(path.resolve(resolvedBaseUrl, value)),
+         ]
+-          .map((segment) =>
+-            segment === "*" ? `$${++matchId}` : segment === "$" ? "$$" : segment
+-          )
++          .map((segment) => {
++            if (segment === "*") {
++              return `$${++matchId}`;
++            }
++            if (segment === "$") {
++              return "$$";
++            }
++            return segment;
++          })
+           .join("");
+ 
+         aliases.push({ find, replacement });

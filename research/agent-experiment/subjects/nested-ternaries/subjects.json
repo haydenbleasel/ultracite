@@ -1,0 +1,798 @@
+[
+  {
+    "id": "a",
+    "base": "a",
+    "example": "nested-ternaries-a-next-denormalize-page-path.ts",
+    "basename": "denormalize-page-path.ts",
+    "stubs": {
+      "example": "nested-ternaries-a-stubs.ts",
+      "name": "stubs.ts"
+    },
+    "kind": "unnests cleanly",
+    "label": "A, unnests cleanly",
+    "position": "return",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint core and react), unchanged",
+    "enclosing": "denormalizePagePath",
+    "exported": [
+      "denormalizePagePath"
+    ],
+    "expected": [
+      "no-nested-ternary"
+    ],
+    "source": "vercel/next.js packages/next/src/shared/lib/page-path/denormalize-page-path.ts @ d8bfc3c9, L4-19 (the whole file but its imports); its two imports as a STUB module",
+    "right": "rewrite the return as early returns (or if/else) testing the conditions in the same order, with behaviour unchanged; no new reports",
+    "path": "subjects/nested-ternaries/a/denormalize-page-path.ts",
+    "sha256": "fdf9004894f966adfb76f7747cc8050957d29d84d5e2034e2e61a5cefb1e3308",
+    "stubSha256": "30b388c47074cfb7f957b54d44ecd5bf8fc4e6285ff2a3af6a9c2881c45b5ad3",
+    "originalSha256": "e4219bbc9639e46267579ab7b10ddd7d571a2ed70d13ee91d8f16c254faa9834",
+    "cleanedSha256": "09aaed028ac017b98b9e46c84482aff3569119cd134e7373d5d97797b63345d9",
+    "headerLinesRemoved": 23,
+    "stripFields": [
+      "Rules it hits",
+      "Why it unnests cleanly",
+      "Why it needs a restructure",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Nested-ternaries subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * The lines below the stub import are copied verbatim. The import (marked STUB) replaces lines 1-2,\n *   which import isDynamicRoute and normalizePathSep; nested-ternaries-a-stubs.ts stands in for them.",
+          "to": " * The lines below the stub import are copied, with their formatting changed. The import marked\n *   STUB replaces lines 1-2, which import isDynamicRoute and normalizePathSep; stubs.ts stands in\n *   for them.",
+          "why": "said 'verbatim', which normalising made untrue; named the stub module by its corpus name, which names the topic"
+        },
+        {
+          "from": " * License of the source repository (vercel/next.js/license.md), reproduced in full (also in\n * research/corpus/examples/licenses/next.js-license.md):",
+          "to": " * License of the source repository (vercel/next.js/license.md), reproduced in full:",
+          "why": "named this repo's research folder (the license's copy there)"
+        },
+        {
+          "from": "} from \"./nested-ternaries-a-stubs\";",
+          "to": "} from \"./stubs\";",
+          "why": "the stub module's corpus name names the topic; the run dir calls it stubs.ts"
+        }
+      ],
+      "stubs": [
+        {
+          "from": " * STUB for nested-ternaries subject A. Stands in for the two modules the original file imports:",
+          "to": " * STUB: stands in for the two modules denormalize-page-path.ts imports in Next.js:",
+          "why": "named the topic and the experiment's subject"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/ternar|conditional (expression|operator|render)|\\?\\s*:/i",
+      "/\\bnest(s|ed|ing)?\\b/i",
+      "/\\bchain(s|ed|ing)?\\b/i",
+      "/early[- ]return|return early|\\bguard|short[- ]circuit|\\bflat(ter|ten|tens|tened)?\\b/i",
+      "/\\bif\\s*\\(|\\bif[-/ ]else|\\belse\\b|\\bstatements?\\b/i",
+      "/look[- ]?up|\\bswitch\\b|dispatch|\\bmap of\\b/i",
+      "/\\beager|\\blaz(y|ily)\\b|evaluat(e|es|ed|ing|ion)/i",
+      "/&&|\\|\\||logical (and|or|operator)|\\bleak|falsy|truthy|render(s|ed|ing)? `?0|\\bzero\\b/i",
+      "/increment|\\+\\+|\\bcounter\\b|matchId|capture (group|reference)|numbered|\\$1/i",
+      "/readab|cognitive|complexit|\\beas(y|ier)\\b|simpl(e|er|ify)|\\bclean(ly|er)?\\b|\\bclear(er|ly)?\\b/i",
+      "/\\bempty\\b|\\bpending\\b|\\bloader\\b|\\bloading\\b|no notebooks|none created/i",
+      "/\\bdefault (case|branch)|fall(s|ing)? ?through/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|sonar|unicorn|\\bcurly\\b|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|\\bscenarios?\\b|harness/i",
+      "/verbatim/i",
+      "/Rules it hits|Why it (unnests|needs|'s a trap)|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke|\\bwrong\\b/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\b(36576|44405|65092|59585|49254|49321|49368|50188|50453|50558|50701|1747|13059)\\b|0de109baab|efcec4c1e3|64b718c661|2893c783d5|14bda8a5cf|ba38147ccc|e36837f914|dd57054647|Matt Kane/",
+      "/deliberate|intentional|on purpose|by design|preference/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 5,
+        "added": 5
+      },
+      "whatChanged": {
+        "rulesFixed": {
+          "no-negated-condition": 1,
+          "prefer-const": 1,
+          "unicorn/no-negated-condition": 1
+        },
+        "oxlintBefore": {
+          "func-style": 1,
+          "no-negated-condition": 1,
+          "no-nested-ternary": 1,
+          "prefer-const": 1,
+          "unicorn/no-negated-condition": 1
+        },
+        "oxlintAfter": {
+          "func-style": 1,
+          "no-nested-ternary": 1
+        },
+        "codeChanged": true
+      },
+      "stubWhatChanged": {
+        "rulesFixed": {
+          "require-unicode-regexp": 1,
+          "unicorn/prefer-string-replace-all": 1
+        },
+        "oxlintBefore": {
+          "func-style": 2,
+          "require-unicode-regexp": 2,
+          "unicorn/prefer-string-replace-all": 1
+        },
+        "oxlintAfter": {
+          "func-style": 2,
+          "require-unicode-regexp": 1
+        },
+        "codeChanged": true
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-nested-ternary L50: Do not nest ternary expressions."
+      ],
+      "handoffCounts": {
+        "no-nested-ternary": 1
+      },
+      "help": [
+        "Refactor nested ternary expressions into if-else statements for better readability."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-nested-ternary.html"
+      ],
+      "reportedBeforeFilter": 5,
+      "leftOutByFilter": {
+        "func-style": 3,
+        "require-unicode-regexp": 1
+      },
+      "leftOutByFilterByFile": {
+        "denormalize-page-path.ts": 1,
+        "stubs.ts": 3
+      },
+      "fileLines": {
+        "corpus": 79,
+        "prepared": 56
+      },
+      "trees": [
+        {
+          "line": 50,
+          "lines": 5,
+          "shape": "chain",
+          "position": "return",
+          "members": 2,
+          "text": "_page.startsWith(\"/index/\") && !isDynamicRoute(_page) ? _page.slice(6) : _page === \"/index\" ? \"/\" : _page"
+        }
+      ],
+      "cognitive": {
+        "denormalizePagePath": 4
+      },
+      "oracle": {
+        "calls": 320,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "denormalizePagePath",
+              "function"
+            ]
+          ]
+        },
+        "verdictAgainstCorpusSubject": "same",
+        "differingExactly": 0,
+        "ignoringKeyOrder": "same",
+        "ignoringClassOrder": "same",
+        "withThePreparedStub": "same",
+        "note": "the prepared subject's trace equals the corpus subject's in every scenario, with the corpus's stub module and with the prepared one"
+      },
+      "stub": {
+        "name": "stubs.ts",
+        "corpusName": "nested-ternaries-a-stubs.ts",
+        "codeChangedByNormalising": true,
+        "linesChanged": {
+          "removed": 2,
+          "added": 2
+        }
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "268537c406255e99ce8f1838dbc1d74e4a1cf64554c5f4a2e99ef1e20be3da8f",
+      "package.json": "99f5cd41aace28a706c089ea9dcb31f934b8568c6470f22fd4caed6af525e49d",
+      "tsconfig.json": "9800a102487a881de51fb8d5a4656abf91820b06124e27e254ab31d434ef8a36"
+    },
+    "corpus": {
+      "oxlint": {
+        "func-style": 1,
+        "prefer-const": 1,
+        "no-nested-ternary": 1,
+        "no-negated-condition": 1,
+        "unicorn/no-negated-condition": 1
+      },
+      "eslint": {
+        "func-style": 1,
+        "prefer-const": 1,
+        "no-nested-ternary": 1,
+        "no-negated-condition": 1,
+        "unicorn/no-negated-condition": 1,
+        "sonarjs/no-nested-conditional": 1
+      },
+      "biome": {
+        "style/noNestedTernary": 1,
+        "style/noNegationElse": 1,
+        "style/useConst": 1
+      },
+      "oracle": {
+        "calls": 320,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "denormalizePagePath",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "cognitive": 4
+    }
+  },
+  {
+    "id": "b",
+    "base": "b",
+    "example": "nested-ternaries-b-supabase-explorer-nav-notebooks.tsx",
+    "basename": "ExplorerNavNotebooks.tsx",
+    "stubs": {
+      "example": "nested-ternaries-b-stubs.tsx",
+      "name": "stubs.tsx"
+    },
+    "kind": "JSX",
+    "label": "B, JSX",
+    "position": "JSX child inside two wrappers",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint core and react), unchanged",
+    "enclosing": "ExplorerNavNotebooks",
+    "exported": [
+      "ExplorerNavNotebooks"
+    ],
+    "expected": [
+      "no-nested-ternary"
+    ],
+    "source": "supabase/supabase apps/studio/components/layouts/ExplorerLayout/ExplorerNavNotebooks.tsx @ 09f80f52, L21-114 (the whole file but its imports); its eleven imports as a STUB module",
+    "right": "compute the content above the return (a variable set by if/else, or a helper that returns early) and render it inside the wrappers, or extract a child component that takes the values; same rendered tree and hooks in every scenario",
+    "path": "subjects/nested-ternaries/b/ExplorerNavNotebooks.tsx",
+    "sha256": "d9754bdceb4faab5ad49df00b84618e607ac0a42faa214dd4128ff307b047f20",
+    "stubSha256": "c33145c93deb24aa49980cee481a97e4ac5defe448ece6a3b4da3ab7d272d046",
+    "originalSha256": "0975671b058ab3df6305c3772b9c716794a3dbd8684c5e7828cf7b4b6e7aacb5",
+    "cleanedSha256": "38389b40d3f065e1746a5cc830673001a8de535757df29c165b08fdffc6738c1",
+    "headerLinesRemoved": 24,
+    "stripFields": [
+      "Rules it hits",
+      "Why it unnests cleanly",
+      "Why it needs a restructure",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Nested-ternaries subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * Components: NotebookListItem and ExplorerNavNotebooks, Supabase Studio's list of a project's SQL\n *   notebooks in the explorer sidebar: a loader while the query is pending, a message when there\n *   are no notebooks (one text for a search with no results, another for none created), otherwise\n *   an infinite list.",
+          "to": " * Components: NotebookListItem and ExplorerNavNotebooks, Supabase Studio's list of a project's SQL\n *   notebooks in the explorer sidebar.",
+          "why": "listed the three branches of the chain, what the behaviour oracle renders"
+        },
+        {
+          "from": " * The lines below the stub import are copied verbatim. The import (marked STUB) replaces lines 1-19,\n *   eleven imports; nested-ternaries-b-stubs.tsx stands in for them.",
+          "to": " * The lines below the stub import are copied, with their formatting changed. The import marked\n *   STUB replaces lines 1-19, eleven imports; stubs.tsx stands in for them.",
+          "why": "said 'verbatim', which normalising made untrue; named the stub module by its corpus name, which names the topic"
+        },
+        {
+          "from": " * License of the source repository (supabase/supabase/LICENSE), Apache License 2.0 (in full in\n * research/corpus/examples/licenses/supabase-LICENSE). This file is a copy of a Supabase file with\n * its imports replaced, as marked.",
+          "to": " * License of the source repository: Apache License 2.0 (supabase/supabase/LICENSE). Licensed under the\n * Apache License, Version 2.0; you may obtain a copy of the License at\n * http://www.apache.org/licenses/LICENSE-2.0. This file is a copy of a Supabase file with its\n * imports replaced, as marked.",
+          "why": "named this repo's research folder (the license's copy there); the standard Apache notice instead"
+        },
+        {
+          "from": "// STUB: replaces lines 1-19 of the original (eleven imports; see nested-ternaries-b-stubs.tsx).",
+          "to": "// STUB: replaces lines 1-19 of the original (eleven imports; see stubs.tsx).",
+          "why": "named the stub module by its corpus name"
+        },
+        {
+          "from": "} from \"./nested-ternaries-b-stubs\";",
+          "to": "} from \"./stubs\";",
+          "why": "the stub module's corpus name names the topic; the run dir calls it stubs.tsx"
+        }
+      ],
+      "stubs": [
+        {
+          "from": " * STUB for nested-ternaries subject B. Stands in for the eleven modules the original file imports",
+          "to": " * STUB: stands in for the eleven modules ExplorerNavNotebooks.tsx imports in Supabase Studio",
+          "why": "named the topic and the experiment's subject"
+        },
+        {
+          "from": " * The hooks read a scenario the behaviour oracle sets on globalThis.__scenario; the components are\n * marked stubs the oracle's renderer leaves as leaves. Types are reduced to what the file uses.\n * Not part of the source.",
+          "to": " * The hooks return values read from globalThis.__scenario; the components are inert stand-ins.\n * Types are reduced to what the file uses. Not part of the source.",
+          "why": "named the behaviour oracle and its renderer"
+        },
+        {
+          "from": "// components: marked stubs (the oracle's renderer doesn't expand them)",
+          "to": "// components: inert stand-ins (each returns null)",
+          "why": "named the behaviour oracle's renderer"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/ternar|conditional (expression|operator|render)|\\?\\s*:/i",
+      "/\\bnest(s|ed|ing)?\\b/i",
+      "/\\bchain(s|ed|ing)?\\b/i",
+      "/early[- ]return|return early|\\bguard|short[- ]circuit|\\bflat(ter|ten|tens|tened)?\\b/i",
+      "/\\bif\\s*\\(|\\bif[-/ ]else|\\belse\\b|\\bstatements?\\b/i",
+      "/look[- ]?up|\\bswitch\\b|dispatch|\\bmap of\\b/i",
+      "/\\beager|\\blaz(y|ily)\\b|evaluat(e|es|ed|ing|ion)/i",
+      "/&&|\\|\\||logical (and|or|operator)|\\bleak|falsy|truthy|render(s|ed|ing)? `?0|\\bzero\\b/i",
+      "/increment|\\+\\+|\\bcounter\\b|matchId|capture (group|reference)|numbered|\\$1/i",
+      "/readab|cognitive|complexit|\\beas(y|ier)\\b|simpl(e|er|ify)|\\bclean(ly|er)?\\b|\\bclear(er|ly)?\\b/i",
+      "/\\bempty\\b|\\bpending\\b|\\bloader\\b|\\bloading\\b|no notebooks|none created/i",
+      "/\\bdefault (case|branch)|fall(s|ing)? ?through/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|sonar|unicorn|\\bcurly\\b|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|\\bscenarios?\\b|harness/i",
+      "/verbatim/i",
+      "/Rules it hits|Why it (unnests|needs|'s a trap)|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke|\\bwrong\\b/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\b(36576|44405|65092|59585|49254|49321|49368|50188|50453|50558|50701|1747|13059)\\b|0de109baab|efcec4c1e3|64b718c661|2893c783d5|14bda8a5cf|ba38147ccc|e36837f914|dd57054647|Matt Kane/",
+      "/deliberate|intentional|on purpose|by design|preference/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "biome-ignore lint/style/noNamespace: JSX's own namespace",
+        "why": "a suppression directive the stub module's JSX namespace needs under Biome; it names no rule about conditionals"
+      }
+    ],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 30,
+        "added": 43
+      },
+      "whatChanged": {
+        "rulesFixed": {
+          "import/consistent-type-specifier-style": 2
+        },
+        "oxlintBefore": {
+          "import/consistent-type-specifier-style": 2,
+          "no-nested-ternary": 1,
+          "unicorn/filename-case": 1
+        },
+        "oxlintAfter": {
+          "no-nested-ternary": 1,
+          "unicorn/filename-case": 1
+        },
+        "codeChanged": true
+      },
+      "stubWhatChanged": {
+        "rulesFixed": {
+          "typescript/consistent-indexed-object-style": 1,
+          "typescript/consistent-type-definitions": 1
+        },
+        "oxlintBefore": {
+          "no-empty-function": 4,
+          "typescript/consistent-indexed-object-style": 1,
+          "typescript/consistent-type-definitions": 1,
+          "typescript/no-namespace": 1
+        },
+        "oxlintAfter": {
+          "no-empty-function": 4,
+          "typescript/no-namespace": 1
+        },
+        "codeChanged": true
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-nested-ternary L119: Do not nest ternary expressions."
+      ],
+      "handoffCounts": {
+        "no-nested-ternary": 1
+      },
+      "help": [
+        "Refactor nested ternary expressions into if-else statements for better readability."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-nested-ternary.html"
+      ],
+      "reportedBeforeFilter": 7,
+      "leftOutByFilter": {
+        "no-empty-function": 4,
+        "typescript/no-namespace": 1,
+        "unicorn/filename-case": 1
+      },
+      "leftOutByFilterByFile": {
+        "ExplorerNavNotebooks.tsx": 1,
+        "stubs.tsx": 5
+      },
+      "fileLines": {
+        "corpus": 154,
+        "prepared": 144
+      },
+      "trees": [
+        {
+          "line": 119,
+          "lines": 21,
+          "shape": "chain",
+          "position": "jsx-child",
+          "members": 2,
+          "text": "isPending ? ( <GenericSkeletonLoader /> ) : notebooks.length === 0 ? ( <p className=\"text-foreground-lighter px-2 py-2 text-xs\"> {search ? \"No notebooks found\" : \"No notebooks created yet\"} </p> ) : ("
+        }
+      ],
+      "cognitive": {
+        "NotebookListItem": 0,
+        "<JSX function>": 0,
+        "ExplorerNavNotebooks": 8,
+        "<callback to useMemo>": 0,
+        "<callback to notebooksData?.pages.flatMap>": 0
+      },
+      "oracle": {
+        "calls": 80,
+        "hooks": 80,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "ExplorerNavNotebooks",
+              "function"
+            ]
+          ]
+        },
+        "verdictAgainstCorpusSubject": "changed",
+        "differingExactly": 80,
+        "ignoringKeyOrder": "changed",
+        "ignoringClassOrder": "same",
+        "withThePreparedStub": "same",
+        "note": "the prepared subject's trace differs from the corpus subject's only in the order of the classes in a className (Oxfmt sorts Tailwind classes); with each className's classes sorted they're the same. The prepared subject is the reference for every run"
+      },
+      "stub": {
+        "name": "stubs.tsx",
+        "corpusName": "nested-ternaries-b-stubs.tsx",
+        "codeChangedByNormalising": true,
+        "linesChanged": {
+          "removed": 13,
+          "added": 23
+        }
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "268537c406255e99ce8f1838dbc1d74e4a1cf64554c5f4a2e99ef1e20be3da8f",
+      "package.json": "99f5cd41aace28a706c089ea9dcb31f934b8568c6470f22fd4caed6af525e49d",
+      "tsconfig.json": "9800a102487a881de51fb8d5a4656abf91820b06124e27e254ab31d434ef8a36"
+    },
+    "corpus": {
+      "oxlint": {
+        "import/consistent-type-specifier-style": 2,
+        "no-nested-ternary": 1
+      },
+      "eslint": {
+        "import-x/consistent-type-specifier-style": 2,
+        "react/prefer-read-only-props": 3,
+        "sonarjs/prefer-immediate-return": 1,
+        "no-nested-ternary": 1,
+        "sonarjs/no-nested-conditional": 1
+      },
+      "biome": {
+        "nursery/useTailwindSortedClasses": 2,
+        "style/noNestedTernary": 1,
+        "performance/noJsxPropsBind": 4
+      },
+      "oracle": {
+        "calls": 80,
+        "hooks": 80,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "ExplorerNavNotebooks",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "cognitive": 8
+    }
+  },
+  {
+    "id": "c",
+    "base": "c",
+    "example": "nested-ternaries-c-astro-config-alias.ts",
+    "basename": "index.ts",
+    "stubs": {
+      "example": "nested-ternaries-c-stubs.ts",
+      "name": "stubs.ts"
+    },
+    "kind": "a trap",
+    "label": "C, the trap",
+    "position": "a `.map` callback's concise body",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint core and react), unchanged",
+    "enclosing": "getConfigAlias",
+    "exported": [
+      "getConfigAlias"
+    ],
+    "expected": [
+      "no-nested-ternary"
+    ],
+    "source": "withastro/astro packages/astro/src/vite-plugin-config-alias/index.ts @ 9050e381, L8-68 (the Alias type and getConfigAlias); vite's normalizePath and the two types as a STUB module",
+    "right": "give the `.map` callback a block body with early returns (or a switch, or a lookup of functions), so `++matchId` runs only for a `*`, once per match and in order; or leave it for review",
+    "path": "subjects/nested-ternaries/c/index.ts",
+    "sha256": "2f05f8022014ec3ef01d8bac449215158cb994ad40e364df7bd72ee67cc08c88",
+    "stubSha256": "6d5110e311dca6e8cca29bb08994d69dd74a73027a8137679327ddf3513b5d7a",
+    "originalSha256": "75fbd15991a17563ad5c6a1e76490e85ac1df3ce66454a84039cf01cc618fed0",
+    "cleanedSha256": "a57bae0386d964d509e8914a1d417eada40ef7f91c81d91a8dfc1749aec715a6",
+    "headerLinesRemoved": 26,
+    "stripFields": [
+      "Rules it hits",
+      "Why it unnests cleanly",
+      "Why it needs a restructure",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Nested-ternaries subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * Function:  getConfigAlias, which compiles a project's tsconfig `paths` (and `baseUrl`) into the\n *   regular expressions and replacement strings Astro's Vite plugin resolves imports with. Each `*`\n *   in a target path becomes a numbered capture reference (`$1`, `$2`, …), and `$` is escaped as `$$`.",
+          "to": " * Function:  getConfigAlias, which compiles a project's tsconfig `paths` (and `baseUrl`) into the\n *   regular expressions and replacement strings Astro's Vite plugin resolves imports with.",
+          "why": "described what the nested ternary's branches produce, the counter included"
+        },
+        {
+          "from": " * The lines below the stub imports are copied verbatim. The imports (marked STUB) replace lines 1-7;\n *   node:path is Node's own module, and nested-ternaries-c-stubs.ts stands in for vite's\n *   normalizePath and the two types. The export at the end (marked ADDED) is for the oracle.",
+          "to": " * The lines below the stub imports are copied, with their formatting changed. The imports marked\n *   STUB replace lines 1-7; node:path is Node's own module, and stubs.ts stands in for vite's\n *   normalizePath and the two types. The export at the end (marked ADDED) is not in the original.",
+          "why": "said 'verbatim', which normalising made untrue; named the stub module by its corpus name, which names the topic; named the behaviour oracle"
+        },
+        {
+          "from": " * License of the source repository (withastro/astro/LICENSE), the MIT License, reproduced (also in\n * research/corpus/examples/licenses/astro-LICENSE):",
+          "to": " * License of the source repository (withastro/astro/LICENSE), the MIT License, reproduced:",
+          "why": "named this repo's research folder (the license's copy there)"
+        },
+        {
+          "from": "// the two types come from nested-ternaries-c-stubs.ts.",
+          "to": "// the two types come from stubs.ts.",
+          "why": "named the stub module by its corpus name"
+        },
+        {
+          "from": "from \"./nested-ternaries-c-stubs\";",
+          "to": "from \"./stubs\";",
+          "why": "the stub module's corpus name names the topic; the run dir calls it stubs.ts"
+        },
+        {
+          "from": "// ADDED for the behaviour oracle (not in the original, where getConfigAlias is module-private).",
+          "to": "// ADDED (not in the original, where getConfigAlias is module-private).",
+          "why": "named the behaviour oracle"
+        }
+      ],
+      "stubs": [
+        {
+          "from": " * STUB for nested-ternaries subject C. Stands in for what the original file imports from vite",
+          "to": " * STUB: stands in for what index.ts imports from vite in Astro",
+          "why": "named the topic and the experiment's subject"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/ternar|conditional (expression|operator|render)|\\?\\s*:/i",
+      "/\\bnest(s|ed|ing)?\\b/i",
+      "/\\bchain(s|ed|ing)?\\b/i",
+      "/early[- ]return|return early|\\bguard|short[- ]circuit|\\bflat(ter|ten|tens|tened)?\\b/i",
+      "/\\bif\\s*\\(|\\bif[-/ ]else|\\belse\\b|\\bstatements?\\b/i",
+      "/look[- ]?up|\\bswitch\\b|dispatch|\\bmap of\\b/i",
+      "/\\beager|\\blaz(y|ily)\\b|evaluat(e|es|ed|ing|ion)/i",
+      "/&&|\\|\\||logical (and|or|operator)|\\bleak|falsy|truthy|render(s|ed|ing)? `?0|\\bzero\\b/i",
+      "/increment|\\+\\+|\\bcounter\\b|matchId|capture (group|reference)|numbered|\\$1/i",
+      "/readab|cognitive|complexit|\\beas(y|ier)\\b|simpl(e|er|ify)|\\bclean(ly|er)?\\b|\\bclear(er|ly)?\\b/i",
+      "/\\bempty\\b|\\bpending\\b|\\bloader\\b|\\bloading\\b|no notebooks|none created/i",
+      "/\\bdefault (case|branch)|fall(s|ing)? ?through/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|sonar|unicorn|\\bcurly\\b|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|\\bscenarios?\\b|harness/i",
+      "/verbatim/i",
+      "/Rules it hits|Why it (unnests|needs|'s a trap)|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke|\\bwrong\\b/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\b(36576|44405|65092|59585|49254|49321|49368|50188|50453|50558|50701|1747|13059)\\b|0de109baab|efcec4c1e3|64b718c661|2893c783d5|14bda8a5cf|ba38147ccc|e36837f914|dd57054647|Matt Kane/",
+      "/deliberate|intentional|on purpose|by design|preference/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 48,
+        "added": 63
+      },
+      "whatChanged": {
+        "rulesFixed": {
+          "curly": 2,
+          "import/consistent-type-specifier-style": 2,
+          "typescript/consistent-type-definitions": 1
+        },
+        "oxlintBefore": {
+          "curly": 2,
+          "import/consistent-type-specifier-style": 2,
+          "no-nested-ternary": 1,
+          "no-plusplus": 1,
+          "prefer-named-capture-group": 1,
+          "require-unicode-regexp": 3,
+          "typescript/consistent-type-definitions": 1
+        },
+        "oxlintAfter": {
+          "no-nested-ternary": 1,
+          "no-plusplus": 1,
+          "prefer-named-capture-group": 1,
+          "require-unicode-regexp": 3
+        },
+        "codeChanged": true
+      },
+      "stubWhatChanged": {
+        "rulesFixed": {
+          "require-unicode-regexp": 1,
+          "unicorn/prefer-string-replace-all": 1
+        },
+        "oxlintBefore": {
+          "require-unicode-regexp": 1,
+          "unicorn/prefer-string-replace-all": 1
+        },
+        "oxlintAfter": {},
+        "codeChanged": true
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-nested-ternary L93: Do not nest ternary expressions."
+      ],
+      "handoffCounts": {
+        "no-nested-ternary": 1
+      },
+      "help": [
+        "Refactor nested ternary expressions into if-else statements for better readability."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-nested-ternary.html"
+      ],
+      "reportedBeforeFilter": 6,
+      "leftOutByFilter": {
+        "no-plusplus": 1,
+        "prefer-named-capture-group": 1,
+        "require-unicode-regexp": 3
+      },
+      "leftOutByFilterByFile": {
+        "index.ts": 5
+      },
+      "fileLines": {
+        "corpus": 132,
+        "prepared": 120
+      },
+      "trees": [
+        {
+          "line": 93,
+          "lines": 1,
+          "shape": "chain",
+          "position": "arrow-body",
+          "members": 2,
+          "text": "segment === \"*\" ? `$${++matchId}` : segment === \"$\" ? \"$$\" : segment"
+        }
+      ],
+      "cognitive": {
+        "getConfigAlias": 10,
+        "<callback to [...alias] .map>": 1,
+        "<callback to [ ...normalizePath(path.resolve(resolved>": 3,
+        "<callback to [...normalizePath(resolvedBaseUrl)] .map>": 1
+      },
+      "oracle": {
+        "calls": 240,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "getConfigAlias",
+              "function"
+            ]
+          ]
+        },
+        "verdictAgainstCorpusSubject": "same",
+        "differingExactly": 0,
+        "ignoringKeyOrder": "same",
+        "ignoringClassOrder": "same",
+        "withThePreparedStub": "same",
+        "note": "the prepared subject's trace equals the corpus subject's in every scenario, with the corpus's stub module and with the prepared one"
+      },
+      "stub": {
+        "name": "stubs.ts",
+        "corpusName": "nested-ternaries-c-stubs.ts",
+        "codeChangedByNormalising": true,
+        "linesChanged": {
+          "removed": 2,
+          "added": 2
+        }
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "268537c406255e99ce8f1838dbc1d74e4a1cf64554c5f4a2e99ef1e20be3da8f",
+      "package.json": "99f5cd41aace28a706c089ea9dcb31f934b8568c6470f22fd4caed6af525e49d",
+      "tsconfig.json": "9800a102487a881de51fb8d5a4656abf91820b06124e27e254ab31d434ef8a36"
+    },
+    "corpus": {
+      "oxlint": {
+        "import/consistent-type-specifier-style": 2,
+        "typescript/consistent-type-definitions": 1,
+        "curly": 2,
+        "require-unicode-regexp": 3,
+        "no-nested-ternary": 1,
+        "no-plusplus": 1,
+        "prefer-named-capture-group": 1
+      },
+      "eslint": {
+        "import-x/consistent-type-specifier-style": 2,
+        "@typescript-eslint/consistent-type-definitions": 1,
+        "unicorn/single-line-block-comment-style": 4,
+        "curly": 2,
+        "require-unicode-regexp": 3,
+        "no-nested-ternary": 1,
+        "no-plusplus": 1,
+        "sonarjs/no-nested-incdec": 1,
+        "sonarjs/no-nested-conditional": 1,
+        "prefer-named-capture-group": 1
+      },
+      "biome": {
+        "style/useConsistentTypeDefinitions": 1,
+        "style/useBlockStatements": 2,
+        "complexity/useSimplifiedLogicExpression": 1,
+        "performance/useTopLevelRegex": 2,
+        "style/noIncrementDecrement": 1,
+        "style/noNestedTernary": 1,
+        "style/useUnicodeRegex": 3,
+        "style/useNamedCaptureGroup": 1
+      },
+      "oracle": {
+        "calls": 240,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "getConfigAlias",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "cognitive": 15
+    }
+  }
+]

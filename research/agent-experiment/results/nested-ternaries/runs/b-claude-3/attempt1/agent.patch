@@ -1,0 +1,69 @@
+--- a/ExplorerNavNotebooks.tsx
++++ b/ExplorerNavNotebooks.tsx
+@@ -109,35 +109,43 @@
+     [ref, activeNotebookId, onSelectDelete]
+   );
+ 
++  const renderContent = () => {
++    if (isPending) {
++      return <GenericSkeletonLoader />;
++    }
++
++    if (notebooks.length === 0) {
++      return (
++        <p className="text-foreground-lighter px-2 py-2 text-xs">
++          {search ? "No notebooks found" : "No notebooks created yet"}
++        </p>
++      );
++    }
++
++    return (
++      <InfiniteListDefault
++        className="h-full w-full"
++        items={notebooks}
++        itemProps={itemProps}
++        ItemComponent={NotebookListItem}
++        LoaderComponent={LoaderForIconMenuItems}
++        getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}
++        getItemSize={() => NOTEBOOK_ROW_HEIGHT}
++        gap={1}
++        hasNextPage={hasNextPage}
++        isLoadingNextPage={isFetchingNextPage}
++        onLoadNextPage={fetchNextPage}
++      />
++    );
++  };
++
+   return (
+     <ExplorerNavResourceWrapper
+       type="notebook"
+       search={search}
+       setSearch={setSearch}
+     >
+-      <div className="flex min-h-0 flex-1 flex-col p-3">
+-        {isPending ? (
+-          <GenericSkeletonLoader />
+-        ) : notebooks.length === 0 ? (
+-          <p className="text-foreground-lighter px-2 py-2 text-xs">
+-            {search ? "No notebooks found" : "No notebooks created yet"}
+-          </p>
+-        ) : (
+-          <InfiniteListDefault
+-            className="h-full w-full"
+-            items={notebooks}
+-            itemProps={itemProps}
+-            ItemComponent={NotebookListItem}
+-            LoaderComponent={LoaderForIconMenuItems}
+-            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}
+-            getItemSize={() => NOTEBOOK_ROW_HEIGHT}
+-            gap={1}
+-            hasNextPage={hasNextPage}
+-            isLoadingNextPage={isFetchingNextPage}
+-            onLoadNextPage={fetchNextPage}
+-          />
+-        )}
+-      </div>
++      <div className="flex min-h-0 flex-1 flex-col p-3">{renderContent()}</div>
+     </ExplorerNavResourceWrapper>
+   );
+ };

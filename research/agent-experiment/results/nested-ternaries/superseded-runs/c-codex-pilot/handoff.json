@@ -1,0 +1,61 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint.config.ts: env, extends [core, react], ignorePatterns; oxfmt.config.ts: ...ultracite), unchanged, passed with -c and importing the presets by absolute URL",
+  "filter": "no-nested-ternary, plus any other diagnostic not among the prepared project's own (rule and message, file by file, as diff.ts matches them): a project that lints clean apart from this rule. Every re-lint uses the same filter.",
+  "mirrorRevision": "v3",
+  "diagnosticsReported": 6,
+  "diagnosticsHandedOver": 1,
+  "leftOutByFilter": {
+    "no-plusplus": 1,
+    "prefer-named-capture-group": 1,
+    "require-unicode-regexp": 3
+  },
+  "leftOutByFilterByFile": {
+    "index.ts": 5
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "0ef3470758be684d866bc8ae22a7d84c38027cdf16c2281e83fe5a3d558596d2",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "826f76ae5436e14076375b0f2c6c04711adbd804e75a454634094a8ca0c42428",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "a0e2264c563d3dc778a6fcd519c3030f02df24ac2b4a539bd82fd27647fd6581",
+    "diff.ts": "d8a0c826f8142f686440655c7f460a44aad87546b7107217383244fb0484a51a"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 13,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Refactor nested ternary expressions into if-else statements for better readability.",
+      "line": 93,
+      "message": "Do not nest ternary expressions.",
+      "raw": {
+        "message": "Do not nest ternary expressions.",
+        "code": "eslint(no-nested-ternary)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-nested-ternary.html",
+        "help": "Refactor nested ternary expressions into if-else statements for better readability.",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 3891,
+              "length": 68,
+              "line": 93,
+              "column": 13
+            }
+          }
+        ]
+      },
+      "rule": "no-nested-ternary",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-nested-ternary.html"
+    }
+  ]
+}

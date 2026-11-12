@@ -1,0 +1,1483 @@
+{
+  "generated": "2026-11-12T05:17:23.406Z",
+  "note": "See the header of nested-ternaries-examples.cjs. stripFields: the header fields that name a rule or the expected answer; strip them before an agent sees a subject. Per variant: rules added and removed against the subject in each linter (Ultracite's presets), the nested-ternary rules' counts, tsc diagnostics, the oracle's verdict, and the sonarjs score summed over the file's functions.",
+  "stripFields": [
+    "Rules it hits",
+    "Why it unnests cleanly",
+    "Why it needs a restructure",
+    "Why it's a trap",
+    "What the project did",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses",
+    "Gaming moves"
+  ],
+  "subjects": {
+    "a": {
+      "cognitive": 4,
+      "file": "nested-ternaries-a-next-denormalize-page-path.ts",
+      "lint": {
+        "biome": {
+          "byRule": {
+            "style/noNestedTernary": 1,
+            "style/noNegationElse": 1,
+            "style/useConst": 1
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 75,
+              "message": "Do not nest ternary expressions.",
+              "rule": "style/noNestedTernary"
+            }
+          ]
+        },
+        "eslint": {
+          "byRule": {
+            "func-style": 1,
+            "prefer-const": 1,
+            "no-nested-ternary": 1,
+            "no-negated-condition": 1,
+            "unicorn/no-negated-condition": 1,
+            "sonarjs/no-nested-conditional": 1
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 73,
+              "message": "Do not nest ternary expressions.",
+              "rule": "no-nested-ternary"
+            },
+            {
+              "help": null,
+              "line": 75,
+              "message": "Unexpected negated condition.",
+              "rule": "no-negated-condition"
+            },
+            {
+              "help": null,
+              "line": 75,
+              "message": "Unexpected negated condition.",
+              "rule": "unicorn/no-negated-condition"
+            },
+            {
+              "help": null,
+              "line": 75,
+              "message": "Extract this nested ternary operation into an independent statement.",
+              "rule": "sonarjs/no-nested-conditional"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "func-style": 1,
+            "prefer-const": 1,
+            "no-nested-ternary": 1,
+            "no-negated-condition": 1,
+            "unicorn/no-negated-condition": 1
+          },
+          "topic": [
+            {
+              "help": "Refactor nested ternary expressions into if-else statements for better readability.",
+              "line": 73,
+              "message": "Do not nest ternary expressions.",
+              "rule": "no-nested-ternary"
+            },
+            {
+              "help": "Remove the negation operator and switch the consequent and alternate branches.",
+              "line": 75,
+              "message": "Unexpected negated condition.",
+              "rule": "no-negated-condition"
+            },
+            {
+              "help": "Remove the negation operator and switch the consequent and alternate branches.",
+              "line": 75,
+              "message": "Unexpected negated condition.",
+              "rule": "unicorn/no-negated-condition"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "calls": 320,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "denormalizePagePath",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "origin": {
+        "from": 4,
+        "path": "packages/next/src/shared/lib/page-path/denormalize-page-path.ts",
+        "repo": "next.js",
+        "to": 19,
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/page-path/denormalize-page-path.ts#L4-L19",
+        "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
+      },
+      "stubs": "nested-ternaries-a-stubs.ts",
+      "tsc": [],
+      "verbatim": {
+        "lines": 16,
+        "ok": true
+      },
+      "variants": {
+        "a01 early returns": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "right",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "/**\n * Performs the opposite transformation of `normalizePagePath`. Note that\n * this function is not idempotent either in cases where there are multiple\n * leading `/index` for the page. Examples:\n *  - `/index` -> `/`\n *  - `/index/foo` -> `/foo`\n *  - `/index/index` -> `/index`\n */\nexport function denormalizePagePath(page: string) {\n  let _page = normalizePathSep(page)\n  if (_page.startsWith('/index/') && !isDynamicRoute(_page)) {\n    return _page.slice(6)\n  }\n  if (_page !== '/index') {\n    return _page\n  }\n  return '/'\n}\n"
+        },
+        "a02 early returns, the second test flipped": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "right",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "/**\n * Performs the opposite transformation of `normalizePagePath`. Note that\n * this function is not idempotent either in cases where there are multiple\n * leading `/index` for the page. Examples:\n *  - `/index` -> `/`\n *  - `/index/foo` -> `/foo`\n *  - `/index/index` -> `/index`\n */\nexport function denormalizePagePath(page: string) {\n  let _page = normalizePathSep(page)\n  if (_page.startsWith('/index/') && !isDynamicRoute(_page)) {\n    return _page.slice(6)\n  }\n  if (_page === '/index') {\n    return '/'\n  }\n  return _page\n}\n"
+        },
+        "a03 early returns without braces (if (bool) return x)": {
+          "changed": {
+            "biome": {
+              "style/useBlockStatements": 2,
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "curly": 2,
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "curly": 2,
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "right",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "/**\n * Performs the opposite transformation of `normalizePagePath`. Note that\n * this function is not idempotent either in cases where there are multiple\n * leading `/index` for the page. Examples:\n *  - `/index` -> `/`\n *  - `/index/foo` -> `/foo`\n *  - `/index/index` -> `/index`\n */\nexport function denormalizePagePath(page: string) {\n  let _page = normalizePathSep(page)\n  if (_page.startsWith('/index/') && !isDynamicRoute(_page)) return _page.slice(6)\n  if (_page !== '/index') return _page\n  return '/'\n}\n"
+        },
+        "a04 if / else if / else returns": {
+          "changed": {
+            "biome": {
+              "style/noUselessElse": 2,
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "unicorn/no-useless-else": 1,
+              "no-else-return": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-else-return": 1,
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 4,
+          "kind": "right",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "/**\n * Performs the opposite transformation of `normalizePagePath`. Note that\n * this function is not idempotent either in cases where there are multiple\n * leading `/index` for the page. Examples:\n *  - `/index` -> `/`\n *  - `/index/foo` -> `/foo`\n *  - `/index/index` -> `/index`\n */\nexport function denormalizePagePath(page: string) {\n  let _page = normalizePathSep(page)\n  if (_page.startsWith('/index/') && !isDynamicRoute(_page)) {\n    return _page.slice(6)\n  } else if (_page !== '/index') {\n    return _page\n  } else {\n    return '/'\n  }\n}\n"
+        },
+        "a05 && / || chain": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "sonarjs/expression-complexity": 1,
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 2,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"denormalizePagePath\",\"result\":\"/\"}",
+              "before": "{\"name\":\"denormalizePagePath\",\"result\":\"\"}",
+              "index": 9
+            },
+            "differing": 2,
+            "of": 320,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "a06 tests reordered": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"denormalizePagePath\",\"result\":\"/index/\"}",
+              "before": "{\"name\":\"denormalizePagePath\",\"result\":\"/\"}",
+              "index": 1
+            },
+            "differing": 19,
+            "of": 320,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "a11 the outer test wraps the other": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "unicorn/prefer-ternary": 1,
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 4,
+          "kind": "right",
+          "left": {
+            "conditionals": 0,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "/**\n * Performs the opposite transformation of `normalizePagePath`. Note that\n * this function is not idempotent either in cases where there are multiple\n * leading `/index` for the page. Examples:\n *  - `/index` -> `/`\n *  - `/index/foo` -> `/foo`\n *  - `/index/index` -> `/index`\n */\nexport function denormalizePagePath(page: string) {\n  let _page = normalizePathSep(page)\n  if (_page !== '/index') {\n    if (_page.startsWith('/index/') && !isDynamicRoute(_page)) {\n      return _page.slice(6)\n    }\n    return _page\n  }\n  return '/'\n}\n"
+        },
+        "a07 suppression comments": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 4,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 2,
+            "nested": 1
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 1,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "a08 IIFE": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1,
+              "style/noNegationElse": -1
+            },
+            "eslint": {
+              "unicorn/prefer-ternary": 1,
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1,
+              "no-negated-condition": -1,
+              "unicorn/no-negated-condition": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 1,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "a09 helper that wraps the inner ternary": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 2,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "a10 inner ternary in a variable": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 2,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 320,
+            "verdict": "same"
+          },
+          "tsc": 0
+        }
+      }
+    },
+    "b": {
+      "cognitive": 8,
+      "file": "nested-ternaries-b-supabase-explorer-nav-notebooks.tsx",
+      "lint": {
+        "biome": {
+          "byRule": {
+            "nursery/useTailwindSortedClasses": 2,
+            "style/noNestedTernary": 1,
+            "performance/noJsxPropsBind": 4
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 130,
+              "message": "Do not nest ternary expressions.",
+              "rule": "style/noNestedTernary"
+            }
+          ]
+        },
+        "eslint": {
+          "byRule": {
+            "import-x/consistent-type-specifier-style": 2,
+            "react/prefer-read-only-props": 3,
+            "sonarjs/prefer-immediate-return": 1,
+            "no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 128,
+              "message": "Do not nest ternary expressions.",
+              "rule": "no-nested-ternary"
+            },
+            {
+              "help": null,
+              "line": 130,
+              "message": "Extract this nested ternary operation into an independent statement.",
+              "rule": "sonarjs/no-nested-conditional"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "import/consistent-type-specifier-style": 2,
+            "no-nested-ternary": 1
+          },
+          "topic": [
+            {
+              "help": "Refactor nested ternary expressions into if-else statements for better readability.",
+              "line": 128,
+              "message": "Do not nest ternary expressions.",
+              "rule": "no-nested-ternary"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "calls": 80,
+        "hooks": 80,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "ExplorerNavNotebooks",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "origin": {
+        "from": 21,
+        "path": "apps/studio/components/layouts/ExplorerLayout/ExplorerNavNotebooks.tsx",
+        "repo": "supabase",
+        "to": 114,
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/ExplorerLayout/ExplorerNavNotebooks.tsx#L21-L114",
+        "sha": "09f80f528ec47569841408a81668dff90525c48a"
+      },
+      "stubs": "nested-ternaries-b-stubs.tsx",
+      "tsc": [],
+      "verbatim": {
+        "lines": 94,
+        "ok": true
+      },
+      "variants": {
+        "b01 let content, if / else": {
+          "changed": {
+            "biome": {
+              "suspicious/noImplicitAnyLet": 1,
+              "suspicious/noEvolvingTypes": 1,
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 7,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "const NOTEBOOK_ROW_HEIGHT = 28\n\ntype NotebookListItemProps = RowComponentBaseProps<NotebookRow> & {\n  projectRef: string | undefined\n  activeNotebookId: string | undefined\n  onSelectDelete: (item: { id: string; type: 'notebook' | 'chat'; name: string }) => void\n}\n\nconst NotebookListItem = ({\n  item: notebook,\n  style,\n  projectRef,\n  activeNotebookId,\n  onSelectDelete,\n}: NotebookListItemProps) => {\n  const isActive = activeNotebookId === notebook.id\n  const tabs = useTabsStateSnapshot()\n\n  return (\n    <ExplorerNavItem\n      name={notebook.name}\n      type=\"notebook\"\n      isActive={isActive}\n      style={style}\n      href={`/project/${projectRef}/explorer/notebook/${notebook.id}`}\n      onDoubleClick={() => tabs.makeTabPermanent(createTabId('notebook', { id: notebook.id }))}\n      onSelectDelete={() =>\n        onSelectDelete({ id: notebook.id, type: 'notebook', name: notebook.name })\n      }\n    />\n  )\n}\n\nexport const ExplorerNavNotebooks = () => {\n  const router = useRouter()\n  const { ref, id } = useParams()\n  const { onSelectDelete } = useExplorerDeleteItem()\n\n  const [search, setSearch] = useState('')\n  const debouncedSearch = useDebounce(search, 500)\n\n  const {\n    data: notebooksData,\n    isPending,\n    hasNextPage,\n    isFetchingNextPage,\n    fetchNextPage,\n  } = useNotebooksInfiniteQuery({\n    projectRef: ref,\n    limit: 100,\n    name: search.length === 0 ? search : debouncedSearch,\n  })\n\n  const notebooks = useMemo(() => {\n    const items = notebooksData?.pages.flatMap((page) => page.content) ?? []\n    return items\n  }, [notebooksData?.pages])\n\n  const activeNotebookId = router.pathname.includes('/explorer/notebook/') ? id : undefined\n\n  const itemProps = useMemo(\n    () => ({ projectRef: ref, activeNotebookId, onSelectDelete }),\n    [ref, activeNotebookId, onSelectDelete]\n  )\n\n  let content\n  if (isPending) {\n    content = <GenericSkeletonLoader />\n  } else if (notebooks.length === 0) {\n    content = (\n          <p className=\"px-2 py-2 text-xs text-foreground-lighter\">\n            {search ? 'No notebooks found' : 'No notebooks created yet'}\n          </p>\n    )\n  } else {\n    content = (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n    )\n  }\n\n  return (\n    <ExplorerNavResourceWrapper type=\"notebook\" search={search} setSearch={setSearch}>\n      <div className=\"flex flex-1 min-h-0 flex-col p-3\">\n        {content}\n      </div>\n    </ExplorerNavResourceWrapper>\n  )\n}\n\n"
+        },
+        "b02 helper with early returns": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 6,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "const NOTEBOOK_ROW_HEIGHT = 28\n\ntype NotebookListItemProps = RowComponentBaseProps<NotebookRow> & {\n  projectRef: string | undefined\n  activeNotebookId: string | undefined\n  onSelectDelete: (item: { id: string; type: 'notebook' | 'chat'; name: string }) => void\n}\n\nconst NotebookListItem = ({\n  item: notebook,\n  style,\n  projectRef,\n  activeNotebookId,\n  onSelectDelete,\n}: NotebookListItemProps) => {\n  const isActive = activeNotebookId === notebook.id\n  const tabs = useTabsStateSnapshot()\n\n  return (\n    <ExplorerNavItem\n      name={notebook.name}\n      type=\"notebook\"\n      isActive={isActive}\n      style={style}\n      href={`/project/${projectRef}/explorer/notebook/${notebook.id}`}\n      onDoubleClick={() => tabs.makeTabPermanent(createTabId('notebook', { id: notebook.id }))}\n      onSelectDelete={() =>\n        onSelectDelete({ id: notebook.id, type: 'notebook', name: notebook.name })\n      }\n    />\n  )\n}\n\nexport const ExplorerNavNotebooks = () => {\n  const router = useRouter()\n  const { ref, id } = useParams()\n  const { onSelectDelete } = useExplorerDeleteItem()\n\n  const [search, setSearch] = useState('')\n  const debouncedSearch = useDebounce(search, 500)\n\n  const {\n    data: notebooksData,\n    isPending,\n    hasNextPage,\n    isFetchingNextPage,\n    fetchNextPage,\n  } = useNotebooksInfiniteQuery({\n    projectRef: ref,\n    limit: 100,\n    name: search.length === 0 ? search : debouncedSearch,\n  })\n\n  const notebooks = useMemo(() => {\n    const items = notebooksData?.pages.flatMap((page) => page.content) ?? []\n    return items\n  }, [notebooksData?.pages])\n\n  const activeNotebookId = router.pathname.includes('/explorer/notebook/') ? id : undefined\n\n  const itemProps = useMemo(\n    () => ({ projectRef: ref, activeNotebookId, onSelectDelete }),\n    [ref, activeNotebookId, onSelectDelete]\n  )\n\n  const renderContent = () => {\n    if (isPending) {\n      return <GenericSkeletonLoader />\n    }\n    if (notebooks.length === 0) {\n      return (\n          <p className=\"px-2 py-2 text-xs text-foreground-lighter\">\n            {search ? 'No notebooks found' : 'No notebooks created yet'}\n          </p>\n      )\n    }\n    return (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n    )\n  }\n\n  return (\n    <ExplorerNavResourceWrapper type=\"notebook\" search={search} setSearch={setSearch}>\n      <div className=\"flex flex-1 min-h-0 flex-col p-3\">\n        {renderContent()}\n      </div>\n    </ExplorerNavResourceWrapper>\n  )\n}\n\n"
+        },
+        "b03 child component": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "react/prefer-read-only-props": 7,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 6,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "const NOTEBOOK_ROW_HEIGHT = 28\n\ntype NotebookListItemProps = RowComponentBaseProps<NotebookRow> & {\n  projectRef: string | undefined\n  activeNotebookId: string | undefined\n  onSelectDelete: (item: { id: string; type: 'notebook' | 'chat'; name: string }) => void\n}\n\nconst NotebookListItem = ({\n  item: notebook,\n  style,\n  projectRef,\n  activeNotebookId,\n  onSelectDelete,\n}: NotebookListItemProps) => {\n  const isActive = activeNotebookId === notebook.id\n  const tabs = useTabsStateSnapshot()\n\n  return (\n    <ExplorerNavItem\n      name={notebook.name}\n      type=\"notebook\"\n      isActive={isActive}\n      style={style}\n      href={`/project/${projectRef}/explorer/notebook/${notebook.id}`}\n      onDoubleClick={() => tabs.makeTabPermanent(createTabId('notebook', { id: notebook.id }))}\n      onSelectDelete={() =>\n        onSelectDelete({ id: notebook.id, type: 'notebook', name: notebook.name })\n      }\n    />\n  )\n}\n\nconst NotebooksContent = ({\n  isPending,\n  notebooks,\n  search,\n  itemProps,\n  hasNextPage,\n  isFetchingNextPage,\n  fetchNextPage,\n}: {\n  isPending: boolean\n  notebooks: NotebookRow[]\n  search: string\n  itemProps: Omit<NotebookListItemProps, keyof RowComponentBaseProps<NotebookRow>>\n  hasNextPage: boolean\n  isFetchingNextPage: boolean\n  fetchNextPage: () => void\n}) => {\n  if (isPending) {\n    return <GenericSkeletonLoader />\n  }\n  if (notebooks.length === 0) {\n    return (\n          <p className=\"px-2 py-2 text-xs text-foreground-lighter\">\n            {search ? 'No notebooks found' : 'No notebooks created yet'}\n          </p>\n    )\n  }\n  return (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n  )\n}\n\nexport const ExplorerNavNotebooks = () => {\n  const router = useRouter()\n  const { ref, id } = useParams()\n  const { onSelectDelete } = useExplorerDeleteItem()\n\n  const [search, setSearch] = useState('')\n  const debouncedSearch = useDebounce(search, 500)\n\n  const {\n    data: notebooksData,\n    isPending,\n    hasNextPage,\n    isFetchingNextPage,\n    fetchNextPage,\n  } = useNotebooksInfiniteQuery({\n    projectRef: ref,\n    limit: 100,\n    name: search.length === 0 ? search : debouncedSearch,\n  })\n\n  const notebooks = useMemo(() => {\n    const items = notebooksData?.pages.flatMap((page) => page.content) ?? []\n    return items\n  }, [notebooksData?.pages])\n\n  const activeNotebookId = router.pathname.includes('/explorer/notebook/') ? id : undefined\n\n  const itemProps = useMemo(\n    () => ({ projectRef: ref, activeNotebookId, onSelectDelete }),\n    [ref, activeNotebookId, onSelectDelete]\n  )\n\n  return (\n    <ExplorerNavResourceWrapper type=\"notebook\" search={search} setSearch={setSearch}>\n      <div className=\"flex flex-1 min-h-0 flex-col p-3\">\n        <NotebooksContent\n          isPending={isPending}\n          notebooks={notebooks}\n          search={search}\n          itemProps={itemProps}\n          hasNextPage={hasNextPage}\n          isFetchingNextPage={isFetchingNextPage}\n          fetchNextPage={fetchNextPage}\n        />\n      </div>\n    </ExplorerNavResourceWrapper>\n  )\n}\n\n"
+        },
+        "b04 && with notebooks.length": {
+          "changed": {
+            "biome": {
+              "suspicious/noLeakedRender": 1,
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "react/jsx-no-leaked-render": 2,
+              "react-doctor/jsx-numeric-and-leaked-render": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"render\",\"result\":[{\"children\":[{\"children\":[{\"children\":[\"No notebooks created yet\"],\"props\":{\"className\":\"px-2 py-2 text-xs text-foreground-lighter\"},\"type\":\"p\"},\"0\"],\"props\":{\"className\":\"flex flex-1 min-h-0 flex-col p-3\"},\"type\":\"div\"}],\"props\":{\"type\":\"notebook\",\"search\":\"\",\"setSearch\":\"[fn]\"},\"type\":\"<ExplorerNavResourceWrapper>\"}]}",
+              "before": "{\"name\":\"render\",\"result\":[{\"children\":[{\"children\":[{\"children\":[\"No notebooks created yet\"],\"props\":{\"className\":\"px-2 py-2 text-xs text-foreground-lighter\"},\"type\":\"p\"}],\"props\":{\"className\":\"flex flex-1 min-h-0 flex-col p-3\"},\"type\":\"div\"}],\"props\":{\"type\":\"notebook\",\"search\":\"\",\"setSearch\":\"[fn]\"},\"type\":\"<ExplorerNavResourceWrapper>\"}]}",
+              "index": 40
+            },
+            "differing": 24,
+            "of": 80,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "b05 && without !isPending": {
+          "changed": {
+            "biome": {
+              "suspicious/noLeakedRender": 1,
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "react/jsx-no-leaked-render": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"render\",\"result\":[{\"children\":[{\"children\":[{\"children\":[],\"props\":{},\"type\":\"<GenericSkeletonLoader>\"},{\"children\":[\"No notebooks created yet\"],\"props\":{\"className\":\"px-2 py-2 text-xs text-foreground-lighter\"},\"type\":\"p\"}],\"props\":{\"className\":\"flex flex-1 min-h-0 flex-col p-3\"},\"type\":\"div\"}],\"props\":{\"type\":\"notebook\",\"search\":\"\",\"setSearch\":\"[fn]\"},\"type\":\"<ExplorerNavResourceWrapper>\"}]}",
+              "before": "{\"name\":\"render\",\"result\":[{\"children\":[{\"children\":[{\"children\":[],\"props\":{},\"type\":\"<GenericSkeletonLoader>\"}],\"props\":{\"className\":\"flex flex-1 min-h-0 flex-col p-3\"},\"type\":\"div\"}],\"props\":{\"type\":\"notebook\",\"search\":\"\",\"setSearch\":\"[fn]\"},\"type\":\"<ExplorerNavResourceWrapper>\"}]}",
+              "index": 0
+            },
+            "differing": 40,
+            "of": 80,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "b06 && with booleans": {
+          "changed": {
+            "biome": {
+              "suspicious/noLeakedRender": 1,
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "react/jsx-no-leaked-render": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 3,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "const NOTEBOOK_ROW_HEIGHT = 28\n\ntype NotebookListItemProps = RowComponentBaseProps<NotebookRow> & {\n  projectRef: string | undefined\n  activeNotebookId: string | undefined\n  onSelectDelete: (item: { id: string; type: 'notebook' | 'chat'; name: string }) => void\n}\n\nconst NotebookListItem = ({\n  item: notebook,\n  style,\n  projectRef,\n  activeNotebookId,\n  onSelectDelete,\n}: NotebookListItemProps) => {\n  const isActive = activeNotebookId === notebook.id\n  const tabs = useTabsStateSnapshot()\n\n  return (\n    <ExplorerNavItem\n      name={notebook.name}\n      type=\"notebook\"\n      isActive={isActive}\n      style={style}\n      href={`/project/${projectRef}/explorer/notebook/${notebook.id}`}\n      onDoubleClick={() => tabs.makeTabPermanent(createTabId('notebook', { id: notebook.id }))}\n      onSelectDelete={() =>\n        onSelectDelete({ id: notebook.id, type: 'notebook', name: notebook.name })\n      }\n    />\n  )\n}\n\nexport const ExplorerNavNotebooks = () => {\n  const router = useRouter()\n  const { ref, id } = useParams()\n  const { onSelectDelete } = useExplorerDeleteItem()\n\n  const [search, setSearch] = useState('')\n  const debouncedSearch = useDebounce(search, 500)\n\n  const {\n    data: notebooksData,\n    isPending,\n    hasNextPage,\n    isFetchingNextPage,\n    fetchNextPage,\n  } = useNotebooksInfiniteQuery({\n    projectRef: ref,\n    limit: 100,\n    name: search.length === 0 ? search : debouncedSearch,\n  })\n\n  const notebooks = useMemo(() => {\n    const items = notebooksData?.pages.flatMap((page) => page.content) ?? []\n    return items\n  }, [notebooksData?.pages])\n\n  const activeNotebookId = router.pathname.includes('/explorer/notebook/') ? id : undefined\n\n  const itemProps = useMemo(\n    () => ({ projectRef: ref, activeNotebookId, onSelectDelete }),\n    [ref, activeNotebookId, onSelectDelete]\n  )\n\n  return (\n    <ExplorerNavResourceWrapper type=\"notebook\" search={search} setSearch={setSearch}>\n      <div className=\"flex flex-1 min-h-0 flex-col p-3\">\n        {isPending && <GenericSkeletonLoader />}\n        {!isPending && notebooks.length === 0 && (\n          <p className=\"px-2 py-2 text-xs text-foreground-lighter\">\n            {search ? 'No notebooks found' : 'No notebooks created yet'}\n          </p>\n        )}\n        {!isPending && notebooks.length > 0 && (\n          <InfiniteListDefault\n            className=\"h-full w-full\"\n            items={notebooks}\n            itemProps={itemProps}\n            ItemComponent={NotebookListItem}\n            LoaderComponent={LoaderForIconMenuItems}\n            getItemKey={(index) => notebooks[index]?.id ?? `notebook-${index}`}\n            getItemSize={() => NOTEBOOK_ROW_HEIGHT}\n            gap={1}\n            hasNextPage={hasNextPage}\n            isLoadingNextPage={isFetchingNextPage}\n            onLoadNextPage={fetchNextPage}\n          />\n        )}\n      </div>\n    </ExplorerNavResourceWrapper>\n  )\n}\n\n"
+        },
+        "b07 suppression comments": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 8,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 5,
+            "nested": 1
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 1,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "b08 IIFE in the JSX": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 6,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "b09 helper that wraps the inner ternary": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 6,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 5,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "b10 inner ternary in a variable": {
+          "changed": {
+            "biome": {
+              "suspicious/noLeakedRender": 1,
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 6,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 5,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 80,
+            "verdict": "same"
+          },
+          "tsc": 0
+        }
+      }
+    },
+    "c": {
+      "cognitive": 15,
+      "file": "nested-ternaries-c-astro-config-alias.ts",
+      "lint": {
+        "biome": {
+          "byRule": {
+            "style/useConsistentTypeDefinitions": 1,
+            "style/useBlockStatements": 2,
+            "complexity/useSimplifiedLogicExpression": 1,
+            "performance/useTopLevelRegex": 2,
+            "style/noIncrementDecrement": 1,
+            "style/noNestedTernary": 1,
+            "style/useUnicodeRegex": 3,
+            "style/useNamedCaptureGroup": 1
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 76,
+              "message": "Block statements are preferred in this position.",
+              "rule": "style/useBlockStatements"
+            },
+            {
+              "help": null,
+              "line": 82,
+              "message": "Block statements are preferred in this position.",
+              "rule": "style/useBlockStatements"
+            },
+            {
+              "help": null,
+              "line": 106,
+              "message": "Do not nest ternary expressions.",
+              "rule": "style/noNestedTernary"
+            }
+          ]
+        },
+        "eslint": {
+          "byRule": {
+            "import-x/consistent-type-specifier-style": 2,
+            "@typescript-eslint/consistent-type-definitions": 1,
+            "unicorn/single-line-block-comment-style": 4,
+            "curly": 2,
+            "require-unicode-regexp": 3,
+            "no-nested-ternary": 1,
+            "no-plusplus": 1,
+            "sonarjs/no-nested-incdec": 1,
+            "sonarjs/no-nested-conditional": 1,
+            "prefer-named-capture-group": 1
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 76,
+              "message": "Expected { after 'if' condition.",
+              "rule": "curly"
+            },
+            {
+              "help": null,
+              "line": 82,
+              "message": "Expected { after 'if' condition.",
+              "rule": "curly"
+            },
+            {
+              "help": null,
+              "line": 106,
+              "message": "Do not nest ternary expressions.",
+              "rule": "no-nested-ternary"
+            },
+            {
+              "help": null,
+              "line": 106,
+              "message": "Extract this nested ternary operation into an independent statement.",
+              "rule": "sonarjs/no-nested-conditional"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "import/consistent-type-specifier-style": 2,
+            "typescript/consistent-type-definitions": 1,
+            "curly": 2,
+            "require-unicode-regexp": 3,
+            "no-nested-ternary": 1,
+            "no-plusplus": 1,
+            "prefer-named-capture-group": 1
+          },
+          "topic": [
+            {
+              "help": "Replace `return null;` with `{return null;}`.",
+              "line": 76,
+              "message": "Expected { after 'if' condition.",
+              "rule": "curly"
+            },
+            {
+              "help": "Replace `return null;` with `{return null;}`.",
+              "line": 82,
+              "message": "Expected { after 'if' condition.",
+              "rule": "curly"
+            },
+            {
+              "help": "Refactor nested ternary expressions into if-else statements for better readability.",
+              "line": 106,
+              "message": "Do not nest ternary expressions.",
+              "rule": "no-nested-ternary"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "calls": 240,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "getConfigAlias",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "origin": {
+        "from": 8,
+        "path": "packages/astro/src/vite-plugin-config-alias/index.ts",
+        "repo": "astro",
+        "to": 68,
+        "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-config-alias/index.ts#L8-L68",
+        "sha": "9050e3819c51b0383cced278c278bc6f45c63468"
+      },
+      "stubs": "nested-ternaries-c-stubs.ts",
+      "tsc": [],
+      "verbatim": {
+        "lines": 61,
+        "ok": true
+      },
+      "variants": {
+        "c01 early returns in the callback": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "type Alias = {\n\tfind: RegExp;\n\treplacement: string;\n};\n\n/** Returns a list of compiled aliases. */\nconst getConfigAlias = (settings: AstroSettings): Alias[] | null => {\n\tconst { tsConfig, tsConfigPath } = settings;\n\tif (!tsConfig || !tsConfigPath || !tsConfig.compilerOptions) return null;\n\n\tconst { baseUrl, paths } = tsConfig.compilerOptions as CompilerOptions;\n\n\t// If paths exist but baseUrl doesn't, default to \".\" (tsconfig directory)\n\tconst effectiveBaseUrl = baseUrl ?? (paths ? '.' : undefined);\n\tif (!effectiveBaseUrl) return null;\n\n\t// resolve the base url from the configuration file directory\n\tconst resolvedBaseUrl = path.resolve(path.dirname(tsConfigPath), effectiveBaseUrl);\n\n\tconst aliases: Alias[] = [];\n\n\t// compile any alias expressions and push them to the list\n\tif (paths) {\n\t\tfor (const [alias, values] of Object.entries(paths)) {\n\t\t\t/** Regular Expression used to match a given path. */\n\t\t\tconst find = new RegExp(\n\t\t\t\t`^${[...alias]\n\t\t\t\t\t.map((segment) =>\n\t\t\t\t\t\tsegment === '*' ? '(.+)' : segment.replace(/[\\\\^$*+?.()|[\\]{}]/, '\\\\$&'),\n\t\t\t\t\t)\n\t\t\t\t\t.join('')}$`,\n\t\t\t);\n\n\t\t\tfor (const value of values) {\n\t\t\t\t/** Internal index used to calculate the matching id in a replacement. */\n\t\t\t\tlet matchId = 0;\n\t\t\t\t/** String used to replace a matched path. */\n\t\t\t\tconst replacement = [...normalizePath(path.resolve(resolvedBaseUrl, value))]\n\t\t\t\t\t.map((segment) => {\n\t\t\t\t\t\tif (segment === '*') {\n\t\t\t\t\t\t\treturn `$${++matchId}`;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (segment === '$') {\n\t\t\t\t\t\t\treturn '$$';\n\t\t\t\t\t\t}\n\t\t\t\t\t\treturn segment;\n\t\t\t\t\t})\n\t\t\t\t\t.join('');\n\n\t\t\t\taliases.push({ find, replacement });\n\t\t\t}\n\t\t}\n\t}\n\n\t// compile the baseUrl expression and push it to the list\n\t// - `baseUrl` changes the way non-relative specifiers are resolved\n\t// - if `baseUrl` exists then all non-relative specifiers are resolved relative to it\n\t// - only add this if an explicit baseUrl was provided (not the default)\n\tif (baseUrl) {\n\t\taliases.push({\n\t\t\tfind: /^(?!\\.*\\/|\\.*$|\\w:)(.+)$/,\n\t\t\treplacement: `${[...normalizePath(resolvedBaseUrl)]\n\t\t\t\t.map((segment) => (segment === '$' ? '$$' : segment))\n\t\t\t\t.join('')}/$1`,\n\t\t});\n\t}\n\n\treturn aliases;\n};\n\n// ADDED for the behaviour oracle (not in the original, where getConfigAlias is module-private).\nexport { getConfigAlias };\n"
+        },
+        "c02 switch in the callback": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 13,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "type Alias = {\n\tfind: RegExp;\n\treplacement: string;\n};\n\n/** Returns a list of compiled aliases. */\nconst getConfigAlias = (settings: AstroSettings): Alias[] | null => {\n\tconst { tsConfig, tsConfigPath } = settings;\n\tif (!tsConfig || !tsConfigPath || !tsConfig.compilerOptions) return null;\n\n\tconst { baseUrl, paths } = tsConfig.compilerOptions as CompilerOptions;\n\n\t// If paths exist but baseUrl doesn't, default to \".\" (tsconfig directory)\n\tconst effectiveBaseUrl = baseUrl ?? (paths ? '.' : undefined);\n\tif (!effectiveBaseUrl) return null;\n\n\t// resolve the base url from the configuration file directory\n\tconst resolvedBaseUrl = path.resolve(path.dirname(tsConfigPath), effectiveBaseUrl);\n\n\tconst aliases: Alias[] = [];\n\n\t// compile any alias expressions and push them to the list\n\tif (paths) {\n\t\tfor (const [alias, values] of Object.entries(paths)) {\n\t\t\t/** Regular Expression used to match a given path. */\n\t\t\tconst find = new RegExp(\n\t\t\t\t`^${[...alias]\n\t\t\t\t\t.map((segment) =>\n\t\t\t\t\t\tsegment === '*' ? '(.+)' : segment.replace(/[\\\\^$*+?.()|[\\]{}]/, '\\\\$&'),\n\t\t\t\t\t)\n\t\t\t\t\t.join('')}$`,\n\t\t\t);\n\n\t\t\tfor (const value of values) {\n\t\t\t\t/** Internal index used to calculate the matching id in a replacement. */\n\t\t\t\tlet matchId = 0;\n\t\t\t\t/** String used to replace a matched path. */\n\t\t\t\tconst replacement = [...normalizePath(path.resolve(resolvedBaseUrl, value))]\n\t\t\t\t\t.map((segment) => {\n\t\t\t\t\t\tswitch (segment) {\n\t\t\t\t\t\t\tcase '*': {\n\t\t\t\t\t\t\t\treturn `$${++matchId}`;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcase '$': {\n\t\t\t\t\t\t\t\treturn '$$';\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tdefault: {\n\t\t\t\t\t\t\t\treturn segment;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t})\n\t\t\t\t\t.join('');\n\n\t\t\t\taliases.push({ find, replacement });\n\t\t\t}\n\t\t}\n\t}\n\n\t// compile the baseUrl expression and push it to the list\n\t// - `baseUrl` changes the way non-relative specifiers are resolved\n\t// - if `baseUrl` exists then all non-relative specifiers are resolved relative to it\n\t// - only add this if an explicit baseUrl was provided (not the default)\n\tif (baseUrl) {\n\t\taliases.push({\n\t\t\tfind: /^(?!\\.*\\/|\\.*$|\\w:)(.+)$/,\n\t\t\treplacement: `${[...normalizePath(resolvedBaseUrl)]\n\t\t\t\t.map((segment) => (segment === '$' ? '$$' : segment))\n\t\t\t\t.join('')}/$1`,\n\t\t});\n\t}\n\n\treturn aliases;\n};\n\n// ADDED for the behaviour oracle (not in the original, where getConfigAlias is module-private).\nexport { getConfigAlias };\n"
+        },
+        "c03 lookup of functions": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "sonarjs/function-name": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 12,
+          "kind": "right",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0,
+          "text": "type Alias = {\n\tfind: RegExp;\n\treplacement: string;\n};\n\n/** Returns a list of compiled aliases. */\nconst getConfigAlias = (settings: AstroSettings): Alias[] | null => {\n\tconst { tsConfig, tsConfigPath } = settings;\n\tif (!tsConfig || !tsConfigPath || !tsConfig.compilerOptions) return null;\n\n\tconst { baseUrl, paths } = tsConfig.compilerOptions as CompilerOptions;\n\n\t// If paths exist but baseUrl doesn't, default to \".\" (tsconfig directory)\n\tconst effectiveBaseUrl = baseUrl ?? (paths ? '.' : undefined);\n\tif (!effectiveBaseUrl) return null;\n\n\t// resolve the base url from the configuration file directory\n\tconst resolvedBaseUrl = path.resolve(path.dirname(tsConfigPath), effectiveBaseUrl);\n\n\tconst aliases: Alias[] = [];\n\n\t// compile any alias expressions and push them to the list\n\tif (paths) {\n\t\tfor (const [alias, values] of Object.entries(paths)) {\n\t\t\t/** Regular Expression used to match a given path. */\n\t\t\tconst find = new RegExp(\n\t\t\t\t`^${[...alias]\n\t\t\t\t\t.map((segment) =>\n\t\t\t\t\t\tsegment === '*' ? '(.+)' : segment.replace(/[\\\\^$*+?.()|[\\]{}]/, '\\\\$&'),\n\t\t\t\t\t)\n\t\t\t\t\t.join('')}$`,\n\t\t\t);\n\n\t\t\tfor (const value of values) {\n\t\t\t\t/** Internal index used to calculate the matching id in a replacement. */\n\t\t\t\tlet matchId = 0;\n\t\t\t\t/** String used to replace a matched path. */\n\t\t\t\tconst replacement = [...normalizePath(path.resolve(resolvedBaseUrl, value))]\n\t\t\t\t\t.map((segment) => ({ '*': () => `$${++matchId}`, $: () => '$$' } as Record<string, () => string>)[segment]?.() ?? segment)\n\t\t\t\t\t.join('');\n\n\t\t\t\taliases.push({ find, replacement });\n\t\t\t}\n\t\t}\n\t}\n\n\t// compile the baseUrl expression and push it to the list\n\t// - `baseUrl` changes the way non-relative specifiers are resolved\n\t// - if `baseUrl` exists then all non-relative specifiers are resolved relative to it\n\t// - only add this if an explicit baseUrl was provided (not the default)\n\tif (baseUrl) {\n\t\taliases.push({\n\t\t\tfind: /^(?!\\.*\\/|\\.*$|\\w:)(.+)$/,\n\t\t\treplacement: `${[...normalizePath(resolvedBaseUrl)]\n\t\t\t\t.map((segment) => (segment === '$' ? '$$' : segment))\n\t\t\t\t.join('')}/$1`,\n\t\t});\n\t}\n\n\treturn aliases;\n};\n\n// ADDED for the behaviour oracle (not in the original, where getConfigAlias is module-private).\nexport { getConfigAlias };\n"
+        },
+        "c04 object lookup": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 12,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"getConfigAlias\",\"result\":[{\"find\":\"/^@\\\\/(.+)$/\",\"replacement\":\"/proj/src/$11\",\"resolves\":[[\"@/components/Button\",\"/proj/src/components/Button1\"]]}]}",
+              "before": "{\"name\":\"getConfigAlias\",\"result\":[{\"find\":\"/^@\\\\/(.+)$/\",\"replacement\":\"/proj/src/$1\",\"resolves\":[[\"@/components/Button\",\"/proj/src/components/Button\"]]}]}",
+              "index": 0
+            },
+            "differing": 185,
+            "of": 240,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "c05 increment moved above the test": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"getConfigAlias\",\"result\":[{\"find\":\"/^@\\\\/(.+)$/\",\"replacement\":\"/proj/src/$11\",\"resolves\":[[\"@/components/Button\",\"/proj/src/components/Button1\"]]}]}",
+              "before": "{\"name\":\"getConfigAlias\",\"result\":[{\"find\":\"/^@\\\\/(.+)$/\",\"replacement\":\"/proj/src/$1\",\"resolves\":[[\"@/components/Button\",\"/proj/src/components/Button\"]]}]}",
+              "index": 0
+            },
+            "differing": 185,
+            "of": 240,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "c06 one counter for every target": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "tempting",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "detail": {
+              "after": "{\"name\":\"getConfigAlias\",\"result\":[{\"find\":\"/^~\\\\/(.+)$/\",\"replacement\":\"/proj/src/$1\",\"resolves\":[[\"~/x\",\"/proj/src/x\"]]},{\"find\":\"/^@lib\\\\/(.+)$/\",\"replacement\":\"/proj/src/lib/$1\",\"resolves\":[[\"@lib/util\",\"/proj/src/lib/util\"]]},{\"find\":\"/^@lib\\\\/(.+)$/\",\"replacement\":\"/proj/src/vendor/$2\",\"resolves\":[[\"@lib/util\",\"/proj/src/vendor/$2\"]]},{\"find\":\"/^(?!\\\\.*\\\\/|\\\\.*$|\\\\w:)(.+)$/\",\"replacement\":\"/proj/src/$1\",\"resolves\":[[\"@/components/Button\",\"/proj/src/@/components/Button\"],[\"@lib/util\",\"/proj/src/@lib/util\"],[\"~/x\",\"/proj/src/~/x\"],[\"a/1/b/2\",\"/proj/src/a/1/b/2\"],[\"$lib/store\",\"/proj/src/$l",
+              "before": "{\"name\":\"getConfigAlias\",\"result\":[{\"find\":\"/^~\\\\/(.+)$/\",\"replacement\":\"/proj/src/$1\",\"resolves\":[[\"~/x\",\"/proj/src/x\"]]},{\"find\":\"/^@lib\\\\/(.+)$/\",\"replacement\":\"/proj/src/lib/$1\",\"resolves\":[[\"@lib/util\",\"/proj/src/lib/util\"]]},{\"find\":\"/^@lib\\\\/(.+)$/\",\"replacement\":\"/proj/src/vendor/$1\",\"resolves\":[[\"@lib/util\",\"/proj/src/vendor/util\"]]},{\"find\":\"/^(?!\\\\.*\\\\/|\\\\.*$|\\\\w:)(.+)$/\",\"replacement\":\"/proj/src/$1\",\"resolves\":[[\"@/components/Button\",\"/proj/src/@/components/Button\"],[\"@lib/util\",\"/proj/src/@lib/util\"],[\"~/x\",\"/proj/src/~/x\"],[\"a/1/b/2\",\"/proj/src/a/1/b/2\"],[\"$lib/store\",\"/proj/src/",
+              "index": 2
+            },
+            "differing": 57,
+            "of": 240,
+            "verdict": "changed"
+          },
+          "tsc": 0
+        },
+        "c07 suppression comments": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 15,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 5,
+            "nested": 1
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 1,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "c08 IIFE": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "unicorn/prefer-ternary": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 4,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "c09 helper that wraps the inner ternary": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 5,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "c10 inner ternary in a variable": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 5,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "c11 && / || chain": {
+          "changed": {
+            "biome": {
+              "style/noNestedTernary": -1
+            },
+            "eslint": {
+              "sonarjs/expression-complexity": 1,
+              "no-nested-ternary": -1,
+              "sonarjs/no-nested-conditional": -1
+            },
+            "oxlint": {
+              "no-nested-ternary": -1
+            }
+          },
+          "cognitive": 14,
+          "kind": "gaming",
+          "left": {
+            "conditionals": 3,
+            "nested": 0
+          },
+          "nestedRules": {
+            "biome": 0,
+            "eslint": 0,
+            "eslint-sonarjs": 0,
+            "oxlint": 0
+          },
+          "oracle": {
+            "calls": 240,
+            "verdict": "same"
+          },
+          "tsc": 0
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  }
+}

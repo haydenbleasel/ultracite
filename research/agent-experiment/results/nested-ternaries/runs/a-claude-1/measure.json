@@ -1,0 +1,845 @@
+{
+  "runId": "a-claude-1",
+  "topic": "nested-ternaries",
+  "subject": "a",
+  "base": "a",
+  "label": "A, unnests cleanly",
+  "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint core and react), unchanged",
+  "agent": "claude",
+  "cliVersion": "2.1.322 (Claude Code)",
+  "mirrorRevision": "v3",
+  "wallSeconds": 18.9,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 600000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 5,
+    "leftOutByFilter": {
+      "func-style": 3,
+      "require-unicode-regexp": 1
+    },
+    "given": [
+      {
+        "rule": "no-nested-ternary",
+        "line": 50,
+        "message": "Do not nest ternary expressions.",
+        "help": "Refactor nested ternary expressions into if-else statements for better readability.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-nested-ternary.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "fdf9004894f966adfb76f7747cc8050957d29d84d5e2034e2e61a5cefb1e3308",
+    "parseError": false,
+    "views": {
+      "oxlint": {
+        "nestedHonor": {
+          "no-nested-ternary": 1
+        },
+        "nestedIgnore": {
+          "no-nested-ternary": 1
+        },
+        "topicHonor": {
+          "func-style": 1,
+          "no-nested-ternary": 1
+        },
+        "topicIgnore": {
+          "func-style": 1,
+          "no-nested-ternary": 1
+        },
+        "topicHits": [
+          "func-style L48: Expected a function expression.",
+          "no-nested-ternary L50: Do not nest ternary expressions."
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 1,
+          "no-nested-ternary": 1
+        }
+      },
+      "eslint": {
+        "nestedHonor": {
+          "no-nested-ternary": 1,
+          "sonarjs/no-nested-conditional": 1
+        },
+        "nestedIgnore": {
+          "no-nested-ternary": 1,
+          "sonarjs/no-nested-conditional": 1
+        },
+        "topicHonor": {
+          "func-style": 1,
+          "no-nested-ternary": 1,
+          "sonarjs/no-nested-conditional": 1
+        },
+        "topicIgnore": {
+          "func-style": 1,
+          "no-nested-ternary": 1,
+          "sonarjs/no-nested-conditional": 1
+        },
+        "topicHits": [
+          "func-style L48: Expected a function expression.",
+          "no-nested-ternary L50: Do not nest ternary expressions.",
+          "sonarjs/no-nested-conditional L52: Extract this nested ternary operation into an independent statement."
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 1,
+          "no-nested-ternary": 1,
+          "sonarjs/no-nested-conditional": 1
+        }
+      },
+      "biome": {
+        "nestedHonor": {
+          "style/noNestedTernary": 1
+        },
+        "nestedIgnore": {
+          "style/noNestedTernary": 1
+        },
+        "topicHonor": {
+          "style/noNestedTernary": 1
+        },
+        "topicIgnore": {
+          "style/noNestedTernary": 1
+        },
+        "topicHits": [
+          "style/noNestedTernary L52: Do not nest ternary expressions."
+        ],
+        "parseError": false,
+        "all": {
+          "style/noNestedTernary": 1
+        }
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "no-nested-ternary L50: Do not nest ternary expressions."
+      ],
+      "ignore": [
+        "no-nested-ternary L50: Do not nest ternary expressions."
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "nestedLeft": {
+      "oxlint": 1,
+      "eslint": 1,
+      "eslintSonarjs": 1,
+      "biome": 1
+    },
+    "fileLines": 56,
+    "typeErrors": [],
+    "environmentTypeErrors": [],
+    "oracle": {
+      "verdict": "same",
+      "ignoringOrderAndFlags": "same",
+      "calls": 320,
+      "differing": null,
+      "detail": null,
+      "ignoringKeyOrder": "same",
+      "differingIgnoringKeyOrder": null,
+      "importOk": true,
+      "importError": null,
+      "exports": [
+        [
+          "denormalizePagePath",
+          "function"
+        ]
+      ],
+      "environment": false
+    },
+    "cognitive": {
+      "sum": 4,
+      "enclosing": 4,
+      "max": 4,
+      "byFunction": [
+        "denormalizePagePath: 4"
+      ]
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": []
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "no-nested-ternary L50: Do not nest ternary expressions."
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 18.9,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "early returns",
+        "kinds": [
+          "early returns"
+        ],
+        "guards": {
+          "added": 2,
+          "total": 2,
+          "oneLine": 0,
+          "braced": 2
+        },
+        "diff": {
+          "removed": 5,
+          "added": 7
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "13882a7b7e2c1e8bda3d5b8313360d52a5f0163982126733841377b7da6224b7",
+        "parseError": false,
+        "views": {
+          "oxlint": {
+            "nestedHonor": {},
+            "nestedIgnore": {},
+            "topicHonor": {
+              "func-style": 1
+            },
+            "topicIgnore": {
+              "func-style": 1
+            },
+            "topicHits": [
+              "func-style L48: Expected a function expression."
+            ],
+            "parseError": false,
+            "all": {
+              "func-style": 1
+            }
+          },
+          "eslint": {
+            "nestedHonor": {},
+            "nestedIgnore": {},
+            "topicHonor": {
+              "func-style": 1
+            },
+            "topicIgnore": {
+              "func-style": 1
+            },
+            "topicHits": [
+              "func-style L48: Expected a function expression."
+            ],
+            "parseError": false,
+            "all": {
+              "func-style": 1
+            }
+          },
+          "biome": {
+            "nestedHonor": {},
+            "nestedIgnore": {},
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "nestedLeft": {
+          "oxlint": 0,
+          "eslint": 0,
+          "eslintSonarjs": 0,
+          "biome": 0
+        },
+        "fileLines": 58,
+        "typeErrors": [],
+        "environmentTypeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "ignoringOrderAndFlags": "same",
+          "calls": 320,
+          "differing": null,
+          "detail": null,
+          "ignoringKeyOrder": "same",
+          "differingIgnoringKeyOrder": null,
+          "importOk": true,
+          "importError": null,
+          "exports": [
+            [
+              "denormalizePagePath",
+              "function"
+            ]
+          ],
+          "environment": false
+        },
+        "cognitive": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        },
+        "edit": {
+          "edit": "early returns",
+          "kinds": [
+            "early returns"
+          ],
+          "gaming": false,
+          "fitsPosition": true,
+          "nested": {
+            "before": 1,
+            "after": 0
+          },
+          "conditionals": {
+            "before": 2,
+            "after": 0
+          },
+          "guards": {
+            "added": 2,
+            "total": 2,
+            "oneLine": 0,
+            "braced": 2
+          },
+          "ifElseReturns": 0,
+          "letsAssignedInBranches": [],
+          "helpers": [],
+          "components": [],
+          "switches": [],
+          "lookups": [],
+          "iifes": [],
+          "jsxAnd": [],
+          "jsxAndLengthOperand": 0,
+          "increments": [],
+          "wrappers": {
+            "before": 0,
+            "after": 0
+          },
+          "cognitive": {
+            "before": {
+              "sum": 4,
+              "enclosing": 4,
+              "max": 4,
+              "byFunction": [
+                "denormalizePagePath: 4"
+              ]
+            },
+            "after": {
+              "sum": 3,
+              "enclosing": 3,
+              "max": 3,
+              "byFunction": [
+                "denormalizePagePath: 3"
+              ]
+            }
+          },
+          "diff": {
+            "removed": 5,
+            "added": 7
+          },
+          "fileLines": {
+            "before": 56,
+            "after": 58
+          },
+          "otherCodeChanged": [],
+          "topLevelAdded": [],
+          "enclosingForm": {
+            "before": "function declaration",
+            "after": "function declaration"
+          },
+          "enclosingSignature": {
+            "before": "(page: string)",
+            "after": "(page: string)"
+          },
+          "typeAnnotations": {
+            "before": 1,
+            "after": 1
+          },
+          "lostComments": [],
+          "suppressionAdded": false
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint": {},
+          "eslint": {},
+          "biome": {}
+        },
+        "goneRules": {
+          "oxlint": {
+            "no-nested-ternary": 1
+          },
+          "eslint": {
+            "no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          },
+          "biome": {
+            "style/noNestedTernary": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "early returns"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "13882a7b7e2c1e8bda3d5b8313360d52a5f0163982126733841377b7da6224b7",
+        "parseError": false,
+        "views": {
+          "oxlint": {
+            "nestedHonor": {},
+            "nestedIgnore": {},
+            "topicHonor": {
+              "func-style": 1
+            },
+            "topicIgnore": {
+              "func-style": 1
+            },
+            "topicHits": [
+              "func-style L48: Expected a function expression."
+            ],
+            "parseError": false,
+            "all": {
+              "func-style": 1
+            }
+          },
+          "eslint": {
+            "nestedHonor": {},
+            "nestedIgnore": {},
+            "topicHonor": {
+              "func-style": 1
+            },
+            "topicIgnore": {
+              "func-style": 1
+            },
+            "topicHits": [
+              "func-style L48: Expected a function expression."
+            ],
+            "parseError": false,
+            "all": {
+              "func-style": 1
+            }
+          },
+          "biome": {
+            "nestedHonor": {},
+            "nestedIgnore": {},
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "nestedLeft": {
+          "oxlint": 0,
+          "eslint": 0,
+          "eslintSonarjs": 0,
+          "biome": 0
+        },
+        "fileLines": 58,
+        "typeErrors": [],
+        "environmentTypeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "ignoringOrderAndFlags": "same",
+          "calls": 320,
+          "differing": null,
+          "detail": null,
+          "ignoringKeyOrder": "same",
+          "differingIgnoringKeyOrder": null,
+          "importOk": true,
+          "importError": null,
+          "exports": [
+            [
+              "denormalizePagePath",
+              "function"
+            ]
+          ],
+          "environment": false
+        },
+        "cognitive": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        },
+        "edit": {
+          "edit": "early returns",
+          "kinds": [
+            "early returns"
+          ],
+          "gaming": false,
+          "fitsPosition": true,
+          "nested": {
+            "before": 1,
+            "after": 0
+          },
+          "conditionals": {
+            "before": 2,
+            "after": 0
+          },
+          "guards": {
+            "added": 2,
+            "total": 2,
+            "oneLine": 0,
+            "braced": 2
+          },
+          "ifElseReturns": 0,
+          "letsAssignedInBranches": [],
+          "helpers": [],
+          "components": [],
+          "switches": [],
+          "lookups": [],
+          "iifes": [],
+          "jsxAnd": [],
+          "jsxAndLengthOperand": 0,
+          "increments": [],
+          "wrappers": {
+            "before": 0,
+            "after": 0
+          },
+          "cognitive": {
+            "before": {
+              "sum": 4,
+              "enclosing": 4,
+              "max": 4,
+              "byFunction": [
+                "denormalizePagePath: 4"
+              ]
+            },
+            "after": {
+              "sum": 3,
+              "enclosing": 3,
+              "max": 3,
+              "byFunction": [
+                "denormalizePagePath: 3"
+              ]
+            }
+          },
+          "diff": {
+            "removed": 5,
+            "added": 7
+          },
+          "fileLines": {
+            "before": 56,
+            "after": 58
+          },
+          "otherCodeChanged": [],
+          "topLevelAdded": [],
+          "enclosingForm": {
+            "before": "function declaration",
+            "after": "function declaration"
+          },
+          "enclosingSignature": {
+            "before": "(page: string)",
+            "after": "(page: string)"
+          },
+          "typeAnnotations": {
+            "before": 1,
+            "after": 1
+          },
+          "lostComments": [],
+          "suppressionAdded": false
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint": {},
+          "eslint": {},
+          "biome": {}
+        },
+        "goneRules": {
+          "oxlint": {
+            "no-nested-ternary": 1
+          },
+          "eslint": {
+            "no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          },
+          "biome": {
+            "style/noNestedTernary": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "early returns"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingTopicRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "no-nested-ternary: Do not nest ternary expressions."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "no-nested-ternary: Do not nest ternary expressions."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false,
+        "retryRecomputed": false,
+        "retryReproduces": true
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 3,
+        "costUSD": 0.291398,
+        "tokens": {
+          "input": 6,
+          "output": 613,
+          "cacheCreation": 32289,
+          "cacheRead": 104010
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Edit"
+        ],
+        "toolNames": [
+          "Read",
+          "Edit"
+        ],
+        "toolCallTargets": [
+          "<run-root>/a-claude-1/denormalize-page-path.ts",
+          "<run-root>/a-claude-1/denormalize-page-path.ts"
+        ],
+        "toolErrors": [],
+        "commands": [],
+        "ranLinterOrTests": [],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": false,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "writesOutsideRunDir": [],
+        "printedEnvironment": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "  if (_page.startsWith(\"/index/\") && !isDynamicRoute(_page)) {\n    return _page.slice(6);\n  }\n  if (_page === \"/index\") {\n    return \"/\";\n  }\n  return _page;\n}"
+        ],
+        "finalMessage": "I fixed issue 1 (the nested ternary at line 50) in `denormalize-page-path.ts`. I didn't run the linter; the file gets re-linted when this run finishes.\n\nThe two-level ternary in `denormalizePagePath` is now two `if` statements that return early, followed by a final `return _page`. The checks still run in the same order, so behavior hasn't changed:\n- `/index/...` paths that aren't dynamic routes still lose their leading `/index`.\n- `/index` still becomes `/`.\n- Everything else is returned as it is.",
+        "otherText": [],
+        "understood": {
+          "evaluationOrder": [
+            "The checks still run in the same order, so behavior hasn't changed: - `/index/...` paths that aren't dynamic routes still lose their leading `/index`. - `/index` still becomes `/`. - Everything else is returned as it is."
+          ],
+          "sideEffects": [],
+          "increment": [],
+          "zeroRendering": [],
+          "defaultCase": [],
+          "readability": [],
+          "earlyReturns": [
+            "The two-level ternary in `denormalizePagePath` is now two `if` statements that return early, followed by a final `return _page`."
+          ],
+          "extraction": [],
+          "lookup": [],
+          "whyChoice": [],
+          "curly": [],
+          "preferTernary": [],
+          "preserveBehaviour": [
+            "The checks still run in the same order, so behavior hasn't changed: - `/index/...` paths that aren't dynamic routes still lose their leading `/index`. - `/index` still becomes `/`. - Everything else is returned as it is."
+          ],
+          "review": [],
+          "suppression": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "orchestratorScratch": 3,
+          "webAccess": 59,
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {
+          "webAccess": 1
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "final": {
+    "outcome": "early returns",
+    "response": "early returns, behaviour kept",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false,
+    "stubChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 1,
+    "left": 0,
+    "remaining": 0,
+    "notes": [
+      "Claude Code said:\nI fixed issue 1 (the nested ternary at line 50) in `denormalize-page-path.ts`. I didn't run the linter; the file gets re-linted when this run finishes.\nThe two-level ternary in `denormalizePagePath` is now two `if` statements that return early, followed by a final `return _page`. The checks still run in the same order, so behavior hasn't changed:\n- `/index/...` paths that aren't dynamic routes still lose their leading `/index`.\n- `/index` still becomes `/`.\n- Everything else is returned as it is."
+    ],
+    "issueFixed": [
+      true
+    ],
+    "outro": "Fixed 1 of 1 issue with Claude Code.",
+    "exitCode": 0
+  },
+  "ultracitePrints": {
+    "finalMessage": "I fixed issue 1 (the nested ternary at line 50) in `denormalize-page-path.ts`. I didn't run the linter; the file gets re-linted when this run finishes.\n\nThe two-level ternary in `denormalizePagePath` is now two `if` statements that return early, followed by a final `return _page`. The checks still run in the same order, so behavior hasn't changed:\n- `/index/...` paths that aren't dynamic routes still lose their leading `/index`.\n- `/index` still becomes `/`.\n- Everything else is returned as it is.",
+    "fromStdout": true
+  },
+  "cost": {
+    "costUSD": 0.291398,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 136918
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "orchestratorScratch": 3,
+      "webAccess": 59,
+      "sessionLogs": 4
+    },
+    "exposureInToolCalls": {
+      "webAccess": 1
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/a-claude-1/handoff",
+      "../corpus/examples/nested-ternaries",
+      "../corpus/results/nested-ternaries",
+      "../corpus/calibration/nested-ternaries",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/nested-ternaries-agent-runs.cjs",
+      "../corpus/scripts/nested-ternaries-calibration.cjs",
+      "../corpus/scripts/nested-ternaries-census.cjs",
+      "../corpus/scripts/nested-ternaries-examples.cjs",
+      "../corpus/scripts/nested-ternaries-fixes.cjs",
+      "../corpus/scripts/nested-ternaries-format.cjs",
+      "../corpus/scripts/nested-ternaries-history.cjs",
+      "../corpus/scripts/nested-ternaries-lib.cjs",
+      "../corpus/scripts/nested-ternaries-linters.cjs",
+      "../corpus/scripts/nested-ternaries-markers.cjs",
+      "../corpus/scripts/nested-ternaries-oracle.cjs",
+      "../corpus/scripts/nested-ternaries-rewrite.cjs",
+      "../corpus/scripts/nested-ternaries-rules.cjs",
+      "../corpus/scripts/nested-ternaries-run-all.cjs",
+      "../corpus/scripts/nested-ternaries-sample.cjs",
+      "../corpus/scripts/nested-ternaries-tables.cjs",
+      "../bibliography/nested-ternaries.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-nested-ternaries",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/length-limits",
+      "<outside-repo>/prompt-revision",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<outside-repo>/plans",
+      "<outside-repo>/lint-configs",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/b3wj4ayz9.output",
+      "<outside-repo>/bi2r2ypdh.output",
+      "<outside-repo>/bv4zl8usf.output",
+      "<outside-repo>/bx205rh3g.output",
+      "<outside-repo>/bxddr4du3.output",
+      "<outside-repo>/bxou3vcsr.output",
+      "<outside-repo>/bypardubj.output",
+      "<run-root>/.measure",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-pilot"
+    ]
+  }
+}

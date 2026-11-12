@@ -1,0 +1,1341 @@
+{
+  "agreement": {
+    "structure": {
+      "agree": 35,
+      "kappa": 0.92,
+      "n": 36
+    },
+    "reads": {
+      "agree": 26,
+      "kappa": 0.52,
+      "n": 36
+    },
+    "rewrite": {
+      "agree": 19,
+      "kappa": 0.38,
+      "n": 36
+    },
+    "lookupSafe": {
+      "agree": 32,
+      "kappa": 0.56,
+      "n": 36
+    }
+  },
+  "blindSubset": [
+    "n06",
+    "n08",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n17",
+    "n18",
+    "n20",
+    "n21",
+    "n23",
+    "n25",
+    "n29",
+    "n30",
+    "n31",
+    "n32",
+    "n34",
+    "n35",
+    "n37",
+    "n40",
+    "n41",
+    "n43",
+    "n45",
+    "n46",
+    "n47",
+    "n53",
+    "n57",
+    "n61",
+    "n63",
+    "n65",
+    "n66",
+    "n69",
+    "n70",
+    "n71",
+    "n72",
+    "n73"
+  ],
+  "byStratum": {
+    "D": {
+      "structure": {
+        "flat-chain": 12
+      },
+      "reads": {
+        "same": 7,
+        "better": 5
+      },
+      "rewrite": {
+        "if-else": 3,
+        "early-return": 2,
+        "lookup": 3,
+        "component-split": 1,
+        "helper": 1,
+        "switch": 2
+      },
+      "lookupSafe": {
+        "yes": 6,
+        "no": 6
+      }
+    },
+    "E": {
+      "structure": {
+        "flat-chain": 9,
+        "nested": 5
+      },
+      "reads": {
+        "worse": 1,
+        "better": 10,
+        "same": 3
+      },
+      "rewrite": {
+        "keep": 2,
+        "early-return": 11,
+        "helper": 1
+      },
+      "lookupSafe": {
+        "n/a": 14
+      }
+    },
+    "J": {
+      "structure": {
+        "flat-chain": 18,
+        "nested": 2
+      },
+      "reads": {
+        "better": 10,
+        "same": 7,
+        "worse": 3
+      },
+      "rewrite": {
+        "helper": 14,
+        "keep": 5,
+        "component-split": 1
+      },
+      "lookupSafe": {
+        "n/a": 20
+      }
+    },
+    "S": {
+      "structure": {
+        "nested": 6,
+        "flat-chain": 10
+      },
+      "reads": {
+        "better": 7,
+        "worse": 1,
+        "same": 8
+      },
+      "rewrite": {
+        "if-else": 3,
+        "early-return": 2,
+        "keep": 8,
+        "helper": 3
+      },
+      "lookupSafe": {
+        "n/a": 16
+      }
+    },
+    "X": {
+      "structure": {
+        "flat-chain": 14,
+        "nested": 4
+      },
+      "reads": {
+        "better": 8,
+        "worse": 1,
+        "same": 9
+      },
+      "rewrite": {
+        "helper": 9,
+        "keep": 7,
+        "if-else": 2
+      },
+      "lookupSafe": {
+        "n/a": 18
+      }
+    }
+  },
+  "codebook": "structure    flat-chain (reads as one list of conditions tried in order: every nested ternary\n               in the alternate) | nested (a decision inside a decision: a ternary in a\n               consequent or a test)\n  reads        better | same | worse: the rewrite chosen below (or, for keep, the best statement\n               rewrite) against the ternary as written\n  rewrite      early-return | if-else (let plus if/else, or if/else statements) | helper (a\n               function or variable above) | lookup (an object or Map) | switch |\n               component-split (JSX: an early return in the component or a child component) |\n               keep (the ternary is the clearest form here)\n  lookupSafe   yes (a lookup would behave the same for every value that reaches it) | no (it\n               would evaluate a call or a read that can throw, change a nullish branch, or match\n               an inherited key) | n/a (the tests don't compare one value with constants)\n  notes        one line",
+  "generated": "2026-11-12T05:10:10.088Z",
+  "labels": {
+    "n01": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "if-else",
+        "lookupSafe": "yes",
+        "notes": "config enum 'always'/'never' else shouldInlineAsset(); a lookup keeps the call lazy behind ??, values are booleans, inlineConfig is a closed union; the formatted chain is about as clear"
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-css.ts#L465-L469",
+      "stratum": "D"
+    },
+    "n02": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "early-return",
+        "lookupSafe": "no",
+        "notes": "arrow-key swap on event.key; key is an open string, so a plain-object lookup could match inherited keys"
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/roving-focus/src/roving-focus-group.tsx#L364",
+      "stratum": "D"
+    },
+    "n03": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "if-else",
+        "lookupSafe": "no",
+        "notes": "branches run .every() over element lists; a lookup would run both scans eagerly"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ConvertElementTypePopup.tsx#L215-L225",
+      "stratum": "D"
+    },
+    "n04": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "lookup",
+        "lookupSafe": "yes",
+        "notes": "kind is a closed union mapped to one-character constants: a textbook lookup"
+      },
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/lineEdit.ts#L138",
+      "stratum": "D"
+    },
+    "n05": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "if-else",
+        "lookupSafe": "no",
+        "notes": "typeof dispatch; a lookup would call params(data) eagerly and throw when params isn't a function"
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/types.ts#L4909",
+      "stratum": "D"
+    },
+    "n06": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "component-split",
+        "lookupSafe": "no",
+        "notes": "three 15-line JSX states keyed on renderedStatus; eager lookup would build every state and call getCurrentLocationUrl()"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "component-split",
+        "lookupSafe": "yes",
+        "notes": "Three status panels over 50 lines with a hidden null tail; a child component switching on renderedStatus with early returns reads better. The inner spaFromUrl/spaToUrl ternaries are optional rows, not a second decision. A lookup would eagerly build all panels and call getCurrentLocationUrl, which cannot throw, so it behaves the same."
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/instant-navs/instant-navs-panel.tsx#L290-L341",
+      "stratum": "D"
+    },
+    "n07": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "lookup",
+        "lookupSafe": "yes",
+        "notes": "status enum to Badge label/variant; the elements are plain and the default covers unknown statuses"
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Infrastructure/InfrastructureConfiguration/MapView.tsx#L275-L285",
+      "stratum": "D"
+    },
+    "n08": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "no",
+        "notes": "minify is 'oxc' | false | …; a lookup would have to key on the boolean false through string coercion"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "yes",
+        "notes": "Short two-step mapping of minify ('oxc' -> true, false -> 'dce-only', else undefined) inside an options object; hoisting a let/if-else is about equal. A Map or object keyed by the closed minify values (false coerces to \"false\") behaves the same."
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/worker.ts#L413-L417",
+      "stratum": "D"
+    },
+    "n09": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "early-return",
+        "lookupSafe": "no",
+        "notes": "the '*' branch increments matchId; a lookup would increment it for every segment"
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-config-alias/index.ts#L46",
+      "stratum": "D"
+    },
+    "n10": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "switch",
+        "lookupSafe": "yes",
+        "notes": "four-way enum dispatch to scrollbar components with null default; a switch on context.type reads better"
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/scroll-area/src/scroll-area.tsx#L344-L352",
+      "stratum": "D"
+    },
+    "n11": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "lookup",
+        "lookupSafe": "yes",
+        "notes": "textAlign union to anchor ratio; short line, a lookup is no harder to read"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "yes",
+        "notes": "One-line alignment-to-ratio mapping in an arrow that returns an object literal; statements would need a block body and lets. A {left:0,center:0.5,right:1} table over the closed textAlign union would be equivalent but no clearer."
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/newElement.ts#L307",
+      "stratum": "D"
+    },
+    "n12": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "switch",
+        "lookupSafe": "yes",
+        "notes": "enum to constant metadata in a hot loop; values are constant enum members"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "yes",
+        "notes": "Two-case enum-to-flag mapping with a 0 default in a hot loop; a let plus if/else is the same length and loses const. A lookup keyed by the numeric enum values would behave the same."
+      },
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewLayout/lineDecorations.ts#L229-L233",
+      "stratum": "D"
+    },
+    "n13": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "the a < b ? -1 : a > b ? 1 : 0 comparator idiom; a block would be noisier"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "The standard inline sort comparator (a < b ? -1 : a > b ? 1 : 0); a block-body comparator with ifs is noisier. The tests are relational, not value-vs-constant."
+      },
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/openapi/src/generate.ts#L531",
+      "stratum": "E"
+    },
+    "n14": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "guard (missing elements return 0) then one ternary"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "The whole function is one return whose first arm is a guard (missing element -> 0); `if (!a || !b) return 0; return isElementPreceding(...) ? -1 : 1` reads as a guard clause."
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/collection/src/collection.tsx#L390-L394",
+      "stratum": "E"
+    },
+    "n15": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "decision inside a decision with a comment wedged into the alternate; a block callback with a guard reads better"
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/module-runner/runner.ts#L250-L255",
+      "stratum": "E"
+    },
+    "n16": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "two different headers compared with originDomain, object-literal branches, undefined default"
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/action-handler.ts#L558-L568",
+      "stratum": "E"
+    },
+    "n17": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "value ?? defaultValue ?? [min, max] style fallback in a useMemo callback; idiomatic"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "A clear priority fallback (value, else defaultValue, else [min, max]) in a useMemo arrow; early returns in a block body read about the same. The tests are Array.isArray calls."
+      },
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/slider.tsx#L17-L21",
+      "stratum": "E"
+    },
+    "n18": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "four-way provider icon choice inside a map callback that already has a block body"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "no",
+        "notes": "A four-level stair in a map callback that already has a statement body; ifs that return read as a list. p is an open provider string, so an email/SAML lookup could match inherited keys, and the isCustom call has to run first."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Users/Users.utils.tsx#L48-L56",
+      "stratum": "E"
+    },
+    "n19": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "small comparator inside an if; a guard plus one ternary is no clearer"
+      },
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/router/reg-exp-router/node.ts#L24",
+      "stratum": "E"
+    },
+    "n20": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "scoring callback; early returns in a block body are about as clear"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "The ternary sits in the consequent of the equality test. A block-body callback with `if (lines differ) return 0.99;` and then a single length ternary flattens it."
+      },
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/diff/defaultLinesDiffComputer/defaultLinesDiffComputer.ts#L74-L78",
+      "stratum": "E"
+    },
+    "n21": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "proxy getter: if (prop !== 'key') return value, then the shift-key ternary; the comment inside the ternary goes away"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "The shiftKey ternary is in the consequent, with a comment wedged between ? and the inner test. The Proxy get handler already has statements, so `if (prop !== \"key\") return value;` then the case flip reads better."
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.tsx#L5136-L5142",
+      "stratum": "E"
+    },
+    "n22": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "the JSDoc lists the rules in order; early returns mirror it"
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/redirects/render.ts#L32-L36",
+      "stratum": "E"
+    },
+    "n23": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "dense ternary in a map callback inside a template inside new RegExp; a named helper per literal reads better"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "A dense per-literal escape inside map, inside a template literal, inside a ternary, inside new RegExp. A named escapeLiteral helper above, giving `vals.map(escapeLiteral).join(\"|\")`, reads better. The tests are typeof and truthiness checks."
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L3731",
+      "stratum": "E"
+    },
+    "n24": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "if (!image.complete) return Loading, then one ternary"
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/avatar/src/avatar.tsx#L194-L198",
+      "stratum": "E"
+    },
+    "n25": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "three path cases documented in the JSDoc; early returns read as the list"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "The function body is a single return with a negated middle test (_page !== '/index' ? _page : '/'). Early returns let '/index' -> '/' be stated positively. The first test is a call, not a constant comparison."
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/page-path/denormalize-page-path.ts#L14-L18",
+      "stratum": "E"
+    },
+    "n26": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "map callback choosing one of three large components; second test adds a plan check, so not a lookup"
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/Usage/UsageSection/UsageSection.tsx#L66-L102",
+      "stratum": "E"
+    },
+    "n27": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "collapses to one condition: isSharedFile && !isUnmanagedFile ? '' : undefined"
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/pages/_document.tsx#L477",
+      "stratum": "J"
+    },
+    "n28": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "pointerEvents style value with an undefined default; a variable above is no clearer"
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/dismissable-layer/src/dismissable-layer.tsx#L248-L252",
+      "stratum": "J"
+    },
+    "n29": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "three large JSX branches with inline handlers; a content variable built with if/else reads better"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "Three UI states (editing input, link, empty) as a flat JSX chain. Its handlers close over many locals, so a child component or a hoisted let/if-else moves the code without making it clearer."
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/hyperlink/Hyperlink.tsx#L261-L312",
+      "stratum": "J"
+    },
+    "n30": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "placeholder / bar chart / null inside a panel; a variable above is about the same"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "Two-step JSX chain (no config -> placeholder, bar -> chart, else null). A child component with early returns is about equal. The ResizablePanel nested inside a ResizablePanel is a separate oddity."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/UtilityPanel/ChartConfig.tsx#L124-L159",
+      "stratum": "J"
+    },
+    "n31": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "spread of one of three CSS-variable objects; a function returning the size vars reads better"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "Three size modes as a 20-line spread inside a style object, with the panel-width expression repeated. A getPanelSizeVars() helper with early returns reads better. The inner `x ? px : undefined` ternaries are only value formatting."
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/panel/dynamic-panel.tsx#L253-L272",
+      "stratum": "J"
+    },
+    "n32": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "three render paths each with an explanatory comment; the ternary keeps the comments next to their branch"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "Three clear cases on two booleans (raw children, slot onto the child, wrap) with an explanatory comment; a hoisted let content with if/else reads about the same."
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/scroll-area/src/scroll-area.tsx#L233-L259",
+      "stratum": "J"
+    },
+    "n33": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "eight unrelated flags choosing an icon; a getIcon() with early returns reads better"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Toolbar.tsx#L102-L116",
+      "stratum": "J"
+    },
+    "n34": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "placeholder with a compound test and a template holding another ternary; compute it above"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "The placeholder prop combines a compound OR test (including a typeof check) with another ternary inside the template literal. A getPlaceholder(field) helper with early returns reads better. The tests are not a single value against constants."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/RowEditor/InputField.tsx#L205-L210",
+      "stratum": "J"
+    },
+    "n35": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "snippet line rendering: parts / highlighted / plain; a render helper is about the same"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "A short three-way snippet render (parts, highlighted, plain) inside a map; a SnippetLine child component with early returns would be about equal."
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance.tsx#L173-L186",
+      "stratum": "J"
+    },
+    "n36": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "one slot in a row of toolbar buttons; moving it out breaks the visual order"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Toolbar.tsx#L291-L297",
+      "stratum": "J"
+    },
+    "n37": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "component-split",
+        "lookupSafe": "n/a",
+        "notes": "the tree is a chain, but its first branch holds another ternary (error ? … : tabs) in JSX: reads as nested; a response panel component"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "component-split",
+        "lookupSafe": "n/a",
+        "notes": "The response branch holds its own error-vs-tabs decision, an 80-line tree. A ResponseView child with `if (error) return ...` plus early returns for the pending and empty states reads better."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Functions/EdgeFunctionDetails/EdgeFunctionTesterSheet.tsx#L295-L373",
+      "stratum": "J"
+    },
+    "n38": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "small optional badge in a row; turning it into two && would render both, a variable above moves it away"
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/request-insights/request-insights-panel.tsx#L220-L224",
+      "stratum": "J"
+    },
+    "n39": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "picks one of three translation keys inline in t(); kind and shiftKey are different tests"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/FileDropOverlay.tsx#L136-L140",
+      "stratum": "J"
+    },
+    "n40": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "loading / empty / content: the common three-state render"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "A small loading/empty/content JSX chain. The negated `!description ?` is mild, and a child component for three tiny states is not clearer."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/ErrorCodeTooltip/ErrorCodeTooltip.tsx#L72-L84",
+      "stratum": "J"
+    },
+    "n41": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "multi-value variant test then an unrelated flag; a getExplanation helper reads better"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "Two arms with well-named constants and an undefined tail. A helper with early returns is equal, not clearer. The second test is a different field (inNavigation), so a lookup on variant doesn't cover it."
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/container/errors.tsx#L997-L1003",
+      "stratum": "J"
+    },
+    "n42": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "category list / no match / null; the list branch is long"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/CommandPalette/CommandPalette.tsx#L941-L966",
+      "stratum": "J"
+    },
+    "n43": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "tooltip reason from three negated permission flags; a helper with early returns reads better"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "A four-arm stair of negated flags ending in undefined, buried in tooltip.content.text. A named disabled-reason helper with early returns reads as a list and pairs with the disabled prop."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/General/Infrastructure/RestartServerButton.tsx#L117-L123",
+      "stratum": "J"
+    },
+    "n44": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "first/last tick marker; second test compares index with a computed value, not a constant"
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/request-insights/request-insights-panel.tsx#L375-L379",
+      "stratum": "J"
+    },
+    "n45": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "four placeholder states, each a t() call; compute above"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "Flat-formatted (unindented) chain of placeholder states that already reads as an ordered list; a helper with ifs is equivalent. The tests are on different values."
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/Chat/ChatInterface.tsx#L162-L168",
+      "stratum": "J"
+    },
+    "n46": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "skeleton / count / '0' / null with an includes() test; a render helper reads better"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "A three-level JSX chain with a magic list (['log_type','method','level']) and a Map get. A named count-label helper or constant above, with early returns, reads better."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/DataTableFilters/DataTableFilterCheckbox.tsx#L143-L149",
+      "stratum": "J"
+    },
+    "n47": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "if-else",
+        "lookupSafe": "n/a",
+        "notes": "minify resolution with a lib-format check nested in the 'oxc' branch and a comment inside an object branch"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "yes",
+        "notes": "The lib-ES check is nested in the 'oxc' consequent alongside a commented object literal. A resolveMinify helper with early returns reads better. A lookup on the closed minify values with ?? false would behave the same, since evaluating the inner arm can't throw."
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/build.ts#L752-L764",
+      "stratum": "S"
+    },
+    "n48": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "the next line returns regex, so early returns per precision case read better"
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/regexes.ts#L122-L130",
+      "stratum": "S"
+    },
+    "n49": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "three parallel one-line ternaries on before/after read as a table"
+      },
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Sheet.tsx#L567",
+      "stratum": "S"
+    },
+    "n50": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "normalise to an array: [] / value / [value]"
+      },
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/http/resolveResponse.ts#L99-L103",
+      "stratum": "S"
+    },
+    "n51": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "read-only precedence nested inside the defined check with a multi-line filter; a helper with early returns"
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/ResourceExhaustionWarningBanner/ResourceExhaustionWarningBanner.tsx#L126-L136",
+      "stratum": "S"
+    },
+    "n52": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "text-anchor from align and direction; second test is compound"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/renderer/staticSvgScene.ts#L807-L811",
+      "stratum": "S"
+    },
+    "n53": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "one-line clamp with ternaries in both branches; a clamp helper or if/else reads better"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "One long line with ternaries in both arms, mirrored for endColumn. A small clamp helper (or if/else with Math.max) used for start and end reads better. The tests compare lines with each other, not constants."
+      },
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/tokens/treeSitter/treeSitterTokenizationImpl.ts#L534",
+      "stratum": "S"
+    },
+    "n54": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "if-else",
+        "lookupSafe": "n/a",
+        "notes": "instanceof chain to find the form; if/else with each case on its own reads better"
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/transitions/router.ts#L402-L407",
+      "stratum": "S"
+    },
+    "n55": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "string / array join / '' for textContent, already inside an if/else"
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/head-manager.ts#L14-L18",
+      "stratum": "S"
+    },
+    "n56": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "the function returns !isNoColor next; early returns drop the eslint-disable comment from inside the ternary"
+      },
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/color.ts#L19-L24",
+      "stratum": "S"
+    },
+    "n57": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "if-else",
+        "lookupSafe": "n/a",
+        "notes": "array join nested under a truthiness check; small either way"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "A guard-then-normalize idiom. A let with if/else is about equal. The real fix is a single ternary, `Array.isArray(x) ? x.join(' ') : x || undefined`, which removes the nesting with the same results."
+      },
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/announce/src/announce.tsx#L122-L126",
+      "stratum": "S"
+    },
+    "n58": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "normalise input to an array: string / array / object values"
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/build.ts#L641-L645",
+      "stratum": "S"
+    },
+    "n59": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "build the checks array; three short cases"
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L214-L218",
+      "stratum": "S"
+    },
+    "n60": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "swipe direction from a prop or the position; short"
+      },
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Sheet.tsx#L232-L236",
+      "stratum": "S"
+    },
+    "n61": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "one of several parallel five-deep status chains; derive the state once, then map it to messages"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "A six-arm chain with an isUpgrade decision in one consequent, repeated across several copy lines. Deriving one phase in a helper with early returns, then mapping copy per phase, reads much better. The tests are separate booleans."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/templates/StripeSyncEngine/StripeSyncChangesCard.tsx#L51-L63",
+      "stratum": "S"
+    },
+    "n62": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "margin by element-type predicate; three short cases"
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/transformHandles.ts#L312-L316",
+      "stratum": "S"
+    },
+    "n63": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "awaited ternary of three render calls; a let with if/else (or helper) separates the await"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "Three render paths by fallback type, inside await(...). A renderFallback helper with early returns is about equal. The tests are type checks."
+      },
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/streaming.ts#L96-L100",
+      "stratum": "X"
+    },
+    "n64": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "the exact/inclusive phrase repeats in every locale message; one helper removes the repetition"
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/locales/en.ts#L70",
+      "stratum": "X"
+    },
+    "n65": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "one of four parallel per-side geometry expressions in an array; rewriting each loses the visible symmetry"
+      },
+      "rater2": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "An OR test nested in the consequent, inside one of four parallel array entries, with an unindented old-Prettier layout. Naming the overlap tests and computing each bound above the array reads better. The tests are relational."
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/elbowArrow.ts#L1728-L1734",
+      "stratum": "X"
+    },
+    "n66": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "normalise a header value to an array inside a spread"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "The idiomatic normalize-header-to-array chain (string -> [s], array -> itself, else []); a hoisted let with if/else is about equal. The tests are typeof and Array.isArray."
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/api-utils/node/api-resolver.ts#L215-L219",
+      "stratum": "X"
+    },
+    "n67": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "undo/redo reason buried in a long call inside an if; a const above reads better"
+      },
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursor.ts#L266",
+      "stratum": "X"
+    },
+    "n68": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "configured breakpoints, else one of two constants by service"
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/assets/internal.ts#L162-L166",
+      "stratum": "X"
+    },
+    "n69": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "ssr / lib / false for one rolldown option"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "A short two-boolean priority (ssr, lib, else false) as an option value; hoisting an if/else is no clearer."
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/build.ts#L661-L665",
+      "stratum": "X"
+    },
+    "n70": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "custom and granted are exclusive statuses, so it simplifies to isGranted ? !hasPendingRemove : hasPendingAdd"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "The first and last arms are both hasPendingAdd, and custom/granted are exclusive statuses, so the chain collapses to `isGranted ? !hasPendingRemove : hasPendingAdd`. A statement rewrite of a boolean inside && would be worse."
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/API/ExposedTableSelector.tsx#L179-L183",
+      "stratum": "X"
+    },
+    "n71": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "better",
+        "rewrite": "if-else",
+        "lookupSafe": "n/a",
+        "notes": "the chain sits inside the alternate of childStr === '' ? '' : …; a prefix variable with if/else in the callback (it reads c.#varIndex, so it stays in the class)"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "early-return",
+        "lookupSafe": "n/a",
+        "notes": "A parenthesized chain concatenated with + childStr, in the alternate of the childStr === '' check. The map callback already has statements, so returns per case (empty, var index, meta char, plain) read better."
+      },
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/router/reg-exp-router/node.ts#L149-L153",
+      "stratum": "X"
+    },
+    "n72": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "same repeated exact/inclusive phrase as n64"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "One-line exact/inclusive/exclusive wording inside a template literal; a statement rewrite needs a hoisted variable per branch. The duplication across branches is a separate issue."
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/locales/en.ts#L74",
+      "stratum": "X"
+    },
+    "n73": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "anchor ratio: centre / left / right in one call argument"
+      },
+      "rater2": {
+        "structure": "flat-chain",
+        "reads": "worse",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "A one-line anchor ratio (center 0.5, dragged left 1, else 0) as an object argument; hoisting a let with if/else is noisier. The tests are a flag and a comparison."
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/dragElements.ts#L365",
+      "stratum": "X"
+    },
+    "n74": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "rendering mode nested under the app PPR flag, next to a sibling of the same shape"
+      },
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/index.ts#L4072-L4076",
+      "stratum": "X"
+    },
+    "n75": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "platform font family in a module-level constant; sibling fontSize is a ternary too"
+      },
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/fontInfo.ts#L236",
+      "stratum": "X"
+    },
+    "n76": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "flag parsing; the second test simplifies to allowedHosts === true"
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/cli/flags.ts#L31-L35",
+      "stratum": "X"
+    },
+    "n77": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "same",
+        "rewrite": "keep",
+        "lookupSafe": "n/a",
+        "notes": "merge minify options when both are objects"
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/build.ts#L809-L814",
+      "stratum": "X"
+    },
+    "n78": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "the same normalisation is written twice (definition, check); one helper"
+      },
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/StoragePolicies/StoragePolicies.utils.ts#L24-L28",
+      "stratum": "X"
+    },
+    "n79": {
+      "rater1": {
+        "structure": "nested",
+        "reads": "same",
+        "rewrite": "if-else",
+        "lookupSafe": "n/a",
+        "notes": "end index in a hot query-string loop; a let with if is no clearer"
+      },
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/url.ts#L285",
+      "stratum": "X"
+    },
+    "n80": {
+      "rater1": {
+        "structure": "flat-chain",
+        "reads": "better",
+        "rewrite": "helper",
+        "lookupSafe": "n/a",
+        "notes": "same repeated exact/inclusive phrase as n64"
+      },
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/locales/en.ts#L85",
+      "stratum": "X"
+    }
+  },
+  "note": "Rater 1 labelled all items from the worksheet with the census's automatic labels; rater 2, a separate subagent working blind, labelled the subset. Shares are rater 1's, weighted by each stratum's population (sample.json).",
+  "shares": {
+    "structure": {
+      "flat-chain": 78.9,
+      "nested": 21.1
+    },
+    "reads": {
+      "better": 47.7,
+      "same": 43.8,
+      "worse": 8.5
+    },
+    "rewrite": {
+      "helper": 39.6,
+      "keep": 31.4,
+      "early-return": 11.1,
+      "if-else": 10.4,
+      "lookup": 2.8,
+      "component-split": 2.7,
+      "switch": 1.9
+    },
+    "lookupSafe": {
+      "n/a": 88.6,
+      "yes": 5.7,
+      "no": 5.7
+    }
+  },
+  "vsAuto": {
+    "structure": {
+      "agree": 78,
+      "n": 80
+    },
+    "lookupNA": {
+      "agree": 80,
+      "n": 80
+    }
+  },
+  "weights": {
+    "D": 8.916666666666666,
+    "E": 4.571428571428571,
+    "J": 16.45,
+    "S": 18.375,
+    "X": 8.222222222222221
+  }
+}

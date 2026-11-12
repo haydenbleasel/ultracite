@@ -1,0 +1,4734 @@
+{
+  "generated": "2026-11-12T04:43:13.915Z",
+  "note": "See the header of nested-ternaries-census.cjs and nested-ternaries-lib.cjs. A ternary tree is a maximal group of conditional expressions joined through a direct test, consequent or alternate (parentheses aren't nodes; a TypeScript wrapper ends the tree); `nested` counts trees with two or more conditionals. Shapes: chain (all nesting in the alternate), consequent, test, mixed. Positions are the root's parent once TypeScript wrappers are peeled. Rewrite classes: early-return (a return argument or an arrow's concise body), let-if (a variable initializer with an identifier), if-statement (an assignment or expression statement), extraction (anything else). Test shapes: lookup (one discriminant compared with string or number literals), switch (one discriminant, other constants), thresholds (one subject compared with < or >), unrelated. Leaf risks (for eager evaluation): pure, jsx, reads (member reads), effects (calls, new, assignments), await, throws (an IIFE that throws).",
+  "repos": {
+    "hono": {
+      "check": {
+        "eslintNNT": [
+          29,
+          29
+        ],
+        "sonar": [
+          40,
+          40
+        ],
+        "unicornNNT": [
+          24,
+          24
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "source": {
+        "conditionals": 312,
+        "conditionalsPer10k": 122.2,
+        "conditionalTypes": 229,
+        "conditionalTypesNested": 110,
+        "conditionalTypesNestedIn": {
+          "trueType": 53,
+          "falseType": 55,
+          "checkType": 1,
+          "extendsType": 1
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 49,
+            "sonarjs/no-nested-conditional": 40,
+            "no-nested-ternary": 29,
+            "no-else-return": 28,
+            "unicorn/no-nested-ternary": 24,
+            "unicorn/prefer-minimal-ternary": 8,
+            "unicorn/prefer-logical-operator-over-ternary": 2,
+            "no-unneeded-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 49,
+            "sonarjs/no-nested-conditional": 40,
+            "no-nested-ternary": 29,
+            "no-else-return": 28,
+            "unicorn/no-nested-ternary": 24,
+            "unicorn/prefer-minimal-ternary": 8,
+            "unicorn/prefer-logical-operator-over-ternary": 2,
+            "no-unneeded-ternary": 1
+          }
+        },
+        "files": 187,
+        "filesWithNested": 16,
+        "functions": {
+          "total": 1180,
+          "withNested": 23,
+          "withNestedCognitive": {
+            "max": 228,
+            "mean": 22.74,
+            "median": 6,
+            "n": 23,
+            "p90": 28
+          },
+          "withNestedOver20": 5,
+          "withoutNestedCognitive": {
+            "max": 153,
+            "mean": 8.89,
+            "median": 3,
+            "n": 179,
+            "p90": 22
+          }
+        },
+        "guardChains": 49,
+        "guardChainsTwoPlus": 10,
+        "ifChains": {
+          "elseIf": 64,
+          "elseIfTernaryShaped": 5,
+          "elseIfTernaryShapedByKind": {
+            "assign": 3,
+            "return": 2
+          },
+          "lengths": {
+            "2": 41,
+            "3": 14,
+            "4": 3,
+            "5+": 6
+          },
+          "total": 1143,
+          "ternaryShaped": 25
+        },
+        "indirect": {
+          "sonarNested": 9,
+          "total": 13,
+          "viaFunction": 3
+        },
+        "jsxLines": 0,
+        "lines": 25540,
+        "nested": {
+          "byDepth": {
+            "2": 21,
+            "3": 4
+          },
+          "byPosition": {
+            "initializer": 8,
+            "return": 6,
+            "operand": 3,
+            "argument": 3,
+            "arrow-body": 3,
+            "property": 1,
+            "assignment-statement": 1
+          },
+          "byRewrite": {
+            "early-return": 9,
+            "let-if": 8,
+            "extraction": 7,
+            "if-statement": 1
+          },
+          "byShape": {
+            "chain": 16,
+            "consequent": 7,
+            "mixed": 2
+          },
+          "conditionalsInNested": 56,
+          "conditionalsInNestedShare": 17.9,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 9,
+          "extractionOnly": 7,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "call": 22,
+            "literal": 14,
+            "identifier": 9,
+            "member": 7,
+            "array": 7,
+            "undefined": 6,
+            "template": 5,
+            "function": 3,
+            "unary": 3,
+            "binary": 3,
+            "null": 1,
+            "logical": 1
+          },
+          "leafRisks": {
+            "pure": 42,
+            "effects": 24,
+            "reads": 15
+          },
+          "lines": {
+            "max": 10,
+            "mean": 4.68,
+            "median": 5,
+            "n": 25,
+            "p90": 7
+          },
+          "multiline": 19,
+          "parenthesized": {
+            "all": 3,
+            "none": 22,
+            "some": 0
+          },
+          "reportedByEslint": 25,
+          "statementInPlace": 9,
+          "testShapes": {
+            "unrelated": 25
+          },
+          "total": 25,
+          "treesWithEffects": 12,
+          "wrapped": 0
+        },
+        "nestedPer10k": 9.8,
+        "nestedPer10kJsx": null
+      },
+      "tests": {
+        "conditionals": 89,
+        "conditionalsPer10k": 16,
+        "conditionalTypes": 14,
+        "conditionalTypesNested": 3,
+        "conditionalTypesNestedIn": {
+          "trueType": 2,
+          "falseType": 1
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 35,
+            "no-else-return": 3
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 35,
+            "no-else-return": 3
+          }
+        },
+        "files": 124,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 7580,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 18,
+            "mean": 1.58,
+            "median": 1,
+            "n": 77,
+            "p90": 2
+          }
+        },
+        "guardChains": 51,
+        "guardChainsTwoPlus": 14,
+        "ifChains": {
+          "elseIf": 6,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 4,
+            "3": 1,
+            "5+": 1
+          },
+          "total": 355,
+          "ternaryShaped": 2
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 1,
+          "viaFunction": 0
+        },
+        "jsxLines": 15550,
+        "lines": 55488,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": 0
+      },
+      "seconds": 4
+    },
+    "zod": {
+      "check": {
+        "eslintNNT": [
+          32,
+          32
+        ],
+        "sonar": [
+          35,
+          35
+        ],
+        "unicornNNT": [
+          27,
+          27
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c",
+      "source": {
+        "conditionals": 528,
+        "conditionalsPer10k": 139.3,
+        "conditionalTypes": 259,
+        "conditionalTypesNested": 113,
+        "conditionalTypesNestedIn": {
+          "falseType": 89,
+          "checkType": 1,
+          "trueType": 23
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 286,
+            "no-else-return": 29,
+            "sonarjs/no-nested-conditional": 27,
+            "no-nested-ternary": 26,
+            "unicorn/no-nested-ternary": 24,
+            "unicorn/prefer-minimal-ternary": 7,
+            "unicorn/prefer-logical-operator-over-ternary": 7,
+            "unicorn/no-unnecessary-nested-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 286,
+            "no-else-return": 29,
+            "sonarjs/no-nested-conditional": 27,
+            "no-nested-ternary": 26,
+            "unicorn/no-nested-ternary": 24,
+            "unicorn/prefer-minimal-ternary": 7,
+            "unicorn/prefer-logical-operator-over-ternary": 7,
+            "unicorn/no-unnecessary-nested-ternary": 1
+          }
+        },
+        "files": 125,
+        "filesWithNested": 9,
+        "functions": {
+          "total": 2377,
+          "withNested": 13,
+          "withNestedCognitive": {
+            "max": 102,
+            "mean": 20.31,
+            "median": 8,
+            "n": 13,
+            "p90": 33
+          },
+          "withNestedOver20": 4,
+          "withoutNestedCognitive": {
+            "max": 185,
+            "mean": 10.92,
+            "median": 3,
+            "n": 264,
+            "p90": 24
+          }
+        },
+        "guardChains": 316,
+        "guardChainsTwoPlus": 81,
+        "ifChains": {
+          "elseIf": 51,
+          "elseIfTernaryShaped": 5,
+          "elseIfTernaryShapedByKind": {
+            "assign": 3,
+            "return": 2
+          },
+          "lengths": {
+            "2": 31,
+            "3": 9,
+            "4": 3,
+            "5+": 8
+          },
+          "total": 1733,
+          "ternaryShaped": 16
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 3,
+          "viaFunction": 2
+        },
+        "jsxLines": 0,
+        "lines": 37903,
+        "nested": {
+          "byDepth": {
+            "2": 22,
+            "3": 2
+          },
+          "byPosition": {
+            "initializer": 12,
+            "template": 10,
+            "arrow-body": 2
+          },
+          "byRewrite": {
+            "let-if": 12,
+            "extraction": 10,
+            "early-return": 2
+          },
+          "byShape": {
+            "chain": 20,
+            "consequent": 2,
+            "mixed": 2
+          },
+          "conditionalsInNested": 51,
+          "conditionalsInNestedShare": 9.7,
+          "dispatch": {
+            "allPure": 3,
+            "discriminantKinds": {
+              "member": 3,
+              "typeof": 1
+            },
+            "finalDefault": {
+              "literal": 3,
+              "identifier": 1
+            },
+            "lookup": 4,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 1
+          },
+          "earlyReturnPossible": 2,
+          "extractionOnly": 10,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "literal": 49,
+            "call": 6,
+            "template": 6,
+            "identifier": 4,
+            "member": 3,
+            "array": 3,
+            "undefined": 3,
+            "object": 1
+          },
+          "leafRisks": {
+            "pure": 64,
+            "effects": 7,
+            "reads": 4
+          },
+          "lines": {
+            "max": 9,
+            "mean": 2.08,
+            "median": 1,
+            "n": 24,
+            "p90": 5
+          },
+          "multiline": 5,
+          "parenthesized": {
+            "all": 1,
+            "none": 23,
+            "some": 0
+          },
+          "reportedByEslint": 24,
+          "statementInPlace": 12,
+          "testShapes": {
+            "unrelated": 20,
+            "lookup": 4
+          },
+          "total": 24,
+          "treesWithEffects": 5,
+          "wrapped": 0
+        },
+        "nestedPer10k": 6.3,
+        "nestedPer10kJsx": null
+      },
+      "tests": {
+        "conditionals": 73,
+        "conditionalsPer10k": 14.5,
+        "conditionalTypes": 16,
+        "conditionalTypesNested": 6,
+        "conditionalTypesNestedIn": {
+          "trueType": 2,
+          "falseType": 4
+        },
+        "eslint": {
+          "raw": {
+            "sonarjs/no-nested-conditional": 8,
+            "no-nested-ternary": 6,
+            "unicorn/prefer-ternary": 3,
+            "unicorn/no-nested-ternary": 3,
+            "no-else-return": 2,
+            "unicorn/prefer-minimal-ternary": 2
+          },
+          "reported": {
+            "sonarjs/no-nested-conditional": 8,
+            "no-nested-ternary": 6,
+            "unicorn/prefer-ternary": 3,
+            "unicorn/no-nested-ternary": 3,
+            "no-else-return": 2,
+            "unicorn/prefer-minimal-ternary": 2
+          }
+        },
+        "files": 198,
+        "filesWithNested": 3,
+        "functions": {
+          "total": 5886,
+          "withNested": 4,
+          "withNestedCognitive": {
+            "max": 22,
+            "mean": 13.25,
+            "median": 6,
+            "n": 4,
+            "p90": 22
+          },
+          "withNestedOver20": 2,
+          "withoutNestedCognitive": {
+            "max": 30,
+            "mean": 2.15,
+            "median": 1,
+            "n": 53,
+            "p90": 5
+          }
+        },
+        "guardChains": 9,
+        "guardChainsTwoPlus": 5,
+        "ifChains": {
+          "elseIf": 6,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 6
+          },
+          "total": 543,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 2,
+          "total": 2,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 50464,
+        "nested": {
+          "byDepth": {
+            "2": 2,
+            "3": 2
+          },
+          "byPosition": {
+            "initializer": 2,
+            "property": 1,
+            "arrow-body": 1
+          },
+          "byRewrite": {
+            "let-if": 2,
+            "extraction": 1,
+            "early-return": 1
+          },
+          "byShape": {
+            "chain": 3,
+            "consequent": 1
+          },
+          "conditionalsInNested": 10,
+          "conditionalsInNestedShare": 13.7,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {
+              "identifier": 1
+            },
+            "finalDefault": {
+              "call": 1
+            },
+            "lookup": 1,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 1
+          },
+          "earlyReturnPossible": 1,
+          "extractionOnly": 1,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "call": 4,
+            "literal": 3,
+            "identifier": 3,
+            "object": 2,
+            "member": 1,
+            "null": 1
+          },
+          "leafRisks": {
+            "pure": 9,
+            "effects": 4,
+            "reads": 1
+          },
+          "lines": {
+            "max": 7,
+            "mean": 2.5,
+            "median": 1,
+            "n": 4,
+            "p90": 1
+          },
+          "multiline": 1,
+          "parenthesized": {
+            "all": 1,
+            "none": 3,
+            "some": 0
+          },
+          "reportedByEslint": 4,
+          "statementInPlace": 2,
+          "testShapes": {
+            "unrelated": 3,
+            "lookup": 1
+          },
+          "total": 4,
+          "treesWithEffects": 1,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.8,
+        "nestedPer10kJsx": null
+      },
+      "seconds": 3
+    },
+    "trpc": {
+      "check": {
+        "eslintNNT": [
+          12,
+          12
+        ],
+        "sonar": [
+          12,
+          12
+        ],
+        "unicornNNT": [
+          12,
+          12
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "source": {
+        "conditionals": 169,
+        "conditionalsPer10k": 65.1,
+        "conditionalTypes": 210,
+        "conditionalTypesNested": 95,
+        "conditionalTypesNestedIn": {
+          "falseType": 67,
+          "trueType": 28
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 40,
+            "unicorn/prefer-minimal-ternary": 13,
+            "no-nested-ternary": 2,
+            "unicorn/no-nested-ternary": 2,
+            "sonarjs/no-nested-conditional": 2,
+            "no-else-return": 2,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 40,
+            "unicorn/prefer-minimal-ternary": 13,
+            "no-nested-ternary": 2,
+            "unicorn/no-nested-ternary": 2,
+            "sonarjs/no-nested-conditional": 2,
+            "no-else-return": 2,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "files": 176,
+        "filesWithNested": 2,
+        "functions": {
+          "total": 1245,
+          "withNested": 2,
+          "withNestedCognitive": {
+            "max": 25,
+            "mean": 14,
+            "median": 3,
+            "n": 2,
+            "p90": 3
+          },
+          "withNestedOver20": 1,
+          "withoutNestedCognitive": {
+            "max": 33,
+            "mean": 4.05,
+            "median": 2,
+            "n": 128,
+            "p90": 8
+          }
+        },
+        "guardChains": 64,
+        "guardChainsTwoPlus": 23,
+        "ifChains": {
+          "elseIf": 17,
+          "elseIfTernaryShaped": 1,
+          "elseIfTernaryShapedByKind": {
+            "assign": 1
+          },
+          "lengths": {
+            "2": 15,
+            "3": 2
+          },
+          "total": 722,
+          "ternaryShaped": 6
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 4,
+          "viaFunction": 4
+        },
+        "jsxLines": 2499,
+        "lines": 25948,
+        "nested": {
+          "byDepth": {
+            "2": 2
+          },
+          "byPosition": {
+            "arrow-body": 1,
+            "initializer": 1
+          },
+          "byRewrite": {
+            "early-return": 1,
+            "let-if": 1
+          },
+          "byShape": {
+            "chain": 2
+          },
+          "conditionalsInNested": 4,
+          "conditionalsInNestedShare": 2.4,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 1,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "literal": 2,
+            "array": 2,
+            "unary": 1,
+            "identifier": 1
+          },
+          "leafRisks": {
+            "pure": 6
+          },
+          "lines": {
+            "max": 5,
+            "mean": 3,
+            "median": 1,
+            "n": 2,
+            "p90": 1
+          },
+          "multiline": 1,
+          "parenthesized": {
+            "all": 0,
+            "none": 2,
+            "some": 0
+          },
+          "reportedByEslint": 2,
+          "statementInPlace": 1,
+          "testShapes": {
+            "thresholds": 1,
+            "unrelated": 1
+          },
+          "total": 2,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.8,
+        "nestedPer10kJsx": 0
+      },
+      "tests": {
+        "conditionals": 383,
+        "conditionalsPer10k": 66.9,
+        "conditionalTypes": 183,
+        "conditionalTypesNested": 34,
+        "conditionalTypesNestedIn": {
+          "trueType": 23,
+          "falseType": 11
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 53,
+            "no-nested-ternary": 10,
+            "unicorn/no-nested-ternary": 10,
+            "sonarjs/no-nested-conditional": 10
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 53,
+            "no-nested-ternary": 10,
+            "unicorn/no-nested-ternary": 10,
+            "sonarjs/no-nested-conditional": 10
+          }
+        },
+        "files": 314,
+        "filesWithNested": 2,
+        "functions": {
+          "total": 3668,
+          "withNested": 5,
+          "withNestedCognitive": {
+            "max": 21,
+            "mean": 13.4,
+            "median": 14,
+            "n": 5,
+            "p90": 14
+          },
+          "withNestedOver20": 1,
+          "withoutNestedCognitive": {
+            "max": 72,
+            "mean": 10.43,
+            "median": 3,
+            "n": 231,
+            "p90": 25
+          }
+        },
+        "guardChains": 130,
+        "guardChainsTwoPlus": 47,
+        "ifChains": {
+          "elseIf": 78,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 45,
+            "3": 22,
+            "4": 11
+          },
+          "total": 1421,
+          "ternaryShaped": 2
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 9,
+          "viaFunction": 0
+        },
+        "jsxLines": 15646,
+        "lines": 57228,
+        "nested": {
+          "byDepth": {
+            "2": 10
+          },
+          "byPosition": {
+            "jsx-child": 5,
+            "return": 4,
+            "spread": 1
+          },
+          "byRewrite": {
+            "extraction": 6,
+            "early-return": 4
+          },
+          "byShape": {
+            "chain": 9,
+            "consequent": 1
+          },
+          "conditionalsInNested": 20,
+          "conditionalsInNestedShare": 5.2,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {
+              "member": 4
+            },
+            "finalDefault": {
+              "jsx": 4
+            },
+            "lookup": 4,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 4
+          },
+          "earlyReturnPossible": 4,
+          "extractionOnly": 6,
+          "inJsx": 5,
+          "jsxLeaves": 4,
+          "leafKinds": {
+            "literal": 15,
+            "jsx": 12,
+            "call": 1,
+            "member": 1,
+            "object": 1
+          },
+          "leafRisks": {
+            "pure": 16,
+            "effects": 5,
+            "reads": 5,
+            "jsx": 4
+          },
+          "lines": {
+            "max": 49,
+            "mean": 21.4,
+            "median": 5,
+            "n": 10,
+            "p90": 49
+          },
+          "multiline": 10,
+          "parenthesized": {
+            "all": 0,
+            "none": 10,
+            "some": 0
+          },
+          "reportedByEslint": 10,
+          "statementInPlace": 0,
+          "testShapes": {
+            "unrelated": 6,
+            "lookup": 4
+          },
+          "total": 10,
+          "treesWithEffects": 5,
+          "wrapped": 0
+        },
+        "nestedPer10k": 1.7,
+        "nestedPer10kJsx": 5.8
+      },
+      "seconds": 2
+    },
+    "vite": {
+      "check": {
+        "eslintNNT": [
+          28,
+          28
+        ],
+        "sonar": [
+          33,
+          33
+        ],
+        "unicornNNT": [
+          26,
+          26
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "source": {
+        "conditionals": 570,
+        "conditionalsPer10k": 124.2,
+        "conditionalTypes": 20,
+        "conditionalTypesNested": 10,
+        "conditionalTypesNestedIn": {
+          "trueType": 4,
+          "falseType": 6
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 90,
+            "no-else-return": 51,
+            "sonarjs/no-nested-conditional": 33,
+            "no-nested-ternary": 28,
+            "unicorn/prefer-minimal-ternary": 27,
+            "unicorn/no-nested-ternary": 26,
+            "unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 90,
+            "no-else-return": 51,
+            "sonarjs/no-nested-conditional": 33,
+            "no-nested-ternary": 28,
+            "unicorn/prefer-minimal-ternary": 27,
+            "unicorn/no-nested-ternary": 26,
+            "unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "files": 124,
+        "filesWithNested": 10,
+        "functions": {
+          "total": 2336,
+          "withNested": 19,
+          "withNestedCognitive": {
+            "max": 192,
+            "mean": 30.95,
+            "median": 15,
+            "n": 19,
+            "p90": 53
+          },
+          "withNestedOver20": 6,
+          "withoutNestedCognitive": {
+            "max": 102,
+            "mean": 9.05,
+            "median": 3,
+            "n": 324,
+            "p90": 23
+          }
+        },
+        "guardChains": 118,
+        "guardChainsTwoPlus": 33,
+        "ifChains": {
+          "elseIf": 106,
+          "elseIfTernaryShaped": 15,
+          "elseIfTernaryShapedByKind": {
+            "assign": 10,
+            "return": 5
+          },
+          "lengths": {
+            "2": 84,
+            "3": 13,
+            "4": 6,
+            "5+": 3
+          },
+          "total": 2554,
+          "ternaryShaped": 56
+        },
+        "indirect": {
+          "sonarNested": 4,
+          "total": 20,
+          "viaFunction": 9
+        },
+        "jsxLines": 0,
+        "lines": 45885,
+        "nested": {
+          "byDepth": {
+            "2": 22,
+            "3": 3
+          },
+          "byPosition": {
+            "initializer": 12,
+            "property": 6,
+            "operand": 3,
+            "assignment-statement": 2,
+            "arrow-body": 1,
+            "template": 1
+          },
+          "byRewrite": {
+            "let-if": 12,
+            "extraction": 10,
+            "if-statement": 2,
+            "early-return": 1
+          },
+          "byShape": {
+            "chain": 15,
+            "consequent": 8,
+            "mixed": 2
+          },
+          "conditionalsInNested": 54,
+          "conditionalsInNestedShare": 9.5,
+          "dispatch": {
+            "allPure": 1,
+            "discriminantKinds": {
+              "identifier": 3,
+              "member": 2
+            },
+            "finalDefault": {
+              "member": 1,
+              "call": 1,
+              "literal": 1,
+              "object": 1,
+              "undefined": 1
+            },
+            "lookup": 3,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 2,
+            "switch": 2,
+            "withEffects": 2
+          },
+          "earlyReturnPossible": 1,
+          "extractionOnly": 10,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "literal": 26,
+            "call": 16,
+            "identifier": 10,
+            "array": 7,
+            "member": 6,
+            "object": 4,
+            "template": 4,
+            "logical": 3,
+            "new": 1,
+            "function": 1,
+            "undefined": 1
+          },
+          "leafRisks": {
+            "pure": 49,
+            "effects": 21,
+            "reads": 9
+          },
+          "lines": {
+            "max": 16,
+            "mean": 7.24,
+            "median": 5,
+            "n": 25,
+            "p90": 11
+          },
+          "multiline": 25,
+          "parenthesized": {
+            "all": 0,
+            "none": 25,
+            "some": 0
+          },
+          "reportedByEslint": 25,
+          "statementInPlace": 14,
+          "testShapes": {
+            "unrelated": 20,
+            "lookup": 3,
+            "switch": 2
+          },
+          "total": 25,
+          "treesWithEffects": 12,
+          "wrapped": 0
+        },
+        "nestedPer10k": 5.4,
+        "nestedPer10kJsx": null
+      },
+      "tests": {
+        "conditionals": 20,
+        "conditionalsPer10k": 10.2,
+        "conditionalTypes": 2,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 5,
+            "no-else-return": 3
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 5,
+            "no-else-return": 3
+          }
+        },
+        "files": 89,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 1600,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 11,
+            "mean": 2.53,
+            "median": 2,
+            "n": 15,
+            "p90": 3
+          }
+        },
+        "guardChains": 4,
+        "guardChainsTwoPlus": 0,
+        "ifChains": {
+          "elseIf": 4,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 4
+          },
+          "total": 150,
+          "ternaryShaped": 2
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 19613,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": null
+      },
+      "seconds": 2
+    },
+    "astro": {
+      "check": {
+        "eslintNNT": [
+          33,
+          33
+        ],
+        "sonar": [
+          42,
+          42
+        ],
+        "unicornNNT": [
+          31,
+          31
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "source": {
+        "conditionals": 789,
+        "conditionalsPer10k": 95.1,
+        "conditionalTypes": 58,
+        "conditionalTypesNested": 18,
+        "conditionalTypesNestedIn": {
+          "trueType": 8,
+          "falseType": 9,
+          "checkType": 1
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 179,
+            "no-else-return": 88,
+            "sonarjs/no-nested-conditional": 41,
+            "no-nested-ternary": 32,
+            "unicorn/no-nested-ternary": 30,
+            "unicorn/prefer-minimal-ternary": 27,
+            "unicorn/prefer-logical-operator-over-ternary": 21,
+            "no-unneeded-ternary": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 179,
+            "no-else-return": 88,
+            "sonarjs/no-nested-conditional": 41,
+            "no-nested-ternary": 32,
+            "unicorn/no-nested-ternary": 30,
+            "unicorn/prefer-minimal-ternary": 27,
+            "unicorn/prefer-logical-operator-over-ternary": 21,
+            "no-unneeded-ternary": 2
+          }
+        },
+        "files": 635,
+        "filesWithNested": 25,
+        "functions": {
+          "total": 4014,
+          "withNested": 30,
+          "withNestedCognitive": {
+            "max": 106,
+            "mean": 15.47,
+            "median": 8,
+            "n": 30,
+            "p90": 28
+          },
+          "withNestedOver20": 4,
+          "withoutNestedCognitive": {
+            "max": 89,
+            "mean": 7.81,
+            "median": 4,
+            "n": 455,
+            "p90": 18
+          }
+        },
+        "guardChains": 217,
+        "guardChainsTwoPlus": 55,
+        "ifChains": {
+          "elseIf": 131,
+          "elseIfTernaryShaped": 15,
+          "elseIfTernaryShapedByKind": {
+            "return": 11,
+            "assign": 4
+          },
+          "lengths": {
+            "2": 108,
+            "3": 15,
+            "4": 5,
+            "5+": 3
+          },
+          "total": 3638,
+          "ternaryShaped": 90
+        },
+        "indirect": {
+          "sonarNested": 9,
+          "total": 16,
+          "viaFunction": 4
+        },
+        "jsxLines": 0,
+        "lines": 82969,
+        "nested": {
+          "byDepth": {
+            "2": 32
+          },
+          "byPosition": {
+            "initializer": 21,
+            "property": 5,
+            "assignment-statement": 3,
+            "arrow-body": 2,
+            "return": 1
+          },
+          "byRewrite": {
+            "let-if": 21,
+            "extraction": 5,
+            "if-statement": 3,
+            "early-return": 3
+          },
+          "byShape": {
+            "chain": 25,
+            "consequent": 7
+          },
+          "conditionalsInNested": 64,
+          "conditionalsInNestedShare": 8.1,
+          "dispatch": {
+            "allPure": 1,
+            "discriminantKinds": {
+              "identifier": 6,
+              "member": 1
+            },
+            "finalDefault": {
+              "call": 3,
+              "template": 2,
+              "undefined": 1,
+              "identifier": 1
+            },
+            "lookup": 7,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 1,
+            "switch": 0,
+            "withEffects": 5
+          },
+          "earlyReturnPossible": 3,
+          "extractionOnly": 5,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "literal": 38,
+            "member": 16,
+            "identifier": 15,
+            "call": 12,
+            "undefined": 7,
+            "template": 3,
+            "array": 2,
+            "new": 1,
+            "object": 1,
+            "logical": 1
+          },
+          "leafRisks": {
+            "pure": 63,
+            "reads": 17,
+            "effects": 16
+          },
+          "lines": {
+            "max": 11,
+            "mean": 3.66,
+            "median": 5,
+            "n": 32,
+            "p90": 5
+          },
+          "multiline": 19,
+          "parenthesized": {
+            "all": 2,
+            "none": 30,
+            "some": 0
+          },
+          "reportedByEslint": 32,
+          "statementInPlace": 24,
+          "testShapes": {
+            "unrelated": 24,
+            "lookup": 7,
+            "thresholds": 1
+          },
+          "total": 32,
+          "treesWithEffects": 14,
+          "wrapped": 0
+        },
+        "nestedPer10k": 3.9,
+        "nestedPer10kJsx": null
+      },
+      "tests": {
+        "conditionals": 99,
+        "conditionalsPer10k": 10.5,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 42,
+            "unicorn/prefer-minimal-ternary": 3,
+            "no-nested-ternary": 1,
+            "unicorn/no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 42,
+            "unicorn/prefer-minimal-ternary": 3,
+            "no-nested-ternary": 1,
+            "unicorn/no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          }
+        },
+        "files": 568,
+        "filesWithNested": 1,
+        "functions": {
+          "total": 10171,
+          "withNested": 1,
+          "withNestedCognitive": {
+            "max": 6,
+            "mean": 6,
+            "median": 6,
+            "n": 1,
+            "p90": 6
+          },
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 14,
+            "mean": 2.08,
+            "median": 1,
+            "n": 83,
+            "p90": 4
+          }
+        },
+        "guardChains": 47,
+        "guardChainsTwoPlus": 4,
+        "ifChains": {
+          "elseIf": 12,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 10,
+            "3": 2
+          },
+          "total": 328,
+          "ternaryShaped": 6
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 94702,
+        "nested": {
+          "byDepth": {
+            "2": 1
+          },
+          "byPosition": {
+            "initializer": 1
+          },
+          "byRewrite": {
+            "let-if": 1
+          },
+          "byShape": {
+            "chain": 1
+          },
+          "conditionalsInNested": 2,
+          "conditionalsInNestedShare": 2,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "literal": 3
+          },
+          "leafRisks": {
+            "pure": 3
+          },
+          "lines": {
+            "max": 1,
+            "mean": 1,
+            "median": 1,
+            "n": 1,
+            "p90": 1
+          },
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 1,
+            "some": 0
+          },
+          "reportedByEslint": 1,
+          "statementInPlace": 1,
+          "testShapes": {
+            "unrelated": 1
+          },
+          "total": 1,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.1,
+        "nestedPer10kJsx": null
+      },
+      "seconds": 4
+    },
+    "excalidraw": {
+      "check": {
+        "eslintNNT": [
+          141,
+          141
+        ],
+        "sonar": [
+          192,
+          192
+        ],
+        "unicornNNT": [
+          133,
+          133
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "source": {
+        "conditionals": 1857,
+        "conditionalsPer10k": 144.9,
+        "conditionalTypes": 55,
+        "conditionalTypesNested": 10,
+        "conditionalTypesNestedIn": {
+          "trueType": 5,
+          "falseType": 5
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 198,
+            "sonarjs/no-nested-conditional": 188,
+            "unicorn/prefer-minimal-ternary": 146,
+            "no-nested-ternary": 140,
+            "unicorn/no-nested-ternary": 132,
+            "unicorn/prefer-logical-operator-over-ternary": 21,
+            "unicorn/no-unnecessary-nested-ternary": 3,
+            "no-else-return": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 197,
+            "sonarjs/no-nested-conditional": 188,
+            "unicorn/prefer-minimal-ternary": 146,
+            "no-nested-ternary": 140,
+            "unicorn/no-nested-ternary": 132,
+            "unicorn/prefer-logical-operator-over-ternary": 21,
+            "unicorn/no-unnecessary-nested-ternary": 3
+          }
+        },
+        "files": 444,
+        "filesWithNested": 57,
+        "functions": {
+          "total": 5408,
+          "withNested": 87,
+          "withNestedCognitive": {
+            "max": 164,
+            "mean": 22.39,
+            "median": 12,
+            "n": 87,
+            "p90": 57
+          },
+          "withNestedOver20": 27,
+          "withoutNestedCognitive": {
+            "max": 167,
+            "mean": 7.98,
+            "median": 3,
+            "n": 756,
+            "p90": 18
+          }
+        },
+        "guardChains": 310,
+        "guardChainsTwoPlus": 56,
+        "ifChains": {
+          "elseIf": 205,
+          "elseIfTernaryShaped": 6,
+          "elseIfTernaryShapedByKind": {
+            "assign": 6
+          },
+          "lengths": {
+            "2": 158,
+            "3": 27,
+            "4": 12,
+            "5+": 8
+          },
+          "total": 4540,
+          "ternaryShaped": 55
+        },
+        "indirect": {
+          "sonarNested": 32,
+          "total": 77,
+          "viaFunction": 6
+        },
+        "jsxLines": 50038,
+        "lines": 128127,
+        "nested": {
+          "byDepth": {
+            "2": 105,
+            "3": 11,
+            "5+": 2
+          },
+          "byPosition": {
+            "initializer": 57,
+            "property": 21,
+            "array-element": 11,
+            "argument": 7,
+            "return": 6,
+            "arrow-body": 5,
+            "jsx-child": 5,
+            "assignment-statement": 4,
+            "operand": 1,
+            "jsx-attribute": 1
+          },
+          "byRewrite": {
+            "let-if": 56,
+            "extraction": 47,
+            "early-return": 11,
+            "if-statement": 4
+          },
+          "byShape": {
+            "chain": 79,
+            "mixed": 19,
+            "consequent": 19,
+            "test": 1
+          },
+          "conditionalsInNested": 274,
+          "conditionalsInNestedShare": 14.8,
+          "dispatch": {
+            "allPure": 4,
+            "discriminantKinds": {
+              "member": 10,
+              "identifier": 5
+            },
+            "finalDefault": {
+              "literal": 7,
+              "member": 3,
+              "identifier": 2,
+              "call": 1,
+              "undefined": 1,
+              "array": 1
+            },
+            "lookup": 10,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 7,
+            "switch": 5,
+            "withEffects": 4
+          },
+          "earlyReturnPossible": 11,
+          "extractionOnly": 47,
+          "inJsx": 7,
+          "jsxLeaves": 5,
+          "leafKinds": {
+            "identifier": 75,
+            "literal": 73,
+            "call": 67,
+            "member": 47,
+            "binary": 46,
+            "null": 29,
+            "object": 16,
+            "array": 11,
+            "jsx": 11,
+            "logical": 7,
+            "unary": 5,
+            "new": 2,
+            "undefined": 1,
+            "await": 1
+          },
+          "leafRisks": {
+            "pure": 214,
+            "effects": 88,
+            "reads": 85,
+            "jsx": 3,
+            "await": 1
+          },
+          "lines": {
+            "max": 52,
+            "mean": 8.15,
+            "median": 5,
+            "n": 118,
+            "p90": 15
+          },
+          "multiline": 112,
+          "parenthesized": {
+            "all": 1,
+            "none": 116,
+            "some": 1
+          },
+          "reportedByEslint": 117,
+          "statementInPlace": 60,
+          "testShapes": {
+            "unrelated": 100,
+            "lookup": 10,
+            "switch": 5,
+            "thresholds": 3
+          },
+          "total": 118,
+          "treesWithEffects": 54,
+          "wrapped": 1
+        },
+        "nestedPer10k": 9.2,
+        "nestedPer10kJsx": 8.2
+      },
+      "tests": {
+        "conditionals": 56,
+        "conditionalsPer10k": 11.3,
+        "conditionalTypes": 34,
+        "conditionalTypesNested": 11,
+        "conditionalTypesNestedIn": {
+          "falseType": 11
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-minimal-ternary": 6,
+            "sonarjs/no-nested-conditional": 4,
+            "unicorn/prefer-ternary": 4,
+            "no-nested-ternary": 1,
+            "unicorn/no-nested-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-minimal-ternary": 6,
+            "sonarjs/no-nested-conditional": 4,
+            "unicorn/prefer-ternary": 4,
+            "no-nested-ternary": 1,
+            "unicorn/no-nested-ternary": 1
+          }
+        },
+        "files": 107,
+        "filesWithNested": 2,
+        "functions": {
+          "total": 3653,
+          "withNested": 2,
+          "withNestedCognitive": {
+            "max": 12,
+            "mean": 8,
+            "median": 4,
+            "n": 2,
+            "p90": 4
+          },
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 9,
+            "mean": 2,
+            "median": 1,
+            "n": 41,
+            "p90": 4
+          }
+        },
+        "guardChains": 10,
+        "guardChainsTwoPlus": 1,
+        "ifChains": {
+          "elseIf": 5,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 3,
+            "3": 2
+          },
+          "total": 83,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 2,
+          "total": 3,
+          "viaFunction": 0
+        },
+        "jsxLines": 37842,
+        "lines": 49621,
+        "nested": {
+          "byDepth": {
+            "2": 2
+          },
+          "byPosition": {
+            "property": 1,
+            "array-element": 1
+          },
+          "byRewrite": {
+            "extraction": 2
+          },
+          "byShape": {
+            "test": 1,
+            "chain": 1
+          },
+          "conditionalsInNested": 4,
+          "conditionalsInNestedShare": 7.1,
+          "dispatch": {
+            "allPure": 1,
+            "discriminantKinds": {
+              "identifier": 1
+            },
+            "finalDefault": {
+              "object": 1
+            },
+            "lookup": 1,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 2,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "object": 4,
+            "null": 1
+          },
+          "leafRisks": {
+            "pure": 4,
+            "effects": 1
+          },
+          "lines": {
+            "max": 11,
+            "mean": 8,
+            "median": 5,
+            "n": 2,
+            "p90": 5
+          },
+          "multiline": 2,
+          "parenthesized": {
+            "all": 1,
+            "none": 1,
+            "some": 0
+          },
+          "reportedByEslint": 1,
+          "statementInPlace": 0,
+          "testShapes": {
+            "unrelated": 1,
+            "lookup": 1
+          },
+          "total": 2,
+          "treesWithEffects": 1,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.4,
+        "nestedPer10kJsx": 0.3
+      },
+      "seconds": 4
+    },
+    "next.js": {
+      "check": {
+        "eslintNNT": [
+          186,
+          186
+        ],
+        "sonar": [
+          233,
+          233
+        ],
+        "unicornNNT": [
+          165,
+          165
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+      "source": {
+        "conditionals": 3284,
+        "conditionalsPer10k": 118.9,
+        "conditionalTypes": 19,
+        "conditionalTypesNested": 3,
+        "conditionalTypesNestedIn": {
+          "falseType": 3
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 465,
+            "sonarjs/no-nested-conditional": 233,
+            "no-nested-ternary": 186,
+            "no-else-return": 178,
+            "unicorn/no-nested-ternary": 165,
+            "unicorn/prefer-minimal-ternary": 136,
+            "unicorn/prefer-logical-operator-over-ternary": 26,
+            "no-unneeded-ternary": 5,
+            "unicorn/no-unnecessary-nested-ternary": 3
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 465,
+            "sonarjs/no-nested-conditional": 233,
+            "no-nested-ternary": 186,
+            "no-else-return": 178,
+            "unicorn/no-nested-ternary": 165,
+            "unicorn/prefer-minimal-ternary": 136,
+            "unicorn/prefer-logical-operator-over-ternary": 26,
+            "no-unneeded-ternary": 5,
+            "unicorn/no-unnecessary-nested-ternary": 3
+          }
+        },
+        "files": 1416,
+        "filesWithNested": 101,
+        "functions": {
+          "total": 10136,
+          "withNested": 132,
+          "withNestedCognitive": {
+            "max": 612,
+            "mean": 36.3,
+            "median": 13,
+            "n": 132,
+            "p90": 84
+          },
+          "withNestedOver20": 48,
+          "withoutNestedCognitive": {
+            "max": 989,
+            "mean": 12.14,
+            "median": 4,
+            "n": 1358,
+            "p90": 24
+          }
+        },
+        "guardChains": 526,
+        "guardChainsTwoPlus": 110,
+        "ifChains": {
+          "elseIf": 474,
+          "elseIfTernaryShaped": 42,
+          "elseIfTernaryShapedByKind": {
+            "assign": 29,
+            "return": 13
+          },
+          "lengths": {
+            "2": 375,
+            "3": 64,
+            "4": 19,
+            "5+": 16
+          },
+          "total": 11768,
+          "ternaryShaped": 189
+        },
+        "indirect": {
+          "sonarNested": 42,
+          "total": 118,
+          "viaFunction": 13
+        },
+        "jsxLines": 50133,
+        "lines": 276128,
+        "nested": {
+          "byDepth": {
+            "2": 146,
+            "3": 14,
+            "4": 4
+          },
+          "byPosition": {
+            "initializer": 71,
+            "property": 27,
+            "argument": 14,
+            "assignment-statement": 11,
+            "spread": 10,
+            "return": 9,
+            "template": 6,
+            "operand": 4,
+            "arrow-body": 4,
+            "jsx-child": 3,
+            "jsx-attribute": 3,
+            "array-element": 2
+          },
+          "byRewrite": {
+            "let-if": 71,
+            "extraction": 69,
+            "early-return": 13,
+            "if-statement": 11
+          },
+          "byShape": {
+            "chain": 123,
+            "consequent": 35,
+            "mixed": 6
+          },
+          "conditionalsInNested": 355,
+          "conditionalsInNestedShare": 10.8,
+          "dispatch": {
+            "allPure": 11,
+            "discriminantKinds": {
+              "member": 10,
+              "identifier": 10,
+              "call-or-chain": 2,
+              "typeof": 1
+            },
+            "finalDefault": {
+              "literal": 6,
+              "call": 3,
+              "undefined": 3,
+              "array": 2,
+              "iife": 2,
+              "identifier": 2,
+              "member": 2,
+              "template": 1,
+              "null": 1,
+              "object": 1
+            },
+            "lookup": 15,
+            "looseEquality": 0,
+            "multiValue": 1,
+            "readsOnly": 4,
+            "switch": 8,
+            "withEffects": 8
+          },
+          "earlyReturnPossible": 13,
+          "extractionOnly": 69,
+          "inJsx": 11,
+          "jsxLeaves": 3,
+          "leafKinds": {
+            "literal": 187,
+            "member": 76,
+            "identifier": 53,
+            "call": 42,
+            "object": 40,
+            "undefined": 37,
+            "array": 23,
+            "template": 16,
+            "null": 13,
+            "logical": 6,
+            "jsx": 6,
+            "unary": 5,
+            "binary": 5,
+            "new": 4,
+            "iife": 3,
+            "await": 2,
+            "assignment": 1
+          },
+          "leafRisks": {
+            "pure": 339,
+            "reads": 106,
+            "effects": 64,
+            "jsx": 4,
+            "await": 4,
+            "throws": 2
+          },
+          "lines": {
+            "max": 109,
+            "mean": 7.15,
+            "median": 5,
+            "n": 164,
+            "p90": 10
+          },
+          "multiline": 143,
+          "parenthesized": {
+            "all": 4,
+            "none": 160,
+            "some": 0
+          },
+          "reportedByEslint": 164,
+          "statementInPlace": 82,
+          "testShapes": {
+            "unrelated": 137,
+            "lookup": 15,
+            "switch": 8,
+            "thresholds": 4
+          },
+          "total": 164,
+          "treesWithEffects": 48,
+          "wrapped": 0
+        },
+        "nestedPer10k": 5.9,
+        "nestedPer10kJsx": 5.8
+      },
+      "tests": {
+        "conditionals": 44,
+        "conditionalsPer10k": 11.7,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 2
+          }
+        },
+        "files": 154,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 3523,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 3,
+            "mean": 1.38,
+            "median": 1,
+            "n": 42,
+            "p90": 2
+          }
+        },
+        "guardChains": 3,
+        "guardChainsTwoPlus": 0,
+        "ifChains": {
+          "elseIf": 2,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 2
+          },
+          "total": 68,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 450,
+        "lines": 37761,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": 0
+      },
+      "seconds": 6
+    },
+    "vscode": {
+      "check": {
+        "eslintNNT": [
+          18,
+          18
+        ],
+        "sonar": [
+          21,
+          21
+        ],
+        "unicornNNT": [
+          7,
+          7
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "core",
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+      "source": {
+        "conditionals": 483,
+        "conditionalsPer10k": 67.3,
+        "conditionalTypes": 4,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 354,
+            "no-else-return": 110,
+            "unicorn/prefer-minimal-ternary": 39,
+            "sonarjs/no-nested-conditional": 21,
+            "no-nested-ternary": 18,
+            "unicorn/no-nested-ternary": 7,
+            "unicorn/prefer-logical-operator-over-ternary": 7,
+            "no-unneeded-ternary": 6
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 354,
+            "no-else-return": 110,
+            "unicorn/prefer-minimal-ternary": 39,
+            "sonarjs/no-nested-conditional": 21,
+            "no-nested-ternary": 18,
+            "unicorn/no-nested-ternary": 7,
+            "unicorn/prefer-logical-operator-over-ternary": 7,
+            "no-unneeded-ternary": 6
+          }
+        },
+        "files": 226,
+        "filesWithNested": 13,
+        "functions": {
+          "total": 4208,
+          "withNested": 13,
+          "withNestedCognitive": {
+            "max": 60,
+            "mean": 27.08,
+            "median": 27,
+            "n": 13,
+            "p90": 50
+          },
+          "withNestedOver20": 8,
+          "withoutNestedCognitive": {
+            "max": 140,
+            "mean": 11.86,
+            "median": 4,
+            "n": 274,
+            "p90": 32
+          }
+        },
+        "guardChains": 325,
+        "guardChainsTwoPlus": 64,
+        "ifChains": {
+          "elseIf": 172,
+          "elseIfTernaryShaped": 20,
+          "elseIfTernaryShapedByKind": {
+            "return": 12,
+            "assign": 8
+          },
+          "lengths": {
+            "2": 140,
+            "3": 23,
+            "4": 6,
+            "5+": 3
+          },
+          "total": 3656,
+          "ternaryShaped": 140
+        },
+        "indirect": {
+          "sonarNested": 1,
+          "total": 1,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 71809,
+        "nested": {
+          "byDepth": {
+            "2": 15,
+            "4": 1
+          },
+          "byPosition": {
+            "initializer": 9,
+            "property": 3,
+            "assignment-statement": 2,
+            "argument": 1,
+            "arrow-body": 1
+          },
+          "byRewrite": {
+            "let-if": 9,
+            "extraction": 4,
+            "if-statement": 2,
+            "early-return": 1
+          },
+          "byShape": {
+            "chain": 10,
+            "consequent": 4,
+            "mixed": 2
+          },
+          "conditionalsInNested": 36,
+          "conditionalsInNestedShare": 7.5,
+          "dispatch": {
+            "allPure": 3,
+            "discriminantKinds": {
+              "identifier": 4,
+              "member": 1
+            },
+            "finalDefault": {
+              "literal": 3,
+              "member": 1,
+              "array": 1
+            },
+            "lookup": 2,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 2,
+            "switch": 3,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 1,
+          "extractionOnly": 4,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "member": 21,
+            "literal": 16,
+            "identifier": 9,
+            "array": 3,
+            "call": 2,
+            "binary": 1
+          },
+          "leafRisks": {
+            "pure": 28,
+            "reads": 21,
+            "effects": 3
+          },
+          "lines": {
+            "max": 9,
+            "mean": 2.5,
+            "median": 1,
+            "n": 16,
+            "p90": 5
+          },
+          "multiline": 6,
+          "parenthesized": {
+            "all": 9,
+            "none": 7,
+            "some": 0
+          },
+          "reportedByEslint": 16,
+          "statementInPlace": 11,
+          "testShapes": {
+            "unrelated": 10,
+            "switch": 3,
+            "lookup": 2,
+            "thresholds": 1
+          },
+          "total": 16,
+          "treesWithEffects": 3,
+          "wrapped": 0
+        },
+        "nestedPer10k": 2.2,
+        "nestedPer10kJsx": null
+      },
+      "tests": {
+        "conditionals": 0,
+        "conditionalsPer10k": null,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {},
+          "reported": {}
+        },
+        "files": 0,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 0,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": null
+        },
+        "guardChains": 0,
+        "guardChainsTwoPlus": 0,
+        "ifChains": {
+          "elseIf": 0,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {},
+          "total": 0,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 0,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": null,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": null,
+        "nestedPer10kJsx": null
+      },
+      "seconds": 2
+    },
+    "shadcn": {
+      "check": {
+        "eslintNNT": [
+          1,
+          1
+        ],
+        "sonar": [
+          1,
+          1
+        ],
+        "unicornNNT": [
+          1,
+          1
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "react",
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+      "source": {
+        "conditionals": 82,
+        "conditionalsPer10k": 44.4,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-minimal-ternary": 2,
+            "unicorn/prefer-ternary": 1,
+            "no-nested-ternary": 1,
+            "unicorn/no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          },
+          "reported": {
+            "unicorn/prefer-minimal-ternary": 2,
+            "unicorn/prefer-ternary": 1,
+            "no-nested-ternary": 1,
+            "unicorn/no-nested-ternary": 1,
+            "sonarjs/no-nested-conditional": 1
+          }
+        },
+        "files": 165,
+        "filesWithNested": 1,
+        "functions": {
+          "total": 588,
+          "withNested": 1,
+          "withNestedCognitive": {
+            "max": 3,
+            "mean": 3,
+            "median": 3,
+            "n": 1,
+            "p90": 3
+          },
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 13,
+            "mean": 1.93,
+            "median": 1,
+            "n": 60,
+            "p90": 3
+          }
+        },
+        "guardChains": 13,
+        "guardChainsTwoPlus": 3,
+        "ifChains": {
+          "elseIf": 3,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 3
+          },
+          "total": 39,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 6,
+          "viaFunction": 0
+        },
+        "jsxLines": 16911,
+        "lines": 18473,
+        "nested": {
+          "byDepth": {
+            "2": 1
+          },
+          "byPosition": {
+            "arrow-body": 1
+          },
+          "byRewrite": {
+            "early-return": 1
+          },
+          "byShape": {
+            "chain": 1
+          },
+          "conditionalsInNested": 2,
+          "conditionalsInNestedShare": 2.4,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 1,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "identifier": 2,
+            "array": 1
+          },
+          "leafRisks": {
+            "pure": 3
+          },
+          "lines": {
+            "max": 5,
+            "mean": 5,
+            "median": 5,
+            "n": 1,
+            "p90": 5
+          },
+          "multiline": 1,
+          "parenthesized": {
+            "all": 0,
+            "none": 1,
+            "some": 0
+          },
+          "reportedByEslint": 1,
+          "statementInPlace": 0,
+          "testShapes": {
+            "unrelated": 1
+          },
+          "total": 1,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.5,
+        "nestedPer10kJsx": 0.6
+      },
+      "tests": {
+        "conditionals": 0,
+        "conditionalsPer10k": null,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {},
+          "reported": {}
+        },
+        "files": 0,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 0,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": null
+        },
+        "guardChains": 0,
+        "guardChainsTwoPlus": 0,
+        "ifChains": {
+          "elseIf": 0,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {},
+          "total": 0,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 0,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": null,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": null,
+        "nestedPer10kJsx": null
+      },
+      "seconds": 0
+    },
+    "radix": {
+      "check": {
+        "eslintNNT": [
+          14,
+          14
+        ],
+        "sonar": [
+          15,
+          15
+        ],
+        "unicornNNT": [
+          11,
+          11
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "react",
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "source": {
+        "conditionals": 374,
+        "conditionalsPer10k": 146.1,
+        "conditionalTypes": 8,
+        "conditionalTypesNested": 2,
+        "conditionalTypesNestedIn": {
+          "checkType": 2
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 24,
+            "sonarjs/no-nested-conditional": 15,
+            "no-nested-ternary": 14,
+            "unicorn/prefer-minimal-ternary": 13,
+            "unicorn/no-nested-ternary": 11,
+            "unicorn/prefer-logical-operator-over-ternary": 11,
+            "no-else-return": 8
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 24,
+            "sonarjs/no-nested-conditional": 15,
+            "no-nested-ternary": 14,
+            "unicorn/prefer-minimal-ternary": 13,
+            "unicorn/no-nested-ternary": 11,
+            "unicorn/prefer-logical-operator-over-ternary": 11,
+            "no-else-return": 8
+          }
+        },
+        "files": 160,
+        "filesWithNested": 11,
+        "functions": {
+          "total": 1493,
+          "withNested": 12,
+          "withNestedCognitive": {
+            "max": 10,
+            "mean": 4.25,
+            "median": 3,
+            "n": 12,
+            "p90": 6
+          },
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 16,
+            "mean": 3.11,
+            "median": 2,
+            "n": 212,
+            "p90": 7
+          }
+        },
+        "guardChains": 23,
+        "guardChainsTwoPlus": 3,
+        "ifChains": {
+          "elseIf": 29,
+          "elseIfTernaryShaped": 4,
+          "elseIfTernaryShapedByKind": {
+            "return": 3,
+            "assign": 1
+          },
+          "lengths": {
+            "2": 23,
+            "3": 3,
+            "4": 3
+          },
+          "total": 690,
+          "ternaryShaped": 9
+        },
+        "indirect": {
+          "sonarNested": 1,
+          "total": 8,
+          "viaFunction": 0
+        },
+        "jsxLines": 23867,
+        "lines": 25594,
+        "nested": {
+          "byDepth": {
+            "2": 11,
+            "4": 1
+          },
+          "byPosition": {
+            "return": 9,
+            "initializer": 1,
+            "property": 1,
+            "jsx-child": 1
+          },
+          "byRewrite": {
+            "early-return": 9,
+            "extraction": 2,
+            "let-if": 1
+          },
+          "byShape": {
+            "chain": 8,
+            "consequent": 4
+          },
+          "conditionalsInNested": 26,
+          "conditionalsInNestedShare": 7,
+          "dispatch": {
+            "allPure": 2,
+            "discriminantKinds": {
+              "identifier": 1,
+              "member": 1
+            },
+            "finalDefault": {
+              "identifier": 1,
+              "null": 1
+            },
+            "lookup": 1,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 1,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 9,
+          "extractionOnly": 2,
+          "inJsx": 2,
+          "jsxLeaves": 2,
+          "leafKinds": {
+            "literal": 18,
+            "jsx": 6,
+            "member": 5,
+            "identifier": 3,
+            "call": 2,
+            "undefined": 2,
+            "unary": 1,
+            "null": 1
+          },
+          "leafRisks": {
+            "pure": 25,
+            "jsx": 6,
+            "reads": 5,
+            "effects": 2
+          },
+          "lines": {
+            "max": 27,
+            "mean": 5.58,
+            "median": 5,
+            "n": 12,
+            "p90": 6
+          },
+          "multiline": 7,
+          "parenthesized": {
+            "all": 1,
+            "none": 11,
+            "some": 0
+          },
+          "reportedByEslint": 12,
+          "statementInPlace": 1,
+          "testShapes": {
+            "unrelated": 10,
+            "lookup": 1,
+            "switch": 1
+          },
+          "total": 12,
+          "treesWithEffects": 2,
+          "wrapped": 0
+        },
+        "nestedPer10k": 4.7,
+        "nestedPer10kJsx": 5
+      },
+      "tests": {
+        "conditionals": 37,
+        "conditionalsPer10k": 13.4,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {},
+          "reported": {}
+        },
+        "files": 46,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 2776,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 6,
+            "mean": 1.3,
+            "median": 1,
+            "n": 33,
+            "p90": 2
+          }
+        },
+        "guardChains": 0,
+        "guardChainsTwoPlus": 0,
+        "ifChains": {
+          "elseIf": 0,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {},
+          "total": 17,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 26159,
+        "lines": 27654,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": 0
+      },
+      "seconds": 1
+    },
+    "react-aria": {
+      "check": {
+        "eslintNNT": [
+          4,
+          4
+        ],
+        "sonar": [
+          5,
+          5
+        ],
+        "unicornNNT": [
+          5,
+          5
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "react",
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+      "source": {
+        "conditionals": 233,
+        "conditionalsPer10k": 104,
+        "conditionalTypes": 2,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 28,
+            "unicorn/prefer-minimal-ternary": 12,
+            "unicorn/no-nested-ternary": 5,
+            "sonarjs/no-nested-conditional": 5,
+            "no-nested-ternary": 4,
+            "no-else-return": 3,
+            "unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 28,
+            "unicorn/prefer-minimal-ternary": 12,
+            "unicorn/no-nested-ternary": 5,
+            "sonarjs/no-nested-conditional": 5,
+            "no-nested-ternary": 4,
+            "no-else-return": 3,
+            "unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "files": 71,
+        "filesWithNested": 1,
+        "functions": {
+          "total": 528,
+          "withNested": 3,
+          "withNestedCognitive": {
+            "max": 15,
+            "mean": 8.67,
+            "median": 7,
+            "n": 3,
+            "p90": 7
+          },
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 46,
+            "mean": 5.5,
+            "median": 2,
+            "n": 123,
+            "p90": 11
+          }
+        },
+        "guardChains": 34,
+        "guardChainsTwoPlus": 1,
+        "ifChains": {
+          "elseIf": 18,
+          "elseIfTernaryShaped": 4,
+          "elseIfTernaryShapedByKind": {
+            "assign": 4
+          },
+          "lengths": {
+            "2": 17,
+            "3": 1
+          },
+          "total": 313,
+          "ternaryShaped": 12
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 1,
+          "viaFunction": 0
+        },
+        "jsxLines": 21979,
+        "lines": 22407,
+        "nested": {
+          "byDepth": {
+            "2": 4
+          },
+          "byPosition": {
+            "initializer": 4
+          },
+          "byRewrite": {
+            "let-if": 4
+          },
+          "byShape": {
+            "chain": 3,
+            "mixed": 1
+          },
+          "conditionalsInNested": 9,
+          "conditionalsInNestedShare": 3.9,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {
+            "literal": 7,
+            "object": 4,
+            "call": 1,
+            "identifier": 1
+          },
+          "leafRisks": {
+            "pure": 12,
+            "effects": 1
+          },
+          "lines": {
+            "max": 7,
+            "mean": 3.5,
+            "median": 1,
+            "n": 4,
+            "p90": 5
+          },
+          "multiline": 2,
+          "parenthesized": {
+            "all": 0,
+            "none": 4,
+            "some": 0
+          },
+          "reportedByEslint": 4,
+          "statementInPlace": 4,
+          "testShapes": {
+            "unrelated": 4
+          },
+          "total": 4,
+          "treesWithEffects": 1,
+          "wrapped": 0
+        },
+        "nestedPer10k": 1.8,
+        "nestedPer10kJsx": 1.8
+      },
+      "tests": {
+        "conditionals": 307,
+        "conditionalsPer10k": 68.5,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 11,
+            "no-else-return": 8,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 11,
+            "no-else-return": 8,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "files": 86,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 3803,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 11,
+            "mean": 1.21,
+            "median": 1,
+            "n": 281,
+            "p90": 1
+          }
+        },
+        "guardChains": 8,
+        "guardChainsTwoPlus": 1,
+        "ifChains": {
+          "elseIf": 5,
+          "elseIfTernaryShaped": 1,
+          "elseIfTernaryShapedByKind": {
+            "return": 1
+          },
+          "lengths": {
+            "2": 3,
+            "3": 2
+          },
+          "total": 165,
+          "ternaryShaped": 1
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 0,
+          "viaFunction": 0
+        },
+        "jsxLines": 15182,
+        "lines": 44831,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": 0
+      },
+      "seconds": 2
+    },
+    "supabase": {
+      "check": {
+        "eslintNNT": [
+          684,
+          684
+        ],
+        "sonar": [
+          785,
+          785
+        ],
+        "unicornNNT": [
+          498,
+          498
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "react",
+      "sha": "09f80f528ec47569841408a81668dff90525c48a",
+      "source": {
+        "conditionals": 7124,
+        "conditionalsPer10k": 186.2,
+        "conditionalTypes": 18,
+        "conditionalTypesNested": 3,
+        "conditionalTypesNestedIn": {
+          "trueType": 2,
+          "falseType": 1
+        },
+        "eslint": {
+          "raw": {
+            "sonarjs/no-nested-conditional": 785,
+            "no-nested-ternary": 684,
+            "unicorn/no-nested-ternary": 498,
+            "unicorn/prefer-ternary": 470,
+            "no-else-return": 165,
+            "unicorn/prefer-minimal-ternary": 73,
+            "unicorn/prefer-logical-operator-over-ternary": 51,
+            "unicorn/no-unnecessary-nested-ternary": 11,
+            "no-unneeded-ternary": 6
+          },
+          "reported": {
+            "sonarjs/no-nested-conditional": 785,
+            "no-nested-ternary": 684,
+            "unicorn/no-nested-ternary": 498,
+            "unicorn/prefer-ternary": 470,
+            "no-else-return": 165,
+            "unicorn/prefer-minimal-ternary": 73,
+            "unicorn/prefer-logical-operator-over-ternary": 51,
+            "unicorn/no-unnecessary-nested-ternary": 11,
+            "no-unneeded-ternary": 6
+          }
+        },
+        "files": 2759,
+        "filesWithNested": 365,
+        "functions": {
+          "total": 19321,
+          "withNested": 410,
+          "withNestedCognitive": {
+            "max": 91,
+            "mean": 12.36,
+            "median": 9,
+            "n": 410,
+            "p90": 23
+          },
+          "withNestedOver20": 60,
+          "withoutNestedCognitive": {
+            "max": 80,
+            "mean": 3.72,
+            "median": 2,
+            "n": 2592,
+            "p90": 8
+          }
+        },
+        "guardChains": 1096,
+        "guardChainsTwoPlus": 341,
+        "ifChains": {
+          "elseIf": 221,
+          "elseIfTernaryShaped": 27,
+          "elseIfTernaryShapedByKind": {
+            "return": 23,
+            "assign": 4
+          },
+          "lengths": {
+            "2": 163,
+            "3": 34,
+            "4": 9,
+            "5+": 15
+          },
+          "total": 7267,
+          "ternaryShaped": 128
+        },
+        "indirect": {
+          "sonarNested": 83,
+          "total": 783,
+          "viaFunction": 169
+        },
+        "jsxLines": 310726,
+        "lines": 382573,
+        "nested": {
+          "byDepth": {
+            "2": 399,
+            "3": 90,
+            "4": 20,
+            "5+": 11
+          },
+          "byPosition": {
+            "jsx-child": 226,
+            "initializer": 136,
+            "jsx-attribute": 54,
+            "property": 45,
+            "argument": 15,
+            "return": 15,
+            "operand": 13,
+            "template": 10,
+            "arrow-body": 4,
+            "spread": 1,
+            "assignment-statement": 1
+          },
+          "byRewrite": {
+            "extraction": 364,
+            "let-if": 136,
+            "early-return": 19,
+            "if-statement": 1
+          },
+          "byShape": {
+            "chain": 414,
+            "consequent": 60,
+            "mixed": 46
+          },
+          "conditionalsInNested": 1222,
+          "conditionalsInNestedShare": 17.2,
+          "dispatch": {
+            "allPure": 37,
+            "discriminantKinds": {
+              "identifier": 29,
+              "member": 15,
+              "call-or-chain": 1,
+              "typeof": 1
+            },
+            "finalDefault": {
+              "literal": 20,
+              "identifier": 6,
+              "undefined": 4,
+              "member": 4,
+              "array": 3,
+              "jsx": 3,
+              "call": 2,
+              "template": 2,
+              "object": 1,
+              "binary": 1
+            },
+            "lookup": 38,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 3,
+            "switch": 8,
+            "withEffects": 6
+          },
+          "earlyReturnPossible": 19,
+          "extractionOnly": 364,
+          "inJsx": 329,
+          "jsxLeaves": 217,
+          "leafKinds": {
+            "jsx": 634,
+            "literal": 569,
+            "undefined": 87,
+            "identifier": 87,
+            "null": 85,
+            "template": 83,
+            "call": 64,
+            "member": 64,
+            "array": 28,
+            "logical": 15,
+            "object": 12,
+            "unary": 6,
+            "binary": 6,
+            "function": 2
+          },
+          "leafRisks": {
+            "pure": 923,
+            "jsx": 441,
+            "reads": 195,
+            "effects": 183
+          },
+          "lines": {
+            "max": 322,
+            "mean": 20.8,
+            "median": 7,
+            "n": 520,
+            "p90": 59
+          },
+          "multiline": 454,
+          "parenthesized": {
+            "all": 37,
+            "none": 469,
+            "some": 14
+          },
+          "reportedByEslint": 520,
+          "statementInPlace": 137,
+          "testShapes": {
+            "unrelated": 469,
+            "lookup": 38,
+            "switch": 8,
+            "thresholds": 5
+          },
+          "total": 520,
+          "treesWithEffects": 145,
+          "wrapped": 1
+        },
+        "nestedPer10k": 13.6,
+        "nestedPer10kJsx": 15.8
+      },
+      "tests": {
+        "conditionals": 94,
+        "conditionalsPer10k": 11.8,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 9,
+            "unicorn/prefer-minimal-ternary": 2,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 9,
+            "unicorn/prefer-minimal-ternary": 2,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "files": 458,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 9558,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 6,
+            "mean": 1.38,
+            "median": 1,
+            "n": 80,
+            "p90": 2
+          }
+        },
+        "guardChains": 17,
+        "guardChainsTwoPlus": 3,
+        "ifChains": {
+          "elseIf": 1,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 1
+          },
+          "total": 107,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 1,
+          "viaFunction": 0
+        },
+        "jsxLines": 40749,
+        "lines": 79558,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": 0
+      },
+      "seconds": 10
+    },
+    "ultracite": {
+      "check": {
+        "eslintNNT": [
+          0,
+          0
+        ],
+        "sonar": [
+          0,
+          0
+        ],
+        "unicornNNT": [
+          0,
+          0
+        ]
+      },
+      "errors": [],
+      "mismatches": [],
+      "mismatchCount": 0,
+      "set": "dogfood",
+      "sha": "cfa365be0a5446943faa1c23ecc244c788df36cc",
+      "source": {
+        "conditionals": 348,
+        "conditionalsPer10k": 184.9,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 16,
+            "unicorn/prefer-minimal-ternary": 6,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 16,
+            "unicorn/prefer-minimal-ternary": 6,
+            "unicorn/prefer-logical-operator-over-ternary": 1
+          }
+        },
+        "files": 56,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 1038,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 26,
+            "mean": 4.09,
+            "median": 2,
+            "n": 256,
+            "p90": 9
+          }
+        },
+        "guardChains": 62,
+        "guardChainsTwoPlus": 20,
+        "ifChains": {
+          "elseIf": 18,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 13,
+            "3": 3,
+            "5+": 2
+          },
+          "total": 738,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 3,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 18818,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": null
+      },
+      "tests": {
+        "conditionals": 97,
+        "conditionalsPer10k": 33,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 87,
+            "unicorn/prefer-minimal-ternary": 7
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 87,
+            "unicorn/prefer-minimal-ternary": 7
+          }
+        },
+        "files": 52,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 5492,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 9,
+            "mean": 1.4,
+            "median": 1,
+            "n": 92,
+            "p90": 2
+          }
+        },
+        "guardChains": 118,
+        "guardChainsTwoPlus": 23,
+        "ifChains": {
+          "elseIf": 0,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {},
+          "total": 250,
+          "ternaryShaped": 0
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 2,
+          "viaFunction": 0
+        },
+        "jsxLines": 0,
+        "lines": 29413,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": null
+      },
+      "seconds": 2
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  },
+  "pooled": {
+    "corpus": {
+      "source": {
+        "conditionals": 7992,
+        "conditionalsPer10k": 115.1,
+        "conditionalTypes": 854,
+        "conditionalTypesNested": 359,
+        "conditionalTypesNestedIn": {
+          "falseType": 234,
+          "checkType": 3,
+          "trueType": 121,
+          "extendsType": 1
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 1661,
+            "sonarjs/no-nested-conditional": 585,
+            "no-else-return": 488,
+            "no-nested-ternary": 461,
+            "unicorn/no-nested-ternary": 410,
+            "unicorn/prefer-minimal-ternary": 403,
+            "unicorn/prefer-logical-operator-over-ternary": 87,
+            "no-unneeded-ternary": 14,
+            "unicorn/no-unnecessary-nested-ternary": 7
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 1660,
+            "sonarjs/no-nested-conditional": 585,
+            "no-else-return": 486,
+            "no-nested-ternary": 461,
+            "unicorn/no-nested-ternary": 410,
+            "unicorn/prefer-minimal-ternary": 403,
+            "unicorn/prefer-logical-operator-over-ternary": 87,
+            "no-unneeded-ternary": 14,
+            "unicorn/no-unnecessary-nested-ternary": 7
+          }
+        },
+        "files": 3333,
+        "filesWithNested": 233,
+        "functions": {
+          "total": 30904,
+          "withNested": 319,
+          "withNestedCognitive": {
+            "max": 612,
+            "mean": 28.08,
+            "median": 12,
+            "n": 319,
+            "p90": 63
+          },
+          "withNestedOver20": 103,
+          "withoutNestedCognitive": {
+            "max": 989,
+            "mean": 9.96,
+            "median": 3,
+            "n": 3738,
+            "p90": 23
+          }
+        },
+        "guardChains": 1925,
+        "guardChainsTwoPlus": 432,
+        "ifChains": {
+          "elseIf": 1220,
+          "elseIfTernaryShaped": 109,
+          "elseIfTernaryShapedByKind": {
+            "assign": 64,
+            "return": 45
+          },
+          "lengths": {
+            "2": 952,
+            "3": 167,
+            "4": 54,
+            "5+": 47
+          },
+          "total": 29754,
+          "ternaryShaped": 577
+        },
+        "indirect": {
+          "sonarNested": 97,
+          "total": 252,
+          "viaFunction": 41
+        },
+        "jsxLines": 102670,
+        "lines": 694309,
+        "nested": {
+          "byDepth": {
+            "2": 365,
+            "3": 34,
+            "4": 5,
+            "5+": 2
+          },
+          "byPosition": {
+            "initializer": 191,
+            "property": 63,
+            "argument": 25,
+            "assignment-statement": 23,
+            "return": 22,
+            "arrow-body": 19,
+            "template": 17,
+            "array-element": 13,
+            "operand": 11,
+            "spread": 10,
+            "jsx-child": 8,
+            "jsx-attribute": 4
+          },
+          "byRewrite": {
+            "let-if": 190,
+            "extraction": 152,
+            "early-return": 41,
+            "if-statement": 23
+          },
+          "byShape": {
+            "chain": 290,
+            "consequent": 82,
+            "mixed": 33,
+            "test": 1
+          },
+          "conditionalsInNested": 894,
+          "conditionalsInNestedShare": 11.2,
+          "dispatch": {
+            "allPure": 23,
+            "discriminantKinds": {
+              "identifier": 28,
+              "member": 27,
+              "typeof": 2,
+              "call-or-chain": 2
+            },
+            "finalDefault": {
+              "literal": 20,
+              "call": 8,
+              "member": 7,
+              "identifier": 6,
+              "undefined": 6,
+              "array": 4,
+              "template": 3,
+              "iife": 2,
+              "object": 2,
+              "null": 1
+            },
+            "lookup": 41,
+            "looseEquality": 0,
+            "multiValue": 1,
+            "readsOnly": 16,
+            "switch": 18,
+            "withEffects": 20
+          },
+          "earlyReturnPossible": 41,
+          "extractionOnly": 152,
+          "inJsx": 18,
+          "jsxLeaves": 8,
+          "leafKinds": {
+            "literal": 405,
+            "identifier": 176,
+            "member": 176,
+            "call": 167,
+            "object": 62,
+            "array": 58,
+            "undefined": 55,
+            "binary": 55,
+            "null": 43,
+            "template": 34,
+            "logical": 18,
+            "jsx": 17,
+            "unary": 14,
+            "new": 8,
+            "function": 4,
+            "await": 3,
+            "iife": 3,
+            "assignment": 1
+          },
+          "leafRisks": {
+            "pure": 805,
+            "reads": 257,
+            "effects": 223,
+            "jsx": 7,
+            "await": 5,
+            "throws": 2
+          },
+          "lines": {
+            "max": 109,
+            "mean": 6.52,
+            "median": 5,
+            "n": 406,
+            "p90": 11
+          },
+          "multiline": 330,
+          "parenthesized": {
+            "all": 20,
+            "none": 385,
+            "some": 1
+          },
+          "reportedByEslint": 405,
+          "statementInPlace": 213,
+          "testShapes": {
+            "unrelated": 337,
+            "lookup": 41,
+            "switch": 18,
+            "thresholds": 10
+          },
+          "total": 406,
+          "treesWithEffects": 148,
+          "wrapped": 1
+        },
+        "nestedPer10k": 5.8,
+        "nestedPer10kJsx": 6.8
+      },
+      "tests": {
+        "conditionals": 764,
+        "conditionalsPer10k": 20.9,
+        "conditionalTypes": 249,
+        "conditionalTypesNested": 54,
+        "conditionalTypesNestedIn": {
+          "trueType": 27,
+          "falseType": 27
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 144,
+            "sonarjs/no-nested-conditional": 23,
+            "no-nested-ternary": 18,
+            "unicorn/no-nested-ternary": 15,
+            "unicorn/prefer-minimal-ternary": 11,
+            "no-else-return": 8
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 144,
+            "sonarjs/no-nested-conditional": 23,
+            "no-nested-ternary": 18,
+            "unicorn/no-nested-ternary": 15,
+            "unicorn/prefer-minimal-ternary": 11,
+            "no-else-return": 8
+          }
+        },
+        "files": 1554,
+        "filesWithNested": 8,
+        "functions": {
+          "total": 36081,
+          "withNested": 12,
+          "withNestedCognitive": {
+            "max": 22,
+            "mean": 11.83,
+            "median": 12,
+            "n": 12,
+            "p90": 21
+          },
+          "withNestedOver20": 3,
+          "withoutNestedCognitive": {
+            "max": 72,
+            "mean": 5.53,
+            "median": 1,
+            "n": 542,
+            "p90": 11
+          }
+        },
+        "guardChains": 254,
+        "guardChainsTwoPlus": 71,
+        "ifChains": {
+          "elseIf": 113,
+          "elseIfTernaryShaped": 0,
+          "elseIfTernaryShapedByKind": {},
+          "lengths": {
+            "2": 74,
+            "3": 27,
+            "4": 11,
+            "5+": 1
+          },
+          "total": 2948,
+          "ternaryShaped": 12
+        },
+        "indirect": {
+          "sonarNested": 4,
+          "total": 15,
+          "viaFunction": 0
+        },
+        "jsxLines": 69488,
+        "lines": 364877,
+        "nested": {
+          "byDepth": {
+            "2": 15,
+            "3": 2
+          },
+          "byPosition": {
+            "jsx-child": 5,
+            "return": 4,
+            "initializer": 3,
+            "property": 2,
+            "arrow-body": 1,
+            "spread": 1,
+            "array-element": 1
+          },
+          "byRewrite": {
+            "extraction": 9,
+            "early-return": 5,
+            "let-if": 3
+          },
+          "byShape": {
+            "chain": 14,
+            "consequent": 2,
+            "test": 1
+          },
+          "conditionalsInNested": 36,
+          "conditionalsInNestedShare": 4.7,
+          "dispatch": {
+            "allPure": 1,
+            "discriminantKinds": {
+              "member": 4,
+              "identifier": 2
+            },
+            "finalDefault": {
+              "jsx": 4,
+              "call": 1,
+              "object": 1
+            },
+            "lookup": 6,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 5
+          },
+          "earlyReturnPossible": 5,
+          "extractionOnly": 9,
+          "inJsx": 5,
+          "jsxLeaves": 4,
+          "leafKinds": {
+            "literal": 21,
+            "jsx": 12,
+            "object": 7,
+            "call": 5,
+            "identifier": 3,
+            "member": 2,
+            "null": 2
+          },
+          "leafRisks": {
+            "pure": 32,
+            "effects": 10,
+            "reads": 6,
+            "jsx": 4
+          },
+          "lines": {
+            "max": 49,
+            "mean": 14.18,
+            "median": 5,
+            "n": 17,
+            "p90": 48
+          },
+          "multiline": 13,
+          "parenthesized": {
+            "all": 2,
+            "none": 15,
+            "some": 0
+          },
+          "reportedByEslint": 16,
+          "statementInPlace": 3,
+          "testShapes": {
+            "unrelated": 11,
+            "lookup": 6
+          },
+          "total": 17,
+          "treesWithEffects": 7,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.5,
+        "nestedPer10kJsx": 1.4
+      }
+    },
+    "external": {
+      "source": {
+        "conditionals": 15805,
+        "conditionalsPer10k": 138.2,
+        "conditionalTypes": 882,
+        "conditionalTypesNested": 364,
+        "conditionalTypesNestedIn": {
+          "falseType": 235,
+          "checkType": 5,
+          "trueType": 123,
+          "extendsType": 1
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 2184,
+            "sonarjs/no-nested-conditional": 1391,
+            "no-nested-ternary": 1164,
+            "unicorn/no-nested-ternary": 925,
+            "no-else-return": 664,
+            "unicorn/prefer-minimal-ternary": 503,
+            "unicorn/prefer-logical-operator-over-ternary": 151,
+            "no-unneeded-ternary": 20,
+            "unicorn/no-unnecessary-nested-ternary": 18
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 2183,
+            "sonarjs/no-nested-conditional": 1391,
+            "no-nested-ternary": 1164,
+            "unicorn/no-nested-ternary": 925,
+            "no-else-return": 662,
+            "unicorn/prefer-minimal-ternary": 503,
+            "unicorn/prefer-logical-operator-over-ternary": 151,
+            "no-unneeded-ternary": 20,
+            "unicorn/no-unnecessary-nested-ternary": 18
+          }
+        },
+        "files": 6488,
+        "filesWithNested": 611,
+        "functions": {
+          "total": 52834,
+          "withNested": 745,
+          "withNestedCognitive": {
+            "max": 612,
+            "mean": 18.94,
+            "median": 10,
+            "n": 745,
+            "p90": 36
+          },
+          "withNestedOver20": 163,
+          "withoutNestedCognitive": {
+            "max": 989,
+            "mean": 7.19,
+            "median": 3,
+            "n": 6725,
+            "p90": 16
+          }
+        },
+        "guardChains": 3091,
+        "guardChainsTwoPlus": 780,
+        "ifChains": {
+          "elseIf": 1491,
+          "elseIfTernaryShaped": 144,
+          "elseIfTernaryShapedByKind": {
+            "assign": 73,
+            "return": 71
+          },
+          "lengths": {
+            "2": 1158,
+            "3": 205,
+            "4": 66,
+            "5+": 62
+          },
+          "total": 38063,
+          "ternaryShaped": 726
+        },
+        "indirect": {
+          "sonarNested": 181,
+          "total": 1050,
+          "viaFunction": 210
+        },
+        "jsxLines": 476153,
+        "lines": 1143356,
+        "nested": {
+          "byDepth": {
+            "2": 780,
+            "3": 124,
+            "4": 26,
+            "5+": 13
+          },
+          "byPosition": {
+            "initializer": 332,
+            "jsx-child": 235,
+            "property": 109,
+            "jsx-attribute": 58,
+            "return": 46,
+            "argument": 40,
+            "template": 27,
+            "arrow-body": 24,
+            "operand": 24,
+            "assignment-statement": 24,
+            "array-element": 13,
+            "spread": 11
+          },
+          "byRewrite": {
+            "extraction": 518,
+            "let-if": 331,
+            "early-return": 70,
+            "if-statement": 24
+          },
+          "byShape": {
+            "chain": 716,
+            "consequent": 146,
+            "mixed": 80,
+            "test": 1
+          },
+          "conditionalsInNested": 2153,
+          "conditionalsInNestedShare": 13.6,
+          "dispatch": {
+            "allPure": 62,
+            "discriminantKinds": {
+              "identifier": 58,
+              "member": 43,
+              "typeof": 3,
+              "call-or-chain": 3
+            },
+            "finalDefault": {
+              "literal": 40,
+              "identifier": 13,
+              "member": 11,
+              "call": 10,
+              "undefined": 10,
+              "array": 7,
+              "template": 5,
+              "object": 3,
+              "jsx": 3,
+              "iife": 2,
+              "null": 2,
+              "binary": 1
+            },
+            "lookup": 80,
+            "looseEquality": 0,
+            "multiValue": 1,
+            "readsOnly": 19,
+            "switch": 27,
+            "withEffects": 26
+          },
+          "earlyReturnPossible": 70,
+          "extractionOnly": 518,
+          "inJsx": 349,
+          "jsxLeaves": 227,
+          "leafKinds": {
+            "literal": 999,
+            "jsx": 657,
+            "identifier": 269,
+            "member": 245,
+            "call": 234,
+            "undefined": 144,
+            "null": 129,
+            "template": 117,
+            "array": 87,
+            "object": 78,
+            "binary": 61,
+            "logical": 33,
+            "unary": 21,
+            "new": 8,
+            "function": 6,
+            "await": 3,
+            "iife": 3,
+            "assignment": 1
+          },
+          "leafRisks": {
+            "pure": 1768,
+            "reads": 457,
+            "jsx": 454,
+            "effects": 409,
+            "await": 5,
+            "throws": 2
+          },
+          "lines": {
+            "max": 322,
+            "mean": 14.37,
+            "median": 5,
+            "n": 943,
+            "p90": 34
+          },
+          "multiline": 794,
+          "parenthesized": {
+            "all": 58,
+            "none": 870,
+            "some": 15
+          },
+          "reportedByEslint": 942,
+          "statementInPlace": 355,
+          "testShapes": {
+            "unrelated": 821,
+            "lookup": 80,
+            "switch": 27,
+            "thresholds": 15
+          },
+          "total": 943,
+          "treesWithEffects": 296,
+          "wrapped": 2
+        },
+        "nestedPer10k": 8.2,
+        "nestedPer10kJsx": 12.2
+      },
+      "tests": {
+        "conditionals": 1202,
+        "conditionalsPer10k": 23.3,
+        "conditionalTypes": 249,
+        "conditionalTypesNested": 54,
+        "conditionalTypesNestedIn": {
+          "trueType": 27,
+          "falseType": 27
+        },
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 164,
+            "sonarjs/no-nested-conditional": 23,
+            "no-nested-ternary": 18,
+            "no-else-return": 16,
+            "unicorn/no-nested-ternary": 15,
+            "unicorn/prefer-minimal-ternary": 13,
+            "unicorn/prefer-logical-operator-over-ternary": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 164,
+            "sonarjs/no-nested-conditional": 23,
+            "no-nested-ternary": 18,
+            "no-else-return": 16,
+            "unicorn/no-nested-ternary": 15,
+            "unicorn/prefer-minimal-ternary": 13,
+            "unicorn/prefer-logical-operator-over-ternary": 2
+          }
+        },
+        "files": 2144,
+        "filesWithNested": 8,
+        "functions": {
+          "total": 52218,
+          "withNested": 12,
+          "withNestedCognitive": {
+            "max": 22,
+            "mean": 11.83,
+            "median": 12,
+            "n": 12,
+            "p90": 21
+          },
+          "withNestedOver20": 3,
+          "withoutNestedCognitive": {
+            "max": 72,
+            "mean": 3.73,
+            "median": 1,
+            "n": 936,
+            "p90": 6
+          }
+        },
+        "guardChains": 279,
+        "guardChainsTwoPlus": 75,
+        "ifChains": {
+          "elseIf": 119,
+          "elseIfTernaryShaped": 1,
+          "elseIfTernaryShapedByKind": {
+            "return": 1
+          },
+          "lengths": {
+            "2": 78,
+            "3": 29,
+            "4": 11,
+            "5+": 1
+          },
+          "total": 3237,
+          "ternaryShaped": 13
+        },
+        "indirect": {
+          "sonarNested": 4,
+          "total": 16,
+          "viaFunction": 0
+        },
+        "jsxLines": 151578,
+        "lines": 516920,
+        "nested": {
+          "byDepth": {
+            "2": 15,
+            "3": 2
+          },
+          "byPosition": {
+            "jsx-child": 5,
+            "return": 4,
+            "initializer": 3,
+            "property": 2,
+            "arrow-body": 1,
+            "spread": 1,
+            "array-element": 1
+          },
+          "byRewrite": {
+            "extraction": 9,
+            "early-return": 5,
+            "let-if": 3
+          },
+          "byShape": {
+            "chain": 14,
+            "consequent": 2,
+            "test": 1
+          },
+          "conditionalsInNested": 36,
+          "conditionalsInNestedShare": 3,
+          "dispatch": {
+            "allPure": 1,
+            "discriminantKinds": {
+              "member": 4,
+              "identifier": 2
+            },
+            "finalDefault": {
+              "jsx": 4,
+              "call": 1,
+              "object": 1
+            },
+            "lookup": 6,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 5
+          },
+          "earlyReturnPossible": 5,
+          "extractionOnly": 9,
+          "inJsx": 5,
+          "jsxLeaves": 4,
+          "leafKinds": {
+            "literal": 21,
+            "jsx": 12,
+            "object": 7,
+            "call": 5,
+            "identifier": 3,
+            "member": 2,
+            "null": 2
+          },
+          "leafRisks": {
+            "pure": 32,
+            "effects": 10,
+            "reads": 6,
+            "jsx": 4
+          },
+          "lines": {
+            "max": 49,
+            "mean": 14.18,
+            "median": 5,
+            "n": 17,
+            "p90": 48
+          },
+          "multiline": 13,
+          "parenthesized": {
+            "all": 2,
+            "none": 15,
+            "some": 0
+          },
+          "reportedByEslint": 16,
+          "statementInPlace": 3,
+          "testShapes": {
+            "unrelated": 11,
+            "lookup": 6
+          },
+          "total": 17,
+          "treesWithEffects": 7,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0.3,
+        "nestedPer10kJsx": 0.7
+      }
+    },
+    "react": {
+      "source": {
+        "conditionals": 7813,
+        "conditionalsPer10k": 174,
+        "conditionalTypes": 28,
+        "conditionalTypesNested": 5,
+        "conditionalTypesNestedIn": {
+          "checkType": 2,
+          "trueType": 2,
+          "falseType": 1
+        },
+        "eslint": {
+          "raw": {
+            "sonarjs/no-nested-conditional": 806,
+            "no-nested-ternary": 703,
+            "unicorn/prefer-ternary": 523,
+            "unicorn/no-nested-ternary": 515,
+            "no-else-return": 176,
+            "unicorn/prefer-minimal-ternary": 100,
+            "unicorn/prefer-logical-operator-over-ternary": 64,
+            "unicorn/no-unnecessary-nested-ternary": 11,
+            "no-unneeded-ternary": 6
+          },
+          "reported": {
+            "sonarjs/no-nested-conditional": 806,
+            "no-nested-ternary": 703,
+            "unicorn/prefer-ternary": 523,
+            "unicorn/no-nested-ternary": 515,
+            "no-else-return": 176,
+            "unicorn/prefer-minimal-ternary": 100,
+            "unicorn/prefer-logical-operator-over-ternary": 64,
+            "unicorn/no-unnecessary-nested-ternary": 11,
+            "no-unneeded-ternary": 6
+          }
+        },
+        "files": 3155,
+        "filesWithNested": 378,
+        "functions": {
+          "total": 21930,
+          "withNested": 426,
+          "withNestedCognitive": {
+            "max": 91,
+            "mean": 12.08,
+            "median": 9,
+            "n": 426,
+            "p90": 23
+          },
+          "withNestedOver20": 60,
+          "withoutNestedCognitive": {
+            "max": 80,
+            "mean": 3.72,
+            "median": 2,
+            "n": 2987,
+            "p90": 8
+          }
+        },
+        "guardChains": 1166,
+        "guardChainsTwoPlus": 348,
+        "ifChains": {
+          "elseIf": 271,
+          "elseIfTernaryShaped": 35,
+          "elseIfTernaryShapedByKind": {
+            "return": 26,
+            "assign": 9
+          },
+          "lengths": {
+            "2": 206,
+            "3": 38,
+            "4": 12,
+            "5+": 15
+          },
+          "total": 8309,
+          "ternaryShaped": 149
+        },
+        "indirect": {
+          "sonarNested": 84,
+          "total": 798,
+          "viaFunction": 169
+        },
+        "jsxLines": 373483,
+        "lines": 449047,
+        "nested": {
+          "byDepth": {
+            "2": 415,
+            "3": 90,
+            "4": 21,
+            "5+": 11
+          },
+          "byPosition": {
+            "jsx-child": 227,
+            "initializer": 141,
+            "jsx-attribute": 54,
+            "property": 46,
+            "return": 24,
+            "argument": 15,
+            "operand": 13,
+            "template": 10,
+            "arrow-body": 5,
+            "spread": 1,
+            "assignment-statement": 1
+          },
+          "byRewrite": {
+            "extraction": 366,
+            "let-if": 141,
+            "early-return": 29,
+            "if-statement": 1
+          },
+          "byShape": {
+            "chain": 426,
+            "consequent": 64,
+            "mixed": 47
+          },
+          "conditionalsInNested": 1259,
+          "conditionalsInNestedShare": 16.1,
+          "dispatch": {
+            "allPure": 39,
+            "discriminantKinds": {
+              "identifier": 30,
+              "member": 16,
+              "call-or-chain": 1,
+              "typeof": 1
+            },
+            "finalDefault": {
+              "literal": 20,
+              "identifier": 7,
+              "undefined": 4,
+              "member": 4,
+              "array": 3,
+              "jsx": 3,
+              "call": 2,
+              "template": 2,
+              "object": 1,
+              "binary": 1,
+              "null": 1
+            },
+            "lookup": 39,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 3,
+            "switch": 9,
+            "withEffects": 6
+          },
+          "earlyReturnPossible": 29,
+          "extractionOnly": 366,
+          "inJsx": 331,
+          "jsxLeaves": 219,
+          "leafKinds": {
+            "jsx": 640,
+            "literal": 594,
+            "identifier": 93,
+            "undefined": 89,
+            "null": 86,
+            "template": 83,
+            "member": 69,
+            "call": 67,
+            "array": 29,
+            "object": 16,
+            "logical": 15,
+            "unary": 7,
+            "binary": 6,
+            "function": 2
+          },
+          "leafRisks": {
+            "pure": 963,
+            "jsx": 447,
+            "reads": 200,
+            "effects": 186
+          },
+          "lines": {
+            "max": 322,
+            "mean": 20.31,
+            "median": 7,
+            "n": 537,
+            "p90": 59
+          },
+          "multiline": 464,
+          "parenthesized": {
+            "all": 38,
+            "none": 485,
+            "some": 14
+          },
+          "reportedByEslint": 537,
+          "statementInPlace": 142,
+          "testShapes": {
+            "unrelated": 484,
+            "lookup": 39,
+            "switch": 9,
+            "thresholds": 5
+          },
+          "total": 537,
+          "treesWithEffects": 148,
+          "wrapped": 1
+        },
+        "nestedPer10k": 12,
+        "nestedPer10kJsx": 13.6
+      },
+      "tests": {
+        "conditionals": 438,
+        "conditionalsPer10k": 28.8,
+        "conditionalTypes": 0,
+        "conditionalTypesNested": 0,
+        "conditionalTypesNestedIn": {},
+        "eslint": {
+          "raw": {
+            "unicorn/prefer-ternary": 20,
+            "no-else-return": 8,
+            "unicorn/prefer-logical-operator-over-ternary": 2,
+            "unicorn/prefer-minimal-ternary": 2
+          },
+          "reported": {
+            "unicorn/prefer-ternary": 20,
+            "no-else-return": 8,
+            "unicorn/prefer-logical-operator-over-ternary": 2,
+            "unicorn/prefer-minimal-ternary": 2
+          }
+        },
+        "files": 590,
+        "filesWithNested": 0,
+        "functions": {
+          "total": 16137,
+          "withNested": 0,
+          "withNestedCognitive": null,
+          "withNestedOver20": 0,
+          "withoutNestedCognitive": {
+            "max": 11,
+            "mean": 1.25,
+            "median": 1,
+            "n": 394,
+            "p90": 2
+          }
+        },
+        "guardChains": 25,
+        "guardChainsTwoPlus": 4,
+        "ifChains": {
+          "elseIf": 6,
+          "elseIfTernaryShaped": 1,
+          "elseIfTernaryShapedByKind": {
+            "return": 1
+          },
+          "lengths": {
+            "2": 4,
+            "3": 2
+          },
+          "total": 289,
+          "ternaryShaped": 1
+        },
+        "indirect": {
+          "sonarNested": 0,
+          "total": 1,
+          "viaFunction": 0
+        },
+        "jsxLines": 82090,
+        "lines": 152043,
+        "nested": {
+          "byDepth": {},
+          "byPosition": {},
+          "byRewrite": {},
+          "byShape": {},
+          "conditionalsInNested": 0,
+          "conditionalsInNestedShare": 0,
+          "dispatch": {
+            "allPure": 0,
+            "discriminantKinds": {},
+            "finalDefault": {},
+            "lookup": 0,
+            "looseEquality": 0,
+            "multiValue": 0,
+            "readsOnly": 0,
+            "switch": 0,
+            "withEffects": 0
+          },
+          "earlyReturnPossible": 0,
+          "extractionOnly": 0,
+          "inJsx": 0,
+          "jsxLeaves": 0,
+          "leafKinds": {},
+          "leafRisks": {},
+          "lines": null,
+          "multiline": 0,
+          "parenthesized": {
+            "all": 0,
+            "none": 0,
+            "some": 0
+          },
+          "reportedByEslint": 0,
+          "statementInPlace": 0,
+          "testShapes": {},
+          "total": 0,
+          "treesWithEffects": 0,
+          "wrapped": 0
+        },
+        "nestedPer10k": 0,
+        "nestedPer10kJsx": 0
+      }
+    }
+  }
+}

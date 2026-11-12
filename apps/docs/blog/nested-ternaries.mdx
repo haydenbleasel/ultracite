@@ -1,0 +1,266 @@
+---
+title: Most nested ternaries are lists, not trees
+description: Why JavaScript has a conditional expression at all, what the research says about reading one, what no-nested-ternary reports on 943 nested ternaries in twelve codebases, what each rewrite costs, and what coding agents did with three of them.
+date: 2026-11-12
+author: hayden
+next:
+  - label: Change or turn off a rule in your project
+    href: /docs/configuration#overriding-rules
+  - label: Tell agents how you like conditionals written
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - no-nested-ternary
+  - unicorn/no-nested-ternary
+  - sonarjs/no-nested-conditional
+  - noNestedTernary
+  - unicorn/prefer-ternary
+---
+
+A ternary picks one of two values: `ready ? "go" : "wait"`. Nest one in another and it picks one of several: `a ? x : b ? y : z`. ESLint's `no-nested-ternary` reports any ternary that sits directly inside another one's branches. Oxlint and Biome have their own versions, and Ultracite turns the rule on in all three.
+
+Part of the reason is our policy of turning on every rule we reasonably can. But we'd keep this one anyway. A nested ternary takes more effort to work through than a plain `if`, and it's harder to change. Where it fits, we'd rather return early, with an `if` that short-circuits, so the logic stays flat.
+
+So we tested that. We read where the conditional operator came from, why some languages left it out, and what the research says about reading one. We found every nested ternary in twelve codebases, 943 of them, ran each linter's version of the rule on them, and rewrote every one in each way that applies, on copies, to see what the rewrites cost and when they change behavior. Then we handed three of them to Claude Code and Codex through Ultracite's agent fix.
+
+## Invented so only one branch runs
+
+The conditional expression is older than JavaScript, and it exists for a reason that still matters. John McCarthy first wrote it as a FORTRAN function, `XIF(M,N1,N2)`, which, in McCarthy's [history of Lisp](https://web.archive.org/web/20241225232618/http://jmc.stanford.edu/articles/lisp/lisp.pdf), "had to be used sparingly, because all three arguments had to be evaluated before" "XIF was entered,". "This led to the invention of the true" "conditional expression which evaluates only one of N1 and N2". McCarthy's 1960 version was already a chain of tests, read left to right.
+
+Chains are as old as the `?:` spelling, too. The 1972 [manual for B](https://www.nokia.com/bell-labs/about/dennis-m-ritchie/kbman.html), C's predecessor, spells it out: "Binding is right to left. Thus a?b:c?d:e is a?b:(c?d:e)." JavaScript's [spec](https://tc39.es/ecma262/#sec-conditional-operator) keeps both properties. The operator groups to the right, so `a ? x : b ? y : z` reads as an else-if chain, and only the chosen branch runs.
+
+JavaScript needs it more than most languages, because it splits statements from expressions, and a lot of code lives on the expression side. A JSX child, a JSX attribute, a template literal, a default parameter and an arrow function's concise body all take an expression, so an `if` can't go there. Brendan Eich, who designed JavaScript, put it plainly in 2012, when Rust [removed](https://github.com/rust-lang/rust/issues/1698) its own ternary: "Wish I had made JS an expression language." "The great statement/expression split motivates ?: but Rust is free of that,".
+
+## Languages that left it out
+
+Rust could drop `?:` because its `if` is an expression and returns a value. Kotlin and Swift work the same way. Go left the operator out for a different reason, and nesting is it. The [Go FAQ](https://go.dev/doc/faq#Does_Go_have_a_ternary_form) says the language's designers "had seen the operation used too often to create impenetrably complex expressions." "The `if-else` form, although longer," "is unquestionably clearer."
+
+PHP is the one language with a hard bug count. Its ternary grouped from the left, so `$a == 1 ? 'one' : $a == 2 ? 'two' : 'other'` didn't mean what it looks like. When an [RFC](https://wiki.php.net/rfc/ternary_associativity) proposed deprecating unparenthesized nesting in 2019, an analysis of the top 1,000 Composer packages found 12 nested ternaries the change would affect, and "9 of them are bugs, where a right-associative meaning was intended,". PHP 8.0 made the form a compile-time error. Those bugs came from the grouping, which JavaScript gets right, not from nesting itself.
+
+## A one-sentence rule
+
+ESLint's `no-nested-ternary` was [added](https://github.com/eslint/eslint/commit/70850e2becc06f95ce0c56f0b4c2f4b24f2a2479) in December 2013 with no proposal and no stated reason. Its [docs](https://eslint.org/docs/latest/rules/no-nested-ternary) give one sentence: "Nesting ternary expressions can make code more difficult to understand." The check hasn't changed since. It reports a ternary whose consequent or alternate is another ternary, and nothing else. A ternary in the test, or one behind `||`, inside a call or inside a template literal, passes.
+
+People asked for exceptions: one parenthesized level, chains in the else position, a maximum depth, TypeScript's nested conditional types. ESLint declined each one. On chains, a maintainer [wrote](https://github.com/eslint/eslint/pull/10452): "The whole point of the rule is that it's hard to read" "multiple ternary expressions."
+
+Sindre Sorhus had asked for the parenthesized exception for XO, and Unicorn later added a rule that allows it. Unicorn's [`no-nested-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/50) allows one level if it's wrapped in parentheses, and its fix adds them. That fix never settles with a formatter, because Prettier and Oxfmt strip parentheses around a nested ternary in the else branch. The lint fix adds them, the formatter removes them, and the next run adds them again. Sorhus has [declined](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2901) to change it: "The parenthesization requirement is the core of this rule, not an incidental detail." When asked to avoid formatter conflicts in general, the reply was "Unicorn is an independent project, and Prettier compatibility is not a goal." eslint-config-prettier has turned the rule off since 2019, and Ultracite turned it off in 2026 for the same reason. SonarJS has a stricter rule of its own, `no-nested-conditional`, which also looks inside templates and calls.
+
+## Indented, flattened, indented again
+
+Formatters have argued about nested ternaries for years, and the argument was about whether a reader can see the shape. Prettier first indented every level. In 2018, version 1.15 flattened the else branch so chains would print like `if`/`else if`, because indenting every level "caused increasing levels of indentation for deeply-nested ternaries." The [request to undo it](https://github.com/prettier/prettier/issues/5814) gathered 682 thumbs-up. Its top comment, from Dan Abramov: "It erases the logical structure where one is implied." One Prettier maintainer called ternaries "the most cryptic syntax of all in JavaScript".
+
+[Prettier 3.1](https://prettier.io/blog/2023/11/13/3.1.0.html) put the indentation back in 2023 and added an opt-in `--experimental-ternaries` style, which prints a chain as a flat list of `test ? value` lines. Its [announcement](https://prettier.io/blog/2023/11/13/curious-ternaries) argued that formatting, not refactoring, was the fix: developers "have long found them so confusing to read that they end up" "just refactoring their code to an ugly series of" `if`/`else` statements. Oxfmt follows Prettier's default and doesn't offer the experimental style.
+
+## Is a ternary hard to read?
+
+The best evidence comes from research on "atoms of confusion", small patterns that make people misread code. In the [first study](https://doi.org/10.1145/3106237.3106264), 73 people predicted the output of short C snippets, each with and without an atom. The conditional operator was one: "?: leads to 31% more errors than if-statements." It didn't hold up in other languages. In Java, it [wasn't significantly confusing](https://arxiv.org/abs/2103.05424). In two JavaScript experiments, it [wasn't either](https://doi.org/10.1016/j.jss.2023.111731) (p = 0.79 and p = 0.16), and 9 of 15 practitioners interviewed preferred the ternary version, the only pattern where people preferred the form with the atom.
+
+The C study tested exactly one nested ternary, a fully parenthesized two-level one. In its [published data](https://github.com/dgopstein/atoms-of-confusion/tree/7aed29b562fc8e9bfdab59800572555dea3a51d4/snippet_study/data), 35 of 48 people got it right, against 46 of 48 for the same logic as nested `if` blocks. The two single ternaries scored 37 of 48 and 37 of 49. So the nested one did no worse than the simple ones, though its answers were more scattered: eight distinct answers, against three for the `if` version. One snippet is all there is.
+
+Metrics disagree with each other here. Sonar's [cognitive complexity](/research/cognitive-complexity) charges each ternary in a chain as a nested `if`, so a chain of k tests scores k(k+1)/2. For the same four-way choice, our calibration cases scored:
+
+| Form                         | Cognitive complexity | Cyclomatic complexity |
+| ---------------------------- | -------------------: | --------------------: |
+| Chain of ternaries           |                    6 |                     4 |
+| `let` and an `else if` chain |                    4 |                     4 |
+| Early returns                |                    3 |                     4 |
+| `switch`                     |                    1 |                     4 |
+| Lookup object with `??`      |                    0 |                     2 |
+
+A study of nested `if`s by Shulamyt Ajami, Yonatan Woodbridge and Dror Feitelson [found](https://doi.org/10.1007/s10664-018-9628-3) them no harder than compound conditions. The metric scores structure, and the people in these studies didn't always read structure the way the metric does.
+
+## The bugs are in front of the question mark
+
+We found no study of how hard a nested ternary is to modify, and little on bugs. In three of six Java projects, bug fixes [changed ternaries](https://rebels.cs.uwaterloo.ca/papers/esem2024_shi.pdf) more often than other changes did, but mostly because the fixes added null checks, "not due to their confusing nature". The real precedence bugs we found in public trackers have an operator in front of the `?`: `a && b ? c : d`, `prefix + flag ? x : y`, `a ?? b ? c : d`. VS Code fixed one of those in September 2025, `a ?? b ? c : d` read as `(a ?? b) ? c : d`. `no-nested-ternary` doesn't report any of them, because none is nested.
+
+## Guard clauses without a study
+
+Our preferred rewrite has a name and a long history, but no experiment behind it. Martin Fowler's catalog calls it [Replace Nested Conditional with Guard Clauses](https://refactoring.com/catalog/replaceNestedConditionalWithGuardClauses.html). The old rule it argues against, one exit per function, is often blamed on Edsger Dijkstra, but Dijkstra's [1968 letter](https://www.cs.utexas.edu/~EWD/transcriptions/EWD02xx/EWD215.html) on `goto` says nothing about single exit. GitHub's Copilot docs make the case in practitioners' terms: nested structures make it "difficult to modify or extend the logic of the code in future", so "Use early returns for error conditions".
+
+The one-line form, `if (bool) return x;`, has a complication. The `curly` rule reports any `if` without braces, and Biome's equivalent gives its reason: "Without braces, it is easy to add a second statement" "that looks like part of the block but is not." The early return survives, but as three lines with braces.
+
+React's [docs](https://react.dev/learn/conditional-rendering) never say "nested ternary". They say the ternary "works well for simple conditions, but use it in moderation." "If your components get messy with too much nested conditional markup," "consider extracting child components to clean things up." And they warn about the usual shortcut: "Don't put numbers on the left side of `&&`." If the left side is `0`, "React will happily render `0` rather than nothing."
+
+## 943 nested ternaries in twelve codebases
+
+We used the same twelve codebases as the earlier posts. Eight are TypeScript projects (zod, Hono, tRPC, Vite, Astro, Excalidraw, Next.js and VS Code), and four are React codebases (shadcn/ui, Radix, React Aria and Supabase), each at a pinned commit. Their source has 15,805 ternaries in 1,143,356 lines, and 943 nested ternaries, 8.2 per 10,000 lines. Supabase Studio alone has 520. Tests have 17.
+
+Most of them are lists. 716, or 76%, are chains like `a ? x : b ? y : z`, where every nested ternary sits in the else position, as in an else-if chain. 780 are two deep. Only 146 nest in the consequent, the `a ? (b ? x : y) : z` shape that really is a tree.
+
+Where they sit matters more than their shape, because it decides what the rewrite can be:
+
+| Position | Nested ternaries | Share |
+| --- | --: | --: |
+| `return` or an arrow's concise body, where an early return fits | 70 | 7.4% |
+| A variable initializer or a statement, where `if`/`else` fits | 355 | 37.6% |
+| JSX, arguments, properties, templates and other expressions | 518 | 54.9% |
+
+So only 7% sit where our preferred shape fits directly. More than half sit where no statement can go, so the only rewrite is an extraction: a helper function, a variable above the JSX, or a child component.
+
+The three linters agree exactly on the rule. ESLint, Oxlint and Biome each reported 1,164 times and flagged the same 892 groups of nested ternaries. SonarJS's rule flagged 125 more, mostly ternaries nested through a template literal or a call. None of the twelve projects turns any of these rules on. React Aria had `no-nested-ternary` on in its ESLint config and left it off when it moved to Oxlint in May 2026, without saying why. And none of the rules looks at TypeScript's conditional types, where 364 of 882 are nested.
+
+## What each rewrite costs
+
+We rewrote every reported nested ternary, on copies, in each way that applies: early returns where it was a return value, `let` plus `if`/`else` for a variable, a helper function anywhere, and a lookup object or `switch` where every test compares one value with a constant. Every rewrite parsed and cleared the report. After formatting, early returns added a median of 2 lines, `let` plus `if`/`else` 3 and a helper 5. A lookup saved 2.
+
+Cognitive complexity mostly moved rather than fell. Early returns lowered the function holding the ternary by a median of 1. A helper lowered it by 4, but only by 1 once the helper's own score was counted. And where the ternary nested in the consequent, `let` plus `if`/`else` scored higher than the ternary had, because the metric charges every `else`.
+
+Lookups are where rewrites change behavior. 80 nested ternaries compare one value with constants, so they look like a table. But an object literal evaluates every value as it's built, which is the problem McCarthy invented the conditional to avoid:
+
+{/* prettier-ignore */}
+```ts title="lookup.ts"
+const parsed = kind === "json" ? parseJson(text) : kind === "yaml" ? parseYaml(text) : text;
+
+// Calls both parsers, and throws if either one fails on the other format.
+const parsedByKind = { json: parseJson(text), yaml: parseYaml(text) }[kind] ?? text;
+```
+
+In our behavior cases, an eager lookup threw where the ternary didn't, and a plain object keyed by a string returned `Object.prototype` members for `"constructor"` and `"toString"`. Twelve of the 80 would call functions eagerly, and 23 have a branch that can be `undefined`, which a `??` default would replace. A `switch` or a `Map` avoided these problems. A lookup of functions avoided the eager calls, but not the inherited keys.
+
+Other rewrites have their own catches. Airbnb's style guide fixes a nested ternary by moving the inner one into a variable, and Mark S. Miller [pointed out](https://github.com/airbnb/javascript/issues/1677) that this "is not equivalent." The inner comparison now always runs, and "These extra evaluations may have side effects or throw". In JSX, `count && <List />` renders `0` when the count is zero. And changing `const` plus a ternary to `let` plus `if`/`else` widens TypeScript's inferred type.
+
+The fix passes that run with these rules can undo or break the rewrites. With Unicorn's `prefer-ternary` on, ESLint's fix turned part of 285 of our rewrites back into a ternary. It was always a single level, never nested again, but it undoes the early-return shape. Oxlint's version of the same rule has no fix and reports far less. Two other fixes write conditionals of their own. With Oxlint 1.90, the dangerous fix for `prefer-logical-operator-over-ternary` turned `x ? x : y ? a : b` into `x || y ? a : b`, which means something else. It changed all 10 such ternaries in the corpus, and produced a syntax error for 2 more. And ESLint's fix for React's `jsx-no-leaked-render` turned `count && (a ? x : y)` into `count ? (a ? x : y) : null`, a nested ternary, 11 times in the corpus.
+
+## Harder to change, in one narrow sense
+
+We followed eight of the codebases through three years of history to test whether nested ternaries are harder to modify. When someone added a branch, the change was about the same size either way, a median of 4 to 6 lines added. But a ternary almost always rewrote lines that were already there, because the formatter rewraps the whole chain:
+
+| Adding one branch to               | Changes | Pure insertions |
+| ---------------------------------- | ------: | --------------: |
+| A chain of early returns           |      60 |           81.7% |
+| An `else if` chain                 |     147 |           58.5% |
+| A single ternary, making it nested |      82 |           14.6% |
+| An already nested ternary          |      24 |            8.3% |
+
+These are different changes in different code, not the same change written two ways, but the pattern fits our reason: a ternary's branches are harder to touch without touching the others.
+
+The bug evidence is weaker. Functions with a nested ternary were touched by bug fixes more often, but they are also bigger, and they branch. Once we accounted for size and for having any conditional at all, the difference was gone: an odds ratio of 1.10, with a 95% interval from 0.84 to 1.43. Of 63 commits whose messages mentioned ternaries, nesting or precedence, 2 fixed a ternary bug. Both were in VS Code, and neither ternary was nested.
+
+## No agent wrote one
+
+In 264 runs from our earlier experiments, Claude Code and Codex never wrote a nested ternary, even in the function-style experiment, where nesting was one of the tempting rewrites. They turned an `if` into a single ternary five times, and never the reverse. Model vendors point the same way: GitHub's docs ask for early returns, and OpenAI's coding guide quotes a prompt against "overly clever one-liners". We found no study that counts nested ternaries in model-written code.
+
+## A page path, a notebook list and an alias map
+
+In November 2026 we set up a project the way Ultracite's setup leaves it for Oxlint, with React selected. The rule is on there already, so the user changes nothing. Then we picked three real nested ternaries that need different responses:
+
+- **A, a return value.** Next.js's [`denormalizePagePath`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/page-path/denormalize-page-path.ts) returns a two-test chain. Early returns fit. The tempting `||` chain changes 2 of the 320 page paths we tested, and reordering the tests changes 19.
+- **B, JSX.** Supabase Studio's [`ExplorerNavNotebooks`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/ExplorerLayout/ExplorerNavNotebooks.tsx#L21-L114) shows a loader, an empty message or a list, inside two wrappers. No statement can go there, so the choice has to move to a variable, a helper or a child component. `notebooks.length && …` would render a `0` in 24 of 80 scenarios.
+- **C, a trap.** Astro's [`getConfigAlias`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-config-alias/index.ts#L8-L68) builds path aliases from a tsconfig, numbering each `*` with a counter:
+
+{/* prettier-ignore */}
+```ts title="index.ts (Astro)"
+const replacement = [...normalizePath(path.resolve(resolvedBaseUrl, value))]
+	.map((segment) => (segment === '*' ? `$${++matchId}` : segment === '$' ? '$$' : segment))
+	.join('');
+```
+
+It looks like a table. As an object lookup, `++matchId` would run for every character, and 185 of 240 configs we tested would change. Astro has already [fixed a bug](https://github.com/withastro/astro/pull/13059) in this counter once.
+
+Each file went through Ultracite's agent fix as it ran in November 2026: the prompt, up to three attempts, and the same report a user sees. The prompt asks agents not to run the linter or other commands, because Ultracite re-lints the file afterwards. We ran each subject four times with Claude Code and four times with Codex, 24 runs in all, and checked behavior by importing each file and comparing every scenario, including what B renders and which hooks it calls.
+
+## Twenty-four rewrites, all correct
+
+Every run cleared the rule in one attempt and kept behavior in every scenario. No run added a type error, a suppression or an Oxlint or ESLint report from another rule, and no run touched code outside the ternary. Biome flagged one thing: the untyped `let content;` five runs wrote for B. No run fell for a trap: no `&&` in B, no lookup in C.
+
+Each rewrite fit its position. On A and C, every run returned early. Claude unnested both tests on A, while Codex made the smallest change that clears the rule, one guard and a single ternary:
+
+```ts title="denormalize-page-path.ts, one Codex run"
+export function denormalizePagePath(page: string) {
+  const _page = normalizePathSep(page);
+  if (_page.startsWith("/index/") && !isDynamicRoute(_page)) {
+    return _page.slice(6);
+  }
+  return _page === "/index" ? "/" : _page;
+}
+```
+
+On C, all eight wrote the same block body, with the counter still in the `*` branch:
+
+```ts title="index.ts, one Claude Code run"
+.map((segment) => {
+  if (segment === "*") {
+    return `$${++matchId}`;
+  }
+  if (segment === "$") {
+    return "$$";
+  }
+  return segment;
+})
+```
+
+Claude said why each time: "`*` becomes `$1`, `$2`, … in order, and `matchId` goes up only when a `*` is found." On B, six runs put the choice in a `let content` assigned by `if`/`else if`/`else` above the return, and two Claude runs wrote a small render helper with early returns. One explained: "The helper runs on every render exactly where the ternary was, and it isn't a hook." Codex's messages were a single line each, such as "Replaced the nested ternary in `index.ts` with explicit `if` returns, preserving behavior."
+
+The agents added 32 guards, and braced every one themselves, so `curly` had nothing to do. Then we ran Ultracite's fix passes on all 24 final files, with Oxlint, ESLint and Biome, safe and unsafe. Nothing wrote a ternary back. ESLint's `prefer-ternary` skips a guard that follows another guard, and a `return` that's already a ternary.
+
+Two raters, both Claude models, judged each final file against the original from a blind packet, and both called all 24 easier to follow. Cognitive complexity agreed, by small margins: A from 4 to 3, B from 8 to 7 or 6, and C's callback from 3 to 2. Ultracite printed "Fixed 1 of 1 issue" for every run, followed by the end of the agent's message. Claude Code's runs cost $3.88 in all, a median of 30 cents each, and Codex used a median of 17,700 tokens.
+
+## Nesting the rule doesn't count
+
+**The rule's check is narrow.** It sees a ternary directly in another one's branches. A ternary in the test, behind `||`, inside a call or a template literal, passes, and so does every nested conditional type. The precedence bugs we found, an operator in front of the `?`, aren't nesting at all.
+
+**Most fixes move the complexity.** More than half of nested ternaries sit where a statement can't go, and the rule has no fix, so the answer is a helper, a variable or a component. That clears the report and lowers the function's score, but the decision is still there, a few lines away from where it's used. In our hand classification, one rater judged a third of nested ternaries clearest as they were, mostly short three-way choices in JSX attributes, arguments and object properties. The two raters mostly agreed on a ternary's shape, less often on whether a rewrite helped, and often not on which rewrite.
+
+**The look-alike rewrites change behavior.** A lookup evaluates every branch and returns inherited keys, an `||` chain falls through `0` and `""`, and `&&` renders `0`. The fix passes that run nearby can undo an early return or write a nested ternary of their own.
+
+**The evidence is thin.** One nested ternary has ever been tested for comprehension, in C. No study measures how hard nested ternaries are to modify, and none tests guard clauses. Our history found no robust link to bugs, and the diff pattern it found is an association.
+
+**Our experiment was easy.** Each subject had one nested ternary two levels deep, and the agents found the right rewrite every time. The raters are two Claude models, the handoff was filtered to this rule, and the prompt asked agents not to run anything, so none checked its own edit. Deeper trees, or a ternary whose shape is a real tree, might go differently.
+
+## Return early where there's a return
+
+**Read a chain as a list.** Three quarters of nested ternaries are else-if chains in expression form. Where one is a return value, early returns are the clearest rewrite, and they score lower on cognitive complexity. That's the shape we prefer, braces included.
+
+**In JSX, move the choice up.** A variable assigned by `if`/`else` above the `return`, or a small render helper, keeps behavior and reads well. A child component is better when the branches carry their own state. Don't swap a ternary for `&&` unless the left side is a boolean.
+
+**Don't turn a chain into a lookup unless every branch is a plain value.** If a branch calls a function, increments a counter, throws or reads a property, use a `switch`, a `Map`, or a lookup of functions. If the key comes from outside, use `Object.hasOwn` or a `Map`.
+
+**Leave a short choice where it is, if a rewrite only moves it.** A two-way choice in a JSX attribute or an argument often reads best as it is. If the rule is on, a small, well-named helper is better than an IIFE or a variable that only exists to dodge it. You can [change or turn off the rule](/docs/configuration#overriding-rules) in your own config.
+
+**Watch the fix pass.** Review what `fix` does after a rewrite, especially unsafe fixes. In our measurements, one fix turned a conditional into one that means something else, and another wrote nested ternaries into JSX.
+
+A nested ternary is usually a list written as an expression, because the code it lives in only takes expressions. The rule can't tell a list from a tree, and the evidence that either is hard to read is thinner than the rule's confidence. Where there's a `return`, early returns were better in every case we tried, and agents found them on their own.
+
+<NextSteps />
+
+## References
+
+**History and other languages**
+
+- John McCarthy. [History of Lisp](https://web.archive.org/web/20241225232618/http://jmc.stanford.edu/articles/lisp/lisp.pdf). _ACM SIGPLAN Notices_ 13(8), 1978, and [Recursive functions of symbolic expressions and their computation by machine, Part I](https://doi.org/10.1145/367177.367199). _CACM_ 3(4), 1960.
+- Ken Thompson. [Users' Reference to B](https://www.nokia.com/bell-labs/about/dennis-m-ritchie/kbman.html). Bell Labs, 1972.
+- Ecma International. [ECMAScript specification: Conditional Operator](https://tc39.es/ecma262/#sec-conditional-operator).
+- Rust. [Remove ternary operator](https://github.com/rust-lang/rust/issues/1698). rust-lang/rust #1698, 2012.
+- The Go Authors. [Why does Go not have the ?: operator?](https://go.dev/doc/faq#Does_Go_have_a_ternary_form) Go FAQ.
+- Nikita Popov. [PHP RFC: Deprecate left-associative ternary operator](https://wiki.php.net/rfc/ternary_associativity). 2019.
+
+**The rules and formatters**
+
+- ESLint. [`no-nested-ternary`](https://eslint.org/docs/latest/rules/no-nested-ternary) rule documentation, and Ian Christian Myers, [Rule no-nested-ternary](https://github.com/eslint/eslint/commit/70850e2becc06f95ce0c56f0b4c2f4b24f2a2479), 2013.
+- ESLint. [Allow chained ternaries](https://github.com/eslint/eslint/pull/10452). eslint/eslint #10452, 2018.
+- Sindre Sorhus. [A better `no-nested-ternary` rule](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/50). eslint-plugin-unicorn #50, 2016, and [#2901](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2901), 2026.
+- Prettier. [Nested ternary formatting - add indents back](https://github.com/prettier/prettier/issues/5814). prettier/prettier #5814, 2019–2023.
+- Sosuke Suzuki. [Prettier 3.1: New experimental ternaries formatting](https://prettier.io/blog/2023/11/13/3.1.0.html), and Alex Rattray, [A curious case of the ternaries](https://prettier.io/blog/2023/11/13/curious-ternaries). Prettier blog, 2023.
+- React. [Conditional Rendering](https://react.dev/learn/conditional-rendering).
+
+**Research**
+
+- Dan Gopstein, Jake Iannacone, Yu Yan, Lois DeLong, Yanyan Zhuang, Martin K.-C. Yeh and Justin Cappos. [Understanding misunderstandings in source code](https://doi.org/10.1145/3106237.3106264). ESEC/FSE 2017, and its [replication data](https://github.com/dgopstein/atoms-of-confusion/tree/7aed29b562fc8e9bfdab59800572555dea3a51d4/snippet_study/data).
+- Chris Langhout and Maurício Aniche. [Atoms of confusion in Java](https://arxiv.org/abs/2103.05424). ICPC 2021.
+- Adriano Torres, Caio Oliveira, Márcio Okimoto, Diego Marcílio, Pedro Queiroga, Fernando Castor, Rodrigo Bonifácio, Edna Dias Canedo, Márcio Ribeiro and Eduardo Monteiro. [An investigation of confusing code patterns in JavaScript](https://doi.org/10.1016/j.jss.2023.111731). _Journal of Systems and Software_ 203, 2023.
+- Shulamyt Ajami, Yonatan Woodbridge and Dror G. Feitelson. [Syntax, predicates, idioms — what really affects code complexity?](https://doi.org/10.1007/s10664-018-9628-3) _Empirical Software Engineering_ 24(1), 2019.
+- Guoshuai Shi, Farshad Kazemi, Michael W. Godfrey and Shane McIntosh. [Reevaluating the defect proneness of atoms of confusion in Java systems](https://rebels.cs.uwaterloo.ca/papers/esem2024_shi.pdf). ESEM 2024.
+
+**Guard clauses and rewrites**
+
+- Martin Fowler. [Replace Nested Conditional with Guard Clauses](https://refactoring.com/catalog/replaceNestedConditionalWithGuardClauses.html). Refactoring catalog.
+- Edsger W. Dijkstra. [A case against the GO TO statement](https://www.cs.utexas.edu/~EWD/transcriptions/EWD02xx/EWD215.html). EWD215, published as "Go To Statement Considered Harmful", _CACM_ 11(3), 1968.
+- Mark S. Miller. [Recommended ?: refactoring is worse](https://github.com/airbnb/javascript/issues/1677). airbnb/javascript #1677, 2017.
+
+**The subjects**
+
+- Next.js. [`denormalize-page-path.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/page-path/denormalize-page-path.ts).
+- Supabase. [`ExplorerNavNotebooks.tsx`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/ExplorerLayout/ExplorerNavNotebooks.tsx#L21-L114).
+- Astro. [`vite-plugin-config-alias/index.ts`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-config-alias/index.ts#L8-L68) and [#13059](https://github.com/withastro/astro/pull/13059).

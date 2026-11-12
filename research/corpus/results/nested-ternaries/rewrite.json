@@ -1,0 +1,1700 @@
+{
+  "formatter": {
+    "status": 0,
+    "stderr": ""
+  },
+  "generated": "2026-11-12T05:09:39.136Z",
+  "note": "See the header of nested-ternaries-rewrite.cjs. One copy per (tree, rewrite). cognitive: the enclosing function's sonarjs score before and after (the helper's score apart); linesAdded: after Oxfmt on both copies; presets: per rule, reports on the rewrite minus reports on the original (itemsWithMore: rewrites that add at least one); fix: after each `ultracite fix` path on both copies, rewrites where a nested ternary came back (nestedBack) or the fix added conditionals (conditionalsBack) relative to the same path on the original; signs: static signs that the rewrite can change behaviour.",
+  "repos": {
+    "zod": "284243fb0d6532665afdc9239188773bb624f73c",
+    "hono": "f78a245abc393368583085e19c7f5b28b460bf51",
+    "trpc": "796700d8653b3832409fff997e6f5789519b9ea7",
+    "vite": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+    "astro": "9050e3819c51b0383cced278c278bc6f45c63468",
+    "excalidraw": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+    "next.js": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+    "vscode": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+    "shadcn": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+    "radix": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+    "react-aria": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+    "supabase": "09f80f528ec47569841408a81668dff90525c48a"
+  },
+  "summary": {
+    "source": {
+      "early-return": {
+        "attempted": 70,
+        "built": 70,
+        "cognitiveAfter": {
+          "max": 28,
+          "mean": 4.26,
+          "median": 3,
+          "min": 2,
+          "n": 70,
+          "p90": 9,
+          "sum": 298
+        },
+        "cognitiveBefore": {
+          "max": 28,
+          "mean": 5.26,
+          "median": 3,
+          "min": 3,
+          "n": 70,
+          "p90": 10,
+          "sum": 368
+        },
+        "cognitiveChange": {
+          "max": 0,
+          "mean": -1,
+          "median": -1,
+          "min": -6,
+          "n": 70,
+          "p90": 0,
+          "sum": -70
+        },
+        "cognitiveChangeWithHelper": {
+          "max": 0,
+          "mean": -1,
+          "median": -1,
+          "min": -6,
+          "n": 70,
+          "p90": 0,
+          "sum": -70
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 20,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 12,
+          "mean": 3.39,
+          "median": 2,
+          "min": 0,
+          "n": 70,
+          "p90": 8,
+          "sum": 237
+        },
+        "nestedNotRemoved": 0,
+        "parses": 70,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {
+              "complexity/noUselessUndefined": 6
+            },
+            "net": {
+              "complexity/noUselessUndefined": 6,
+              "style/noNegationElse": -4,
+              "style/useConsistentArrowReturn": -6,
+              "style/noNestedTernary": -79
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/prefer-ternary": 19,
+              "unicorn/no-useless-undefined": 6
+            },
+            "net": {
+              "unicorn/prefer-ternary": 19,
+              "unicorn/no-useless-undefined": 6,
+              "unicorn/prefer-logical-operator-over-ternary": -2,
+              "no-negated-condition": -5,
+              "arrow-body-style": -6,
+              "unicorn/no-negated-condition": -6,
+              "unicorn/prefer-minimal-ternary": -8,
+              "no-nested-ternary": -79,
+              "sonarjs/no-nested-conditional": -80
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "unicorn/no-useless-undefined": 6
+            },
+            "net": {
+              "unicorn/no-useless-undefined": 6,
+              "no-inline-comments": -5,
+              "no-negated-condition": -5,
+              "unicorn/no-negated-condition": -5,
+              "arrow-body-style": -6,
+              "no-nested-ternary": -79
+            }
+          }
+        },
+        "signs": {},
+        "signsAny": 0,
+        "skipped": {}
+      },
+      "let-if": {
+        "attempted": 331,
+        "built": 329,
+        "cognitiveAfter": {
+          "max": 614,
+          "mean": 29.59,
+          "median": 14,
+          "min": 3,
+          "n": 328,
+          "p90": 81,
+          "sum": 9704
+        },
+        "cognitiveBefore": {
+          "max": 612,
+          "mean": 29.88,
+          "median": 15,
+          "min": 3,
+          "n": 328,
+          "p90": 82,
+          "sum": 9801
+        },
+        "cognitiveChange": {
+          "max": 4,
+          "mean": -0.3,
+          "median": 0,
+          "min": -33,
+          "n": 328,
+          "p90": 2,
+          "sum": -97
+        },
+        "cognitiveChangeWithHelper": {
+          "max": 4,
+          "mean": -0.3,
+          "median": 0,
+          "min": -33,
+          "n": 328,
+          "p90": 2,
+          "sum": -97
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 90,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 11,
+          "mean": 3.7,
+          "median": 3,
+          "min": -2,
+          "n": 329,
+          "p90": 6,
+          "sum": 1216
+        },
+        "nestedNotRemoved": 0,
+        "parses": 329,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {
+              "suspicious/noImplicitAnyLet": 308,
+              "suspicious/noEvolvingTypes": 308,
+              "style/useDestructuring": 21,
+              "complexity/noExcessiveCognitiveComplexity": 1
+            },
+            "net": {
+              "suspicious/noImplicitAnyLet": 308,
+              "suspicious/noEvolvingTypes": 308,
+              "style/useDestructuring": 29,
+              "complexity/noUselessTernary": -1,
+              "style/useConst": -3,
+              "complexity/noExcessiveCognitiveComplexity": -5,
+              "complexity/useMathMinMax": -6,
+              "style/noNegationElse": -22,
+              "style/noNestedTernary": -408
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/prefer-ternary": 90,
+              "unicorn/prefer-switch": 5,
+              "sonarjs/cognitive-complexity": 3
+            },
+            "net": {
+              "unicorn/prefer-ternary": 91,
+              "unicorn/prefer-switch": 5,
+              "sonarjs/cognitive-complexity": 1,
+              "inline-config-ignored": -1,
+              "no-unneeded-ternary": -1,
+              "sonarjs/prefer-immediate-return": -3,
+              "prefer-const": -3,
+              "unicorn/prefer-logical-operator-over-ternary": -11,
+              "unicorn/prefer-minimal-ternary": -21,
+              "no-negated-condition": -24,
+              "unicorn/no-negated-condition": -24,
+              "no-nested-ternary": -408,
+              "sonarjs/no-nested-conditional": -442
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "unicorn/prefer-ternary": 97,
+              "prefer-destructuring": 21,
+              "no-unsafe-optional-chaining": 1,
+              "import/no-mutable-exports": 1,
+              "react/preserve-manual-memoization": 1
+            },
+            "net": {
+              "unicorn/prefer-ternary": 98,
+              "prefer-destructuring": 29,
+              "no-unsafe-optional-chaining": 1,
+              "import/no-mutable-exports": 1,
+              "react/preserve-manual-memoization": 1,
+              "no-unneeded-ternary": -1,
+              "unicorn/prefer-math-min-max": -2,
+              "prefer-const": -3,
+              "unicorn/prefer-logical-operator-over-ternary": -6,
+              "no-negated-condition": -24,
+              "unicorn/no-negated-condition": -24,
+              "no-inline-comments": -26,
+              "no-nested-ternary": -408
+            }
+          }
+        },
+        "signs": {
+          "exported-const-becomes-let": 1
+        },
+        "signsAny": 1,
+        "skipped": {
+          "pattern-or-multiple-declarators": 1,
+          "wrapped": 1
+        }
+      },
+      "if-statement": {
+        "attempted": 24,
+        "built": 24,
+        "cognitiveAfter": {
+          "max": 209,
+          "mean": 27.25,
+          "median": 12,
+          "min": 4,
+          "n": 24,
+          "p90": 43,
+          "sum": 654
+        },
+        "cognitiveBefore": {
+          "max": 209,
+          "mean": 28.17,
+          "median": 13,
+          "min": 4,
+          "n": 24,
+          "p90": 45,
+          "sum": 676
+        },
+        "cognitiveChange": {
+          "max": 2,
+          "mean": -0.92,
+          "median": -1,
+          "min": -5,
+          "n": 24,
+          "p90": 0,
+          "sum": -22
+        },
+        "cognitiveChangeWithHelper": {
+          "max": 2,
+          "mean": -0.92,
+          "median": -1,
+          "min": -5,
+          "n": 24,
+          "p90": 0,
+          "sum": -22
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 6,
+          "mean": 2.17,
+          "median": 1,
+          "min": 1,
+          "n": 24,
+          "p90": 4,
+          "sum": 52
+        },
+        "nestedNotRemoved": 0,
+        "parses": 24,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {
+              "correctness/noSelfAssign": 4,
+              "complexity/noExcessiveCognitiveComplexity": 1,
+              "suspicious/noExplicitAny": 1,
+              "style/noMultiAssign": 1,
+              "style/useCollapsedElseIf": 1
+            },
+            "net": {
+              "correctness/noSelfAssign": 4,
+              "suspicious/noExplicitAny": 2,
+              "complexity/noExcessiveCognitiveComplexity": 1,
+              "style/noMultiAssign": 1,
+              "style/useCollapsedElseIf": 1,
+              "suspicious/noAssignInExpressions": -1,
+              "style/noNegationElse": -2,
+              "style/noNestedTernary": -27
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "no-lonely-if": 1,
+              "unicorn/prefer-switch": 1
+            },
+            "net": {
+              "no-lonely-if": 1,
+              "unicorn/prefer-switch": 1,
+              "no-negated-condition": -2,
+              "unicorn/no-negated-condition": -2,
+              "unicorn/prefer-minimal-ternary": -2,
+              "unicorn/prefer-logical-operator-over-ternary": -4,
+              "no-nested-ternary": -27,
+              "sonarjs/no-nested-conditional": -28
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "no-self-assign": 4,
+              "unicorn/prefer-ternary": 3,
+              "typescript/no-explicit-any": 1,
+              "no-multi-assign": 1,
+              "no-lonely-if": 1
+            },
+            "net": {
+              "no-self-assign": 4,
+              "unicorn/prefer-ternary": 3,
+              "typescript/no-explicit-any": 2,
+              "no-multi-assign": 1,
+              "no-lonely-if": 1,
+              "no-inline-comments": -1,
+              "no-negated-condition": -2,
+              "unicorn/no-negated-condition": -2,
+              "unicorn/prefer-logical-operator-over-ternary": -2,
+              "no-nested-ternary": -27
+            }
+          }
+        },
+        "signs": {},
+        "signsAny": 0,
+        "skipped": {}
+      },
+      "helper": {
+        "attempted": 942,
+        "built": 942,
+        "cognitiveAfter": {
+          "max": 603,
+          "mean": 19.88,
+          "median": 6,
+          "min": 0,
+          "n": 939,
+          "p90": 50,
+          "sum": 18663
+        },
+        "cognitiveBefore": {
+          "max": 612,
+          "mean": 25.86,
+          "median": 12,
+          "min": 3,
+          "n": 939,
+          "p90": 63,
+          "sum": 24280
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -5.98,
+          "median": -4,
+          "min": -81,
+          "n": 939,
+          "p90": -3,
+          "sum": -5617
+        },
+        "cognitiveChangeWithHelper": {
+          "max": 0,
+          "mean": -2.71,
+          "median": -1,
+          "min": -79,
+          "n": 939,
+          "p90": 0,
+          "sum": -2547
+        },
+        "cognitiveHelper": {
+          "max": 28,
+          "mean": 3.27,
+          "median": 3,
+          "min": 2,
+          "n": 942,
+          "p90": 5,
+          "sum": 3077
+        },
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 175,
+            "markersLost": 3,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 15,
+          "mean": 5.22,
+          "median": 5,
+          "min": -19,
+          "n": 942,
+          "p90": 9,
+          "sum": 4916
+        },
+        "nestedNotRemoved": 0,
+        "parses": 942,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {
+              "complexity/noUselessUndefined": 133,
+              "correctness/noSwitchDeclarations": 10,
+              "complexity/noExcessiveCognitiveComplexity": 4,
+              "suspicious/noLoopFunc": 1,
+              "suspicious/noReturnAssign": 1
+            },
+            "net": {
+              "complexity/noUselessUndefined": 144,
+              "correctness/noSwitchDeclarations": 10,
+              "suspicious/noLoopFunc": 1,
+              "suspicious/noReturnAssign": 1,
+              "complexity/noUselessTernary": -1,
+              "nursery/useTailwindSortedClasses": -2,
+              "complexity/useMathMinMax": -6,
+              "suspicious/noLeakedRender": -7,
+              "complexity/noUselessFragments": -9,
+              "style/useConsistentArrowReturn": -17,
+              "complexity/noExcessiveCognitiveComplexity": -116,
+              "style/noNegationElse": -159,
+              "style/noNestedTernary": -1164
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/prefer-ternary": 173,
+              "unicorn/no-useless-undefined": 133,
+              "no-case-declarations": 10,
+              "unicorn/consistent-function-scoping": 9,
+              "complexity": 2,
+              "sonarjs/prefer-single-boolean-return": 1
+            },
+            "net": {
+              "unicorn/prefer-ternary": 208,
+              "unicorn/no-useless-undefined": 144,
+              "no-case-declarations": 10,
+              "unicorn/consistent-function-scoping": 9,
+              "sonarjs/prefer-single-boolean-return": 1,
+              "inline-config-ignored": -1,
+              "no-unneeded-ternary": -1,
+              "arrow-body-style": -19,
+              "unicorn/prefer-logical-operator-over-ternary": -24,
+              "unicorn/prefer-minimal-ternary": -47,
+              "complexity": -60,
+              "sonarjs/cognitive-complexity": -78,
+              "no-negated-condition": -178,
+              "unicorn/no-negated-condition": -188,
+              "no-nested-ternary": -1164,
+              "sonarjs/no-nested-conditional": -1235
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "unicorn/no-useless-undefined": 133,
+              "no-case-declarations": 10,
+              "unicorn/consistent-function-scoping": 9,
+              "complexity": 2,
+              "no-unsafe-optional-chaining": 1,
+              "no-loop-func": 1,
+              "no-return-assign": 1,
+              "react/preserve-manual-memoization": 1,
+              "react/static-components": 1
+            },
+            "net": {
+              "unicorn/no-useless-undefined": 144,
+              "no-case-declarations": 10,
+              "unicorn/consistent-function-scoping": 9,
+              "no-unsafe-optional-chaining": 1,
+              "no-loop-func": 1,
+              "no-return-assign": 1,
+              "react/preserve-manual-memoization": 1,
+              "no-unneeded-ternary": -1,
+              "unicorn/no-useless-spread": -1,
+              "react/static-components": -1,
+              "unicorn/prefer-ternary": -1,
+              "no-warning-comments": -2,
+              "unicorn/prefer-math-min-max": -2,
+              "react/jsx-no-useless-fragment": -11,
+              "unicorn/prefer-logical-operator-over-ternary": -15,
+              "arrow-body-style": -19,
+              "no-inline-comments": -40,
+              "complexity": -60,
+              "no-negated-condition": -178,
+              "unicorn/no-negated-condition": -178,
+              "no-nested-ternary": -1164
+            }
+          }
+        },
+        "signs": {
+          "await-moved-into-async-helper": 3
+        },
+        "signsAny": 3,
+        "skipped": {}
+      },
+      "lookup": {
+        "attempted": 79,
+        "built": 79,
+        "cognitiveAfter": {
+          "max": 156,
+          "mean": 14.76,
+          "median": 3,
+          "min": 0,
+          "n": 79,
+          "p90": 34,
+          "sum": 1166
+        },
+        "cognitiveBefore": {
+          "max": 163,
+          "mean": 18.85,
+          "median": 8,
+          "min": 3,
+          "n": 79,
+          "p90": 37,
+          "sum": 1489
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -4.09,
+          "median": -3,
+          "min": -15,
+          "n": 79,
+          "p90": -3,
+          "sum": -323
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -3,
+          "mean": -4.09,
+          "median": -3,
+          "min": -15,
+          "n": 79,
+          "p90": -3,
+          "sum": -323
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 4,
+          "mean": -1.89,
+          "median": -2,
+          "min": -7,
+          "n": 79,
+          "p90": 0,
+          "sum": -149
+        },
+        "nestedNotRemoved": 0,
+        "parses": 79,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "complexity/noExcessiveCognitiveComplexity": -4,
+              "style/noNestedTernary": -89
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/prefer-ternary": 1
+            },
+            "net": {
+              "unicorn/prefer-ternary": 1,
+              "sonarjs/cognitive-complexity": -2,
+              "unicorn/prefer-minimal-ternary": -3,
+              "unicorn/prefer-logical-operator-over-ternary": -4,
+              "no-nested-ternary": -89,
+              "sonarjs/no-nested-conditional": -91
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "object-shorthand": 1
+            },
+            "net": {
+              "object-shorthand": 2,
+              "unicorn/no-typeof-undefined": -1,
+              "no-warning-comments": -2,
+              "no-inline-comments": -4,
+              "no-nested-ternary": -89
+            }
+          }
+        },
+        "signs": {
+          "inherited-keys": 79,
+          "discriminant-read-evaluated-once": 31,
+          "branch-may-be-nullish": 23,
+          "eager-calls": 12,
+          "eager-member-reads": 10,
+          "number-keys-match-strings": 5,
+          "nullish-branch-replaced-by-default": 1,
+          "value-duplicated-per-key": 1,
+          "discriminant-call-evaluated-once": 1
+        },
+        "signsAny": 79,
+        "skipped": {}
+      },
+      "lookup-lazy": {
+        "attempted": 79,
+        "built": 79,
+        "cognitiveAfter": {
+          "max": 156,
+          "mean": 14.73,
+          "median": 3,
+          "min": 0,
+          "n": 79,
+          "p90": 34,
+          "sum": 1164
+        },
+        "cognitiveBefore": {
+          "max": 163,
+          "mean": 18.85,
+          "median": 8,
+          "min": 3,
+          "n": 79,
+          "p90": 37,
+          "sum": 1489
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -4.11,
+          "median": -3,
+          "min": -15,
+          "n": 79,
+          "p90": -3,
+          "sum": -325
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -3,
+          "mean": -4.11,
+          "median": -3,
+          "min": -15,
+          "n": 79,
+          "p90": -3,
+          "sum": -325
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 4,
+          "mean": -1.27,
+          "median": -1,
+          "min": -5,
+          "n": 79,
+          "p90": 1,
+          "sum": -100
+        },
+        "nestedNotRemoved": 0,
+        "parses": 79,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "complexity/noExcessiveCognitiveComplexity": -5,
+              "style/noNestedTernary": -89
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/no-useless-undefined": 1,
+              "unicorn/prefer-ternary": 1
+            },
+            "net": {
+              "unicorn/no-useless-undefined": 1,
+              "unicorn/prefer-ternary": 1,
+              "sonarjs/cognitive-complexity": -2,
+              "unicorn/prefer-minimal-ternary": -3,
+              "unicorn/prefer-logical-operator-over-ternary": -4,
+              "no-nested-ternary": -89,
+              "sonarjs/no-nested-conditional": -91
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "react/no-unstable-nested-components": 3,
+              "unicorn/no-useless-undefined": 1
+            },
+            "net": {
+              "react/no-unstable-nested-components": 6,
+              "unicorn/no-useless-undefined": 1,
+              "unicorn/no-typeof-undefined": -1,
+              "no-warning-comments": -2,
+              "no-inline-comments": -4,
+              "no-nested-ternary": -89
+            }
+          }
+        },
+        "signs": {
+          "inherited-keys": 79,
+          "discriminant-read-evaluated-once": 31,
+          "branch-may-be-nullish": 23,
+          "number-keys-match-strings": 5,
+          "nullish-branch-replaced-by-default": 1,
+          "value-duplicated-per-key": 1,
+          "discriminant-call-evaluated-once": 1
+        },
+        "signsAny": 79,
+        "skipped": {}
+      },
+      "switch": {
+        "attempted": 106,
+        "built": 106,
+        "cognitiveAfter": {
+          "max": 155,
+          "mean": 16.62,
+          "median": 5,
+          "min": 0,
+          "n": 106,
+          "p90": 36,
+          "sum": 1762
+        },
+        "cognitiveBefore": {
+          "max": 164,
+          "mean": 20.87,
+          "median": 10,
+          "min": 3,
+          "n": 106,
+          "p90": 39,
+          "sum": 2212
+        },
+        "cognitiveChange": {
+          "max": -2,
+          "mean": -4.25,
+          "median": -3,
+          "min": -15,
+          "n": 106,
+          "p90": -3,
+          "sum": -450
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -2,
+          "mean": -3.21,
+          "median": -2,
+          "min": -14,
+          "n": 106,
+          "p90": -2,
+          "sum": -340
+        },
+        "cognitiveHelper": {
+          "max": 5,
+          "mean": 1.1,
+          "median": 1,
+          "min": 1,
+          "n": 100,
+          "p90": 1,
+          "sum": 110
+        },
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 16,
+          "mean": 8.41,
+          "median": 8,
+          "min": 3,
+          "n": 106,
+          "p90": 11,
+          "sum": 891
+        },
+        "nestedNotRemoved": 0,
+        "parses": 106,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {
+              "complexity/noUselessUndefined": 11
+            },
+            "net": {
+              "complexity/noUselessUndefined": 11,
+              "style/useConsistentArrowReturn": -3,
+              "complexity/noExcessiveCognitiveComplexity": -11,
+              "style/noNestedTernary": -122
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/no-useless-undefined": 11,
+              "unicorn/consistent-function-scoping": 4
+            },
+            "net": {
+              "unicorn/no-useless-undefined": 11,
+              "unicorn/consistent-function-scoping": 4,
+              "complexity": -2,
+              "arrow-body-style": -3,
+              "unicorn/prefer-logical-operator-over-ternary": -4,
+              "unicorn/prefer-minimal-ternary": -5,
+              "sonarjs/cognitive-complexity": -5,
+              "no-nested-ternary": -122,
+              "sonarjs/no-nested-conditional": -124
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "unicorn/no-useless-undefined": 11,
+              "unicorn/consistent-function-scoping": 4
+            },
+            "net": {
+              "unicorn/no-useless-undefined": 11,
+              "unicorn/consistent-function-scoping": 4,
+              "unicorn/no-typeof-undefined": -1,
+              "complexity": -2,
+              "no-warning-comments": -2,
+              "arrow-body-style": -3,
+              "no-inline-comments": -4,
+              "no-nested-ternary": -122
+            }
+          }
+        },
+        "signs": {
+          "discriminant-read-evaluated-once": 42,
+          "discriminant-call-evaluated-once": 3,
+          "await-moved-into-async-helper": 1
+        },
+        "signsAny": 45,
+        "skipped": {}
+      },
+      "trees": {
+        "noStatementRewrite": 519,
+        "noRewriteAtAll": 0,
+        "total": 942,
+        "withKinds": {
+          "helper": 478,
+          "helper+let-if": 275,
+          "early-return+helper": 64,
+          "helper+let-if+lookup+lookup-lazy+switch": 43,
+          "helper+lookup+lookup-lazy+switch": 28,
+          "helper+if-statement": 19,
+          "helper+switch": 13,
+          "helper+let-if+switch": 11,
+          "helper+if-statement+lookup+lookup-lazy+switch": 4,
+          "early-return+helper+lookup+lookup-lazy+switch": 4,
+          "early-return+helper+switch": 2,
+          "helper+if-statement+switch": 1
+        }
+      }
+    },
+    "tests": {
+      "early-return": {
+        "attempted": 5,
+        "built": 5,
+        "cognitiveAfter": {
+          "max": 10,
+          "mean": 6.8,
+          "median": 7,
+          "min": 3,
+          "n": 5,
+          "p90": 7,
+          "sum": 34
+        },
+        "cognitiveBefore": {
+          "max": 21,
+          "mean": 13.8,
+          "median": 14,
+          "min": 6,
+          "n": 5,
+          "p90": 14,
+          "sum": 69
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -7,
+          "median": -7,
+          "min": -11,
+          "n": 5,
+          "p90": -7,
+          "sum": -35
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -3,
+          "mean": -7,
+          "median": -7,
+          "min": -11,
+          "n": 5,
+          "p90": -7,
+          "sum": -35
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 3,
+          "mean": 2.2,
+          "median": 2,
+          "min": 2,
+          "n": 5,
+          "p90": 2,
+          "sum": 11
+        },
+        "nestedNotRemoved": 0,
+        "parses": 5,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "style/noNestedTernary": -6
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {},
+            "net": {
+              "sonarjs/cognitive-complexity": -1,
+              "no-nested-ternary": -6,
+              "sonarjs/no-nested-conditional": -6
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {},
+            "net": {
+              "no-nested-ternary": -6
+            }
+          }
+        },
+        "signs": {},
+        "signsAny": 0,
+        "skipped": {}
+      },
+      "let-if": {
+        "attempted": 3,
+        "built": 3,
+        "cognitiveAfter": {
+          "max": 21,
+          "mean": 15,
+          "median": 18,
+          "min": 6,
+          "n": 3,
+          "p90": 18,
+          "sum": 45
+        },
+        "cognitiveBefore": {
+          "max": 22,
+          "mean": 16.67,
+          "median": 22,
+          "min": 6,
+          "n": 3,
+          "p90": 22,
+          "sum": 50
+        },
+        "cognitiveChange": {
+          "max": 0,
+          "mean": -1.67,
+          "median": -1,
+          "min": -4,
+          "n": 3,
+          "p90": -1,
+          "sum": -5
+        },
+        "cognitiveChangeWithHelper": {
+          "max": 0,
+          "mean": -1.67,
+          "median": -1,
+          "min": -4,
+          "n": 3,
+          "p90": -1,
+          "sum": -5
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 7,
+          "mean": 3.67,
+          "median": 2,
+          "min": 2,
+          "n": 3,
+          "p90": 2,
+          "sum": 11
+        },
+        "nestedNotRemoved": 0,
+        "parses": 3,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {
+              "suspicious/noImplicitAnyLet": 2,
+              "suspicious/noEvolvingTypes": 2
+            },
+            "net": {
+              "suspicious/noImplicitAnyLet": 2,
+              "suspicious/noEvolvingTypes": 2,
+              "style/noNestedTernary": -4
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/prefer-switch": 1
+            },
+            "net": {
+              "unicorn/prefer-switch": 1,
+              "sonarjs/cognitive-complexity": -1,
+              "no-nested-ternary": -4,
+              "sonarjs/no-nested-conditional": -4
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {},
+            "net": {
+              "no-nested-ternary": -4
+            }
+          }
+        },
+        "signs": {},
+        "signsAny": 0,
+        "skipped": {}
+      },
+      "if-statement": {
+        "attempted": 0,
+        "built": 0,
+        "cognitiveAfter": null,
+        "cognitiveBefore": null,
+        "cognitiveChange": null,
+        "cognitiveChangeWithHelper": null,
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": null,
+        "nestedNotRemoved": 0,
+        "parses": 0,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {}
+          },
+          "eslint": {
+            "itemsWithMore": {},
+            "net": {}
+          },
+          "oxlint": {
+            "itemsWithMore": {},
+            "net": {}
+          }
+        },
+        "signs": {},
+        "signsAny": 0,
+        "skipped": {}
+      },
+      "helper": {
+        "attempted": 16,
+        "built": 16,
+        "cognitiveAfter": {
+          "max": 17,
+          "mean": 5.25,
+          "median": 1,
+          "min": 0,
+          "n": 16,
+          "p90": 14,
+          "sum": 84
+        },
+        "cognitiveBefore": {
+          "max": 22,
+          "mean": 13.38,
+          "median": 14,
+          "min": 3,
+          "n": 16,
+          "p90": 21,
+          "sum": 214
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -8.12,
+          "median": -7,
+          "min": -21,
+          "n": 16,
+          "p90": -3,
+          "sum": -130
+        },
+        "cognitiveChangeWithHelper": {
+          "max": 0,
+          "mean": -4.44,
+          "median": -5,
+          "min": -11,
+          "n": 16,
+          "p90": -1,
+          "sum": -71
+        },
+        "cognitiveHelper": {
+          "max": 10,
+          "mean": 3.69,
+          "median": 2,
+          "min": 2,
+          "n": 16,
+          "p90": 7,
+          "sum": 59
+        },
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 1,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 9,
+          "mean": 5,
+          "median": 5,
+          "min": 0,
+          "n": 16,
+          "p90": 6,
+          "sum": 80
+        },
+        "nestedNotRemoved": 0,
+        "parses": 16,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "style/noNestedTernary": -18
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {
+              "unicorn/prefer-ternary": 1
+            },
+            "net": {
+              "unicorn/prefer-ternary": 1,
+              "sonarjs/cognitive-complexity": -5,
+              "no-nested-ternary": -18,
+              "sonarjs/no-nested-conditional": -18
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {},
+            "net": {
+              "no-nested-ternary": -18
+            }
+          }
+        },
+        "signs": {},
+        "signsAny": 0,
+        "skipped": {}
+      },
+      "lookup": {
+        "attempted": 6,
+        "built": 6,
+        "cognitiveAfter": {
+          "max": 13,
+          "mean": 6.17,
+          "median": 5,
+          "min": 1,
+          "n": 6,
+          "p90": 8,
+          "sum": 37
+        },
+        "cognitiveBefore": {
+          "max": 22,
+          "mean": 14.83,
+          "median": 14,
+          "min": 4,
+          "n": 6,
+          "p90": 21,
+          "sum": 89
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -8.67,
+          "median": -9,
+          "min": -13,
+          "n": 6,
+          "p90": -9,
+          "sum": -52
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -3,
+          "mean": -8.67,
+          "median": -9,
+          "min": -13,
+          "n": 6,
+          "p90": -9,
+          "sum": -52
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 0,
+          "mean": -0.67,
+          "median": 0,
+          "min": -2,
+          "n": 6,
+          "p90": 0,
+          "sum": -4
+        },
+        "nestedNotRemoved": 0,
+        "parses": 6,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "style/noNestedTernary": -7
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {},
+            "net": {
+              "sonarjs/cognitive-complexity": -2,
+              "no-nested-ternary": -7,
+              "sonarjs/no-nested-conditional": -7
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {},
+            "net": {
+              "no-nested-ternary": -7
+            }
+          }
+        },
+        "signs": {
+          "inherited-keys": 6,
+          "eager-member-reads": 4,
+          "discriminant-read-evaluated-once": 4,
+          "eager-calls": 1,
+          "branch-may-be-nullish": 1
+        },
+        "signsAny": 6,
+        "skipped": {}
+      },
+      "lookup-lazy": {
+        "attempted": 6,
+        "built": 6,
+        "cognitiveAfter": {
+          "max": 13,
+          "mean": 6.17,
+          "median": 5,
+          "min": 1,
+          "n": 6,
+          "p90": 8,
+          "sum": 37
+        },
+        "cognitiveBefore": {
+          "max": 22,
+          "mean": 14.83,
+          "median": 14,
+          "min": 4,
+          "n": 6,
+          "p90": 21,
+          "sum": 89
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -8.67,
+          "median": -9,
+          "min": -13,
+          "n": 6,
+          "p90": -9,
+          "sum": -52
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -3,
+          "mean": -8.67,
+          "median": -9,
+          "min": -13,
+          "n": 6,
+          "p90": -9,
+          "sum": -52
+        },
+        "cognitiveHelper": null,
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 1,
+          "mean": 0.17,
+          "median": 1,
+          "min": -2,
+          "n": 6,
+          "p90": 1,
+          "sum": 1
+        },
+        "nestedNotRemoved": 0,
+        "parses": 6,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "style/noNestedTernary": -7
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {},
+            "net": {
+              "sonarjs/cognitive-complexity": -2,
+              "no-nested-ternary": -7,
+              "sonarjs/no-nested-conditional": -7
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {
+              "react/no-unstable-nested-components": 4
+            },
+            "net": {
+              "react/no-unstable-nested-components": 8,
+              "no-nested-ternary": -7
+            }
+          }
+        },
+        "signs": {
+          "inherited-keys": 6,
+          "discriminant-read-evaluated-once": 4,
+          "branch-may-be-nullish": 1
+        },
+        "signsAny": 6,
+        "skipped": {}
+      },
+      "switch": {
+        "attempted": 6,
+        "built": 6,
+        "cognitiveAfter": {
+          "max": 14,
+          "mean": 9.17,
+          "median": 9,
+          "min": 1,
+          "n": 6,
+          "p90": 13,
+          "sum": 55
+        },
+        "cognitiveBefore": {
+          "max": 22,
+          "mean": 14.83,
+          "median": 14,
+          "min": 4,
+          "n": 6,
+          "p90": 21,
+          "sum": 89
+        },
+        "cognitiveChange": {
+          "max": -3,
+          "mean": -5.67,
+          "median": -5,
+          "min": -9,
+          "n": 6,
+          "p90": -5,
+          "sum": -34
+        },
+        "cognitiveChangeWithHelper": {
+          "max": -2,
+          "mean": -5.33,
+          "median": -5,
+          "min": -8,
+          "n": 6,
+          "p90": -5,
+          "sum": -32
+        },
+        "cognitiveHelper": {
+          "max": 1,
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "n": 2,
+          "p90": 1,
+          "sum": 2
+        },
+        "fix": {
+          "biome": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "eslint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          },
+          "oxlint": {
+            "conditionalsBack": 0,
+            "markersLost": 0,
+            "nestedBack": 0,
+            "parseErrors": 0
+          }
+        },
+        "linesAdded": {
+          "max": 9,
+          "mean": 6.5,
+          "median": 6,
+          "min": 4,
+          "n": 6,
+          "p90": 8,
+          "sum": 39
+        },
+        "nestedNotRemoved": 0,
+        "parses": 6,
+        "presets": {
+          "biome": {
+            "itemsWithMore": {},
+            "net": {
+              "style/noNestedTernary": -7
+            }
+          },
+          "eslint": {
+            "itemsWithMore": {},
+            "net": {
+              "sonarjs/cognitive-complexity": -2,
+              "no-nested-ternary": -7,
+              "sonarjs/no-nested-conditional": -7
+            }
+          },
+          "oxlint": {
+            "itemsWithMore": {},
+            "net": {
+              "no-nested-ternary": -7
+            }
+          }
+        },
+        "signs": {
+          "discriminant-read-evaluated-once": 4
+        },
+        "signsAny": 4,
+        "skipped": {}
+      },
+      "trees": {
+        "noStatementRewrite": 8,
+        "noRewriteAtAll": 0,
+        "total": 16,
+        "withKinds": {
+          "helper": 7,
+          "early-return+helper+lookup+lookup-lazy+switch": 4,
+          "helper+let-if": 2,
+          "helper+let-if+lookup+lookup-lazy+switch": 1,
+          "early-return+helper": 1,
+          "helper+lookup+lookup-lazy+switch": 1
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10"
+  }
+}

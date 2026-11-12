@@ -1,0 +1,3961 @@
+{
+  "runtime": "node v24.14.1",
+  "mirrorRevision": "v3",
+  "oracle": "research/corpus/scripts/nested-ternaries-oracle.cjs (shared with the corpus), unchanged",
+  "cases": [
+    {
+      "name": "a as prepared",
+      "oracle": "same",
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b as prepared",
+      "oracle": "same",
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c as prepared",
+      "oracle": "same",
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a01: early returns (corpus variant, normalised)",
+      "mutant": "a01",
+      "variant": "a01 early returns",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a02: early returns, the second test flipped (corpus variant, normalised)",
+      "mutant": "a02",
+      "variant": "a02 early returns, the second test flipped",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03: early returns without braces (if (bool) return x) (corpus variant, normalised)",
+      "mutant": "a03",
+      "variant": "a03 early returns without braces (if (bool) return x)",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04: if / else if / else returns (corpus variant, normalised)",
+      "mutant": "a04",
+      "variant": "a04 if / else if / else returns",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "if/else returns"
+      ],
+      "guards": {
+        "added": 1,
+        "total": 1,
+        "oneLine": 0,
+        "braced": 1
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a05: && / || chain (corpus variant, normalised)",
+      "mutant": "a05",
+      "variant": "a05 && / || chain",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 2,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "&& / || chain",
+      "response": "behaviour changed (wrong): && / || chain",
+      "kinds": [
+        "&& / || chain"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 2,
+          "enclosing": 2,
+          "max": 2,
+          "byFunction": [
+            "denormalizePagePath: 2"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "behaviour changed (wrong): && / || chain"
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 2,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 2,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a06: tests reordered (corpus variant, normalised)",
+      "mutant": "a06",
+      "variant": "a06 tests reordered",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 19,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "behaviour changed (wrong): early returns",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "behaviour changed (wrong): early returns",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 19,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 19,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a11: the outer test wraps the other (corpus variant, normalised)",
+      "mutant": "a11",
+      "variant": "a11 the outer test wraps the other",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a07: suppression comments (corpus variant, normalised)",
+      "mutant": "a07",
+      "variant": "a07 suppression comments",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [],
+      "guards": null,
+      "cognitive": null,
+      "increments": null,
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a08: IIFE (corpus variant, normalised)",
+      "mutant": "a08",
+      "variant": "a08 IIFE",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "IIFE",
+      "response": "gaming (IIFE), behaviour kept",
+      "kinds": [
+        "IIFE",
+        "early returns",
+        "one ternary kept"
+      ],
+      "guards": {
+        "added": 1,
+        "total": 1,
+        "oneLine": 0,
+        "braced": 1
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 2,
+          "max": 2,
+          "byFunction": [
+            "denormalizePagePath: 2",
+            "<anonymous>: 1"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "IIFE",
+        "response": "gaming (IIFE), behaviour kept",
+        "kinds": [
+          "early returns",
+          "one ternary kept"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a09: helper that wraps the inner ternary (corpus variant, normalised)",
+      "mutant": "a09",
+      "variant": "a09 helper that wraps the inner ternary",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper wrapping the inner ternary",
+      "response": "gaming (helper wrapping the inner ternary), behaviour kept",
+      "kinds": [
+        "helper wrapping the inner ternary",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 2,
+          "max": 2,
+          "byFunction": [
+            "rest: 1",
+            "denormalizePagePath: 2"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper wrapping the inner ternary",
+        "response": "gaming (helper wrapping the inner ternary), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a10: inner ternary in a variable (corpus variant, normalised)",
+      "mutant": "a10",
+      "variant": "a10 inner ternary in a variable",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "inner ternary moved to a variable",
+      "response": "gaming (inner ternary moved to a variable), behaviour kept",
+      "kinds": [
+        "inner ternary moved to a variable"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "inner ternary moved to a variable",
+        "response": "gaming (inner ternary moved to a variable), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b01: let content, if / else (corpus variant, normalised)",
+      "mutant": "b01",
+      "variant": "b01 let content, if / else",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "if/else with a variable",
+      "response": "if/else with a variable, behaviour kept",
+      "kinds": [
+        "if/else with a variable"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 7,
+          "enclosing": 7,
+          "max": 7,
+          "byFunction": [
+            "ExplorerNavNotebooks: 7"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "if/else with a variable",
+        "response": "if/else with a variable, behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b02: helper with early returns (corpus variant, normalised)",
+      "mutant": "b02",
+      "variant": "b02 helper with early returns",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper with early returns",
+      "response": "helper with early returns, behaviour kept",
+      "kinds": [
+        "helper with early returns",
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 2,
+          "max": 4,
+          "byFunction": [
+            "ExplorerNavNotebooks: 2",
+            "renderContent: 4"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "helper with early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03: child component (corpus variant, normalised)",
+      "mutant": "b03",
+      "variant": "b03 child component",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "child component",
+      "response": "child component, behaviour kept",
+      "kinds": [
+        "child component",
+        "early returns",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 2,
+          "max": 4,
+          "byFunction": [
+            "NotebooksContent: 4",
+            "ExplorerNavNotebooks: 2"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "child component",
+        "response": "child component, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04: && with notebooks.length (corpus variant, normalised)",
+      "mutant": "b04",
+      "variant": "b04 && with notebooks.length",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 24,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "&& / || chain",
+      "response": "behaviour changed (wrong): && / || chain",
+      "kinds": [
+        "JSX &&"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "ExplorerNavNotebooks: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "behaviour changed (wrong): && / || chain",
+        "kinds": [
+          "JSX &&"
+        ]
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 24,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 24,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b05: && without !isPending (corpus variant, normalised)",
+      "mutant": "b05",
+      "variant": "b05 && without !isPending",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 40,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "&& / || chain",
+      "response": "behaviour changed (wrong): && / || chain",
+      "kinds": [
+        "JSX &&"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "ExplorerNavNotebooks: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "behaviour changed (wrong): && / || chain",
+        "kinds": [
+          "JSX &&"
+        ]
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 40,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 40,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06: && with booleans (corpus variant, normalised)",
+      "mutant": "b06",
+      "variant": "b06 && with booleans",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "&& / || chain",
+      "response": "&& / || chain, behaviour kept",
+      "kinds": [
+        "JSX &&"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "ExplorerNavNotebooks: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "&& / || chain, behaviour kept",
+        "kinds": [
+          "JSX &&"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b07: suppression comments (corpus variant, normalised)",
+      "mutant": "b07",
+      "variant": "b07 suppression comments",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [],
+      "guards": null,
+      "cognitive": null,
+      "increments": null,
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b08: IIFE in the JSX (corpus variant, normalised)",
+      "mutant": "b08",
+      "variant": "b08 IIFE in the JSX",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "IIFE",
+      "response": "gaming (IIFE), behaviour kept",
+      "kinds": [
+        "IIFE",
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 2,
+          "max": 4,
+          "byFunction": [
+            "ExplorerNavNotebooks: 2",
+            "<anonymous>: 4"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "IIFE",
+        "response": "gaming (IIFE), behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b09: helper that wraps the inner ternary (corpus variant, normalised)",
+      "mutant": "b09",
+      "variant": "b09 helper that wraps the inner ternary",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper wrapping the inner ternary",
+      "response": "gaming (helper wrapping the inner ternary), behaviour kept",
+      "kinds": [
+        "helper wrapping the inner ternary"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "ExplorerNavNotebooks: 3",
+            "renderList: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper wrapping the inner ternary",
+        "response": "gaming (helper wrapping the inner ternary), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b10: inner ternary in a variable (corpus variant, normalised)",
+      "mutant": "b10",
+      "variant": "b10 inner ternary in a variable",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "inner ternary moved to a variable",
+      "response": "gaming (inner ternary moved to a variable), behaviour kept",
+      "kinds": [
+        "inner ternary moved to a variable"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 6,
+          "max": 6,
+          "byFunction": [
+            "ExplorerNavNotebooks: 6"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "inner ternary moved to a variable",
+        "response": "gaming (inner ternary moved to a variable), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c01: early returns in the callback (corpus variant, normalised)",
+      "mutant": "c01",
+      "variant": "c01 early returns in the callback",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 4,
+        "oneLine": 0,
+        "braced": 4
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 94,
+          "kind": "prefix ++",
+          "context": "an if branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c02: switch in the callback (corpus variant, normalised)",
+      "mutant": "c02",
+      "variant": "c02 switch in the callback",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "switch",
+      "response": "switch, behaviour kept",
+      "kinds": [
+        "switch"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 13,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 95,
+          "kind": "prefix ++",
+          "context": "a switch case"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "switch",
+        "response": "switch, behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c03: lookup of functions (corpus variant, normalised)",
+      "mutant": "c03",
+      "variant": "c03 lookup of functions",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "lookup of functions",
+      "response": "lookup of functions, behaviour kept",
+      "kinds": [
+        "lookup of functions",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 12,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 95,
+          "kind": "prefix ++",
+          "context": "a function in an object (runs when called)"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "lookup of functions",
+        "response": "lookup of functions, behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c04: object lookup (corpus variant, normalised)",
+      "mutant": "c04",
+      "variant": "c04 object lookup",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 185,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "lookup object",
+      "response": "behaviour changed (wrong): lookup object",
+      "kinds": [
+        "lookup object"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 12,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 94,
+          "kind": "prefix ++",
+          "context": "an object literal's value (built eagerly)"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "lookup object",
+        "response": "behaviour changed (wrong): lookup object"
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 185,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 185,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c05: increment moved above the test (corpus variant, normalised)",
+      "mutant": "c05",
+      "variant": "c05 increment moved above the test",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 185,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "behaviour changed (wrong): early returns",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 4,
+        "oneLine": 0,
+        "braced": 4
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 93,
+          "kind": "prefix ++",
+          "context": "unconditional in <callback to [ ...normalizePath(path.resolve(resolvedBaseUrl, value)), ] >"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "behaviour changed (wrong): early returns",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 185,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 185,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c06: one counter for every target (corpus variant, normalised)",
+      "mutant": "c06",
+      "variant": "c06 one counter for every target",
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 57,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper with early returns",
+      "response": "behaviour changed (wrong): helper with early returns",
+      "kinds": [
+        "helper with early returns",
+        "early returns",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 4,
+        "oneLine": 0,
+        "braced": 4
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "toReplacementSegment: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 89,
+          "kind": "prefix ++",
+          "context": "an if branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "behaviour changed (wrong): helper with early returns",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 57,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "changed",
+          "differing": 57,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c07: suppression comments (corpus variant, normalised)",
+      "mutant": "c07",
+      "variant": "c07 suppression comments",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [],
+      "guards": null,
+      "cognitive": null,
+      "increments": null,
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c08: IIFE (corpus variant, normalised)",
+      "mutant": "c08",
+      "variant": "c08 IIFE",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "IIFE",
+      "response": "gaming (IIFE), behaviour kept",
+      "kinds": [
+        "IIFE",
+        "early returns",
+        "one ternary kept"
+      ],
+      "guards": {
+        "added": 1,
+        "total": 3,
+        "oneLine": 0,
+        "braced": 3
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 1",
+            "<anonymous>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 94,
+          "kind": "prefix ++",
+          "context": "a ternary branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "IIFE",
+        "response": "gaming (IIFE), behaviour kept",
+        "kinds": [
+          "early returns",
+          "one ternary kept"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c09: helper that wraps the inner ternary (corpus variant, normalised)",
+      "mutant": "c09",
+      "variant": "c09 helper that wraps the inner ternary",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper wrapping the inner ternary",
+      "response": "gaming (helper wrapping the inner ternary), behaviour kept",
+      "kinds": [
+        "helper wrapping the inner ternary",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "escapeDollar: 1",
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 95,
+          "kind": "prefix ++",
+          "context": "a ternary branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper wrapping the inner ternary",
+        "response": "gaming (helper wrapping the inner ternary), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c10: inner ternary in a variable (corpus variant, normalised)",
+      "mutant": "c10",
+      "variant": "c10 inner ternary in a variable",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "inner ternary moved to a variable",
+      "response": "gaming (inner ternary moved to a variable), behaviour kept",
+      "kinds": [
+        "inner ternary moved to a variable"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 94,
+          "kind": "prefix ++",
+          "context": "a ternary branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "inner ternary moved to a variable",
+        "response": "gaming (inner ternary moved to a variable), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c11: && / || chain (corpus variant, normalised)",
+      "mutant": "c11",
+      "variant": "c11 && / || chain",
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "&& / || chain",
+      "response": "gaming (&& / || chain), behaviour kept",
+      "kinds": [
+        "&& / || chain"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 94,
+          "kind": "prefix ++",
+          "context": "the right of && or || (short-circuit)"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "&& / || chain",
+        "response": "gaming (&& / || chain), behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03raw: early returns without braces, as written (corpus variant, not normalised)",
+      "mutant": "a03raw",
+      "variant": "a03 early returns without braces (if (bool) return x)",
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "one-line guards"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 2,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04raw: if / else if / else returns, as written (corpus variant, not normalised)",
+      "mutant": "a04raw",
+      "variant": "a04 if / else if / else returns",
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "if/else returns",
+      "response": "if/else returns, behaviour kept",
+      "kinds": [
+        "if/else returns"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "if/else returns",
+        "response": "if/else returns, behaviour kept"
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c01raw: early returns in the callback, as written (corpus variant, not normalised)",
+      "mutant": "c01raw",
+      "variant": "c01 early returns in the callback",
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "one-line guards",
+        "other code changed"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 4,
+        "oneLine": 2,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [...normalizePath(path.resolve(resolvedB>: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 82,
+          "kind": "prefix ++",
+          "context": "an if branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": null,
+        "oxlintNested": 0,
+        "ours": {
+          "oracle": "same",
+          "differing": null,
+          "oxlintNested": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah1: a const arrow with early returns (the declaration converted too)",
+      "mutant": "ah1",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "declaration form changed"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "declaration form changed"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah2: one guard, the inner ternary kept as a single ternary",
+      "mutant": "ah2",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "one ternary kept"
+      ],
+      "guards": {
+        "added": 1,
+        "total": 1,
+        "oneLine": 0,
+        "braced": 1
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one ternary kept"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah3: let + if / else if / else, then one return",
+      "mutant": "ah3",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "if/else with a variable",
+      "response": "if/else with a variable, behaviour kept",
+      "kinds": [
+        "if/else with a variable",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "if/else with a variable",
+        "response": "if/else with a variable, behaviour kept"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah4: one-line guards, if (bool) return x; (as written)",
+      "mutant": "ah4",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "one-line guards"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 2,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah5: one-line guards, normalised (curly's fix adds braces)",
+      "mutant": "ah5",
+      "variant": null,
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah6: early returns with the two tests swapped (they're mutually exclusive, so the result is the same)",
+      "mutant": "ah6",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 4,
+          "enclosing": 4,
+          "max": 4,
+          "byFunction": [
+            "denormalizePagePath: 4"
+          ]
+        },
+        "after": {
+          "sum": 3,
+          "enclosing": 3,
+          "max": 3,
+          "byFunction": [
+            "denormalizePagePath: 3"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "bh1: early returns from the component, each repeating both wrappers",
+      "mutant": "bh1",
+      "variant": null,
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "wrappers repeated"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 6,
+          "max": 6,
+          "byFunction": [
+            "ExplorerNavNotebooks: 6"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "wrappers repeated"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "bh2: a function-declaration helper with early returns, called in the JSX",
+      "mutant": "bh2",
+      "variant": null,
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper with early returns",
+      "response": "helper with early returns, behaviour kept",
+      "kinds": [
+        "helper with early returns",
+        "early returns"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 6,
+          "enclosing": 2,
+          "max": 4,
+          "byFunction": [
+            "ExplorerNavNotebooks: 2",
+            "renderContent: 4"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "helper with early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "bh3: the whole chain moved into a const above the return (still nested)",
+      "mutant": "bh3",
+      "variant": null,
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "nested ternary kept",
+      "response": "nested ternary kept",
+      "kinds": [
+        "nested ternary kept",
+        "inner ternary moved to a variable"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 0,
+        "oneLine": 0,
+        "braced": 0
+      },
+      "cognitive": {
+        "before": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        },
+        "after": {
+          "sum": 8,
+          "enclosing": 8,
+          "max": 8,
+          "byFunction": [
+            "ExplorerNavNotebooks: 8"
+          ]
+        }
+      },
+      "increments": [],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "nested ternary kept",
+        "response": "nested ternary kept",
+        "kinds": [
+          "nested ternary kept"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch1: one-line guards in the callback (as written)",
+      "mutant": "ch1",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "early returns",
+      "response": "early returns, behaviour kept",
+      "kinds": [
+        "early returns",
+        "one-line guards"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 4,
+        "oneLine": 2,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 93,
+          "kind": "prefix ++",
+          "context": "an if branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "early returns",
+        "response": "early returns, behaviour kept",
+        "kinds": [
+          "early returns",
+          "one-line guards"
+        ],
+        "oneLine": 2
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch2: a helper with early returns, declared inside the loop over values (a closure over the counter)",
+      "mutant": "ch2",
+      "variant": null,
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "helper with early returns",
+      "response": "helper with early returns, behaviour kept",
+      "kinds": [
+        "helper with early returns",
+        "early returns",
+        "type annotations changed"
+      ],
+      "guards": {
+        "added": 2,
+        "total": 4,
+        "oneLine": 0,
+        "braced": 4
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 14,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "toReplacement: 2",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 90,
+          "kind": "prefix ++",
+          "context": "an if branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "helper with early returns",
+        "response": "helper with early returns, behaviour kept",
+        "kinds": [
+          "early returns"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch3: a Map built in the callback (every value, the increment included, built eagerly): changes behaviour",
+      "mutant": "ch3",
+      "variant": null,
+      "normalised": true,
+      "oracle": "changed",
+      "differing": 185,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "Map lookup",
+      "response": "behaviour changed (wrong): Map lookup",
+      "kinds": [
+        "Map lookup"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 12,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 95,
+          "kind": "prefix ++",
+          "context": "unconditional in <callback to [ ...normalizePath(path.resolve(resolvedBaseUrl, value)), ] >"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "nested": 0,
+        "edit": "Map lookup",
+        "response": "behaviour changed (wrong): Map lookup"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch4: a lookup with matchId + 1, and the increment in its own if: same behaviour",
+      "mutant": "ch4",
+      "variant": null,
+      "normalised": true,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 0,
+        "eslint": 0,
+        "eslintSonarjs": 0,
+        "biome": 0
+      },
+      "outcome": "lookup object",
+      "response": "lookup object, behaviour kept",
+      "kinds": [
+        "lookup object"
+      ],
+      "guards": {
+        "added": 0,
+        "total": 2,
+        "oneLine": 0,
+        "braced": 2
+      },
+      "cognitive": {
+        "before": {
+          "sum": 15,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 3",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        },
+        "after": {
+          "sum": 13,
+          "enclosing": 10,
+          "max": 10,
+          "byFunction": [
+            "getConfigAlias: 10",
+            "<callback to [...alias] .map>: 1",
+            "<callback to [ ...normalizePath(path.resolve(resolved>: 1",
+            "<callback to [...normalizePath(resolvedBaseUrl)] .map>: 1"
+          ]
+        }
+      },
+      "increments": [
+        {
+          "line": 94,
+          "kind": "matchId + 1",
+          "context": "an object literal's value (built eagerly)"
+        },
+        {
+          "line": 97,
+          "kind": "+=",
+          "context": "an if branch"
+        }
+      ],
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 0,
+        "edit": "lookup object",
+        "response": "lookup object, behaviour kept"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch5: a suppression comment for Oxlint only (ESLint's sonarjs still reports)",
+      "mutant": "ch5",
+      "variant": null,
+      "normalised": false,
+      "oracle": "same",
+      "differing": null,
+      "nested": {
+        "oxlint": 1,
+        "eslint": 1,
+        "eslintSonarjs": 1,
+        "biome": 1
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [],
+      "guards": null,
+      "cognitive": null,
+      "increments": null,
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "nested": 1,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "primingCheck": {
+    "note": "lines of the unstripped corpus subjects' and stubs' comments that the PRIMING patterns match; each must be above 0",
+    "hits": {
+      "a": {
+        "subject": 46,
+        "stubs": 3
+      },
+      "b": {
+        "subject": 44,
+        "stubs": 7
+      },
+      "c": {
+        "subject": 51,
+        "stubs": 3
+      }
+    },
+    "pass": true
+  },
+  "diffPort": {
+    "note": "the mirror's v3 port of diff.ts (recordSourceLines, partitionByRemaining) against packages/cli/src/agent-fix/diff.ts itself, on hand-written edits; each side's partition is given as indexes into the originals and the fresh reports",
+    "cases": [
+      {
+        "name": "a repeated message, a new report above the originals",
+        "real": {
+          "cleared": [],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [
+            0
+          ],
+          "stillReported": [
+            1,
+            2
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [
+            0
+          ],
+          "stillReported": [
+            1,
+            2
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "one original fixed where it stood, one added elsewhere",
+        "real": {
+          "cleared": [
+            0
+          ],
+          "still": [
+            1
+          ],
+          "introduced": [
+            1
+          ],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [
+            0
+          ],
+          "still": [
+            1
+          ],
+          "introduced": [
+            1
+          ],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "a limit rule's count changes",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "a message that names a line moves",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "a number fixed and another added nearby",
+        "real": {
+          "cleared": [
+            0
+          ],
+          "still": [],
+          "introduced": [
+            0
+          ],
+          "stillReported": []
+        },
+        "mirror": {
+          "cleared": [
+            0
+          ],
+          "still": [],
+          "introduced": [
+            0
+          ],
+          "stillReported": []
+        },
+        "pass": true
+      },
+      {
+        "name": "the nested ternary moved down by the edit, still reported",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "the nested ternary rewritten, a new one written elsewhere",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "a report on a line that reads the same elsewhere",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "nothing changed",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      }
+    ]
+  },
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts Oxlint adapter (fixAndCollect and verify, run under Bun in a project with init's oxlint.config.ts and oxfmt.config.ts, which import `ultracite/...`, and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs, configs passed with -c), on the same files: every diagnostic (every field but `raw`, before the handoff filter) and the subject, its stub module, package.json and tsconfig.json each pass leaves must match.",
+    "cases": [
+      {
+        "name": "a as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a11",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a10",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b10",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c10",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c11",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a03raw",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a04raw",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c01raw",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah1",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 0,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah2",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah3",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah4",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah5",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah6",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "bh1",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "bh2",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "bh3",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch1",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch2",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch3",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch4",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 4,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch5",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}
