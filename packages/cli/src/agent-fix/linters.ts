@@ -9,6 +9,7 @@ import {
 } from "../config-resolution";
 import { eslintIgnoredFileArgs, toStylelintTargets } from "../linter-args";
 import { spawnSync } from "../spawn-sync";
+import { findNearestFile, oxlintConfigNames } from "../utils";
 import type { Linter } from "../utils";
 import type { Diagnostic, LinterAdapter } from "./types";
 
@@ -127,15 +128,62 @@ interface JsPluginRuleDocs {
   url?: string;
 }
 
+// By where they were resolved from and package name.
 const jsPlugins = new Map<string, JsPlugin | null>();
 
+// The path each directory's plugins resolve from, by directory.
+const pluginBases = new Map<string, string>();
+
+// `-c path`, `--config path` or `--config=path`.
+const CONFIG_FLAG_RE = /^(?:-c|--config)(?:=(?<path>.+))?$/u;
+
 /**
- * Loads a plugin from the project being linted, which is where Oxlint loads
- * it from. Best effort and cached: a plugin that can't be loaded just leaves
- * its rules without help text.
+ * Oxlint resolves a config's `jsPlugins` from the config file, so a file's
+ * plugins are loaded from the config Oxlint lints it with: the one `-c`
+ * names, otherwise the nearest one up from the file (from the working
+ * directory with `--disable-nested-config`), found the way Oxlint finds it,
+ * up to the filesystem root. Without one, from the working directory.
  */
-const loadJsPlugin = (packageName: string): JsPlugin | null => {
-  const cached = jsPlugins.get(packageName);
+const pluginBase = (file: string, passthrough: string[]): string => {
+  const flag = passthrough.findIndex((arg) => CONFIG_FLAG_RE.test(arg));
+
+  const named =
+    flag === -1
+      ? undefined
+      : (CONFIG_FLAG_RE.exec(passthrough[flag] ?? "")?.groups?.path ??
+        passthrough[flag + 1]);
+
+  if (named) {
+    return path.resolve(named);
+  }
+
+  const dir = passthrough.includes("--disable-nested-config")
+    ? process.cwd()
+    : path.dirname(path.resolve(file));
+
+  const cached = pluginBases.get(dir);
+
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const base =
+    findNearestFile(oxlintConfigNames, dir)?.path ??
+    path.join(process.cwd(), "package.json");
+
+  pluginBases.set(dir, base);
+
+  return base;
+};
+
+/**
+ * Loads a plugin from where Oxlint loads it (see pluginBase). Best effort
+ * and cached: a plugin that can't be loaded just leaves its rules without
+ * help text.
+ */
+const loadJsPlugin = (packageName: string, base: string): JsPlugin | null => {
+  const key = `${base}\u0000${packageName}`;
+  const cached = jsPlugins.get(key);
 
   if (cached !== undefined) {
     return cached;
@@ -144,9 +192,7 @@ const loadJsPlugin = (packageName: string): JsPlugin | null => {
   let plugin: JsPlugin | null = null;
 
   try {
-    const projectRequire = createRequire(
-      path.join(process.cwd(), "package.json")
-    );
+    const projectRequire = createRequire(base);
 
     // SAFETY: every field of JsPlugin is optional and read through optional
     // chaining, so a module of another shape yields no docs instead of failing.
@@ -159,7 +205,7 @@ const loadJsPlugin = (packageName: string): JsPlugin | null => {
     plugin = null;
   }
 
-  jsPlugins.set(packageName, plugin);
+  jsPlugins.set(key, plugin);
 
   return plugin;
 };
@@ -169,7 +215,11 @@ const loadJsPlugin = (packageName: string): JsPlugin | null => {
  * comes from a JS plugin, so the agent would get the one-line message alone.
  * The plugin's own rule metadata fills them in, as ESLint's report does.
  */
-const jsPluginRuleDocs = (ruleName: string): JsPluginRuleDocs => {
+const jsPluginRuleDocs = (
+  ruleName: string,
+  file: string,
+  passthrough: string[]
+): JsPluginRuleDocs => {
   const separator = ruleName.indexOf("/");
   const packageName = JS_PLUGIN_PACKAGES.get(ruleName.slice(0, separator));
 
@@ -177,8 +227,8 @@ const jsPluginRuleDocs = (ruleName: string): JsPluginRuleDocs => {
     return {};
   }
 
-  const rule =
-    loadJsPlugin(packageName)?.rules?.[ruleName.slice(separator + 1)];
+  const plugin = loadJsPlugin(packageName, pluginBase(file, passthrough));
+  const rule = plugin?.rules?.[ruleName.slice(separator + 1)];
 
   return {
     help: rule?.meta?.docs?.description ?? rule?.recommendation,
@@ -201,7 +251,10 @@ const stripOxlintNotice = (stdout: string): string => {
   return start > 0 ? stdout.slice(start) : stdout;
 };
 
-const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
+const parseOxlintDiagnostics = (
+  stdout: string,
+  passthrough: string[]
+): Diagnostic[] => {
   const parsed = parseJsonOutput<OxlintReport>(
     "oxlint",
     stripOxlintNotice(stdout)
@@ -218,7 +271,9 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
     const rule = diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint";
 
     const docs =
-      diagnostic.help || diagnostic.url ? {} : jsPluginRuleDocs(rule);
+      diagnostic.help || diagnostic.url
+        ? {}
+        : jsPluginRuleDocs(rule, diagnostic.filename, passthrough);
 
     diagnostics.push({
       column: span?.column ?? 1,
@@ -267,7 +322,7 @@ const runOxlintPass = (
     ...targets,
   ]);
 
-  return parseOxlintDiagnostics(stdout);
+  return parseOxlintDiagnostics(stdout, filteredPassthrough);
 };
 
 const oxlintAdapter: LinterAdapter = {

@@ -209,18 +209,17 @@ export default defineConfig({${env}
 
 // Doctor's env check for a project whose only file is this oxlint.config.ts.
 const checkOxlintEnv = (contents: string) => {
-  mock.module("node:fs", () => ({
-    accessSync: mock(() => {}),
-    existsSync: mock(
-      (filePath: string) =>
-        nodePath.basename(String(filePath)) === "oxlint.config.ts"
-    ),
-    readFileSync: mock(() => contents),
-  }));
+  mockFileSystem({
+    [nodePath.join(process.cwd(), "oxlint.config.ts")]: contents,
+  });
 
-  return runDiagnostics("oxlint").find(
-    (result) => result.name === "Oxlint environment"
-  );
+  try {
+    return runDiagnostics("oxlint").find(
+      (result) => result.name === "Oxlint environment"
+    );
+  } finally {
+    restoreFileSystemMock();
+  }
 };
 
 describe("doctor", () => {
@@ -726,6 +725,121 @@ describe("doctor", () => {
     expect(
       checkOxlintEnv('import next from "ultracite/oxlint/next";')
     ).toBeUndefined();
+  });
+
+  test("doesn't pass an oxlint config it can't read", () => {
+    // It doesn't parse, or exports an array.
+    for (const contents of [
+      'import core from "ultracite/oxlint/core";\nexport default defineConfig({',
+      'import core from "ultracite/oxlint/core";\nexport default [core];',
+    ]) {
+      expect(checkOxlintEnv(contents)).toBeUndefined();
+    }
+  });
+
+  test("warns that it can't tell about an oxlint config that spreads in an object", () => {
+    // update would move the spread after `extends`, so upgrade can't add it.
+    const ahead = checkOxlintEnv(oxlintConfigWithEnv("\n  ...shared,"));
+
+    expect(ahead).toMatchObject({ status: "warn" });
+    expect(ahead?.message).toContain(
+      "can't tell whether an object it spreads in"
+    );
+    expect(ahead?.message).toContain(
+      "`ultracite upgrade` can't, since the config has `...shared` ahead of `extends`"
+    );
+    expect(ahead?.message).not.toContain("Run `ultracite upgrade`");
+    expect(
+      checkOxlintEnv(oxlintConfigWithEnv("\n  ...shared,\n  env: core.env,"))
+    ).toMatchObject({ status: "pass" });
+
+    // After `extends`, upgrade adds `env` ahead of it.
+    const after = checkOxlintEnv(
+      oxlintConfigWithEnv("").replace(
+        "extends: [core],",
+        "extends: [core],\n  ...shared,"
+      )
+    );
+
+    expect(after?.message).toContain("can't tell whether");
+    expect(after?.message).toContain("Run `ultracite upgrade`");
+  });
+
+  test("leaves the env of an oxlint config Oxlint can't load to the configuration check", () => {
+    const configPath = nodePath.join(process.cwd(), "oxlint.config.ts");
+
+    // Next to an oxlint.config.mts, or a .ts one in a CommonJS package:
+    // upgrade can't add env to either until it's sorted out.
+    for (const beside of [
+      { [nodePath.join(process.cwd(), "oxlint.config.mts")]: "" },
+      {
+        [nodePath.join(process.cwd(), "package.json")]: JSON.stringify({
+          type: "commonjs",
+        }),
+      },
+    ]) {
+      mockFileSystem({ [configPath]: oxlintConfigWithEnv(""), ...beside });
+
+      try {
+        const checks = runDiagnostics("oxlint");
+
+        expect(findCheck(checks, "Oxlint configuration")).toMatchObject({
+          status: "fail",
+        });
+        expect(findCheck(checks, "Oxlint environment")).toBeUndefined();
+      } finally {
+        restoreFileSystemMock();
+      }
+    }
+  });
+
+  test("warns about a config upgrade can't add env to, without suggesting upgrade", () => {
+    const throughConst = oxlintConfigWithEnv("")
+      .replace("export default", "const base = { ...core };\n\nexport default")
+      .replace("extends: [core]", "extends: [base]");
+
+    // The project's own `jsPluginSettings` clashes with the generated one.
+    const clash = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const jsPluginSettings = {};
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  settings: jsPluginSettings,
+});
+`;
+
+    for (const [config, reason] of [
+      [throughConst, "takes the core preset through a name of its own"],
+      [clash, "declares its own `jsPluginSettings`"],
+    ]) {
+      const missing = checkOxlintEnv(config);
+
+      expect(missing).toMatchObject({ status: "warn" });
+      expect(missing?.message).toContain("sets no `env`");
+      expect(missing?.message).toContain(
+        `\`ultracite upgrade\` can't, since the config ${reason}`
+      );
+      expect(missing?.message).not.toContain("Run `ultracite upgrade`");
+    }
+  });
+
+  test("says where to run upgrade for an oxlint config in a parent directory", () => {
+    mockFileSystem({
+      [nodePath.join(nodePath.dirname(process.cwd()), "oxlint.config.ts")]:
+        oxlintConfigWithEnv(""),
+    });
+
+    try {
+      const missing = findCheck(runDiagnostics("oxlint"), "Oxlint environment");
+
+      expect(missing).toMatchObject({ status: "warn" });
+      expect(missing?.message).toContain("`ultracite init` from .. to add it");
+    } finally {
+      restoreFileSystemMock();
+    }
   });
 
   test("finds .mts configs", () => {
