@@ -13,7 +13,7 @@ const SCRIPT_TAG_RE = /<script/iu;
 // A whole page: a doctype or an `<html>` element first, after any comments.
 // Angular serves such a file as it is (`src/index.html`, a static page in
 // `public/`, an email) and never compiles it as a template.
-const DOCUMENT_RE = /^\uFEFF?(?:\s|<!--.*?-->)*<(?:!doctype|html)[\s>]/isu;
+const DOCUMENT_RE = /^\uFEFF?(?:\s|<!--(?:[^-]|-(?!->))*-->)*<(?:!doctype|html)[\s>]/isu;
 
 /**
  * Lints an HTML file twice: as an Angular template, and, when it has a
