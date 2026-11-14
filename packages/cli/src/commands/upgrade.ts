@@ -4,6 +4,7 @@ import process from "node:process";
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager } from "nypm";
+import { gtr, lt, valid, validRange } from "semver";
 
 import packageJson from "../../package.json" with { type: "json" };
 import { agentAdapters, assertAgentAvailable } from "../agent-fix/agents";
@@ -91,6 +92,22 @@ const assertAgentUpgradeSupported = (
   if (agent && major && Number(major) < FIRST_AGENT_UPGRADE_MAJOR) {
     throw new UltraciteSetupError(
       `\`--${agent}\` needs Ultracite ${FIRST_AGENT_UPGRADE_MAJOR} or later, since earlier releases can't hand the upgrade to an agent. Drop \`--${agent}\` to install ${version}, or upgrade to ${FIRST_AGENT_UPGRADE_MAJOR} or later.`
+    );
+  }
+};
+
+// The release that added `upgrade`. The hand-off runs the installed
+// release's own `upgrade`, which anything older doesn't have.
+const FIRST_UPGRADE_VERSION = "7.11.0";
+
+// Fail before installing a release the hand-off can't run, rather than
+// leave it installed next to a toolchain nothing synced.
+const assertUpgradeSupported = (version: string): void => {
+  const range = validRange(version);
+
+  if (range && gtr(FIRST_UPGRADE_VERSION, range)) {
+    throw new UltraciteSetupError(
+      `\`ultracite upgrade\` can't move to ${version}: releases before ${FIRST_UPGRADE_VERSION} have no \`upgrade\` command to sync the toolchain with. Install it with your package manager instead, along with the linter versions its release notes name.`
     );
   }
 };
@@ -304,9 +321,20 @@ const handOffToInstalled = (
     return null;
   }
 
-  log.info(
-    `Handing off to Ultracite ${installed.manifest.version} to sync the toolchain...`
-  );
+  const { version } = installed.manifest;
+
+  // A dist-tag can resolve to a release too old to have `upgrade`.
+  const installedVersion = valid(version);
+
+  if (installedVersion && lt(installedVersion, FIRST_UPGRADE_VERSION)) {
+    log.warn(
+      `Ultracite ${version} has no \`upgrade\` command, so your linter was left at the version it had. Install the linter versions its release notes name.`
+    );
+
+    return 0;
+  }
+
+  log.info(`Handing off to Ultracite ${version} to sync the toolchain...`);
 
   // Forward --pm only when the user passed it. Otherwise the new CLI
   // detects the package manager itself, with the details (like the Yarn
@@ -444,6 +472,7 @@ export const upgrade = async (
 
   const version = options.version ?? "latest";
   assertVersionSpec(version);
+  assertUpgradeSupported(version);
   assertAgentUpgradeSupported(version, options.agent);
 
   const linter = detectLinter();

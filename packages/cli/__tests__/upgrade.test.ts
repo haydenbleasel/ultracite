@@ -647,6 +647,20 @@ describe("upgrade", () => {
     expect(harness.addDevDependency).not.toHaveBeenCalled();
   });
 
+  test("rejects a release that has no upgrade command, before installing anything", async () => {
+    const harness = setup();
+    const { upgrade } = await loadUpgrade();
+
+    for (const version of ["7.10.0", "7.10", "6"]) {
+      // oxlint-disable-next-line no-await-in-loop -- each rejection is asserted in turn
+      await expect(upgrade({ pm: "npm", version })).rejects.toThrow(
+        "releases before 7.11.0 have no `upgrade` command"
+      );
+    }
+
+    expect(harness.addDevDependency).not.toHaveBeenCalled();
+  });
+
   test("rejects --claude or --codex with a release before 8, before installing anything", async () => {
     const harness = setup();
     const { upgrade } = await loadUpgrade();
