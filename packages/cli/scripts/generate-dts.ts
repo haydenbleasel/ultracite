@@ -227,11 +227,16 @@ export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
 /**
  * Returns a copy of the js-plugins preset narrowed to the given plugin
  * names: only the selected jsPlugins entries are loaded and only their
- * rules (top-level and per-override) are kept.
+ * rules (top-level and per-override) are kept. Every field it returns is
+ * set, so a config can spread them.
  */
 export declare const selectJsPlugins: (
   pluginNames: readonly OxlintJsPluginName[]
-) => OxlintConfigWithJsPlugins;
+) => OxlintConfigWithJsPlugins & {
+  overrides: NonNullable<OxlintConfig["overrides"]>;
+  rules: NonNullable<OxlintConfig["rules"]>;
+  settings: NonNullable<OxlintConfig["settings"]>;
+};
 `;
 
 const writeDeclaration = async (preset: Preset) => {

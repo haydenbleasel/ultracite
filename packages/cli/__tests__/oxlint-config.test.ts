@@ -407,17 +407,25 @@ describe("oxlint package exports", () => {
       },
     } satisfies OxfmtConfig;
 
+    const selected = selectJsPlugins(["github"]);
+
     const oxlintConfig = {
       env: { ...corePreset.env, node: true },
-      extends: [corePreset, reactPreset, vitestPreset],
+      extends: [corePreset, reactPreset, vitestPreset, selected],
       ignorePatterns: [...corePreset.ignorePatterns, "generated"],
-      overrides: [...corePreset.overrides, ...vitestPreset.overrides],
+      overrides: [
+        ...corePreset.overrides,
+        ...vitestPreset.overrides,
+        ...selected.overrides,
+      ],
       plugins: [...corePreset.plugins, ...reactPreset.plugins],
-      rules: { ...corePreset.rules, ...reactPreset.rules },
+      rules: { ...corePreset.rules, ...reactPreset.rules, ...selected.rules },
+      settings: { ...selected.settings },
     } satisfies OxlintConfig;
 
     expect(oxfmtConfig.sortTailwindcss.functions).toContain("myCn");
     expect(oxlintConfig.ignorePatterns).toContain("generated");
+    expect(oxlintConfig.settings).toEqual(jsPlugins.settings);
   });
 });
 

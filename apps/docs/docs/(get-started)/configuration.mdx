@@ -246,7 +246,7 @@ import ultracite from "ultracite/oxfmt";
 export default defineConfig({
   ...ultracite,
   sortTailwindcss: {
-    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+    ...ultracite.sortTailwindcss,
     stylesheet: "./app/globals.css",
   },
 });
@@ -256,7 +256,7 @@ export default defineConfig({
 `sortTailwindcss` is an Oxfmt option, not an Oxlint one. Put it in your Oxfmt config: Oxlint's config rejects it with `` unknown field `sortTailwindcss` ``.
 :::
 
-Setting `sortTailwindcss` replaces the preset's value instead of merging with it, so keep the preset's `functions` list.
+Setting `sortTailwindcss` replaces the preset's value instead of merging with it, so spread the preset's value to keep its `functions` list.
 
 Oxfmt resolves `stylesheet` relative to the config file that sets it. A path that doesn't resolve turns sorting off without an error, so check that classes still sort after you change it. In a monorepo with a single root config, use the path from the root, such as `./apps/web/src/styles.css`.
 
@@ -270,7 +270,7 @@ import root from "../../oxfmt.config.ts";
 export default defineConfig({
   ...root,
   sortTailwindcss: {
-    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+    ...root.sortTailwindcss,
     stylesheet: "./src/styles.css",
   },
 });
