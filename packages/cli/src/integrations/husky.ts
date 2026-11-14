@@ -79,6 +79,12 @@ const ULTRACITE_END_MARKER = "# ultracite end";
 const SHEBANG = "#!/bin/sh";
 const LINT_STAGED_LINE_RE = /\blint-staged$/u;
 
+const RUNS_LINT_STAGED_RE = /\blint-staged\b/u;
+
+// Whether a line of a hook the user wrote invokes lint-staged.
+const runsLintStaged = (line: string): boolean =>
+  !line.trimStart().startsWith("#") && RUNS_LINT_STAGED_RE.test(line);
+
 const renderSection = (hookScript: string): string =>
   `${ULTRACITE_MARKER}\n${hookScript}${ULTRACITE_END_MARKER}`;
 
@@ -196,6 +202,12 @@ export const husky = {
       const parts = [before, section, after].filter((part) => part !== "");
       await writeProjectFile(path, `${parts.join("\n")}\n`);
 
+      return;
+    }
+
+    // A hook that already runs lint-staged runs Ultracite's task with it;
+    // a section of our own would run lint-staged a second time per commit.
+    if (useLintStaged && lines.some(runsLintStaged)) {
       return;
     }
 

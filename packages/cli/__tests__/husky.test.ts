@@ -720,6 +720,28 @@ describe("husky", () => {
       expect(script).not.toContain("\r");
     });
 
+    test("leaves a hook that already runs lint-staged alone", async () => {
+      const written = mockProject({
+        "./.husky/pre-commit": "npm test\nnpx lint-staged\n",
+      });
+
+      await husky.update("npm", true);
+      restoreFileSystemMock();
+
+      expect(written.has("./.husky/pre-commit")).toBe(false);
+    });
+
+    test("adds the standalone section to a hook that runs lint-staged", async () => {
+      const written = mockProject({
+        "./.husky/pre-commit": "npx lint-staged\n",
+      });
+
+      await husky.update("npm", false);
+      restoreFileSystemMock();
+
+      expect(countMarkers(written.get("./.husky/pre-commit"))).toBe(1);
+    });
+
     test("keeps the last line when the hook only mentions ultracite in a comment", async () => {
       const written = mockProject({
         "./.husky/pre-commit": "# ultracite runs below\nnpm test",
