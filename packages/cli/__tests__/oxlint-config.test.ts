@@ -14,17 +14,22 @@ import { readdirSync, readFileSync as _readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import type { OxlintOverride } from "oxlint";
+import type { OxfmtConfig } from "oxfmt";
+import type { OxlintConfig, OxlintOverride } from "oxlint";
 
+import oxfmtPreset from "../config/oxfmt/index.mjs";
 import antiSlop from "../config/oxlint/anti-slop/index.mjs";
+import corePreset from "../config/oxlint/core/index.mjs";
 import gdp from "../config/oxlint/gdp/index.mjs";
 import jsPlugins, {
   selectJsPlugins,
 } from "../config/oxlint/js-plugins/index.mjs";
 import type { OxlintJsPluginName } from "../config/oxlint/js-plugins/index.mjs";
 import nextJsPlugins from "../config/oxlint/next/js-plugins/index.mjs";
+import reactPreset from "../config/oxlint/react/index.mjs";
 import shadcn from "../config/oxlint/shadcn/index.mjs";
 import tanstackJsPlugins from "../config/oxlint/tanstack/js-plugins/index.mjs";
+import vitestPreset from "../config/oxlint/vitest/index.mjs";
 import packageJson from "../package.json";
 
 // The test preload mocks node:fs (readFileSync returns "{}"), so read real
@@ -308,8 +313,8 @@ describe("oxlint package exports", () => {
   });
 
   /**
-   * The declaration files are hand-authored templates in
-   * scripts/generate-dts.ts, not generated from the source, so they can
+   * scripts/generate-dts.ts infers each default export's type from the
+   * preset, but named exports are declared by hand there, so they can
    * silently drift when a preset gains a runtime export — jsPluginSettings
    * was missing from the js-plugins declaration this way (#773).
    */
@@ -384,6 +389,35 @@ describe("oxlint package exports", () => {
     ];
 
     expect(combined.length).toBeGreaterThan(0);
+  });
+
+  /**
+   * The declarations describe what each preset sets, so a config can spread
+   * a preset's fields. `bun run types` fails here if a declaration widens
+   * back to the generic config type, where every field is optional (#874).
+   */
+  test("declarations type the fields each preset sets", () => {
+    const oxfmtConfig = {
+      ...oxfmtPreset,
+      sortImports: { ...oxfmtPreset.sortImports, newlinesBetween: false },
+      sortTailwindcss: {
+        ...oxfmtPreset.sortTailwindcss,
+        functions: [...oxfmtPreset.sortTailwindcss.functions, "myCn"],
+        stylesheet: "./app/globals.css",
+      },
+    } satisfies OxfmtConfig;
+
+    const oxlintConfig = {
+      env: { ...corePreset.env, node: true },
+      extends: [corePreset, reactPreset, vitestPreset],
+      ignorePatterns: [...corePreset.ignorePatterns, "generated"],
+      overrides: [...corePreset.overrides, ...vitestPreset.overrides],
+      plugins: [...corePreset.plugins, ...reactPreset.plugins],
+      rules: { ...corePreset.rules, ...reactPreset.rules },
+    } satisfies OxlintConfig;
+
+    expect(oxfmtConfig.sortTailwindcss.functions).toContain("myCn");
+    expect(oxlintConfig.ignorePatterns).toContain("generated");
   });
 });
 

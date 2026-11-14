@@ -108,7 +108,7 @@ Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `drizzle
 
 ### Generated files (do not hand-edit)
 
-- `config/oxlint/**/index.d.mts` and `config/oxfmt/index.d.mts`: written by `packages/cli/scripts/generate-dts.ts` on every build (`prebuild`).
+- `config/oxlint/**/index.d.mts` and `config/oxfmt/index.d.mts`: written by `packages/cli/scripts/generate-dts.ts` on every build (`prebuild`). Each default export is declared with the type TypeScript infers for the preset's `defineConfig()` call, so the build fails if that call doesn't type-check (a plain shared object spread into it needs a JSDoc `@satisfies`, as `react/jsx-a11y.mjs` has). The script uses the `typescript` package's JS API, so check that it still exists before moving that devDependency to TypeScript 7.
 - `config/biome/core/biome.jsonc` -> `files.includes`: synced from `shared/ignores.mjs` by the same script.
 - `config/oxlint/anti-slop/plugin.mjs` and `plugin.d.mts`: a vendored bundle of https://github.com/dmmulroy/anti-slop. Re-vendor with `bun run packages/cli/scripts/vendor-anti-slop.ts [ref]` and bump `PINNED_REF`; then update the rule list in `anti-slop/index.mjs`.
 - `packages/cli/skills/`: gitignored copy of `skills/ultracite`, refreshed by `prepack`. Edit `skills/ultracite` at the repo root.

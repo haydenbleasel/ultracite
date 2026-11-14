@@ -1,5 +1,3 @@
-import type { OxlintConfig } from "oxlint";
-
-declare const config: OxlintConfig;
+declare const config: { rules: Record<string, never> };
 
 export default config;

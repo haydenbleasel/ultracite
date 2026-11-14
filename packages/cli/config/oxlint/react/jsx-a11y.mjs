@@ -1,6 +1,8 @@
 // Every non-nursery jsx-a11y rule oxlint implements, with decisions matching
 // the ESLint presets. The Solid and Qwik presets, whose components are JSX
-// too, enable the same rules.
+// too, enable the same rules. The type keeps each severity a literal, so
+// TypeScript can infer the presets that spread these rules (#874).
+/** @satisfies {import("oxlint").DummyRuleMap} */
 const jsxA11yRules = {
   "jsx-a11y/alt-text": "error",
   "jsx-a11y/anchor-ambiguous-text": "error",
