@@ -158,7 +158,8 @@ describe("biome workspace config", () => {
 describe("oxlint workspace config", () => {
   test("extends the root config and repeats what extends doesn't carry", async () => {
     const written = mockProject({
-      "./oxlint.config.ts": "export default {};",
+      "./oxlint.config.ts":
+        "export default { env: {}, extends: [], ignorePatterns: [], settings: {} };",
       "package.json": '{ "type": "module" }',
     });
 
@@ -183,6 +184,41 @@ export default defineConfig({
   settings: root.settings,
 });
 `);
+  });
+
+  test("repeats only the properties the root config sets", async () => {
+    const written = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+});
+`,
+      "package.json": '{ "type": "module" }',
+    });
+
+    await oxlint.createWorkspace({ dir: "apps/web", frameworks: ["react"] });
+
+    const content = written.get("./apps/web/oxlint.config.ts") ?? "";
+    expect(content).toContain("  env: root.env,\n  extends: [root, react],");
+    expect(content).toContain("  ignorePatterns: root.ignorePatterns,\n});");
+    expect(content).not.toContain("settings");
+  });
+
+  test("repeats all of them when the root config spreads in an object", async () => {
+    const written = mockProject({
+      "./oxlint.config.ts": "export default { ...shared, extends: [] };",
+      "package.json": '{ "type": "module" }',
+    });
+
+    await oxlint.createWorkspace({ dir: "apps/web", frameworks: ["react"] });
+
+    expect(written.get("./apps/web/oxlint.config.ts")).toContain(
+      "settings: root.settings,"
+    );
   });
 
   test("writes .mts outside an ES module workspace package", async () => {

@@ -1522,10 +1522,47 @@ export const lacksCoreEnv = (contents: string): boolean => {
 // The identifier a workspace config imports the root config as.
 const rootConfigIdentifier = "root";
 
+// The properties `extends` doesn't carry over, which a workspace config
+// repeats from the root config.
+const inheritedProperties = ["env", "ignorePatterns", "settings"] as const;
+
+/**
+ * Which of those the root config has. Reading one it doesn't declare is a
+ * type error in the workspace config (the root config's type is exactly what
+ * it sets), which type-aware linting then reports too. A root config that
+ * can't be read, or spreads in an object that may set any of them, is
+ * assumed to have all three.
+ */
+const readInheritedProperties = (
+  rootContents: string
+): readonly (typeof inheritedProperties)[number][] => {
+  const parsed = parseConfigModule(rootContents);
+
+  if (parsed.kind !== "module" || parsed.module.container !== "object") {
+    return inheritedProperties;
+  }
+
+  const { entries } = parsed.module;
+
+  if (entries.some((entry) => entry.key === null)) {
+    return inheritedProperties;
+  }
+
+  return inheritedProperties.filter((property) =>
+    entries.some((entry) => entry.key === property)
+  );
+};
+
 const generateWorkspaceConfigContent = (
   rootConfigImport: string,
-  presets: string[]
+  presets: string[],
+  inherited: readonly (typeof inheritedProperties)[number][]
 ): string => {
+  const inherit = (property: (typeof inheritedProperties)[number]): string =>
+    inherited.includes(property)
+      ? `  ${property}: ${rootConfigIdentifier}.${property},\n`
+      : "";
+
   const imports = [
     renderImport("oxlint", ["defineConfig"]),
     ...presets.map(
@@ -1557,11 +1594,8 @@ import ${rootConfigIdentifier} from "${rootConfigImport}";
 // Oxlint lints each file with its nearest config alone, so this extends the
 // root config and repeats the properties that extends doesn't carry over.
 export default defineConfig({
-  env: ${rootConfigIdentifier}.env,
-${extendsBlock}
-  ignorePatterns: ${rootConfigIdentifier}.ignorePatterns,
-  settings: ${rootConfigIdentifier}.settings,
-});
+${inherit("env")}${extendsBlock}
+${inherit("ignorePatterns")}${inherit("settings")}});
 `;
 };
 
@@ -1658,7 +1692,8 @@ export const oxlint = {
       `./${configPath}`,
       generateWorkspaceConfigContent(
         `${pathToRoot(dir)}/${fileName(rootConfigPath)}`,
-        presets
+        presets,
+        readInheritedProperties(rootContents)
       )
     );
 
