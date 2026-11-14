@@ -1,6 +1,13 @@
 {
 	"root": false,
 	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"javascript": {
+		"parser": {
+			// NestJS injects through parameter decorators (@Body(), @Param(),
+			// @Inject()), which Biome otherwise rejects as a parse error
+			"unsafeParameterDecoratorsEnabled": true
+		}
+	},
 	"linter": {
 		"rules": {
 			"complexity": {

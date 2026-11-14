@@ -54,6 +54,22 @@ const presets = {
         expect: [],
         forbid: ["parse"],
       },
+      "src/app.service.ts": {
+        // Parameter decorators only parse with the preset's parser option.
+        content: `import { Inject, Injectable } from "@angular/core";
+
+@Injectable()
+export class AppService {
+  readonly name: string;
+
+  constructor(@Inject("NAME") name: string) {
+    this.name = name;
+  }
+}
+`,
+        expect: [],
+        forbid: ["parse"],
+      },
     },
     presets: ["angular"],
   },
@@ -162,6 +178,21 @@ export const wipe = async (): Promise<void> => {
         content: 'export enum Role {\n  Admin = "admin",\n}\n',
         expect: [],
         forbid: ["lint/style/noEnum"],
+      },
+      "src/cats.controller.ts": {
+        // Parameter decorators only parse with the preset's parser option.
+        content: `import { Body, Controller, Post } from "@nestjs/common";
+
+@Controller("cats")
+export class CatsController {
+  @Post()
+  create(@Body() name: string): string {
+    return name;
+  }
+}
+`,
+        expect: [],
+        forbid: ["parse"],
       },
     },
     presets: ["nestjs"],
