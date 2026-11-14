@@ -11,6 +11,7 @@ import {
 import type { HookReport } from "../hook-input";
 import {
   eslintIgnoredFileArgs,
+  expandGlobTargets,
   normalizeFileArgs,
   toOxlintTargets,
   toStylelintTargets,
@@ -273,7 +274,11 @@ export const fix = (
   { agent, hook = false, report = "none" }: FixOptions = {}
 ): Promise<void> | void => {
   const linter = detectLinter();
-  const normalizedFiles = normalizeFileArgs(files);
+
+  // ESLint, Prettier and Stylelint expand globs themselves.
+  const normalizedFiles = normalizeFileArgs(
+    linter === "eslint" ? files : expandGlobTargets(files)
+  );
 
   if (!linter) {
     throw new UltraciteSetupError(NO_LINTER_CONFIG_MESSAGE);

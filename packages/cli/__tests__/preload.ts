@@ -35,7 +35,10 @@ globalThis.__realSpawnSync = _realSpawnSync;
 // Mock fast-glob before any imports that use it
 // This is needed for tsconfig.test.ts and other tests that scan for files
 mock.module("fast-glob", () => ({
-  default: mock(() => Promise.resolve([])),
+  default: Object.assign(
+    mock(() => Promise.resolve([])),
+    { sync: mock(() => []) }
+  ),
 }));
 
 // Mock find-workspaces (used by detectFrameworks) so tests never scan the real

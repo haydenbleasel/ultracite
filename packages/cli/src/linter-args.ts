@@ -1,6 +1,8 @@
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 
+import fastGlob from "fast-glob";
+
 import { UltraciteSetupError } from "./config-resolution";
 
 type PathExists = (path: string) => boolean;
@@ -32,6 +34,57 @@ export const normalizeFileArgs = (files: string[]): string[] =>
 const GLOB_CHARS_RE = /[*?[\]{}]/u;
 
 export const isGlobPattern = (arg: string): boolean => GLOB_CHARS_RE.test(arg);
+
+// Never worth matching: no linter lints them, and a `**` glob would walk
+// every installed package.
+const GLOB_EXPANSION_IGNORES = ["**/node_modules/**", "**/.git/**"];
+
+// The longest command line Windows runs through a `.cmd` shim is 8191
+// characters; elsewhere the limit is the kernel's, far higher.
+const MAX_EXPANDED_LENGTH = process.platform === "win32" ? 7000 : 200_000;
+
+/**
+ * Biome and Oxlint take a glob as a literal path: Biome then checks nothing
+ * and, with --no-errors-on-unmatched, exits 0, and Oxlint exits 1 with "No
+ * files found to lint". Without a shell to expand it (a quoted pattern in a
+ * package.json script, any pattern on Windows) the glob has to be expanded
+ * here. A target that exists on disk is a path, however glob-like its name
+ * (`app/[slug]/page.tsx`), and a pattern that matches nothing is passed on
+ * for the linter to report.
+ */
+export const expandGlobTargets = (files: string[]): string[] => {
+  let expandedLength = 0;
+
+  return files.flatMap((file) => {
+    if (!isGlobPattern(file) || existsSync(file)) {
+      return [file];
+    }
+
+    // fast-glob reads a backslash as an escape, so Windows separators are
+    // normalized for the pattern to match.
+    const pattern = path.sep === "\\" ? file.replaceAll("\\", "/") : file;
+
+    const matches = fastGlob
+      .sync(pattern, { dot: true, ignore: GLOB_EXPANSION_IGNORES })
+      .toSorted();
+
+    if (matches.length === 0) {
+      return [file];
+    }
+
+    for (const match of matches) {
+      expandedLength += match.length + 1;
+    }
+
+    if (expandedLength > MAX_EXPANDED_LENGTH) {
+      throw new UltraciteSetupError(
+        `${file} matches too many files to pass on one command line. Pass the directory to lint instead.`
+      );
+    }
+
+    return matches;
+  });
+};
 
 // The Stylelint preset parses SCSS and Less through custom syntaxes. The
 // indented `.sass` syntax has no maintained PostCSS parser, so it is left out
@@ -132,9 +185,10 @@ const oxlintExtensions = [
 
 /**
  * Oxlint fails on an explicit file it does not lint (a README, package.json,
- * a Dockerfile), so those are dropped. Directories and globs pass through,
- * since Oxlint filters their contents itself. An empty result means Oxlint
- * has nothing to lint and should be skipped.
+ * a Dockerfile), so those are dropped. Directories pass through, since
+ * Oxlint filters their contents itself, and so does a glob that matched
+ * nothing (see expandGlobTargets), for Oxlint to report. An empty result
+ * means Oxlint has nothing to lint and should be skipped.
  */
 export const toOxlintTargets = (files: string[]): string[] => {
   if (files.length === 0) {

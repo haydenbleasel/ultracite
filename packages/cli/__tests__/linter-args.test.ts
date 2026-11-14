@@ -3,6 +3,7 @@ import { statSync as realStatSync } from "node:fs";
 
 import {
   eslintIgnoredFileArgs,
+  expandGlobTargets,
   extractAgentFlags,
   extractHookFlag,
   normalizeFileArgs,
@@ -220,6 +221,50 @@ describe("linter args", () => {
       ])
     ).toEqual(["src/index.ts", "App.vue", "src/**/*.tsx", "."]);
     expect(toOxlintTargets(["README.md", ".env"])).toEqual([]);
+  });
+
+  test("expands a glob no shell expanded and leaves paths alone", () => {
+    const matches = new Map([["src/**/*.ts", ["src/b.ts", "src/a.ts"]]]);
+
+    mock.module("fast-glob", () => ({
+      default: { sync: mock((pattern: string) => matches.get(pattern) ?? []) },
+    }));
+
+    mock.module("node:fs", () => ({
+      ...defaultFileSystemMock(),
+      existsSync: mock(
+        (filePath: string) => filePath === "app/[slug]/page.tsx"
+      ),
+      statSync: originalStatSync,
+    }));
+
+    try {
+      expect(
+        expandGlobTargets([
+          "src/**/*.ts",
+          "app/[slug]/page.tsx",
+          "none/*.ts",
+          "README.md",
+        ])
+      ).toEqual([
+        "src/a.ts",
+        "src/b.ts",
+        "app/[slug]/page.tsx",
+        "none/*.ts",
+        "README.md",
+      ]);
+    } finally {
+      mock.module("fast-glob", () => ({
+        default: Object.assign(
+          mock(() => Promise.resolve([])),
+          { sync: mock(() => []) }
+        ),
+      }));
+      mock.module("node:fs", () => ({
+        ...defaultFileSystemMock(),
+        statSync: originalStatSync,
+      }));
+    }
   });
 
   test("extracts --hook and strips it from passthrough", () => {

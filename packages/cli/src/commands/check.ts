@@ -7,6 +7,7 @@ import {
 } from "../config-resolution";
 import {
   eslintIgnoredFileArgs,
+  expandGlobTargets,
   normalizeFileArgs,
   toOxlintTargets,
   toStylelintTargets,
@@ -137,7 +138,11 @@ export const check = (
   passthrough: string[] = []
 ): void => {
   const linter = detectLinter();
-  const normalizedFiles = normalizeFileArgs(files);
+
+  // ESLint, Prettier and Stylelint expand globs themselves.
+  const normalizedFiles = normalizeFileArgs(
+    linter === "eslint" ? files : expandGlobTargets(files)
+  );
 
   if (!linter) {
     throw new UltraciteSetupError(NO_LINTER_CONFIG_MESSAGE);
