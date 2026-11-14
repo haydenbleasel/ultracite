@@ -1319,6 +1319,25 @@ export default defineConfig({
     expect(project.warn.mock.calls.at(-1)?.[0]).toContain("./base.json");
   });
 
+  test("migrates the .oxlintrc.jsonc form too", async () => {
+    const project = mockProject({
+      "./.oxlintrc.jsonc": `{
+  // mine
+  "rules": { "no-console": "off" },
+}`,
+    });
+
+    expect(oxlint.exists()).toBe(true);
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('rules: {\n    "no-console": "off"\n  },');
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./.oxlintrc.jsonc",
+    ]);
+    expect(project.info.mock.calls.at(-1)?.[0]).toContain(".oxlintrc.jsonc");
+  });
+
   test("merges .oxlintrc.json settings with the react-doctor settings", async () => {
     const project = mockProject({
       "./.oxlintrc.json": '{ "settings": { "next": { "rootDir": "app" } } }',

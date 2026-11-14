@@ -37,8 +37,11 @@ const fileName = (filePath: string): string => filePath.slice(2);
 
 // Oxlint refuses to run when this sits next to oxlint.config.ts, so init
 // migrates it into the TS config and removes it.
-const oxlintRcPath = "./.oxlintrc.json";
-const oxlintRcFile = ".oxlintrc.json";
+const oxlintRcFiles = [".oxlintrc.json", ".oxlintrc.jsonc"] as const;
+
+// The rc file the project has, if any. Oxlint loads either form.
+const findOxlintRcFile = (): (typeof oxlintRcFiles)[number] | null =>
+  oxlintRcFiles.find((file) => exists(`./${file}`)) ?? null;
 
 // Standalone presets are enabled as a plain `ultracite/oxlint/<preset>`
 // extend rather than through selectJsPlugins: anti-slop is vendored inside
@@ -1229,21 +1232,23 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
 };
 
 type OxlintRc =
-  | { config: JsonObject; kind: "config" }
-  | { kind: "invalid" }
+  | { config: JsonObject; file: string; kind: "config" }
+  | { file: string; kind: "invalid" }
   | null;
 
 const readOxlintRc = async (): Promise<OxlintRc> => {
-  if (!exists(oxlintRcPath)) {
+  const file = findOxlintRcFile();
+
+  if (!file) {
     return null;
   }
 
   const config = parseJsoncStrict(
-    await readFile(oxlintRcPath, "utf-8"),
+    await readFile(`./${file}`, "utf-8"),
     rcSchema
   );
 
-  return config ? { config, kind: "config" } : { kind: "invalid" };
+  return config ? { config, file, kind: "config" } : { file, kind: "invalid" };
 };
 
 /**
@@ -1560,10 +1565,33 @@ ${extendsBlock}
 `;
 };
 
+// Removes the rc file update has just migrated, and says what it couldn't
+// carry over.
+const finishRcMigration = async (
+  rc: OxlintRc,
+  unmigrated: string[],
+  configFile: string
+): Promise<void> => {
+  if (!rc) {
+    return;
+  }
+
+  await rm(`./${rc.file}`, { force: true });
+  log.info(
+    `Moved the settings from ${rc.file} into ${configFile} and removed ${rc.file}.`
+  );
+
+  if (unmigrated.length > 0) {
+    log.warn(
+      `${rc.file} extended ${unmigrated.join(", ")}, which ${configFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
+    );
+  }
+};
+
 const workspaceConfigNames = [
   "oxlint.config.ts",
   "oxlint.config.mts",
-  oxlintRcFile,
+  ...oxlintRcFiles,
 ] as const;
 
 export const oxlint = {
@@ -1639,7 +1667,7 @@ export const oxlint = {
   exists: () =>
     exists(oxlintTsConfigPath) ||
     exists(oxlintMtsConfigPath) ||
-    exists(oxlintRcPath),
+    findOxlintRcFile() !== null,
   findWorkspaceConfig: (dir: string): string | null =>
     workspaceConfigNames
       .map((name) => `${dir}/${name}`)
@@ -1664,7 +1692,7 @@ export const oxlint = {
     // would leave Oxlint unable to load either.
     if (rc?.kind === "invalid") {
       log.warn(
-        `Could not parse ${oxlintRcFile}, so the Oxlint config was left unchanged. Oxlint won't run with both ${oxlintRcFile} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
+        `Could not parse ${rc.file}, so the Oxlint config was left unchanged. Oxlint won't run with both ${rc.file} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
       );
 
       return false;
@@ -1748,18 +1776,7 @@ export const oxlint = {
       );
     }
 
-    if (rc) {
-      await rm(oxlintRcPath, { force: true });
-      log.info(
-        `Moved the settings from ${oxlintRcFile} into ${configFile} and removed ${oxlintRcFile}.`
-      );
-    }
-
-    if (plan.unmigrated.length > 0) {
-      log.warn(
-        `${oxlintRcFile} extended ${plan.unmigrated.join(", ")}, which ${configFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
-      );
-    }
+    await finishRcMigration(rc, plan.unmigrated, configFile);
 
     return true;
   },
@@ -1779,7 +1796,7 @@ export const addMissingOxlintEnv = async (): Promise<string | null> => {
     paths.conflict ||
     !paths.existing ||
     paths.existing !== paths.target ||
-    exists(oxlintRcPath)
+    findOxlintRcFile() !== null
   ) {
     return null;
   }

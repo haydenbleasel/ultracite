@@ -428,6 +428,7 @@ export const stylelintConfigNames = [
 // the JSON forms are what `oxlint --init` / `oxfmt --init` create.
 export const oxlintConfigNames = [
   ".oxlintrc.json",
+  ".oxlintrc.jsonc",
   "oxlint.config.ts",
   "oxlint.config.mts",
 ] as const;
