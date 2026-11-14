@@ -38,10 +38,10 @@ else
   PARTIALLY_STAGED=""
   FULLY_STAGED=$STAGED_FILES
   if [ -n "$UNSTAGED_FILES" ]; then
-    PARTIALLY_STAGED=$(printf '%s\n' "$STAGED_FILES" | grep -Fx -- "$UNSTAGED_FILES")
+    PARTIALLY_STAGED=$(printf '%s\n' "$STAGED_FILES" | grep -Fx -- "$UNSTAGED_FILES" || true)
   fi
   if [ -n "$PARTIALLY_STAGED" ]; then
-    FULLY_STAGED=$(printf '%s\n' "$STAGED_FILES" | grep -Fxv -- "$PARTIALLY_STAGED")
+    FULLY_STAGED=$(printf '%s\n' "$STAGED_FILES" | grep -Fxv -- "$PARTIALLY_STAGED" || true)
   fi
 
   # Run the fixer on the staged files, capturing the exit code so we can
