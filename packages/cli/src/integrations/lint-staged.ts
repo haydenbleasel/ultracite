@@ -1,10 +1,10 @@
 import { readFile } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
 
 import { log } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 import type { ParseError } from "jsonc-parser";
 import { generateCode, parseModule } from "magicast";
+import type { ASTNode } from "magicast";
 import { addDevDependency } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 import YAML from "yaml";
@@ -69,72 +69,12 @@ const configFiles = [
   "./lint-staged.config.ts",
 ];
 
-// A value loaded from a user's JS config module: JSON data, or a function
-// (lint-staged builds commands from the staged file list with those).
-type LintStagedFunction = (
-  files: string[]
-) => string | string[] | Promise<string | string[]>;
-
-type ModuleValue =
-  | JsonValue
-  | LintStagedFunction
-  | ModuleValue[]
-  | { [key: string]: ModuleValue };
-
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- decoding a user's lint-staged config, which may be any JSON/YAML value
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 const mentionsUltracite = (config: JsonValue): boolean =>
   JSON.stringify(config).includes("ultracite");
-
-/**
- * The JSON data in a value loaded from a JS config, or undefined when a
- * function is anywhere in it. Function-valued entries are a documented
- * lint-staged pattern, but they can't survive a JSON round-trip — rewriting
- * such a config would silently delete the user's functions.
- */
-const toJsonValue = (value: ModuleValue): JsonValue | undefined => {
-  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- walking a config loaded from the user's JS module, where function-valued entries are exactly what's being detected
-  if (typeof value === "function") {
-    return undefined;
-  }
-
-  if (Array.isArray(value)) {
-    const items: JsonValue[] = [];
-
-    for (const item of value) {
-      const json = toJsonValue(item);
-
-      if (json === undefined) {
-        return undefined;
-      }
-
-      items.push(json);
-    }
-
-    return items;
-  }
-
-  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- same untyped-module boundary: distinguishes nested config objects from scalars
-  if (value !== null && typeof value === "object") {
-    const entries: [string, JsonValue][] = [];
-
-    for (const [key, entry] of Object.entries(value)) {
-      const json = toJsonValue(entry);
-
-      if (json === undefined) {
-        return undefined;
-      }
-
-      entries.push([key, json]);
-    }
-
-    return Object.fromEntries(entries);
-  }
-
-  return value;
-};
 
 const warnUnmergeableConfig = (
   filename: string,
@@ -553,6 +493,100 @@ const updateEsmConfig = async (
   }
 };
 
+const LEADING_WHITESPACE_RE = /^[ \t]*/u;
+const TRAILING_COMMA_RE = /^\s*,/u;
+
+// The object literal a CommonJS config assigns to `module.exports`.
+const findCjsExportsObject = (content: string): ASTNode | null => {
+  let program: ASTNode;
+
+  try {
+    program = parseModule(content).$ast;
+  } catch {
+    return null;
+  }
+
+  if (program.type !== "Program") {
+    return null;
+  }
+
+  for (const statement of program.body) {
+    const expression =
+      statement.type === "ExpressionStatement" ? statement.expression : null;
+
+    if (
+      expression?.type === "AssignmentExpression" &&
+      expression.left.type === "MemberExpression" &&
+      expression.left.object.type === "Identifier" &&
+      expression.left.object.name === "module" &&
+      expression.left.property.type === "Identifier" &&
+      expression.left.property.name === "exports"
+    ) {
+      return expression.right.type === "ObjectExpression"
+        ? expression.right
+        : null;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Adds the Ultracite entry to a CommonJS config's `module.exports = {...}`
+ * by inserting it into the source, so comments, variables and computed tasks
+ * elsewhere in the file stay as written. Loading the module and writing back
+ * its value froze every expression at what it evaluated to on this machine.
+ * Returns null for a config that isn't an object literal, or already has an
+ * entry for the pattern.
+ */
+const addEntryToCjsConfig = (
+  content: string,
+  command: string
+): string | null => {
+  const config = findCjsExportsObject(content);
+
+  if (config?.type !== "ObjectExpression" || !config.end) {
+    return null;
+  }
+
+  const hasPattern = config.properties.some(
+    (property) =>
+      property.type === "ObjectProperty" &&
+      property.key.type === "StringLiteral" &&
+      property.key.value === ULTRACITE_PATTERN
+  );
+
+  if (hasPattern) {
+    return null;
+  }
+
+  const entry = `${JSON.stringify(ULTRACITE_PATTERN)}: [${JSON.stringify(command)}]`;
+  const closing = config.end - 1;
+  const last = config.properties.at(-1);
+
+  if (!last?.end) {
+    return `${content.slice(0, (config.start ?? closing) + 1)}\n  ${entry},\n${content.slice(closing)}`;
+  }
+
+  const lineEnd = content.indexOf("\n", last.end);
+
+  // A one-line object takes the entry on that line.
+  if (lineEnd === -1 || lineEnd > closing) {
+    return `${content.slice(0, last.end)}, ${entry}${content.slice(last.end)}`;
+  }
+
+  // Otherwise it goes on a line of its own after the last entry, below any
+  // comment that shares that entry's line.
+  const lineStart = content.lastIndexOf("\n", last.start ?? 0) + 1;
+
+  const indent =
+    LEADING_WHITESPACE_RE.exec(content.slice(lineStart))?.[0] ?? "  ";
+
+  const comma = TRAILING_COMMA_RE.test(content.slice(last.end)) ? "" : ",";
+
+  return `${content.slice(0, last.end)}${comma}${content.slice(last.end, lineEnd)}\n${indent}${entry},${content.slice(lineEnd)}`;
+};
+
 // Update CommonJS config files
 const updateCjsConfig = async (
   filename: string,
@@ -571,36 +605,15 @@ const updateCjsConfig = async (
     return;
   }
 
-  let existingConfig: ModuleValue;
+  const updated = addEntryToCjsConfig(content, command);
 
-  try {
-    // Use dynamic import with cache-busting query to avoid stale modules
-    const fileUrl = `${pathToFileURL(filename).href}?t=${Date.now()}`;
-    // Intentionally loading the user's config file at runtime; the path is not statically known
-    const imported = await import(fileUrl);
-    existingConfig = imported.default ?? imported;
-  } catch {
+  if (updated === null) {
     warnUnmergeableConfig(filename, packageManager);
 
     return;
   }
 
-  const jsonConfig = toJsonValue(existingConfig);
-
-  const merged = isJsonObject(jsonConfig)
-    ? mergeUltraciteTask(jsonConfig, command)
-    : null;
-
-  if (!merged) {
-    warnUnmergeableConfig(filename, packageManager);
-
-    return;
-  }
-
-  await writeProjectFile(
-    filename,
-    `module.exports = ${JSON.stringify(merged, null, 2)};\n`
-  );
+  await writeProjectFile(filename, updated);
 };
 
 // Create fallback config file

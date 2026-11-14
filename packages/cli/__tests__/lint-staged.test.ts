@@ -499,9 +499,9 @@ export default {
 
       const warn = spyOn(log, "warn").mockImplementation(() => {});
 
-      // The .cjs file can't be imported here. Creating .lintstagedrc.json
-      // instead would shadow it (lint-staged uses one config per directory),
-      // so the user is told to add the task by hand.
+      // The .cjs file doesn't assign an object to module.exports. Creating
+      // .lintstagedrc.json instead would shadow it (lint-staged uses one
+      // config per directory), so the user is told to add the task by hand.
       await lintStaged.update("npm");
 
       expect(mockWriteFile).not.toHaveBeenCalled();
@@ -1536,6 +1536,74 @@ export default {
   "${PATTERN}": ["npx ultracite fix"],
 };
 `);
+    });
+
+    test("adds its entry to a CommonJS config without evaluating it", async () => {
+      const written = mockProject({
+        "./lint-staged.config.cjs": `// Keep the typecheck first.
+const isCI = Boolean(process.env.CI);
+
+module.exports = {
+  // strict in CI only
+  "*.ts": [\`eslint --max-warnings \${isCI ? 0 : 10}\`],
+  "*.md": "markdownlint" // docs
+};
+`,
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.get("./lint-staged.config.cjs"))
+        .toBe(`// Keep the typecheck first.
+const isCI = Boolean(process.env.CI);
+
+module.exports = {
+  // strict in CI only
+  "*.ts": [\`eslint --max-warnings \${isCI ? 0 : 10}\`],
+  "*.md": "markdownlint", // docs
+  "${PATTERN}": ["npx ultracite fix"],
+};
+`);
+    });
+
+    test("adds its entry to one-line and empty CommonJS configs", async () => {
+      const oneLine = mockProject({
+        "./.lintstagedrc.cjs": 'module.exports = { "*.md": "markdownlint" };\n',
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(oneLine.get("./.lintstagedrc.cjs")).toBe(
+        `module.exports = { "*.md": "markdownlint", "${PATTERN}": ["npx ultracite fix"] };\n`
+      );
+
+      const empty = mockProject({
+        "./.lintstagedrc.cjs": "module.exports = {};\n",
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(empty.get("./.lintstagedrc.cjs")).toBe(
+        `module.exports = {\n  "${PATTERN}": ["npx ultracite fix"],\n};\n`
+      );
+    });
+
+    test("leaves a CommonJS config that exports a function for the user", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.cjs": "module.exports = (files) => ['eslint'];\n",
+      });
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.has("./.lintstagedrc.cjs")).toBe(false);
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
     });
 
     test("widens the legacy glob in a CommonJS config an earlier init wrote", async () => {
