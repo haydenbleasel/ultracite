@@ -1,7 +1,9 @@
 import { readFile, rm } from "node:fs/promises";
 
+import { log } from "@clack/prompts";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import type { ParseError } from "jsonc-parser";
 import { runScriptCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
@@ -205,12 +207,27 @@ const generatedFixCommands = (): Set<string> =>
     )
   );
 
-const readJson = async (filePath: string): Promise<JsonObject> => {
+// The file's contents, or null when it has a syntax error. jsonc-parser
+// recovers what it can from one, and writing that back would drop the rest
+// (one side of a merge conflict, say).
+const readJson = async (filePath: string): Promise<JsonObject | null> => {
+  const contents = await readFile(filePath, "utf-8");
+
+  if (contents.trim() === "") {
+    return {};
+  }
+
+  const errors: ParseError[] = [];
+
   // jsonc-parser's output is untyped; a JSONC document parses to a JSON
-  // value, or undefined when unparseable.
-  const parsed: JsonValue | undefined = parse(
-    await readFile(filePath, "utf-8")
-  );
+  // value.
+  const parsed: JsonValue | undefined = parse(contents, errors, {
+    allowTrailingComma: true,
+  });
+
+  if (errors.length > 0) {
+    return null;
+  }
 
   return isJsonObject(parsed) ? parsed : {};
 };
@@ -277,6 +294,10 @@ export const createHooks = (
 
     const existing = await readJson(filePath);
 
+    if (!existing) {
+      return;
+    }
+
     const pruned = removeGeneratedEntries(
       existing,
       template,
@@ -319,6 +340,15 @@ export const createHooks = (
     }
 
     const existingJson = await readJson(seedPath);
+
+    if (!existingJson) {
+      log.warn(
+        `Could not parse ${seedPath}, so the ${hookIntegration.name} hook was not added. Fix its syntax and re-run \`ultracite init\`.`
+      );
+
+      return;
+    }
+
     const current = retireLegacyFormat(existingJson);
 
     const upgraded = upgradeCommand(

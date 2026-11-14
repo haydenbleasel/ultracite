@@ -1,4 +1,6 @@
-import { describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, spyOn, test } from "bun:test";
+
+import { log } from "@clack/prompts";
 
 import { createHooks } from "../src/hooks";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
@@ -60,6 +62,41 @@ const claudeCommands = (settings: {
 describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
+
+  describe("a settings file that doesn't parse", () => {
+    test("is left unchanged, with a warning", async () => {
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      const written = await runUpdate(
+        "claude",
+        `{
+  "permissions": {
+<<<<<<< HEAD
+    "deny": ["Bash(rm:*)"]
+=======
+    "deny": ["Bash(curl:*)"]
+>>>>>>> theirs
+  }
+}`
+      );
+
+      expect(written).toBeUndefined();
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining("Could not parse")
+      );
+      warn.mockRestore();
+    });
+
+    test("still takes comments and trailing commas", async () => {
+      const written = await runUpdate(
+        "claude",
+        '{\n  // mine\n  "permissions": { "deny": ["Bash(rm:*)"], },\n}'
+      );
+
+      expect(written.permissions.deny).toEqual(["Bash(rm:*)"]);
+      expect(written.hooks.PostToolUse).toHaveLength(1);
+    });
+  });
 
   describe("invalid editor or hook integration", () => {
     test("throws error for invalid editor or hook integration name", () => {
