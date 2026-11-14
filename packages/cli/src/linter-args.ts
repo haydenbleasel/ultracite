@@ -65,12 +65,20 @@ const isDirectory = (file: string): boolean => {
   }
 };
 
+const isFile = (file: string): boolean => {
+  try {
+    return statSync(file).isFile();
+  } catch {
+    return false;
+  }
+};
+
 /**
  * Stylelint has no extension filtering of its own, so handing it the same
  * targets as ESLint/Prettier makes it parse .ts/.json files as CSS and fail.
- * Style files pass through, extension-less targets (directories) become
- * style-scoped globs, and other files are dropped. An empty result means
- * Stylelint has nothing to lint and should be skipped.
+ * Style files pass through, directories become style-scoped globs, and
+ * other files are dropped. An empty result means Stylelint has nothing to
+ * lint and should be skipped.
  */
 export const toStylelintTargets = (files: string[]): string[] => {
   if (files.length === 0) {
@@ -85,10 +93,12 @@ export const toStylelintTargets = (files: string[]): string[] => {
       continue;
     }
 
-    // extname alone misses directories with a dot in their name (app.web),
-    // so also stat real paths. Globs never exist on disk and keep relying on
-    // the extname check.
-    if (path.extname(file) === "" || isDirectory(file)) {
+    // A target with no extension is taken for a directory unless it is a
+    // file on disk (a Dockerfile, LICENSE or .gitignore), which Stylelint
+    // would fail to scan. extname alone also misses directories with a dot
+    // in their name (app.web), so real paths are stat'ed either way. Globs
+    // never exist on disk and keep relying on the extname check.
+    if (isDirectory(file) || (path.extname(file) === "" && !isFile(file))) {
       // Stylelint's glob engine treats backslashes as escapes, so Windows
       // path separators must be normalized for the pattern to match.
       const normalized = path.sep === "\\" ? file.replaceAll("\\", "/") : file;

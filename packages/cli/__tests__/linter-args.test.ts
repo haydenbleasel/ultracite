@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
+import { statSync as realStatSync } from "node:fs";
 
 import {
   eslintIgnoredFileArgs,
@@ -9,6 +10,10 @@ import {
   toOxlintTargets,
   toStylelintTargets,
 } from "../src/linter-args";
+import { defaultFileSystemMock } from "./mock-fs";
+
+// mock.module rebinds the import, so keep the real function in a const.
+const originalStatSync = realStatSync;
 
 describe("linter args", () => {
   test("keeps existing hyphen-prefixed paths as files", () => {
@@ -162,6 +167,33 @@ describe("linter args", () => {
       String.raw`app/\(marketing\)/**/*.{css,scss,less}`,
       String.raw`src/\[slug\]/**/*.{css,scss,less}`,
     ]);
+  });
+
+  test("drops extension-less files instead of globbing them as directories", () => {
+    const extensionless = new Set(["Dockerfile", "LICENSE", ".gitignore"]);
+
+    mock.module("node:fs", () => ({
+      ...defaultFileSystemMock(),
+      statSync: mock((filePath: string) => {
+        if (!extensionless.has(filePath)) {
+          throw new Error("ENOENT");
+        }
+
+        return { isDirectory: () => false, isFile: () => true };
+      }),
+    }));
+
+    try {
+      expect(
+        toStylelintTargets(["Dockerfile", "LICENSE", ".gitignore", "src"])
+      ).toEqual(["src/**/*.{css,scss,less}"]);
+    } finally {
+      // The preload's mock leaves statSync real, so put that back too.
+      mock.module("node:fs", () => ({
+        ...defaultFileSystemMock(),
+        statSync: originalStatSync,
+      }));
+    }
   });
 
   test("drops indented .sass files, which have no maintained parser", () => {
