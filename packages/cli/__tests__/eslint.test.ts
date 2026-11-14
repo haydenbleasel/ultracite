@@ -226,6 +226,117 @@ export default defineConfig([...core, { rules: { eqeqeq: "off" } }]);
     );
   });
 
+  test("reads presets passed to defineConfig without a spread", async () => {
+    const project = mockProject({
+      "./eslint.config.mjs": `import { defineConfig, globalIgnores } from "eslint/config";
+import core from "ultracite/eslint/core";
+import react from "ultracite/eslint/react";
+
+export default defineConfig(core, react, globalIgnores(["generated/**"]), { rules: { "no-console": "off" } });
+`,
+    });
+
+    await eslint.update({ frameworks: ["vitest"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(`import core from "ultracite/eslint/core";
+import react from "ultracite/eslint/react";
+import vitest from "ultracite/eslint/vitest";
+import { defineConfig, globalIgnores } from "eslint/config";
+
+export default defineConfig(
+  ...core,
+  ...react,
+  ...vitest,
+  globalIgnores(["generated/**"]),
+  { rules: { "no-console": "off" } },
+);
+`);
+    expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("keeps the order of the presets and leaves a scoped preset scoped", async () => {
+    const source = `import core from "ultracite/eslint/core";
+import next from "ultracite/eslint/next";
+import react from "ultracite/eslint/react";
+import vitest from "ultracite/eslint/vitest";
+
+export default [
+  ...core,
+  ...react,
+  ...next,
+  { files: ["**/*.test.ts"], extends: [vitest] },
+];
+`;
+
+    const project = mockProject({ "./eslint.config.mjs": source });
+
+    await eslint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(`import core from "ultracite/eslint/core";
+import react from "ultracite/eslint/react";
+import next from "ultracite/eslint/next";
+import vitest from "ultracite/eslint/vitest";
+
+export default [
+  ...core,
+  ...react,
+  ...next,
+  { files: ["**/*.test.ts"], extends: [vitest] },
+];
+`);
+  });
+
+  test("leaves a config that uses the presets in a form it can't regenerate", async () => {
+    const sources = [
+      `import core from "ultracite/eslint/core";
+
+const config = [...core, { rules: { "no-console": "off" } }];
+
+export default config;
+`,
+      `const core = require("ultracite/eslint/core");
+
+module.exports = [...core.default];
+`,
+      `import { defineConfig } from "eslint/config";
+import core from "ultracite/eslint/core";
+
+export default defineConfig([{ extends: [core], rules: { eqeqeq: "off" } }]);
+`,
+    ];
+
+    for (const source of sources) {
+      const project = mockProject({ "./eslint.config.mjs": source });
+
+      // oxlint-disable-next-line no-await-in-loop -- each shape is checked in turn against its own mock project
+      await eslint.update({ frameworks: ["react"] });
+
+      expect(project.writeFile).not.toHaveBeenCalled();
+      expect(project.warn.mock.calls[0]?.[0]).toContain("left unchanged");
+    }
+  });
+
+  test("keeps a TypeScript config in its file in a CommonJS package", async () => {
+    const project = mockProject({
+      "./eslint.config.ts": `import type { Linter } from "eslint";
+import core from "ultracite/eslint/core";
+
+const overrides: Linter.Config = { rules: { "no-console": "off" } };
+
+export default [...core, overrides];
+`,
+    });
+
+    await eslint.update();
+
+    const [[writtenPath, content]] = project.writeFile.mock.calls;
+    expect(writtenPath).toBe("./eslint.config.ts");
+    expect(content).toContain("const overrides: Linter.Config");
+    expect(project.rm).not.toHaveBeenCalled();
+  });
+
   test("replaces a config that doesn't use Ultracite and says so", async () => {
     const project = mockProject({
       "./eslint.config.mjs": "export default [{ rules: {} }];\n",

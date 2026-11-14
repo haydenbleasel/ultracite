@@ -14,7 +14,11 @@ import {
 import { pathToRoot, readWorkspacePackageJson } from "../workspace-frameworks";
 import type { WorkspaceFrameworks } from "../workspace-frameworks";
 import { parseConfigModule, renderEntries } from "./config-module";
-import type { ConfigModule, RenderedEntry } from "./config-module";
+import type {
+  ConfigModule,
+  ModuleImport,
+  RenderedEntry,
+} from "./config-module";
 
 const eslintConfigPaths = eslintConfigNames.map((name) => `./${name}`);
 
@@ -101,7 +105,10 @@ interface EslintExtras {
   danglingComments: string[];
   entries: RenderedEntry[];
   imports: string[];
+  // The presets the export lists, in the order it lists them.
   presets: string[];
+  // Imports of presets the config only uses inside an entry of its own.
+  scopedImports: { local: string; text: string }[];
   statements: string[];
 }
 
@@ -118,11 +125,17 @@ const generateEslintConfig = (
     ...withTypeAwareAddOns(frameworks.map(validateFrameworkName), typeAware),
   ];
 
+  const identifiers = new Set(presets.map(presetIdentifier));
+
   const imports = [
     ...presets.map(
       (preset) =>
         `import ${presetIdentifier(preset)} from "ultracite/eslint/${preset}";`
     ),
+    // A scoped preset that is now listed too is imported once, above.
+    ...(extras?.scopedImports ?? [])
+      .filter(({ local }) => !identifiers.has(local))
+      .map(({ text }) => text),
     ...(extras?.imports ?? []),
   ].join("\n");
 
@@ -153,16 +166,19 @@ export default ${config};
 `;
 };
 
-// Split a config that spreads Ultracite presets into those presets and
-// everything else. Returns null for a config that doesn't use Ultracite's
-// presets, which init replaces.
-const readUltraciteConfig = (config: ConfigModule): EslintExtras | null => {
-  if (config.container === "object") {
-    return null;
-  }
+// How an existing config relates to Ultracite's presets: `carried` when its
+// export lists them (the presets and everything else are split apart),
+// `unreadable` when it imports them but not in a shape init can regenerate,
+// and `foreign` when it doesn't use them at all.
+type ExistingConfig =
+  | { extras: EslintExtras; kind: "carried" }
+  | { kind: "foreign" }
+  | { kind: "unreadable" };
 
+const readUltraciteConfig = (config: ConfigModule): ExistingConfig => {
   const presetLocals = new Map<string, string>();
-  const imports: string[] = [];
+  const otherImports: string[] = [];
+  const presetImports = new Map<string, ModuleImport>();
 
   for (const moduleImport of config.imports) {
     const preset = ULTRACITE_PRESET_RE.exec(moduleImport.source)?.groups
@@ -170,28 +186,81 @@ const readUltraciteConfig = (config: ConfigModule): EslintExtras | null => {
 
     if (preset && moduleImport.defaultLocal && !moduleImport.typeOnly) {
       presetLocals.set(moduleImport.defaultLocal, preset);
+      presetImports.set(moduleImport.defaultLocal, moduleImport);
     } else {
-      imports.push(moduleImport.text);
+      otherImports.push(moduleImport.text);
     }
   }
 
-  const entries = config.entries.filter(
-    (entry) => !(entry.spreadOf && presetLocals.has(entry.spreadOf))
-  );
-
-  if (entries.length === config.entries.length) {
-    return null;
+  if (presetLocals.size === 0) {
+    return { kind: "foreign" };
   }
 
+  if (config.container === "object") {
+    return { kind: "unreadable" };
+  }
+
+  // A preset is part of the config when the export lists it, spread
+  // (`...core`) or, as defineConfig() also takes it, bare (`core`). One the
+  // config only uses inside an entry (`{ files, extends: [vitest] }`) is
+  // scoped by the user and stays that way: its import is carried over and
+  // it isn't added to the whole project.
+  const presetOf = (entry: ConfigModule["entries"][number]) =>
+    presetLocals.get(entry.spreadOf ?? entry.identifier ?? "");
+
+  const presets = [
+    ...new Set(config.entries.flatMap((entry) => presetOf(entry) ?? [])),
+  ];
+
+  if (presets.length === 0) {
+    return { kind: "unreadable" };
+  }
+
+  const listed = new Set(presets);
+
+  const scopedImports = [...presetImports].flatMap(([local, moduleImport]) =>
+    listed.has(presetLocals.get(local) ?? "")
+      ? []
+      : [{ local, text: moduleImport.text }]
+  );
+
   return {
-    callee: config.callee,
-    container: config.container,
-    danglingComments: config.danglingComments,
-    entries: entries.map(({ comment, text }) => ({ comment, text })),
-    imports,
-    presets: [...presetLocals.values()],
-    statements: config.statements.map((statement) => statement.text),
+    extras: {
+      callee: config.callee,
+      container: config.container,
+      danglingComments: config.danglingComments,
+      entries: config.entries.flatMap((entry) =>
+        presetOf(entry) === undefined
+          ? [{ comment: entry.comment, text: entry.text }]
+          : []
+      ),
+      imports: otherImports,
+      presets,
+      scopedImports,
+      statements: config.statements.map((statement) => statement.text),
+    },
+    kind: "carried",
   };
+};
+
+const USES_ULTRACITE_PRESET_RE = /["']ultracite\/eslint\//u;
+
+// Where update writes the config. ESLint loads a TypeScript config whatever
+// the package's module type, so one stays where it is; moving it to .mjs
+// would leave its type syntax in a JavaScript file. A CommonJS file can't
+// hold the generated ES module, so it gets the default .mjs file (or .mts,
+// from .cts), and the stale file is removed so ESLint doesn't resolve it
+// over the new one.
+const resolveTargetPath = (existingPath: string): string => {
+  if (existingPath.endsWith(".ts") && !existingPath.endsWith(".cts")) {
+    return existingPath;
+  }
+
+  if (existingPath.endsWith(".cts")) {
+    return "./eslint.config.mts";
+  }
+
+  return canHoldEsmConfig(existingPath) ? existingPath : defaultConfigPath;
 };
 
 const warnReplaced = (fileName: string): void => {
@@ -309,7 +378,8 @@ export const eslint = {
   update: async (opts?: EslintOptions) => {
     const existingPath = getEslintConfigPath() ?? defaultConfigPath;
     const fileName = existingPath.slice(2);
-    const parsed = parseConfigModule(await readFile(existingPath, "utf-8"));
+    const source = await readFile(existingPath, "utf-8");
+    const parsed = parseConfigModule(source);
 
     // A config that doesn't parse can't be carried over, and ESLint can't
     // load it either; leave it for the user to fix rather than discard it.
@@ -321,16 +391,36 @@ export const eslint = {
       return;
     }
 
-    const existing =
-      parsed.kind === "module" ? readUltraciteConfig(parsed.module) : null;
+    const existing: ExistingConfig =
+      parsed.kind === "module"
+        ? readUltraciteConfig(parsed.module)
+        : {
+            kind: USES_ULTRACITE_PRESET_RE.test(source)
+              ? "unreadable"
+              : "foreign",
+          };
 
-    if (!existing) {
+    // A config built on the presets in a shape init can't regenerate (a
+    // config held in a const, CommonJS `require`, a preset inside `extends`)
+    // is the user's own work; replacing it would discard it.
+    if (existing.kind === "unreadable") {
+      log.warn(
+        `${fileName} uses Ultracite's presets in a form init can't update, so it was left unchanged. Add any new presets to it yourself, or export an array that spreads them (\`export default [...core, ...react]\`) and re-run \`ultracite init\`.`
+      );
+
+      return;
+    }
+
+    const extras = existing.kind === "carried" ? existing.extras : undefined;
+
+    if (!extras) {
       warnReplaced(fileName);
     }
 
-    // Keep the presets the config already had; init adds the selected ones.
-    // The type-aware presets are regenerated from whether any was there.
-    const existingPresets = existing?.presets ?? [];
+    // Keep the presets the config already had, in its order; init adds the
+    // selected ones. The type-aware presets are regenerated from whether any
+    // was there.
+    const existingPresets = extras?.presets ?? [];
 
     const frameworks = [
       ...new Set([...existingPresets, ...(opts?.frameworks ?? [])]),
@@ -339,19 +429,8 @@ export const eslint = {
     const typeAware =
       opts?.typeAware === true || existingPresets.some(isTypeAwarePreset);
 
-    const config = generateEslintConfig(
-      frameworks,
-      typeAware,
-      existing ?? undefined
-    );
-
-    // Only overwrite a config file that can hold the generated ESM module;
-    // CJS configs (eslint.config.cjs/.cts) get the default .mjs file instead,
-    // and the stale file is removed so ESLint doesn't resolve it over the
-    // new one.
-    const targetPath = canHoldEsmConfig(existingPath)
-      ? existingPath
-      : defaultConfigPath;
+    const config = generateEslintConfig(frameworks, typeAware, extras);
+    const targetPath = resolveTargetPath(existingPath);
 
     await writeProjectFile(targetPath, config);
 
