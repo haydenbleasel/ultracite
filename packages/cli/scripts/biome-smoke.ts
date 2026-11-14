@@ -133,8 +133,19 @@ export class AppService {
   cypress: {
     files: {
       "cypress/e2e/login.cy.ts": {
-        content: 'export const visit = (): string => "/";\n',
+        // Cypress and Mocha globals, used without an import.
+        content: `describe("login", () => {
+  beforeEach(() => {
+    cy.visit("/");
+  });
+
+  it("shows the form", () => {
+    cy.get("form").should("be.visible");
+  });
+});
+`,
         expect: [],
+        forbid: ["lint/correctness/noUndeclaredVariables"],
       },
     },
     presets: ["cypress"],

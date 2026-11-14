@@ -2,5 +2,43 @@
 	// Biome has no Cypress rules; they are ESLint-only (ultracite/eslint/cypress).
 	// This preset keeps the framework selectable with every linter.
 	"root": false,
-	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json"
+	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"overrides": [
+		{
+			// Cypress injects cy, Cypress and the Mocha and Chai globals into specs
+			// and support files without imports, so noUndeclaredVariables reported
+			// every describe, it and cy. Mirrors the globals and files of the
+			// ESLint cypress preset.
+			"includes": ["**/*.cy.*", "**/cypress/**/*"],
+			"javascript": {
+				"globals": [
+					"Cypress",
+					"after",
+					"afterEach",
+					"assert",
+					"before",
+					"beforeEach",
+					"chai",
+					"context",
+					"cy",
+					"describe",
+					"expect",
+					"it",
+					"mocha",
+					"run",
+					"setup",
+					"specify",
+					"suite",
+					"suiteSetup",
+					"suiteTeardown",
+					"teardown",
+					"test",
+					"xcontext",
+					"xdescribe",
+					"xit",
+					"xspecify"
+				]
+			}
+		}
+	]
 }
