@@ -77,7 +77,9 @@ export default {
         name: "prettier.config.mjs",
       },
       {
-        code: () => `export { default } from "ultracite/stylelint";`,
+        code: () => `import config from "ultracite/stylelint";
+
+export default { ...config };`,
         lang: "javascript",
         name: "stylelint.config.mjs",
       },
@@ -92,6 +94,7 @@ export default {
 ${presets.map((preset) => `import ${preset} from "ultracite/oxlint/${preset}";`).join("\n")}
 
 export default defineConfig({
+  env: core.env,
 ${oxlintExtends(presets)}
   ignorePatterns: core.ignorePatterns,
 });`,
