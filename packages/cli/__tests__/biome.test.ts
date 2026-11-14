@@ -307,6 +307,57 @@ describe("biome", () => {
   });
 
   describe("update", () => {
+    test("points an existing config below the repository root at that root", async () => {
+      const gitDirectory = nodePath.join(
+        nodePath.dirname(process.cwd()),
+        ".git"
+      );
+
+      const mockWriteFile = mockProjectFiles((path) => path === gitDirectory);
+
+      await biome.update();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1]).vcs).toEqual({
+        root: "..",
+      });
+    });
+
+    test("writes a .gitignore for an existing config outside any repository", async () => {
+      const mockWriteFile = mockProjectFiles(() => false);
+
+      await biome.update();
+
+      expect(mockWriteFile.mock.calls[1]).toEqual([
+        ".gitignore",
+        "node_modules\n",
+      ]);
+    });
+
+    test("leaves version control alone when the config or project settles it", async () => {
+      const withIgnoreFile = mockProjectFiles((path) => path === ".gitignore");
+
+      await biome.update();
+
+      expect(withIgnoreFile).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(withIgnoreFile.mock.calls[0][1]).vcs).toBeUndefined();
+
+      const withVcs = mockProjectFiles(() => false);
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve('{"vcs":{"enabled":false}}')),
+        writeFile: withVcs,
+      }));
+
+      await biome.update();
+
+      expect(withVcs).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(withVcs.mock.calls[0][1]).vcs).toEqual({
+        enabled: false,
+      });
+    });
+
     test("adds ultracite/biome/core to existing config", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

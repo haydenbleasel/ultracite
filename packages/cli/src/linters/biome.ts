@@ -66,6 +66,14 @@ const findVcsRoot = (): string | undefined => {
     : undefined;
 };
 
+// Outside any repository, and with no ignore file of its own, the project
+// gets a .gitignore for the core preset to read.
+const ensureIgnoreFile = async (vcsRoot: string | undefined): Promise<void> => {
+  if (!(vcsRoot || VCS_FILES.some((file) => exists(file)))) {
+    await writeProjectFile(".gitignore", DEFAULT_GITIGNORE);
+  }
+};
+
 // A nested config in a Biome monorepo extends "//" to inherit the root
 // configuration, which is where the Ultracite presets belong.
 const ROOT_CONFIG_EXTENDS = "//";
@@ -166,10 +174,7 @@ export const biome = {
     }
 
     await writeProjectFile(configPath, `${JSON.stringify(config, null, 2)}\n`);
-
-    if (!(vcsRoot || VCS_FILES.some((file) => exists(file)))) {
-      await writeProjectFile(".gitignore", DEFAULT_GITIGNORE);
-    }
+    await ensureIgnoreFile(vcsRoot);
   },
   // A nested config can only inherit the root config through extends, and
   // "//" (which inherits all of it) can't be combined with other entries.
@@ -286,6 +291,22 @@ export const biome = {
       })
     );
 
+    // The core preset this adds reads ignore files, which an existing config
+    // may never have needed. One that sets `vcs` has made its own choice.
+    const setsVcs = Object.hasOwn(parsed, "vcs");
+    const vcsRoot = setsVcs ? undefined : findVcsRoot();
+
+    if (vcsRoot) {
+      contents = applyEdits(
+        contents,
+        modify(contents, ["vcs"], { root: vcsRoot }, { formattingOptions })
+      );
+    }
+
     await writeProjectFile(path, contents);
+
+    if (!setsVcs) {
+      await ensureIgnoreFile(vcsRoot);
+    }
   },
 };
