@@ -43,11 +43,15 @@ const overrideRules = {
 };
 
 // The type-checked rules (marked `requiresTypeChecking`) run in the
-// type-aware add-on.
+// type-aware add-on. So does prefer-describe-function-title, which isn't
+// marked: with `settings.vitest.typecheck` on, as the preset has it, the rule
+// asks the type checker whether a describe title names an imported class or
+// function, and without type information that throws and ends the run.
 const { syntactic, typeChecked } = splitTypeChecked(
   "vitest",
   plugin,
-  Object.assign(baseRules, overrideRules)
+  Object.assign(baseRules, overrideRules),
+  ["prefer-describe-function-title"]
 );
 
 export const typeCheckedRules = typeChecked;

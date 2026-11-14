@@ -967,10 +967,17 @@ test.only("adds", () => {
         expect: ["vitest/no-focused-tests"],
       },
       "src/sum.test.ts": {
-        content: `import { expect, test } from "vitest";
+        // A describe title that names an import makes
+        // prefer-describe-function-title ask for type information, which
+        // this run doesn't have.
+        content: `import { describe, expect, test } from "vitest";
 
-test.only("adds", () => {
-  expect(1 + 1).toBe(2);
+import { sum } from "./sum.mjs";
+
+describe("sum", () => {
+  test.only("adds", () => {
+    expect(sum(1, 1)).toBe(2);
+  });
 });
 `,
         expect: ["vitest/no-focused-tests"],

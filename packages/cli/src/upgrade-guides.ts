@@ -246,7 +246,7 @@ const TYPE_CHECKED_RULES = {
     "values-not-convertible-to-numbers",
   ],
   unicorn: ["no-non-function-verb-prefix"],
-  vitest: ["unbound-method"],
+  vitest: ["prefer-describe-function-title", "unbound-method"],
 } as const;
 
 /** Every rule v8 runs only with type information, as `plugin/rule` IDs. */
