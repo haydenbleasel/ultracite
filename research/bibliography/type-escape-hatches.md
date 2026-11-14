@@ -62,7 +62,7 @@ Every quote is copied exactly and is under 15 words. Sources shared with other p
 ### 1.3 Siek and Taha, "Gradual Typing for Functional Languages" (2006). VERIFIED
 
 - **Citation:** Jeremy G. Siek and Walid Taha, "Gradual Typing for Functional Languages", Scheme and Functional Programming Workshop 2006, University of Chicago TR-2006-06, pp. 81–92.
-- **Link:** http://scheme2006.cs.uchicago.edu/13-siek.pdf
+- **Link:** https://www.schemeworkshop.org/2006/13-siek.pdf
 - **What it says:**
   - "The unknown portions of a type are indicated by ?." Unannotated parameters default to `?`.
   - The type system catches "incompatibilities between the known parts of types".
