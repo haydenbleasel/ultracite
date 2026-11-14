@@ -19,6 +19,9 @@
 			"style": {
 				// NestJS relies on constructor parameter properties for DI
 				"noParameterProperties": "off",
+				// The fix turns the import of an injected class into `import type`,
+				// and constructor injection needs the class at runtime
+				"useImportType": "off",
 				// NestJS ecosystem commonly uses enums for roles, status codes, etc.
 				"noEnum": "off"
 			}

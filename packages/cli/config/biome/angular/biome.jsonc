@@ -8,6 +8,15 @@
 			"unsafeParameterDecoratorsEnabled": true
 		}
 	},
+	"linter": {
+		"rules": {
+			"style": {
+				// The fix turns the import of an injected class into `import type`,
+				// and constructor injection needs the class at runtime
+				"useImportType": "off"
+			}
+		}
+	},
 	"html": {
 		"parser": {
 			"interpolation": true

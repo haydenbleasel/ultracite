@@ -194,6 +194,30 @@ export class CatsController {
         expect: [],
         forbid: ["parse"],
       },
+      "src/cats.service.ts": {
+        content:
+          "export class CatsService {\n  list(): string[] {\n    return [];\n  }\n}\n",
+        expect: [],
+      },
+      "src/dogs.controller.ts": {
+        // An injected class is only named as a type, but has to stay a value
+        // import for dependency injection to resolve it.
+        content: `import { Controller } from "@nestjs/common";
+
+import { CatsService } from "./cats.service";
+
+@Controller("dogs")
+export class DogsController {
+  constructor(private readonly cats: CatsService) {}
+
+  list(): string[] {
+    return this.cats.list();
+  }
+}
+`,
+        expect: [],
+        forbid: ["lint/style/useImportType"],
+      },
     },
     presets: ["nestjs"],
   },

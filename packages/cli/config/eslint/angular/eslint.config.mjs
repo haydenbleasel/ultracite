@@ -53,6 +53,12 @@ const angular = [
     processor: inlineTemplates,
     rules: {
       ...angularRules,
+      // The autofix turns the import of an injected class into `import type`.
+      // Constructor injection needs the class at runtime, so the fix compiles
+      // and then fails to resolve the dependency. typescript-eslint only
+      // holds back when it can see `emitDecoratorMetadata`, which takes type
+      // information.
+      "@typescript-eslint/consistent-type-imports": "off",
     },
   },
   {

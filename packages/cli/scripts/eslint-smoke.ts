@@ -579,6 +579,30 @@ export class AppController {
 `,
         expect: [],
       },
+      "src/cats.controller.ts": {
+        // An injected class is only named as a type, but has to stay a value
+        // import for dependency injection to resolve it.
+        content: `import { Controller, Get } from "@nestjs/common";
+
+import { CatsService } from "./cats.service.js";
+
+@Controller("cats")
+export class CatsController {
+  private readonly cats: CatsService;
+
+  public constructor(cats: CatsService) {
+    this.cats = cats;
+  }
+
+  @Get()
+  public read(): string[] {
+    return this.cats.list();
+  }
+}
+`,
+        expect: [],
+        forbid: ["@typescript-eslint/consistent-type-imports"],
+      },
     },
     presets: ["nestjs"],
     typeAware: {},
