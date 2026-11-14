@@ -4,6 +4,7 @@ import process from "node:process";
 
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
+import type { ParseError } from "jsonc-parser";
 import { gtr, satisfies, valid } from "semver";
 
 import packageJson from "../../package.json" with { type: "json" };
@@ -315,7 +316,21 @@ const checkBiomeConfig = (): DiagnosticCheck => {
 
   try {
     const configContent = readFileSync(configPath, "utf-8");
-    const config = parse(configContent);
+    // jsonc-parser recovers from syntax errors instead of throwing, and
+    // Biome doesn't: it refuses a config that has any.
+    const errors: ParseError[] = [];
+
+    const config = parse(configContent, errors, {
+      allowTrailingComma: true,
+    });
+
+    if (errors.length > 0) {
+      return {
+        message: `Could not parse ${biomeConfigFile}: Biome won't run until its syntax is fixed`,
+        name: BIOME_CHECK,
+        status: "fail",
+      };
+    }
 
     if (
       Array.isArray(config?.extends) &&

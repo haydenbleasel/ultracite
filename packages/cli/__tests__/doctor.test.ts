@@ -393,6 +393,33 @@ describe("doctor", () => {
     );
   });
 
+  test("fails a biome config with a syntax error", () => {
+    const config = nodePath.join(process.cwd(), "biome.jsonc");
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) => filePath === config),
+      readFileSync: mock((filePath: string) => {
+        if (filePath === config) {
+          return '{ "extends": ["ultracite/biome/core"], "linter": { "rules": {';
+        }
+
+        if (isNodeModulesPath(String(filePath))) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
+
+        return '{"devDependencies": {"ultracite": "1.0.0"}}';
+      }),
+    }));
+
+    const biomeCheck = runDiagnostics("biome").find(
+      (check) => check.name === "Biome configuration"
+    );
+
+    expect(biomeCheck?.status).toBe("fail");
+    expect(biomeCheck?.message).toContain("Could not parse biome.jsonc");
+  });
+
   test("warns when biome config does not extend ultracite", () => {
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
