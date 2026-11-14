@@ -106,10 +106,16 @@ const buildDocumentationOverride = (names) => {
 
   if (names.has("jsdoc-js")) {
     // Only the missing-docs check is bridged; it has no native equivalent.
-    // FunctionDeclaration is required by default, exported or not.
+    // FunctionDeclaration is required by default, exported or not. The fixer
+    // is off because all it can write is an empty block, which says nothing
+    // and which core's jsdoc/no-blank-blocks then reports.
     rules["jsdoc-js/require-jsdoc"] = [
       "error",
-      { contexts: publicApiContexts, require: { FunctionDeclaration: false } },
+      {
+        contexts: publicApiContexts,
+        enableFixer: false,
+        require: { FunctionDeclaration: false },
+      },
     ];
     // Core leaves these off. Every JSDoc block on a function, exported or
     // not, must describe its parameters and return value; core keeps the

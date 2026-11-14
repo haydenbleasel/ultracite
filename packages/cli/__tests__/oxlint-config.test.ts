@@ -809,6 +809,8 @@ describe("oxlint js-plugins config", () => {
         "error",
         {
           contexts: expect.any(Array),
+          // Its fix writes an empty block, which jsdoc/no-blank-blocks reports.
+          enableFixer: false,
           require: { FunctionDeclaration: false },
         },
       ],
