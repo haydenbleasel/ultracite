@@ -29,7 +29,17 @@ const astro = [
         parser: typescriptParser,
       },
     },
-    rules: astroRules,
+    rules: {
+      // Astro compiles frontmatter into the page's server-side render
+      // function, so a top-level `return` is valid there (#805). The rule
+      // has no options to allow only `return`, so turn it off and keep the
+      // CommonJS checks it also covered via rules that do take options, as
+      // the Oxlint core preset does.
+      "import-x/no-commonjs": "error",
+      "no-restricted-globals": ["error", "__dirname", "__filename"],
+      "unicorn/prefer-module": "off",
+      ...astroRules,
+    },
   },
   {
     // Client-side <script> tags are linted as virtual files such as

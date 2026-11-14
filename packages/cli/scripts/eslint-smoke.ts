@@ -304,6 +304,10 @@ interface Props {
 
 const { title } = Astro.props as Props;
 const markup = "<b>x</b>";
+
+if (title === "") {
+  return Astro.redirect("/404");
+}
 ---
 
 <h1>{title}</h1>
@@ -314,8 +318,9 @@ const markup = "<b>x</b>";
 </script>
 `,
         expect: ["astro/no-set-html-directive"],
-        // The client script is linted as a virtual `1_1.ts` file.
-        forbid: ["github/filenames-match-regex"],
+        // The client script is linted as a virtual `1_1.ts` file, and a
+        // top-level return is how frontmatter redirects.
+        forbid: ["github/filenames-match-regex", "unicorn/prefer-module"],
       },
     },
     presets: ["astro"],
