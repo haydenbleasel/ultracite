@@ -49,7 +49,12 @@ export default defineConfig({
         "vitest/prefer-hooks-in-order": "error",
         "vitest/prefer-hooks-on-top": "error",
         "vitest/prefer-import-in-mock": "error",
-        "vitest/prefer-importing-vitest-globals": "error",
+        // Reports `test` and `expect` imported from another runner as
+        // globals, and its fix adds a second, clashing import from vitest.
+        // This preset covers every *.test and *.spec file, so that rewrote
+        // the Playwright (and bun:test, node:test) files of a project that
+        // also uses Vitest into code that doesn't parse.
+        "vitest/prefer-importing-vitest-globals": "off",
         "vitest/prefer-mock-promise-shorthand": "error",
         "vitest/prefer-mock-return-shorthand": "error",
         "vitest/prefer-snapshot-hint": "error",

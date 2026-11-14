@@ -1006,6 +1006,19 @@ describe("sum", () => {
 `,
         expect: ["vitest/no-focused-tests"],
       },
+      "src/home.spec.ts": {
+        // Another runner's test file that the preset's globs also match.
+        content: `import { expect, test } from "@playwright/test";
+
+test("shows the title", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page).toHaveTitle("Home");
+});
+`,
+        expect: [],
+        forbid: ["vitest/prefer-importing-vitest-globals"],
+      },
     },
     presets: ["vitest"],
     typeAware: {

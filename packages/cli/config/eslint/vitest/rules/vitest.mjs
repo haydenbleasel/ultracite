@@ -20,6 +20,12 @@ const overrideRules = {
   // Explicit imports are preferred over globals
   "vitest/no-importing-vitest-globals": "off",
 
+  // Reports `test` and `expect` imported from another runner as globals, and
+  // its fix adds a second, clashing import from vitest. This preset covers
+  // every *.test and *.spec file, so that rewrote the Playwright (and
+  // bun:test, node:test) files of a project that also uses Vitest.
+  "vitest/prefer-importing-vitest-globals": "off",
+
   // Conflicts with prefer-called-once (the original #604 issue)
   "vitest/prefer-called-times": "off",
 
