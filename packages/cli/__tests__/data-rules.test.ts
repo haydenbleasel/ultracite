@@ -33,6 +33,22 @@ describe("rules content", () => {
     );
   });
 
+  test("separates every list from the paragraph above it, as the formatters do", () => {
+    const lines = getRules("npx ultracite", "Oxlint + Oxfmt").split("\n");
+
+    const listsWithoutBlankLine = lines.filter((line, index) => {
+      const previous = lines[index - 1] ?? "";
+
+      return (
+        line.startsWith("- ") && previous !== "" && !previous.startsWith("- ")
+      );
+    });
+
+    // Oxfmt and Prettier put a blank line there, so `check` would fail on the
+    // file init just wrote.
+    expect(listsWithoutBlankLine).toEqual([]);
+  });
+
   test("reads naturally with a multi-tool provider name", () => {
     const rules = getRules("npx ultracite", "Oxlint + Oxfmt");
 
