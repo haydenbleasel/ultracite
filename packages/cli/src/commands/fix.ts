@@ -275,7 +275,8 @@ export const fix = (
 ): Promise<void> | void => {
   const linter = detectLinter();
 
-  // ESLint, Prettier and Stylelint expand globs themselves.
+  // ESLint and Prettier expand globs themselves, and toStylelintTargets
+  // expands the ones Stylelint cannot take as they are.
   const normalizedFiles = normalizeFileArgs(
     linter === "eslint" ? files : expandGlobTargets(files)
   );

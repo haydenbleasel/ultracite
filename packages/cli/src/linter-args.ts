@@ -52,21 +52,29 @@ const MAX_EXPANDED_LENGTH = process.platform === "win32" ? 7000 : 200_000;
  * (`app/[slug]/page.tsx`), and a pattern that matches nothing is passed on
  * for the linter to report.
  */
+const matchGlob = (file: string): string[] => {
+  // fast-glob reads a backslash as an escape, so Windows separators are
+  // normalized for the pattern to match.
+  const pattern = path.sep === "\\" ? file.replaceAll("\\", "/") : file;
+
+  return fastGlob
+    .sync(pattern, { dot: true, ignore: GLOB_EXPANSION_IGNORES })
+    .toSorted();
+};
+
+// A target that exists on disk is a path, however glob-like its name.
+const isUnexpandedGlob = (file: string): boolean =>
+  isGlobPattern(file) && !existsSync(file);
+
 export const expandGlobTargets = (files: string[]): string[] => {
   let expandedLength = 0;
 
   return files.flatMap((file) => {
-    if (!isGlobPattern(file) || existsSync(file)) {
+    if (!isUnexpandedGlob(file)) {
       return [file];
     }
 
-    // fast-glob reads a backslash as an escape, so Windows separators are
-    // normalized for the pattern to match.
-    const pattern = path.sep === "\\" ? file.replaceAll("\\", "/") : file;
-
-    const matches = fastGlob
-      .sync(pattern, { dot: true, ignore: GLOB_EXPANSION_IGNORES })
-      .toSorted();
+    const matches = matchGlob(file);
 
     if (matches.length === 0) {
       return [file];
@@ -130,8 +138,10 @@ const isFile = (file: string): boolean => {
  * Stylelint has no extension filtering of its own, so handing it the same
  * targets as ESLint/Prettier makes it parse .ts/.json files as CSS and fail.
  * Style files pass through, directories become style-scoped globs, and
- * other files are dropped. An empty result means Stylelint has nothing to
- * lint and should be skipped.
+ * other files are dropped. A glob that does not name a style extension
+ * (`src/**`, `**\/*.{css,ts}`) is expanded here and its style files kept,
+ * since Stylelint would otherwise match every file type with it. An empty
+ * result means Stylelint has nothing to lint and should be skipped.
  */
 export const toStylelintTargets = (files: string[]): string[] => {
   if (files.length === 0) {
@@ -146,11 +156,15 @@ export const toStylelintTargets = (files: string[]): string[] => {
       continue;
     }
 
+    if (isUnexpandedGlob(file)) {
+      targets.push(...matchGlob(file).filter(hasStyleExtension));
+      continue;
+    }
+
     // A target with no extension is taken for a directory unless it is a
     // file on disk (a Dockerfile, LICENSE or .gitignore), which Stylelint
     // would fail to scan. extname alone also misses directories with a dot
-    // in their name (app.web), so real paths are stat'ed either way. Globs
-    // never exist on disk and keep relying on the extname check.
+    // in their name (app.web), so real paths are stat'ed either way.
     if (isDirectory(file) || (path.extname(file) === "" && !isFile(file))) {
       // Stylelint's glob engine treats backslashes as escapes, so Windows
       // path separators must be normalized for the pattern to match.
@@ -201,7 +215,7 @@ export const toOxlintTargets = (files: string[]): string[] => {
     (file) =>
       hasExtension(file, oxlintExtensions) ||
       isDirectory(file) ||
-      (isGlobPattern(file) && !existsSync(file))
+      isUnexpandedGlob(file)
   );
 };
 

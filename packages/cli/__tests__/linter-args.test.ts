@@ -164,10 +164,65 @@ describe("linter args", () => {
   });
 
   test("escapes glob metacharacters in directory names", () => {
-    expect(toStylelintTargets(["app/(marketing)", "src/[slug]/"])).toEqual([
-      String.raw`app/\(marketing\)/**/*.{css,scss,less}`,
-      String.raw`src/\[slug\]/**/*.{css,scss,less}`,
+    const directories = new Set(["app/(marketing)", "src/[slug]/"]);
+
+    mock.module("node:fs", () => ({
+      ...defaultFileSystemMock(),
+      existsSync: mock((filePath: string) => directories.has(filePath)),
+      statSync: mock((filePath: string) => {
+        if (!directories.has(filePath)) {
+          throw new Error("ENOENT");
+        }
+
+        return { isDirectory: () => true, isFile: () => false };
+      }),
+    }));
+
+    try {
+      expect(toStylelintTargets(["app/(marketing)", "src/[slug]/"])).toEqual([
+        String.raw`app/\(marketing\)/**/*.{css,scss,less}`,
+        String.raw`src/\[slug\]/**/*.{css,scss,less}`,
+      ]);
+    } finally {
+      mock.module("node:fs", () => ({
+        ...defaultFileSystemMock(),
+        statSync: originalStatSync,
+      }));
+    }
+  });
+
+  test("expands a glob that is not limited to style files for stylelint", () => {
+    const matches = new Map([
+      ["src/**", ["src/index.ts", "src/sub/theme.scss", "src/app.css"]],
+      ["**/*.{css,ts}", ["a.ts", "b.css"]],
     ]);
+
+    mock.module("fast-glob", () => ({
+      default: { sync: mock((pattern: string) => matches.get(pattern) ?? []) },
+    }));
+
+    try {
+      expect(
+        toStylelintTargets([
+          "src/**",
+          "**/*.{css,ts}",
+          "none/*",
+          "styles/**/*.css",
+        ])
+      ).toEqual([
+        "src/app.css",
+        "src/sub/theme.scss",
+        "b.css",
+        "styles/**/*.css",
+      ]);
+    } finally {
+      mock.module("fast-glob", () => ({
+        default: Object.assign(
+          mock(() => Promise.resolve([])),
+          { sync: mock(() => []) }
+        ),
+      }));
+    }
   });
 
   test("drops extension-less files instead of globbing them as directories", () => {
