@@ -22,7 +22,7 @@ const zedSettings = `"oxlint": {
   "initialization_options": {
     "settings": {
       "run": "onType",
-      "typeAware": true,
+      "typeAware": null,
       "unusedDisableDirectives": "deny"
     }
   }
@@ -73,7 +73,7 @@ const diagnostics = [
       title: "Fix and format on save",
     },
     {
-      body: "Oxlint’s language server checks each keystroke with the type-aware rules on, and a stale `oxlint-disable` comment is an error.",
+      body: "Oxlint’s language server checks each keystroke, with the type-aware rules too once your Oxlint config turns them on, and a stale `oxlint-disable` comment is an error.",
       code: { lang: "jsonc", path: ".zed/settings.json", text: zedSettings },
       eyebrow: "Zed",
       title: "Lint as you type",
