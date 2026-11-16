@@ -191,6 +191,16 @@ describe("agent-fix linter adapters", () => {
           filename: "src/a.ts",
           message: "a plugin Ultracite doesn't load",
         },
+        {
+          code: "jsdoc-js(require-jsdoc)",
+          filename: "src/a.ts",
+          message: "Missing JSDoc comment.",
+        },
+        {
+          code: "tsdoc(syntax)",
+          filename: "src/a.ts",
+          message: "tsdoc-undefined-tag",
+        },
       ],
     });
 
@@ -201,9 +211,8 @@ describe("agent-fix linter adapters", () => {
 
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
-    const [todo, barrel, unknownRule, otherPlugin] = getLinterAdapter(
-      "oxlint"
-    ).fixAndCollect([], []);
+    const [todo, barrel, unknownRule, otherPlugin, jsdoc, tsdoc] =
+      getLinterAdapter("oxlint").fixAndCollect([], []);
 
     expect(todo.help).toBe('Track uses of "TODO" tags');
     expect(todo.url).toContain("sonarsource.github.io/rspec");
@@ -212,6 +221,10 @@ describe("agent-fix linter adapters", () => {
     expect(unknownRule.help).toBeUndefined();
     expect(unknownRule.url).toBeUndefined();
     expect(otherPlugin.help).toBeUndefined();
+    // The documentation plugins are selected separately, and bridged too.
+    expect(jsdoc.help).toContain("JSDoc comments");
+    expect(jsdoc.url).toContain("eslint-plugin-jsdoc");
+    expect(tsdoc.help).toContain("TSDoc standard");
   });
 
   test("oxlint adapter loads JS plugins from the config that lints the file", () => {

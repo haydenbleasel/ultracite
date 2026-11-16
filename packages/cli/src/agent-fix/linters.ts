@@ -109,8 +109,10 @@ const toOxlintRuleName = (code: string): string => {
 // The plugins the js-plugins preset bridges, by the name their rules carry.
 const JS_PLUGIN_PACKAGES = new Map([
   ["github", "eslint-plugin-github"],
+  ["jsdoc-js", "eslint-plugin-jsdoc"],
   ["react-doctor", "oxlint-plugin-react-doctor"],
   ["sonarjs", "eslint-plugin-sonarjs"],
+  ["tsdoc", "eslint-plugin-tsdoc"],
 ]);
 
 interface JsPluginRule {
