@@ -233,7 +233,7 @@ On B, all eight made the split we'd found: one helper groups the tags, one resol
 
 The durations stay inside the loop, so an unknown profile still throws after the earlier groups' calls have been made, as in the original. Every Claude run said so, for example "an invalid profile still throws after the earlier groups' promises have already been added". Codex said why it cut where it did: "The function has two self-contained sections: grouping tags and resolving cache durations."
 
-On C, every final file gave the same guess on all 1,938 inputs. Four runs kept the line loop and the state it carries in one function, and moved line reading and scoring out. Three moved the loop body into a helper that updates a shared stats object and returns early to skip a line. One of our own hand-made variants had broken the guess that way, and all three agents got the skip right: "Each `continue` in the old loop is now a `return`," one Claude run explained. The eighth run timed out before it reached `guessIndentation`. The splits added parameters: 19 of C's 53 helpers take four or five.
+On C, every final file gave the same guess on all 1,938 inputs. Four runs kept the line loop and the state it carries in one function, and moved line reading and scoring out. Three moved the loop body into a helper that updates a shared stats object and returns early to skip a line. One of our own hand-made variants had broken the guess that way, and all three runs got the skip right: "Each `continue` in the old loop is now a `return`," one Claude run explained. The eighth run timed out before it reached `guessIndentation`. The splits added parameters: 19 of C's 53 helpers take four or five.
 
 ## Easier to follow on one subject in three
 
@@ -269,7 +269,7 @@ A length limit can't see why a function is long. JSX markup, a sequence of steps
 
 The implementations disagree. Biome's 50 lines is roughly ESLint's 70, SonarJS skips components, ESLint and Oxlint count a nested function's lines twice, and the line limits move whenever the formatter's width does. Gaming is cheap: removing blank lines and comments, joining lines, or moving code to module scope all lower the count without changing what a reader has to understand. An options object hides parameters from `max-params` without making the signature simpler.
 
-The evidence is thin in places, and some of it is ours. Our history uses commit messages to find fixes, keeps only functions that survived, and shows associations, not causes. Our raters are Claude models, and the reader judgment rests on 24 files. The experiment's filtered handoff made every retry about something other than length. And no codebase we measured limited lines or statements, so we saw code written without these limits, not code shaped by them.
+The evidence is thin in places, and some of it is ours. Our history uses commit messages to find fixes, keeps only functions that survived, and shows associations, not causes. Our raters are Claude models, and the reader judgment rests on 24 files. The experiment's filtered handoff made all but one retry about something other than length. And no codebase we measured limited lines or statements, so we saw code written without these limits, not code shaped by them.
 
 What a length limit does well is find the outliers, like Next.js's 3,830-line `build`. A threshold high enough to catch only those leaves most code alone. At 50 lines the limit mostly reports code that reads fine, and asks for a split that helps about one time in six.
 
