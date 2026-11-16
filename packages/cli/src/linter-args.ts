@@ -187,8 +187,10 @@ const oxlintExtensions = [
  * Oxlint fails on an explicit file it does not lint (a README, package.json,
  * a Dockerfile), so those are dropped. Directories pass through, since
  * Oxlint filters their contents itself, and so does a glob that matched
- * nothing (see expandGlobTargets), for Oxlint to report. An empty result
- * means Oxlint has nothing to lint and should be skipped.
+ * nothing (see expandGlobTargets), for Oxlint to report. A file that exists
+ * is a path however glob-like its name (`app/[slug]/styles.css`), so it is
+ * dropped like any other file Oxlint does not lint. An empty result means
+ * Oxlint has nothing to lint and should be skipped.
  */
 export const toOxlintTargets = (files: string[]): string[] => {
   if (files.length === 0) {
@@ -198,8 +200,8 @@ export const toOxlintTargets = (files: string[]): string[] => {
   return files.filter(
     (file) =>
       hasExtension(file, oxlintExtensions) ||
-      isGlobPattern(file) ||
-      isDirectory(file)
+      isDirectory(file) ||
+      (isGlobPattern(file) && !existsSync(file))
   );
 };
 

@@ -223,6 +223,31 @@ describe("linter args", () => {
     expect(toOxlintTargets(["README.md", ".env"])).toEqual([]);
   });
 
+  test("drops an existing file oxlint cannot lint, however glob-like its path", () => {
+    const existing = new Set(["app/[slug]/data.json", "app/[slug]/page.tsx"]);
+
+    mock.module("node:fs", () => ({
+      ...defaultFileSystemMock(),
+      existsSync: mock((filePath: string) => existing.has(filePath)),
+      statSync: originalStatSync,
+    }));
+
+    try {
+      expect(
+        toOxlintTargets([
+          "app/[slug]/data.json",
+          "app/[slug]/page.tsx",
+          "none/[a-z]*.json",
+        ])
+      ).toEqual(["app/[slug]/page.tsx", "none/[a-z]*.json"]);
+    } finally {
+      mock.module("node:fs", () => ({
+        ...defaultFileSystemMock(),
+        statSync: originalStatSync,
+      }));
+    }
+  });
+
   test("expands a glob no shell expanded and leaves paths alone", () => {
     const matches = new Map([["src/**/*.ts", ["src/b.ts", "src/a.ts"]]]);
 
