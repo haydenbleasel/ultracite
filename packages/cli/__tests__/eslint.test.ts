@@ -511,4 +511,21 @@ export default [
     );
     expect(content).not.toContain("react/type-aware");
   });
+
+  test("recognises a type-aware root config written with single quotes", async () => {
+    const project = mockProject({
+      "./eslint.config.mjs": `import core from 'ultracite/eslint/core';
+import typeAware from 'ultracite/eslint/type-aware';
+
+export default [...core, ...typeAware];
+`,
+    });
+
+    await eslint.createWorkspace({ dir: "apps/api", frameworks: ["nestjs"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import nestjsTypeAware from "ultracite/eslint/nestjs/type-aware";'
+    );
+  });
 });

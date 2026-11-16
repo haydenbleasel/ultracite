@@ -66,13 +66,20 @@ const withTypeAwareAddOns = (
       : [framework]
   );
 
+// The preset's specifier in either quote style, since a project's formatter
+// may have rewritten the config with single quotes.
+const TYPE_AWARE_IMPORT_RE = new RegExp(
+  `["']ultracite/eslint/${TYPE_AWARE_PRESET}["']`,
+  "u"
+);
+
 // Whether the root config already uses the type-aware preset, which a
 // workspace config's framework add-ons then go with.
 const configIsTypeAware = async (configPath: string): Promise<boolean> => {
   try {
     const content = await readFile(configPath, "utf-8");
 
-    return content.includes(`"ultracite/eslint/${TYPE_AWARE_PRESET}"`);
+    return TYPE_AWARE_IMPORT_RE.test(content);
   } catch {
     return false;
   }
