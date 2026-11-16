@@ -1,5 +1,5 @@
 // Blume's content components, which a post's body needs for code fences,
-// `:::` callouts and the rest: pages/blog/<slug>.astro passes this map to the
+// `:::` callouts and the rest: pages/research/<slug>.astro passes this map to the
 // post's <Content />. A post that uses one missing here fails the build with
 // "Expected component X to be defined"; import it and add it. NextSteps is
 // ours: the block every post ends with, above its references.
