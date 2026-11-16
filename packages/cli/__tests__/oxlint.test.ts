@@ -1376,6 +1376,33 @@ export default defineConfig({
     expect(project.rm).toHaveBeenCalled();
   });
 
+  test.each([
+    '"rules": { "eqeqeq": "off" },',
+    '// ours\n  rules: { "eqeqeq": "off" },',
+  ])(
+    "keeps a quoted or commented oxlint.config.ts key over .oxlintrc.json",
+    async (rules) => {
+      const project = mockProject({
+        "./.oxlintrc.json": '{ "rules": { "eqeqeq": "error" } }',
+        "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  ${rules}
+});
+`,
+      });
+
+      await oxlint.update();
+
+      const [[, content]] = project.writeFile.mock.calls;
+      expect(content).toContain(rules);
+      expect(content).not.toContain('"eqeqeq": "error"');
+    }
+  );
+
   test("regenerates a combined jsPlugins value when the selection shrinks", async () => {
     const project = mockProject(await createCombinedJsPluginsConfig());
 
@@ -2319,6 +2346,28 @@ export default defineConfig({
     expect(content).not.toContain("typeAware");
     expect(project.warn).toHaveBeenCalled();
   });
+
+  test.each([
+    "  // lint options\n  options: { reportUnusedDisableDirectives: true },",
+    '  "options": { reportUnusedDisableDirectives: true },',
+  ])(
+    "update finds a project's own options under a comment or in quotes",
+    async (options) => {
+      const project = mockProject({
+        "./oxlint.config.ts": plainConfig.replace(
+          "  ignorePatterns",
+          `${options}\n  ignorePatterns`
+        ),
+      });
+
+      await oxlint.update({ typeAware: true });
+
+      const [[, content]] = project.writeFile.mock.calls;
+      expect(content).toContain(options);
+      expect(content).not.toContain("typeAware");
+      expect(project.warn).toHaveBeenCalled();
+    }
+  );
 });
 
 // An oxlint.config.ts that extends core plus the given lines.

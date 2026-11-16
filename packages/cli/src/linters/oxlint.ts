@@ -95,7 +95,6 @@ interface OxlintOptions {
 // the editor extension run core's typed rules once oxlint-tsgolint is there.
 const typeAwareOptions = "{ typeAware: true }";
 const TYPE_AWARE_RE = /\btypeAware\s*:\s*true\b/u;
-const OPTIONS_PROPERTY_RE = /^["']?options["']?\s*:/u;
 
 const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github" },
@@ -233,6 +232,11 @@ interface UserExtends {
   trailing: RenderedEntry[];
 }
 
+// A root property carried over, with the key it sets. `text` can't answer
+// that: it opens with any comment above the property, and the key may be
+// quoted.
+type OxlintProperty = RenderedEntry & { key: string | null };
+
 // Everything in an existing config that isn't Ultracite's: carried over into
 // the regenerated file as written.
 interface OxlintExtras {
@@ -245,7 +249,7 @@ interface OxlintExtras {
   // keeps (`import ultraciteCore from "ultracite/oxlint/core"`) so the
   // project's own references to it still resolve.
   presetIdentifiers: Map<string, string>;
-  properties: RenderedEntry[];
+  properties: OxlintProperty[];
   // The names the project's own imports and declarations bind, which a
   // generated import must not take.
   reservedIdentifiers: Set<string>;
@@ -955,7 +959,7 @@ const readExistingConfig = (
         extras.overrides.settings = { entry: carry(entry) };
       }
     } else {
-      extras.properties.push(carry(entry));
+      extras.properties.push({ ...carry(entry), key: entry.key });
     }
   }
 
@@ -1178,7 +1182,7 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
   const unmigrated: string[] = [];
 
   const presentKeys = new Set(
-    extras.properties.map((property) => property.text.split(":")[0]?.trim())
+    extras.properties.map((property) => property.key)
   );
 
   for (const [key, value] of Object.entries(rc)) {
@@ -1227,7 +1231,7 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
           ),
       };
     } else if (!presentKeys.has(key)) {
-      extras.properties.push(renderJsonProperty(key, value));
+      extras.properties.push({ ...renderJsonProperty(key, value), key });
     }
   }
 
@@ -1392,8 +1396,8 @@ const planUpdate = (
 
   // An `options` object of the project's own is kept as written, so
   // type-aware linting is only added to a config that has none.
-  const existingOptions = existing.extras.properties.find((property) =>
-    OPTIONS_PROPERTY_RE.test(property.text)
+  const existingOptions = existing.extras.properties.find(
+    (property) => property.key === "options"
   );
 
   const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
