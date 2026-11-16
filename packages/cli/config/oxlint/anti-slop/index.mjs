@@ -20,6 +20,7 @@ import { defineConfig } from "oxlint";
 //   import antiSlop from "ultracite/oxlint/anti-slop";
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, antiSlop],
 //     ignorePatterns: core.ignorePatterns,
 //   });

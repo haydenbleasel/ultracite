@@ -12,6 +12,7 @@ import { defineConfig } from "oxlint";
 //   import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, next, jsPlugins, nextJsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //     jsPlugins: jsPlugins.jsPlugins,

@@ -16,6 +16,7 @@ import { defineConfig } from "oxlint";
 //   import gdp from "ultracite/oxlint/gdp";
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, gdp],
 //     ignorePatterns: core.ignorePatterns,
 //   });

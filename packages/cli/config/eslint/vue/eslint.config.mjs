@@ -10,7 +10,6 @@ import vueRules from "./rules/vue.mjs";
 import vuejsAccessibilityRules from "./rules/vuejs-accessibility.mjs";
 
 // Only the vue/ entries — the all-on vue rules would otherwise re-enable
-
 // the template formatting rules that eslint-config-prettier turns off.
 // Prettier owns formatting for .vue files.
 const vuePrettierOverrides = Object.fromEntries(

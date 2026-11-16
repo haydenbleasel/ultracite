@@ -84,6 +84,7 @@ export default defineConfig({
         "no-empty-function": "off",
 
         // Disabled: conflicts with prefer-describe-function-title — function names
+        // aren't lowercase strings
         "vitest/prefer-lowercase-title": "off",
 
         // Conflicts with prefer-to-be-truthy and prefer-to-be-falsy (#645)

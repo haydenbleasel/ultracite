@@ -18,6 +18,7 @@ import { defineConfig } from "oxlint";
 //   import shadcn from "ultracite/oxlint/shadcn";
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, shadcn],
 //     ignorePatterns: core.ignorePatterns,
 //     jsPlugins: shadcn.jsPlugins,

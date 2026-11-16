@@ -98,7 +98,8 @@ const config = {
   "react-doctor/no-async-event-handler-without-reentry-guard": "error",
   "react-doctor/no-autoplay-without-muted": "error",
   // React Doctor made this opt-in upstream, as unmeasured performance
-  // advice, and the barrel rules that stay on are core's.
+  // advice. No barrel rule is on for ESLint: unicorn/no-barrel-files is off
+  // in core, and oxc/no-barrel-file has no ESLint version.
   "react-doctor/no-barrel-import": "off",
   "react-doctor/no-blocked-paste": "error",
   "react-doctor/no-boolean-toggle-without-functional-update": "error",

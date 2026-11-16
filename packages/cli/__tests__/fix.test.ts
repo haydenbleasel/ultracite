@@ -1270,8 +1270,8 @@ describe("fix with an agent", () => {
     const biomeDiagnostics = JSON.stringify({
       diagnostics: [
         {
-          // A rule no other test file asks Biome to explain: the adapter
-          // remembers each rule's help, or the lack of it, for the process.
+          // Not the rule the adapter's own tests expect Biome to explain:
+          // it remembers each rule's help, or the lack of it, for the process.
           category: "lint/suspicious/noDebugger",
           location: { path: "src/bad.ts", start: { column: 13, line: 4 } },
           message: "This is an unexpected use of the debugger statement.",

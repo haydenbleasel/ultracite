@@ -12,6 +12,7 @@ import { defineConfig } from "oxlint";
 //   import tanstackJsPlugins from "ultracite/oxlint/tanstack/js-plugins";
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, tanstack, jsPlugins, tanstackJsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //     jsPlugins: jsPlugins.jsPlugins,

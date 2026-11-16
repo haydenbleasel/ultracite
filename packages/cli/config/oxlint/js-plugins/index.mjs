@@ -29,6 +29,7 @@ import {
 //   import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //     jsPlugins: jsPlugins.jsPlugins,
@@ -152,6 +153,7 @@ const buildDocumentationOverride = (names) => {
 // carrying the settings is not enough — they must land on the root config:
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //     settings: jsPluginSettings,
@@ -971,6 +973,7 @@ export default config;
 //   const jsPlugins = selectJsPlugins(["github", "sonarjs"]);
 //
 //   export default defineConfig({
+//     env: core.env,
 //     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //     jsPlugins: jsPlugins.jsPlugins,

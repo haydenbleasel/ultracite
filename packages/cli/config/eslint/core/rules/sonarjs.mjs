@@ -10,8 +10,8 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`sonarjs/${key}`, "error"])
 );
 
-// Overrides mirror the oxlint core preset (config/oxlint/core), which is the
-// benchmark for rule decisions across linters.
+// Overrides mirror the oxlint js-plugins preset (config/oxlint/js-plugins),
+// which is the benchmark for rule decisions across linters.
 const overrideRules = {
   // Fights the formatter (arrowParentheses: always).
   "sonarjs/arrow-function-convention": "off",
