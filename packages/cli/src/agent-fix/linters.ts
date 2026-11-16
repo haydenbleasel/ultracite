@@ -418,7 +418,8 @@ const parseBiomeExplainDescription = (output: string): string | undefined => {
   return description || undefined;
 };
 
-const biomeRuleHelp = new Map<string, string>();
+// Null for a rule Biome could not explain, so it is asked once.
+const biomeRuleHelp = new Map<string, string | null>();
 
 /**
  * Biome's JSON reporter leaves `advices` empty for lint rules, so without
@@ -432,7 +433,7 @@ const explainBiomeRule = (category: string): string | undefined => {
   const parsed = parseBiomeRuleCategory(category);
 
   if (cached !== undefined || !parsed) {
-    return cached;
+    return cached ?? undefined;
   }
 
   const result = spawnSync("biome", ["explain", parsed.rule]);
@@ -442,9 +443,7 @@ const explainBiomeRule = (category: string): string | undefined => {
       ? parseBiomeExplainDescription(String(result.stdout ?? ""))
       : undefined;
 
-  if (help !== undefined) {
-    biomeRuleHelp.set(category, help);
-  }
+  biomeRuleHelp.set(category, help ?? null);
 
   return help;
 };

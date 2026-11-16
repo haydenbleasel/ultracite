@@ -433,6 +433,29 @@ describe("agent-fix linter adapters", () => {
     expect(lint.help).toBeUndefined();
   });
 
+  test("biome adapter asks once about a rule Biome can't explain", () => {
+    const diagnostic = {
+      category: "lint/nursery/noUnexplainedRuleForTest",
+      location: { path: "src/a.ts" },
+      message: "message",
+    };
+
+    const stdout = JSON.stringify({ diagnostics: [diagnostic, diagnostic] });
+
+    const mockSpawn = mock((_cmd: string, args: string[]) =>
+      args[0] === "explain" ? { status: 1, stdout: "" } : { status: 1, stdout }
+    );
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const diagnostics = getLinterAdapter("biome").fixAndCollect([], []);
+
+    expect(diagnostics).toHaveLength(2);
+    expect(
+      mockSpawn.mock.calls.filter(([, args]) => args[0] === "explain")
+    ).toHaveLength(1);
+  });
+
   test("biome adapter explains a11y rules and links their docs", () => {
     const stdout = JSON.stringify({
       diagnostics: [

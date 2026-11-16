@@ -1270,9 +1270,11 @@ describe("fix with an agent", () => {
     const biomeDiagnostics = JSON.stringify({
       diagnostics: [
         {
-          category: "lint/security/noGlobalEval",
+          // A rule no other test file asks Biome to explain: the adapter
+          // remembers each rule's help, or the lack of it, for the process.
+          category: "lint/suspicious/noDebugger",
           location: { path: "src/bad.ts", start: { column: 13, line: 4 } },
-          message: "eval() exposes to security risks.",
+          message: "This is an unexpected use of the debugger statement.",
           severity: "error",
         },
       ],
