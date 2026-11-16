@@ -199,7 +199,16 @@ export const getToolchainPackages = (
         const configured = configuredFrameworks.has(framework);
 
         for (const [name, version] of Object.entries(dependencies)) {
-          if (configured || projectDependencies.has(name)) {
+          // storybook is here only as the peer of eslint-plugin-storybook. A
+          // project that has it is a project that uses Storybook, not one
+          // that lints with the plugin, so it is reinstalled only alongside
+          // the plugin.
+          const inUse =
+            name === "storybook"
+              ? projectDependencies.has("eslint-plugin-storybook")
+              : projectDependencies.has(name);
+
+          if (configured || inUse) {
             packages.set(name, version);
           }
         }

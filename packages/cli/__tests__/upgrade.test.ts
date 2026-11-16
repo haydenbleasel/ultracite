@@ -236,6 +236,9 @@ const loadUpgrade = async () => {
   return module;
 };
 
+const hasStorybook = (packages: string[]): boolean =>
+  packages.some((pkg) => pkg.startsWith("storybook@"));
+
 describe("getToolchainPackages", () => {
   test("biome installs the pinned Biome release", async () => {
     const { getToolchainPackages } = await loadUpgrade();
@@ -267,6 +270,27 @@ describe("getToolchainPackages", () => {
     expect(packages.some((pkg) => pkg.startsWith("eslint-plugin-vue@"))).toBe(
       false
     );
+  });
+
+  test("eslint leaves a project's own storybook alone unless it lints with the plugin", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    expect(
+      hasStorybook(getToolchainPackages("eslint", new Set(["storybook"])))
+    ).toBe(false);
+    expect(
+      hasStorybook(
+        getToolchainPackages(
+          "eslint",
+          new Set(["storybook", "eslint-plugin-storybook"])
+        )
+      )
+    ).toBe(true);
+    expect(
+      hasStorybook(
+        getToolchainPackages("eslint", new Set(), new Set(["storybook"]))
+      )
+    ).toBe(true);
   });
 
   test("eslint installs the plugins of every framework preset the config imports", async () => {
