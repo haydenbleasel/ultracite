@@ -1471,26 +1471,35 @@ lint-staged:
     });
 
     test("widens the glob an earlier init wrote, in place", async () => {
-      const written = mockProject({
-        "./package.json": JSON.stringify({
+      // Tab-indented with CRLF line endings, which the write has to keep.
+      const packageJson = JSON.stringify(
+        {
           // oxlint-disable-next-line sort-keys -- the legacy glob must come first, or replacing it in place looks the same as appending
           "lint-staged": {
             [LEGACY_PATTERN]: ["npx ultracite fix"],
             "*.py": ["ruff check"],
           },
           name: "app",
-        }),
+        },
+        null,
+        "\t"
+      ).replaceAll("\n", "\r\n");
+
+      const written = mockProject({
+        "./package.json": packageJson,
+        "package.json": packageJson,
       });
 
       await lintStaged.update("npm");
       restoreFileSystemMock();
 
-      const config = JSON.parse(written.get("./package.json") ?? "{}")[
-        "lint-staged"
-      ];
+      const content = written.get("package.json") ?? "{}";
+      const config = JSON.parse(content)["lint-staged"];
 
       expect(Object.keys(config)).toEqual([PATTERN, "*.py"]);
       expect(config[PATTERN]).toEqual(["npx ultracite fix"]);
+      expect(content).toStartWith('{\r\n\t"lint-staged": {\r\n\t\t"');
+      expect(content).toEndWith('\t"name": "app"\r\n}\r\n');
     });
 
     test("keeps the legacy glob when its task runs more than ultracite", async () => {

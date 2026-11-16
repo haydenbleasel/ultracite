@@ -12,7 +12,7 @@ import YAML from "yaml";
 import type { JsonObject, JsonValue } from "../data/types";
 import { getRootInstallOptions } from "../package-manager";
 import { parsePackageJson } from "../schemas";
-import { exists, writeProjectFile } from "../utils";
+import { editPackageJson, exists, writeProjectFile } from "../utils";
 import {
   isGeneratedUltraciteFixCommand,
   ultraciteFixCommand,
@@ -249,9 +249,11 @@ const updatePackageJson = async (
   }
 
   if (JSON.stringify(merged) !== JSON.stringify(existingConfig)) {
-    await writeJson(packageJsonPath, {
-      ...packageJson,
-      [LINT_STAGED_KEY]: merged,
+    // Not writeJson: package.json keeps its own indentation and line endings.
+    await editPackageJson((document) => {
+      document[LINT_STAGED_KEY] = merged;
+
+      return true;
     });
   }
 };
