@@ -211,8 +211,12 @@ describe("agent-fix linter adapters", () => {
 
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
+    // The documentation plugins are installed in the CLI package alone, so
+    // the config is named there for `bun test` at the repo root to find them.
+    const config = path.join(import.meta.dir, "..", "oxlint.config.ts");
+
     const [todo, barrel, unknownRule, otherPlugin, jsdoc, tsdoc] =
-      getLinterAdapter("oxlint").fixAndCollect([], []);
+      getLinterAdapter("oxlint").fixAndCollect([], ["-c", config]);
 
     expect(todo.help).toBe('Track uses of "TODO" tags');
     expect(todo.url).toContain("sonarsource.github.io/rspec");
