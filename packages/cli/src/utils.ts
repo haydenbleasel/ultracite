@@ -55,10 +55,12 @@ export const ensureDirectory = (filePath: string): void => {
 const isInsidePath = (target: string, root: string): boolean => {
   const relativePath = path.relative(root, target);
 
-  return (
-    relativePath === "" ||
-    (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
-  );
+  // Only a leading `..` segment leaves the root; a directory can be named
+  // `..apps`.
+  const leavesRoot =
+    relativePath === ".." || relativePath.startsWith(`..${path.sep}`);
+
+  return relativePath === "" || (!leavesRoot && !path.isAbsolute(relativePath));
 };
 
 const getRealPath = (filePath: string): string =>

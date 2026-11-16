@@ -1,8 +1,10 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import type { readdirSync as nodeReaddirSync } from "node:fs";
+import nodePath from "node:path";
 
 import type { JsonValue } from "../src/data/types";
 import {
+  assertWritableProjectPath,
   addEslintPeerOverrides,
   detectFrameworks,
   ensureDirectory,
@@ -12,6 +14,7 @@ import {
   validateFrameworkName,
   writeProjectFile,
 } from "../src/utils";
+import { defaultFileSystemMock, restoreFileSystemMock } from "./mock-fs";
 
 // SAFETY: preload.ts stashes the unmocked node:fs readdirSync on globalThis
 // under this key before installing the fs mock.
@@ -595,6 +598,30 @@ describe("writeProjectFile", () => {
       writeProjectFile(".vscode/settings.json", "{}")
     ).rejects.toThrow("Refusing to write through symbolic link");
     expect(mockWriteFile).not.toHaveBeenCalled();
+  });
+});
+
+describe("assertWritableProjectPath", () => {
+  afterEach(() => {
+    restoreFileSystemMock();
+  });
+
+  test("tells a directory named with leading dots from a path that leaves the project", () => {
+    mock.module("node:fs", () => ({
+      ...defaultFileSystemMock(),
+      lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+      realpathSync: mock((filePath: string) => filePath),
+    }));
+
+    expect(() => {
+      assertWritableProjectPath(nodePath.join("..apps", "oxlint.config.ts"));
+    }).not.toThrow();
+    expect(() => {
+      assertWritableProjectPath(nodePath.join("..", "oxlint.config.ts"));
+    }).toThrow("Refusing to write outside project");
+    expect(() => {
+      assertWritableProjectPath("..");
+    }).toThrow("Refusing to write outside project");
   });
 });
 
