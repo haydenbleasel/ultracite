@@ -1,5 +1,5 @@
 ---
-import { agents } from "../../../lib/agents";
+import { agents, agentsFileReaderCount } from "../../../lib/agents";
 import Everywhere from "../everywhere.astro";
 
 // Excerpts of what `ultracite init` writes for Biome
@@ -66,7 +66,7 @@ const diagnostics = [
       title: "Fix as you format",
     },
     {
-      body: `Biome marks what it can fix \`FIXABLE\`, so an agent can tell what \`ultracite fix\` will settle from what’s left for it. \`init\` writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      body: `Biome marks what it can fix \`FIXABLE\`, so an agent can tell what \`ultracite fix\` will settle from what’s left for it. \`init\` writes the rules into \`AGENTS.md\`, which ${agentsFileReaderCount} of the ${agents.length} agents read.`,
       eyebrow: "Coding agents",
       title: "Every problem names its fix",
     },

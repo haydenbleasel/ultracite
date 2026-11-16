@@ -1,5 +1,5 @@
 ---
-import { agents } from "../../../lib/agents";
+import { agents, agentsFileReaderCount } from "../../../lib/agents";
 import Everywhere from "../everywhere.astro";
 
 // Excerpts of what `ultracite init` writes for Oxlint
@@ -79,7 +79,7 @@ const diagnostics = [
       title: "Lint as you type",
     },
     {
-      body: `Oxlint notices when a coding agent runs it and prints one line per problem and no summary, to save tokens. \`init\` also writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      body: `Oxlint notices when a coding agent runs it and prints one line per problem and no summary, to save tokens. \`init\` also writes the rules into \`AGENTS.md\`, which ${agentsFileReaderCount} of the ${agents.length} agents read.`,
       eyebrow: "Coding agents",
       title: "Output written for agents",
     },

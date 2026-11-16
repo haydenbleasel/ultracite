@@ -1,5 +1,5 @@
 ---
-import { agents } from "../../lib/agents";
+import { agents, agentsFileReaderCount } from "../../lib/agents";
 import { hookIntegrations } from "../../lib/hooks";
 import { agentLogos } from "../../lib/logos";
 import SectionHeading from "./section-heading.astro";
@@ -118,8 +118,8 @@ const hookNames = new Intl.ListFormat("en", {
           </h3>
           <p class="text-muted-foreground max-w-[48ch] text-base/7 text-pretty">
             <code class="font-mono text-sm">init</code> writes the rules into
-            AGENTS.md, which all {agents.length} agents read, so generated code
-            starts close to passing.
+            AGENTS.md, which {agentsFileReaderCount} of them read, so generated
+            code starts close to passing.
           </p>
         </div>
       </li>

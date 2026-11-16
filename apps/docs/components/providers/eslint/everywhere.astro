@@ -1,5 +1,5 @@
 ---
-import { agents } from "../../../lib/agents";
+import { agents, agentsFileReaderCount } from "../../../lib/agents";
 import Everywhere from "../everywhere.astro";
 
 // Excerpts of what `ultracite init` writes for ESLint
@@ -71,7 +71,7 @@ const files = [
       title: "Fix as you format",
     },
     {
-      body: `ESLint ends its report with how many of the problems \`--fix\` can settle, so an agent knows to run \`ultracite fix\` before working through the rest. \`init\` writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      body: `ESLint ends its report with how many of the problems \`--fix\` can settle, so an agent knows to run \`ultracite fix\` before working through the rest. \`init\` writes the rules into \`AGENTS.md\`, which ${agentsFileReaderCount} of the ${agents.length} agents read.`,
       eyebrow: "Coding agents",
       title: "A count of what fix will settle",
     },

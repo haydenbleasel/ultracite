@@ -8,3 +8,9 @@ export interface Agent {
 }
 
 export const agents: Agent[] = cliAgents.map(({ id, name }) => ({ id, name }));
+
+// How many of them read AGENTS.md. An agent with a `rulesCopy` (Replit Agent
+// and its replit.md) reads its own file instead.
+export const agentsFileReaderCount = cliAgents.filter(
+  (agent) => !agent.rulesCopy
+).length;
