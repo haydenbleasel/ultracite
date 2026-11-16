@@ -119,6 +119,17 @@ const byHand = entries
 
 const listFormat = new Intl.ListFormat("en", { type: "conjunction" });
 
+// Empty while every VS Code-based editor has a launcher.
+const byHandNote =
+  byHand.length > 0
+    ? `${listFormat.format(byHand)} ${byHand.length === 1 ? "has" : "have"} no launcher it can use, so it asks you to install the extension yourself. `
+    : "";
+
+const forksLauncherNote =
+  forksWithLauncher === forks.length
+    ? "Each has a launcher"
+    : `${forksWithLauncher} of them have a launcher`;
+
 const faqs: FaqItem[] = [
   {
     answer: `${entries.length}: ${listFormat.format(entries.toSorted(byName).map((entry) => entry.name))}. VS Code and the editors built on it read \`.vscode/settings.json\`, and Zed reads \`.zed/settings.json\`. The config files \`init\` writes for the linter are the tools’ own, so any other editor with an Oxlint, Biome or ESLint integration picks them up too.`,
@@ -130,7 +141,7 @@ const faqs: FaqItem[] = [
     question: "What does init do to my existing settings file?",
   },
   {
-    answer: `\`init\` installs the extension only when it creates the settings file, and only through the editor’s command-line launcher (${new Intl.ListFormat("en", { type: "disjunction" }).format(launchers)}). ${listFormat.format(byHand)} have no launcher it can use, so it asks you to install the extension yourself. Zed extensions always install from Zed’s extensions view.`,
+    answer: `\`init\` installs the extension only when it creates the settings file, and only through the editor’s command-line launcher (${new Intl.ListFormat("en", { type: "disjunction" }).format(launchers)}). ${byHandNote}Zed extensions always install from Zed’s extensions view.`,
     question: "Why didn’t the extension install?",
   },
   {
@@ -375,9 +386,12 @@ const faqs: FaqItem[] = [
       <SectionHeading id="ed-forks" title="Built on VS Code">
         These read the same{" "}
         <code class="font-mono text-base">.vscode/settings.json</code> and run
-        the same extensions. {forksWithLauncher} of them have a launcher{" "}
+        the same extensions. {forksLauncherNote}{" "}
         <code class="font-mono text-base">init</code> installs the extension
-        with; for the rest you install it once yourself.
+        with
+        {forksWithLauncher === forks.length
+          ? "."
+          : "; for the rest you install it once yourself."}
       </SectionHeading>
       <ul
         class="border-border bg-border grid gap-px border-t bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
