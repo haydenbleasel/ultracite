@@ -455,6 +455,10 @@ const checkStylelintConfig = (): DiagnosticCheck => {
 
 // Oxlint and oxfmt each load one config per directory and refuse to run when
 // two of their config files (JSON or TS) sit in the same directory.
+// `.oxlintrc.json`, `.oxlintrc.jsonc` and their oxfmt counterparts, which init
+// migrates into the TS config.
+const JSON_CONFIG_RE = /\.jsonc?$/u;
+
 const findConflictingConfigs = (
   dir: string,
   names: readonly string[]
@@ -492,10 +496,12 @@ const checkOxcConfig = ({
   const conflicting = findConflictingConfigs(found.dir, names);
 
   if (conflicting.length > 1) {
-    const hasJsonConfig = conflicting.some((name) => name.endsWith("json"));
+    const hasJsonConfig = conflicting.some((name) => JSON_CONFIG_RE.test(name));
+    const count = conflicting.length > 2 ? "all" : "both";
+    const none = conflicting.length > 2 ? "any of them" : "either";
 
     return {
-      message: `${conflicting.join(" and ")} are both present, so ${tool} won't load either — ${hasJsonConfig ? "run `ultracite init` to migrate the JSON config into the TS one" : "delete one of them"}`,
+      message: `${conflicting.join(" and ")} are ${count} present, so ${tool} won't load ${none} — ${hasJsonConfig ? "run `ultracite init` to migrate the JSON config into the TS one" : "delete one of them"}`,
       name: checkName,
       status: "fail",
     };

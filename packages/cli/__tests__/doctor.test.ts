@@ -739,6 +739,45 @@ describe("doctor", () => {
     });
   });
 
+  test("points a .jsonc oxc config next to a TS one at init too", () => {
+    const present = new Set([
+      ".oxlintrc.jsonc",
+      "oxlint.config.ts",
+      ".oxfmtrc.json",
+      ".oxfmtrc.jsonc",
+      "oxfmt.config.ts",
+    ]);
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        present.has(nodePath.basename(String(filePath)))
+      ),
+      readFileSync: mock(() => "{}"),
+    }));
+
+    try {
+      const checks = runDiagnostics("oxlint");
+
+      const oxlintCheck = checks.find(
+        (check) => check.name === "Oxlint configuration"
+      );
+
+      const oxfmtCheck = checks.find(
+        (check) => check.name === "oxfmt configuration"
+      );
+
+      expect(oxlintCheck?.message).toContain(
+        ".oxlintrc.jsonc and oxlint.config.ts are both present"
+      );
+      expect(oxlintCheck?.message).toContain("run `ultracite init`");
+      expect(oxfmtCheck?.message).toContain("are all present");
+      expect(oxfmtCheck?.message).toContain("won't load any of them");
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
   test("warns when the oxlint config extends core without env", () => {
     const missing = checkOxlintEnv(oxlintConfigWithEnv(""));
 
