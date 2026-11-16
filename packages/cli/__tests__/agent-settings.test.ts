@@ -25,6 +25,17 @@ describe("mergeAgentSettings", () => {
     expect(merge("")).toBe("read: AGENTS.md\nlint-cmd: npx ultracite fix\n");
   });
 
+  test("returns a file that already has both settings exactly as written", () => {
+    const flowList =
+      "read:   [AGENTS.md]\nlint-cmd:   'npx ultracite fix'\nmodel:    sonnet   # fast\n";
+
+    const scalar =
+      "read:    AGENTS.md   # rules\nlint-cmd: npx ultracite fix\n";
+
+    expect(merge(flowList)).toBe(flowList);
+    expect(merge(scalar)).toBe(scalar);
+  });
+
   test("adds the rules file beside a file the user already reads", () => {
     expect(merge("# Mine\nmodel: sonnet\nread: CONVENTIONS.md\n")).toBe(
       "# Mine\nmodel: sonnet\nread:\n  - CONVENTIONS.md\n  - AGENTS.md\nlint-cmd: npx ultracite fix\n"

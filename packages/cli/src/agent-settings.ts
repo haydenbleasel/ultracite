@@ -107,19 +107,27 @@ const mergeYaml = (
     );
   };
 
+  // Serialising the document normalises its spacing, so a file that needs
+  // no edit is returned as written.
+  let changed = false;
+
   // Scalars too, as nodes, so their comments can be kept.
   const readNode = document.getIn(settings.readKey, true);
 
   if (isSeq(readNode)) {
     // Edit the list in place, so comments on the user's entries survive.
-    readNode.items = readNode.items.filter(
+    const kept = readNode.items.filter(
       (item) => !(isScalar(item) && item.value === LEGACY_RULES_PATH)
     );
+
+    changed = kept.length !== readNode.items.length;
+    readNode.items = kept;
 
     if (
       !readNode.items.some((item) => isScalar(item) && item.value === rulesPath)
     ) {
       readNode.add(rulesPath);
+      changed = true;
     }
   } else {
     const read = nextRead(stringsAt(settings.readKey), settings, rulesPath);
@@ -136,6 +144,8 @@ const mergeYaml = (
     } else if (read) {
       document.setIn(settings.readKey, read.length === 1 ? read[0] : read);
     }
+
+    changed = read !== null;
   }
 
   if (settings.lintKey) {
@@ -143,10 +153,11 @@ const mergeYaml = (
 
     if (lint !== null) {
       document.setIn(settings.lintKey, lint);
+      changed = true;
     }
   }
 
-  return document.toString();
+  return changed ? document.toString() : existing;
 };
 
 const editJson = (source: string, key: string[], value: Strings): string =>
