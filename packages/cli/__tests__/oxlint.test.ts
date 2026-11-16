@@ -2538,6 +2538,17 @@ describe("findLoadedJsPlugins", () => {
     ).toEqual(["oxlint-plugin-react-doctor", "eslint-plugin-tsdoc"]);
   });
 
+  test("reads a selection written with single quotes", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith(
+          "import { jsPluginSettings, selectJsPlugins } from 'ultracite/oxlint/js-plugins';",
+          "const jsPlugins = selectJsPlugins(['sonarjs', 'github']);"
+        )
+      )
+    ).toEqual(["eslint-plugin-sonarjs", "eslint-plugin-github"]);
+  });
+
   test("expands the full js-plugins preset", () => {
     expect(
       findLoadedJsPlugins(

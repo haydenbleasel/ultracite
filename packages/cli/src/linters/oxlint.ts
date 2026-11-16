@@ -566,6 +566,9 @@ ${renderEntries(properties, extras.danglingComments)}
 `;
 };
 
+// A string literal in whichever quotes the project's formatter writes.
+const QUOTED_STRING_RE = /(?<quote>["'`])(?<name>[^"'`]+)\k<quote>/gu;
+
 // Current generated form: const jsPlugins = selectJsPlugins(["github", ...])
 const SELECT_JS_PLUGINS_RE = /selectJsPlugins\(\s*(?<names>\[[^\]]*\])\s*\)/u;
 
@@ -601,7 +604,7 @@ const parseExistingJsPlugins = (
     return [];
   }
 
-  return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)].flatMap(
+  return [...match.groups.names.matchAll(QUOTED_STRING_RE)].flatMap(
     (nameMatch) => {
       const plugin = jsPluginsByConfigName.get(nameMatch.groups?.name ?? "");
 
@@ -1041,8 +1044,8 @@ const findPresetReferences = (contents: string): string[] => {
 
   const body = /extends:\s*\[(?<body>[\s\S]*?)\]/u.exec(contents)?.groups?.body;
 
-  return [...(body ?? "").matchAll(/"(?<value>[^"]+)"/gu)].flatMap(
-    (match) => toUltracitePreset(match.groups?.value ?? "") ?? []
+  return [...(body ?? "").matchAll(QUOTED_STRING_RE)].flatMap(
+    (match) => toUltracitePreset(match.groups?.name ?? "") ?? []
   );
 };
 
