@@ -48,7 +48,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "prebuild": "bun run scripts/generate-dts.ts",
+    "generate": "bun run scripts/generate-dts.ts",
+    "prebuild": "bun run generate",
     "prepack": "bun run scripts/copy-skill.ts",
     "build": "bun check --no-script && bun run build.ts",
     "test": "bun test",

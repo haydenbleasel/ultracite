@@ -6,7 +6,13 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env.*.local"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        "config/oxlint/**/index.d.mts",
+        "config/oxfmt/index.d.mts"
+      ]
     },
     "test": {},
     "test:coverage": {},

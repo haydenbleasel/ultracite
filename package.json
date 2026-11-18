@@ -23,7 +23,8 @@
     "changeset:publish": "turbo run build && changeset publish",
     "bump-deps": "npx npm-check-updates --deep -u -x \"oxfmt, oxlint, @biomejs/biome, *eslint*, *prettier*, *stylelint*\" && bun install",
     "bump-tools": "npx npm-check-updates --deep -u --filter \"oxfmt, oxlint, @biomejs/biome, *eslint*, *prettier*, *stylelint*\" && bun install",
-    "prepare": "husky"
+    "generate": "bun run --cwd packages/cli generate",
+    "prepare": "husky && bun run generate"
   },
   "dependencies": {
     "empathic": "^2.1.0"
