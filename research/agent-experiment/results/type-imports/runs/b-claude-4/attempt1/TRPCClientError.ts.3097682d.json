@@ -1,0 +1,82 @@
+{
+  "diagnostics": [
+    {
+      "column": 8,
+      "fatal": false,
+      "file": "TRPCClientError.ts",
+      "help": "Merge these imports into a single import statement",
+      "line": 41,
+      "message": "Modules should not be imported multiple times in the same file",
+      "raw": {
+        "message": "Modules should not be imported multiple times in the same file",
+        "code": "import(no-duplicates)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/import/no-duplicates.html",
+        "help": "Merge these imports into a single import statement",
+        "filename": "TRPCClientError.ts",
+        "labels": [
+          {
+            "label": "It is first imported here",
+            "span": {
+              "offset": 2058,
+              "length": 42,
+              "line": 41,
+              "column": 8
+            }
+          },
+          {
+            "span": {
+              "offset": 2210,
+              "length": 42,
+              "line": 43,
+              "column": 40
+            }
+          }
+        ]
+      },
+      "rule": "import/no-duplicates",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/import/no-duplicates.html"
+    },
+    {
+      "column": 40,
+      "fatal": false,
+      "file": "TRPCClientError.ts",
+      "help": "Merge the duplicated import into a single import statement",
+      "line": 43,
+      "message": "'@trpc/server/unstable-core-do-not-import' import is duplicated",
+      "raw": {
+        "message": "'@trpc/server/unstable-core-do-not-import' import is duplicated",
+        "code": "eslint(no-duplicate-imports)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-duplicate-imports.html",
+        "help": "Merge the duplicated import into a single import statement",
+        "filename": "TRPCClientError.ts",
+        "labels": [
+          {
+            "label": "This import is duplicated",
+            "span": {
+              "offset": 2210,
+              "length": 42,
+              "line": 43,
+              "column": 40
+            }
+          },
+          {
+            "label": "Can be merged with this import",
+            "span": {
+              "offset": 2058,
+              "length": 42,
+              "line": 41,
+              "column": 8
+            }
+          }
+        ]
+      },
+      "rule": "no-duplicate-imports",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-duplicate-imports.html"
+    }
+  ],
+  "file": "TRPCClientError.ts"
+}

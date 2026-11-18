@@ -1,0 +1,711 @@
+{
+  "note": "Self-test cases for the type-imports topic: the corpus's variants (type-imports-examples.cjs variantsOf, from the cleaned corpus subject), normalised with Ultracite's Oxlint pass (what verify leaves) unless normalise is false (what the agent wrote), and hand-made mutants as edits of the prepared subject. `expect` gives the form and the oracle's verdict per mode (repo, kept, elided), and optionally the subject's rules Oxlint still reports, the tsc codes per setting and the inline `type` specifiers after.",
+  "mutants": [
+    {
+      "id": "a01",
+      "base": "a",
+      "variant": "a01 import type, named",
+      "normalise": true,
+      "description": "corpus variant a01 import type, named",
+      "expect": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "a02",
+      "base": "a",
+      "variant": "a02 import type, namespace",
+      "normalise": true,
+      "description": "corpus variant a02 import type, namespace",
+      "expect": {
+        "form": "import type, namespace",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "a03",
+      "base": "a",
+      "variant": "a03 value import",
+      "normalise": true,
+      "description": "corpus variant a03 value import",
+      "expect": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "a03-as-written",
+      "base": "a",
+      "variant": "a03 value import",
+      "normalise": false,
+      "description": "corpus variant a03 value import, as written (before verify)",
+      "expect": {
+        "form": "value import",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "a04",
+      "base": "a",
+      "variant": "a04 local interface",
+      "normalise": true,
+      "description": "corpus variant a04 local interface",
+      "expect": {
+        "form": "local type or interface",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "a05",
+      "base": "a",
+      "variant": "a05 suppression comments",
+      "normalise": true,
+      "description": "corpus variant a05 suppression comments",
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "a06",
+      "base": "a",
+      "variant": "a06 import x = require()",
+      "normalise": true,
+      "description": "corpus variant a06 import x = require()",
+      "expect": {
+        "form": "import x = require()"
+      }
+    },
+    {
+      "id": "a07",
+      "base": "a",
+      "variant": "a07 import type plus a value import",
+      "normalise": true,
+      "description": "corpus variant a07 import type plus a value import",
+      "expect": {
+        "form": "import type plus a side-effect import",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "b01",
+      "base": "b",
+      "variant": "b01 one value import, one import type",
+      "normalise": true,
+      "description": "corpus variant b01 one value import, one import type",
+      "expect": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "b02",
+      "base": "b",
+      "variant": "b02 the same, value import first",
+      "normalise": true,
+      "description": "corpus variant b02 the same, value import first",
+      "expect": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "b03",
+      "base": "b",
+      "variant": "b03 everything in import type",
+      "normalise": true,
+      "description": "corpus variant b03 everything in import type",
+      "expect": {
+        "form": "everything in one import type",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "b03-as-written",
+      "base": "b",
+      "variant": "b03 everything in import type",
+      "normalise": false,
+      "description": "corpus variant b03 everything in import type, as written (before verify)",
+      "expect": {
+        "form": "everything in one import type",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "b04",
+      "base": "b",
+      "variant": "b04 one import, inline type",
+      "normalise": true,
+      "description": "corpus variant b04 one import, inline type",
+      "expect": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 0
+      }
+    },
+    {
+      "id": "b04-as-written",
+      "base": "b",
+      "variant": "b04 one import, inline type",
+      "normalise": false,
+      "description": "corpus variant b04 one import, inline type, as written (before verify)",
+      "expect": {
+        "form": "one import, inline type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 5
+      }
+    },
+    {
+      "id": "b05",
+      "base": "b",
+      "variant": "b05 three declarations",
+      "normalise": true,
+      "description": "corpus variant b05 three declarations",
+      "expect": {
+        "form": "unchanged",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "b06",
+      "base": "b",
+      "variant": "b06 suppression comments",
+      "normalise": true,
+      "description": "corpus variant b06 suppression comments",
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "b06-as-written",
+      "base": "b",
+      "variant": "b06 suppression comments",
+      "normalise": false,
+      "description": "corpus variant b06 suppression comments, as written (before verify)",
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "b07",
+      "base": "b",
+      "variant": "b07 import x = require()",
+      "normalise": true,
+      "description": "corpus variant b07 import x = require()",
+      "expect": {
+        "form": "import x = require()",
+        "repo": "broken",
+        "kept": "broken",
+        "elided": "broken"
+      }
+    },
+    {
+      "id": "b08",
+      "base": "b",
+      "variant": "b08 a local copy of the type",
+      "normalise": true,
+      "description": "corpus variant b08 a local copy of the type",
+      "expect": {
+        "form": "local type or interface",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "c01",
+      "base": "c",
+      "variant": "c01 cast to the Fn type",
+      "normalise": true,
+      "description": "corpus variant c01 cast to the Fn type",
+      "expect": {
+        "form": "cast to the existing Fn type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "c02",
+      "base": "c",
+      "variant": "c02 import type namespace",
+      "normalise": true,
+      "description": "corpus variant c02 import type namespace",
+      "expect": {
+        "form": "import type, namespace",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "c03",
+      "base": "c",
+      "variant": "c03 static named import",
+      "normalise": true,
+      "description": "corpus variant c03 static named import",
+      "expect": {
+        "form": "static import, named",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "c03-as-written",
+      "base": "c",
+      "variant": "c03 static named import",
+      "normalise": false,
+      "description": "corpus variant c03 static named import, as written (before verify)",
+      "expect": {
+        "form": "static import, named",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "c04",
+      "base": "c",
+      "variant": "c04 static namespace import",
+      "normalise": true,
+      "description": "corpus variant c04 static namespace import",
+      "expect": {
+        "form": "static import, namespace",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "c05",
+      "base": "c",
+      "variant": "c05 import type namespace called as a value",
+      "normalise": true,
+      "description": "corpus variant c05 import type namespace called as a value",
+      "expect": {
+        "form": "import type namespace called as a value",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "c05-as-written",
+      "base": "c",
+      "variant": "c05 import type namespace called as a value",
+      "normalise": false,
+      "description": "corpus variant c05 import type namespace called as a value, as written (before verify)",
+      "expect": {
+        "form": "import type namespace called as a value",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "c06",
+      "base": "c",
+      "variant": "c06 suppression comments",
+      "normalise": true,
+      "description": "corpus variant c06 suppression comments",
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "c06-as-written",
+      "base": "c",
+      "variant": "c06 suppression comments",
+      "normalise": false,
+      "description": "corpus variant c06 suppression comments, as written (before verify)",
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "c07",
+      "base": "c",
+      "variant": "c07 import x = require()",
+      "normalise": true,
+      "description": "corpus variant c07 import x = require()",
+      "expect": {
+        "form": "import x = require()",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "c08",
+      "base": "c",
+      "variant": "c08 a local type for the module",
+      "normalise": true,
+      "description": "corpus variant c08 a local type for the module",
+      "expect": {
+        "form": "local type or interface",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "m-a-inline",
+      "base": "a",
+      "description": "`import { type Telemetry }` (inline only), as written: Hayden's case",
+      "edits": [
+        [
+          "import { traceGlobals } from \"../trace/shared\";\n",
+          "import { traceGlobals } from \"../trace/shared\";\nimport { type Telemetry } from \"./storage\";\n"
+        ],
+        [
+          "    | InstanceType<typeof import(\"./storage\").Telemetry>\n",
+          "    | InstanceType<typeof Telemetry>\n"
+        ]
+      ],
+      "expect": {
+        "form": "inline `import { type X }`",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "same",
+        "inline": 1
+      }
+    },
+    {
+      "id": "m-a-inline-verified",
+      "base": "a",
+      "description": "the same after the next Oxlint fix pass",
+      "normalise": true,
+      "edits": [
+        [
+          "import { traceGlobals } from \"../trace/shared\";\n",
+          "import { traceGlobals } from \"../trace/shared\";\nimport { type Telemetry } from \"./storage\";\n"
+        ],
+        [
+          "    | InstanceType<typeof import(\"./storage\").Telemetry>\n",
+          "    | InstanceType<typeof Telemetry>\n"
+        ]
+      ],
+      "expect": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 0
+      }
+    },
+    {
+      "id": "m-a-instance-type",
+      "base": "a",
+      "description": "`import type { Telemetry }` and the class's instance type written as `Telemetry`",
+      "normalise": true,
+      "edits": [
+        [
+          "import { traceGlobals } from \"../trace/shared\";\n",
+          "import { traceGlobals } from \"../trace/shared\";\nimport type { Telemetry } from \"./storage\";\n"
+        ],
+        [
+          "    | InstanceType<typeof import(\"./storage\").Telemetry>\n",
+          "    | Telemetry\n"
+        ]
+      ],
+      "expect": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "tsc": {
+          "runDir": ""
+        }
+      }
+    },
+    {
+      "id": "m-a-alias",
+      "base": "a",
+      "description": "the `import()` type moved into a local alias (still an `import()` type)",
+      "normalise": true,
+      "edits": [
+        [
+          "import { traceGlobals } from \"../trace/shared\";\n",
+          "import { traceGlobals } from \"../trace/shared\";\n\ntype StoredTelemetry = InstanceType<typeof import(\"./storage\").Telemetry>;\n"
+        ],
+        [
+          "    | InstanceType<typeof import(\"./storage\").Telemetry>\n",
+          "    | StoredTelemetry\n"
+        ]
+      ],
+      "expect": {
+        "form": "other restructure",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        }
+      }
+    },
+    {
+      "id": "m-a-oxlint-only-suppression",
+      "base": "a",
+      "description": "one oxlint-disable-next-line directive above the annotation",
+      "edits": [
+        [
+          "    | InstanceType<typeof import(\"./storage\").Telemetry>\n",
+          "    // oxlint-disable-next-line typescript/consistent-type-imports\n    | InstanceType<typeof import(\"./storage\").Telemetry>\n"
+        ]
+      ],
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "m-b-merged-types",
+      "base": "b",
+      "description": "the two `import type`s merged, isObject's value import kept (the right answer)",
+      "normalise": true,
+      "edits": [
+        [
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n",
+          "import type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\n"
+        ]
+      ],
+      "expect": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "oxlint": {}
+      }
+    },
+    {
+      "id": "m-b-upstream",
+      "base": "b",
+      "description": "back to upstream's mixed import next to the `import type`, as written",
+      "edits": [
+        [
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n",
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject, type DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n"
+        ]
+      ],
+      "expect": {
+        "form": "upstream's mixed import next to an import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 1
+      }
+    },
+    {
+      "id": "m-b-upstream-verified",
+      "base": "b",
+      "description": "the same after the next Oxlint fix pass (split back to three declarations)",
+      "normalise": true,
+      "edits": [
+        [
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n",
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject, type DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n"
+        ]
+      ],
+      "expect": {
+        "form": "unchanged",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "m-b-unmarked",
+      "base": "b",
+      "description": "one value import with every type unmarked, as written",
+      "edits": [
+        [
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n",
+          "import {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  isObject,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\n"
+        ]
+      ],
+      "expect": {
+        "form": "one value import, types unmarked",
+        "repo": "same",
+        "kept": "broken",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "m-b-unmarked-verified",
+      "base": "b",
+      "description": "the same after the next Oxlint fix pass",
+      "normalise": true,
+      "edits": [
+        [
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n",
+          "import {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  isObject,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\n"
+        ]
+      ],
+      "expect": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    },
+    {
+      "id": "m-b-isobject-type",
+      "base": "b",
+      "description": "isObject moved into the second `import type` (type-only, three declarations kept)",
+      "edits": [
+        [
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";\n",
+          "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape, isObject } from \"@trpc/server/unstable-core-do-not-import\";\n"
+        ]
+      ],
+      "expect": {
+        "form": "isObject made type-only",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "m-c-typeof-local",
+      "base": "c",
+      "description": "the require kept, cast with `typeof normalizeLocalePath` (the file's own export)",
+      "normalise": true,
+      "edits": [
+        [
+          " as typeof import(\"../shared/lib/i18n/normalize-locale-path\")",
+          " as { normalizeLocalePath: typeof normalizeLocalePath }"
+        ]
+      ],
+      "expect": {
+        "form": "typeof on a value already in scope",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        }
+      }
+    },
+    {
+      "id": "m-c-typeof-fn-wrong",
+      "base": "c",
+      "description": "the require cast to `typeof Fn` (the function, not the module): a type error, same behaviour",
+      "edits": [
+        [
+          " as typeof import(\"../shared/lib/i18n/normalize-locale-path\")",
+          " as typeof Fn"
+        ]
+      ],
+      "expect": {
+        "form": "cast to the existing Fn type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "tsc": {
+          "runDir": "TS2339"
+        }
+      }
+    },
+    {
+      "id": "m-c-hoisted-require",
+      "base": "c",
+      "description": "the require hoisted to a top-level const (eager in every app)",
+      "normalise": true,
+      "edits": [
+        [
+          "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\n",
+          "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\n\nconst i18n = require(\"../shared/lib/i18n/normalize-locale-path\") as {\n  normalizeLocalePath: typeof Fn;\n};\n"
+        ],
+        [
+          "    return (\n      require(\"../shared/lib/i18n/normalize-locale-path\") as typeof import(\"../shared/lib/i18n/normalize-locale-path\")\n    ).normalizeLocalePath(pathname, locales);\n",
+          "    return i18n.normalizeLocalePath(pathname, locales);\n"
+        ]
+      ],
+      "expect": {
+        "form": "require moved out of the branch",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "m-c-dynamic-import",
+      "base": "c",
+      "description": "the require replaced by `import()` (the function now returns a promise)",
+      "edits": [
+        [
+          "    return (\n      require(\"../shared/lib/i18n/normalize-locale-path\") as typeof import(\"../shared/lib/i18n/normalize-locale-path\")\n    ).normalizeLocalePath(pathname, locales);\n",
+          "    return import(\"../shared/lib/i18n/normalize-locale-path\").then((m) => m.normalizeLocalePath(pathname, locales));\n"
+        ]
+      ],
+      "expect": {
+        "form": "dynamic import()",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      }
+    },
+    {
+      "id": "m-c-oxlint-only-suppression",
+      "base": "c",
+      "description": "one oxlint-disable-next-line directive naming the three rules",
+      "edits": [
+        [
+          "      require(\"../shared/lib/i18n/normalize-locale-path\") as typeof",
+          "      // oxlint-disable-next-line typescript/consistent-type-imports, node/global-require, unicorn/prefer-module\n      require(\"../shared/lib/i18n/normalize-locale-path\") as typeof"
+        ]
+      ],
+      "expect": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      }
+    }
+  ]
+}

@@ -513,6 +513,48 @@ NESTED_TERNARIES_TMP=<scratch dir> node research/corpus/scripts/nested-ternaries
 
 The method, findings and caveats are in `corpus/results/nested-ternaries/REPORT.md`.
 
+### Type imports (fourteenth post)
+
+The type-imports scripts are prefixed `type-imports-` and share `type-imports-lib.cjs`. It holds the topic's paths, the inventory (one ESLint `Linter` pass per file with typescript-eslint's parser and scope analysis: every import and export declaration, and every imported binding's references classified exactly as `consistent-type-imports` classifies them, with JSX uses and the positions `emitDecoratorMetadata` serialises), the real ESLint rules in the same pass with Ultracite's settings and their option variants, one TypeScript program per repo (import-cycles-lib.cjs's resolution) for what each binding is at its source and where each specifier resolves, the side-effect reading of a module's top-level code, the per-file compilers already in this repo's Bun store (ts.transpileModule, esbuild, Oxc through rolldown, sucrase, Node's `module.stripTypeScriptTypes`, Bun's transpiler), and runners for Ultracite's presets and the `ultracite fix` path on copies.
+
+The rules: `typescript/consistent-type-imports`, `typescript/no-import-type-side-effects`, `import/consistent-type-specifier-style` (`"prefer-top-level"`), `import/no-duplicates` and `no-duplicate-imports` (`allowSeparateTypeImports`) in Oxlint core, `typescript/consistent-type-exports` (Oxlint core, type-aware only; ESLint's type-aware preset); the typescript-eslint and import-x versions in ESLint core; Biome's `useImportType`, `useExportType` and `noUnusedImports` and the `organizeImports` action. `consistent-type-imports` (`useImportType` in Biome) is off in the nestjs and angular presets. TypeScript's own `verbatimModuleSyntax` and `isolatedModules` errors (TS1484, TS1205) are measured with them.
+
+The eight corpus repos are measured as in every topic, the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set, and Ultracite's CLI apart. Source and tests are kept apart (`length-lib.cjs`'s test collection). History uses the TODO post's history clones.
+
+| Script | What it does |
+| --- | --- |
+| `type-imports-rules.cjs` | The rules per linter and preset: every Oxlint preset and `oxlint --rules` (fix kinds, type-aware), ESLint resolved with `calculateConfigForFile` for `.ts`, `.tsx`, `.js`, a test file, the type-aware preset and the nestjs and angular presets, each rule's meta, every Biome preset with `biome explain`, the comments above each setting, and the agent prompt's lines. Fails if the scripts' settings drift from the presets. |
+| `type-imports-census.cjs` | The inventory for every file of every repo: each import's form (value, `import type`, inline, mixed, side-effect) and clause, each binding's use (value, type, `typeof`, type key, export, JSX, decorator-metadata position) and what it is at its source (value, type, both, unresolved), `import x = require()`, `import()` types, dynamic `import()`, `require()`, re-exports and type re-exports, exported type declarations, decorators; every module a file imports only for types and that target's top-level side effects (or the package's `sideEffects`); each file's nearest tsconfig.json and `extends` chain; each repo's build tool. |
+| `type-imports-compilers.cjs` | Hayden's reason for `prefer-top-level`, tested: `calibration/type-imports/compilers/` through tsc, `bun check` (TypeScript 7), ts.transpileModule, esbuild (transform and bundle), Oxc and rolldown, sucrase, Bun (`Bun.Transpiler`, `bun build`, `bun file.ts`) and Node (`stripTypeScriptTypes` and `node file.ts`), with verbatimModuleSyntax on and off; each output's treatment of the import and whether the module's side effect ran. `--corpus`: every inline-only import in the corpus through the per-file compilers in both modes. |
+| `type-imports-linters.cjs` | Each rule and option variant alone in Oxlint and Biome on mirrors (raw and as written), the census's ESLint reports, Oxlint's type-aware `consistent-type-exports`, typescript-eslint's typed rules through the census program, and TypeScript with verbatimModuleSyntax and with isolatedModules; every diagnostic joined to its declaration, every message and help text, and every disagreement given a shape. |
+| `type-imports-fixes.cjs` | Each linter's fix path with the topic's rules, as `ultracite fix` runs it (Oxlint then Oxfmt; ESLint then Prettier; Biome check with organizeImports): lines changed, how imports changed, what's left and what's new, whether a second pass changes the file again (its imports, or only whitespace; `--settle` recomputes that from the copies), the type check of the changed files, the module specifiers each original and fixed file loads under nine compilers and modes (side-effect imports that disappear or appear), runtime import cycles before and after, and decorator metadata compiled with emitDecoratorMetadata. |
+| `type-imports-fix-bugs.cjs` | Every fixed file a fix broke: a binding used as a value made type-only (TS1361; for a React import used only by JSX, whether the file's own `jsx` setting still calls React), an inline `type` inside `import type` (TS2206), a file that no longer parses, and every side-effect import merged into another import of its module with where it moved; then the same files fixed from the original with Ultracite's whole preset for that linter. |
+| `type-imports-calibration.cjs` | `calibration/type-imports/` (41 cases and the modules they import, each recording that it evaluated) through every linter configuration, every fix pass, the TypeScript program in six tsconfig modes and every per-file compiler, each output run in a fresh Node process: evaluation order, decorator metadata (through a small DI container), values and errors. |
+| `type-imports-markers.cjs` | Each repo's lint configs and tsconfigs at its pinned commit for these rules and flags (with the commit that added each line), shared configs that imply them, disable comments naming them, and each build tool checked against its file. |
+| `type-imports-history.cjs` | `--churn`: every mainline commit's import lines, converted to `import type` and back, inline and top-level, mass conversions. `--adoption`: each config change naming the flags and rules, with the conversions around it. `--keywords`: commits that mention type-only imports, elision and the errors they cause, as a worksheet (`history-labels.json`). Only `git log`/`git show`, with `GIT_NO_LAZY_FETCH=1`; Next.js and VS Code over the three-year window. |
+| `type-imports-sample.cjs` | The hand classification: 80 reported declarations in eight strata (frozen in `sample.json`); `--worksheet`, `--print` (the blind subset of 32), `--compute` (both raters, weighted shares, κ). |
+| `type-imports-agent-runs.cjs` | Imports in every committed agent-experiment run: declarations agents added or rewrote, their forms, unmarked type-only bindings, the type-import reports and retries they caused. |
+| `type-imports-oracle.cjs` | The behaviour oracle for the three subjects: compiles a subject's directory in a mode (the repo's setting, imports kept, imports elided), runs it in a fresh Node process with every module recording its evaluation (an ESM loader hook or a CommonJS compile wrapper, so the copied modules are untouched) and every `design:*` metadata TypeScript emits (a recording `Reflect.metadata`), and compares traces. A self-test in `examples.json` checks that a converted injected class shows up as changed metadata. |
+| `type-imports-examples.cjs` | Checks the subjects' verbatim lines against their commits, lints them with Ultracite's presets, records what one `ultracite fix` pass hands an agent in each linter, type-checks them, and runs the oracle on 23 hand-made variants (right responses, tempting ones and gaming moves), as written and after one fix pass. |
+| `type-imports-tables.cjs` | Generates `results/type-imports/tables.md`. |
+| `type-imports-run-all.cjs` | Runs all of the above in order, and the shared rule census. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+TYPE_IMPORTS_TMP=<scratch dir> node research/corpus/scripts/type-imports-run-all.cjs   # about 2.5 hours, most of it history; --skip-history, --skip-census, --skip-fixes
+```
+
+- **The inventory predicts the rule.** Every ESLint `consistent-type-imports` report lands on an import the census classifies as having an unmarked type-only binding, and the typed run (the census program) reports the same declarations as the untyped one.
+- **Copies outside `out/`.** Mirrors, fix passes, compiled outputs, calibration and oracle runs live under `$TYPE_IMPORTS_TMP` (default: the system temp directory's `ultracite-research-type-imports/`), because Ultracite's presets ignore `**/out`. Every Oxlint and Biome config is written there too, never under `research/`; the shared census's `oxlint.config.mjs` is removed by `type-imports-run-all.cjs`.
+- **The calibration and the oracle run code.** Only this repo's hand-written cases and its copies of the subjects (with stubs) run, each in a fresh Node process. Nothing from a clone runs.
+- **Compilers come from the Bun store.** esbuild 0.28.1, rolldown 1.2.13 (its Oxc transformer) and sucrase 3.35.1 are dependencies of the docs site and the CLI's tools. swc, Babel's TypeScript plugin, TypeScript 7's emit, ts-rust and scriptc aren't installed and aren't run.
+- **The hand labels are Claude models.** Rater 1, a subagent, labelled all 80 items from a worksheet with the automatic facts; rater 2, a separate subagent working blind, 32. `history-labels.json` has one rater.
+- **Hand inputs:** `history-labels.json`, and the rater labels (`out/type-imports/labels-rater{1,2}.json`, kept in `classifications.json`).
+- **Shared scripts:** none changed. The topic reads `collect-files.cjs`, `tools.cjs`, `length-lib.cjs`, `dead-code-lib.cjs`, `sort-keys-lib.cjs`, `nested-ternaries-lib.cjs`, `import-cycles-lib.cjs` and `length-history.cjs` (its `SCOPES` and `WINDOW_DAYS`), and runs `rule-census.cjs` unchanged with `CORPUS_REPO_LISTS=repos-accessibility.json`.
+
+The method, findings and caveats are in `corpus/results/type-imports/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -1368,3 +1410,83 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
 - `harness-tests/nested-ternaries/mutants.json` (new): 49 mutants.
 - `.gitignore` comments name the topic; the per-attempt patterns cover its logs.
 - **Earlier topics,** re-measured, self-tested and re-aggregated from their committed runs before and after these changes: before and after match exactly for all eleven and prompt-revision (func-style's self-test once differed in two mirror comparisons under parallel load, from Oxlint's report order; alone it is identical). No committed run's response, outcome or oracle verdict changes. Five self-tests fail on the current repo before and after alike, for reasons that predate this topic (accessibility's strict v1 hash check, todo-comments' JS-plugin help, and sort-keys', length-limits' and func-style's variants since key sorting went off in 37ead86b). Against the committed files every topic shows drift from commits made after its runs: 3e83844c Oxlint 1.90, 6675a904 Oxfmt 0.75, 79d73d9e Biome 2.6.4, 3572b864 the ESLint plugins, 7a2d831c, 8eb46ade and 37ead86b the presets, and `hasSessionLog` where the session logs aren't in this worktree.
+
+### Type imports (fourteenth post)
+
+Ultracite's Oxlint core turns on typescript-eslint's `consistent-type-imports` (with `consistent-type-exports`, which needs type information, and `no-import-type-side-effects`), `import/consistent-type-specifier-style` set to `"prefer-top-level"`, `import/no-duplicates` and `no-duplicate-imports`, and Biome's preset has `useImportType` and `useExportType`. The safe fixes convert a value import used only as a type before an agent sees it, so `ultracite fix --claude` or `--codex` gets what they can't fix or leave unsettled. This topic asks whether the agent fixes those without changing which modules load (under the repo's build, a compiler that keeps imports as written, and one that elides them), picks the form the rules ask for, avoids the moves that compile and change what loads, leaves a report for review when the rule's help would change what loads, and whether its edit survives the next fix pass. The user's project is exactly what `ultracite init --linter oxlint` leaves; the rules are on there already.
+
+Subjects are three folders from `corpus/examples/type-imports/`, each laid out in the run dir as in the corpus:
+
+- **a:** Next.js's `telemetry/flush-telemetry.ts`, with `trace/shared.ts` and a stub `telemetry/storage.ts`: `InstanceType<typeof import('./storage').Telemetry>`. Right: `import type { Telemetry }`; storage never loads.
+- **b:** tRPC's `TRPCClientError.ts` with a stub module: one Oxlint pass splits upstream's mixed import into a second `import type`, which `no-duplicates` and `no-duplicate-imports` report and no further pass merges. Right: one value import of `isObject` and one `import type`.
+- **c:** Next.js's `client/normalize-locale-path.ts` with the shared module: `require(…) as typeof import(…)` inside the `__NEXT_I18N_SUPPORT` branch, with `node/global-require` and `unicorn/prefer-module` on the same line. Right: type the `require` without `import()` and leave the require rules for review; a static import loads the i18n module in every app.
+
+**The run dir is what `ultracite init --linter oxlint` leaves.** `prepareSubjects` runs the CLI's own `init` (under Bun, `--skip-install --yes`) for Oxlint, Biome and ESLint in scratch projects, and fails unless Oxlint's config extends core alone. Init's files are kept in `subjects/type-imports/init/`; Oxlint's files as the fix pass formats them make up `run-files/`. Each subject folder holds the subject, the files beside it and a `tsconfig.json` from the corpus examples' compiler options (`verbatimModuleSyntax`, `module: esnext`, `moduleResolution: bundler`, strict; B's `paths` re-rooted). Oxlint's two configs and Biome's are stored with a `.txt` suffix.
+
+**Subjects.** `prepareSubjects`:
+
+- **Strips the header.** It removes the `stripFields` fields and the subject line. `TEXT_EDITS` cut C's `Function:` sentences about the build-time variable to an identification, and rewrite "copied verbatim", the license lines that pointed into `research/`, and the stubs' and copies' headers that named the topic or the oracle.
+- **Checks every comment line** of the subject and the other files of its folder against 17 patterns: the forms (type import, `import type`, inline, top-level, specifier), what compilers do (elide, erase, strip, verbatim), the trap (side effect, eager, lazy, load, bundle, evaluate, the build-time variable, static import), the fix passes' fight (duplicate, merge, split), the rules, review, the tools, the analysis and the history's PRs, commits and authors. The MIT License's "merge" line and B's two upstream directive texts are allowed by name. The same patterns match 30–57 lines of each unstripped subject.
+- **Normalises** the whole folder with Ultracite's Oxlint pass until nothing changes (two passes each). B's first pass splits upstream's mixed import and `prefer-ts-expect-error` adds two TS2578 errors; that state, the corpus's one-pass handoff, is also the fixed point and is what the agents get.
+- **Checks the result:** in every oracle mode the prepared folder behaves as the corpus folder, and the prepared subject behaves the same with the corpus's own other files; the collect leaves every file unchanged; the handoff holds exactly the corpus's counts of the subject's rules.
+
+**The handoff is filtered** in the collect and in every re-lint, as in the seven previous topics: the six topic rules, for C the two require rules on the same line, plus any diagnostic that isn't the prepared project's own, by rule and message. A real project would hand over 2, 10 and 3 issues in the subject; C's handoff is a real project's. The filter never acted.
+
+**Retry loop:** `runWithRetries`, with `scripts/ultracite-adapters.cjs` at a new "v4" revision, which this topic selects. The CLI changed after the nested-ternaries runs in three mirrored slices (f23eb8e8's jsdoc and tsdoc help lookup, d0219d34's Biome explain cache, and the Stylelint target expansion from 800bc5d6, 6c29ae8c and 4a32ea73), and v4 ports them. The self-test runs v4's `toStylelintTargets` against the CLI's own on 13 target lists and compares the JS plugin list (14 checks), the diff.ts port against `diff.ts` on 6 edits, and Ultracite's real Oxlint adapter next to the mirror on 49 inputs; all agree. v1, v2 and v3 are unchanged.
+
+**Measurement.** Each attempt is measured as the agent left the file and as verify left it:
+
+- **Lint, inline config honoured and ignored, in five views:** Oxlint (init's config, and with `--type-aware`), ESLint (core, and with the type-aware preset), Biome (core): 21 import rules, 72 rules an import edit can trip, and every rule a state adds.
+- **`tsc`** in three settings: the run dir's tsconfig, `verbatimModuleSyntax` on, imports elided. TS1361, TS1202, TS1484, TS2206 and TS2857 flagged among others.
+- **The oracle** in all three of the corpus's modes (repo, kept, elided): which modules evaluate, in what order, and every scenario's result (C with i18n off and on).
+- **The edit, from the AST and the corpus's inventory:** the form chosen, top-level or inline, B's declarations and whether `isObject` is still a value import, C's `require` (in the branch, still lazy), casts, local types, lines and everything else that changed.
+- **Ultracite's partition**, the recomputed retry decision, and what it would print.
+- **From the session logs, the agent's and its forks'** (every Codex run spawned one): commands run or refused, `tsc`, searches for tests, reads of an installed Next.js or tRPC, the final, progress and fork messages, sentences about loading, side effects, laziness, bundles, elision, type stripping, duplicates and the rules' conflict, and exposure.
+
+The hand classification is in `classifications.json`. It includes a reader judgement (easier, about the same or harder to follow) by two raters from a blind packet: rater 1 is the model that ran the experiment, rater 2 a separate subagent that saw only the code.
+
+**The deterministic paths.** `aggregate` runs `ultracite fix` and `--unsafe` with Oxlint, Biome and ESLint on each subject, as upstream wrote it and as handed over (30), and on every run's final file (120), each repeated until the file stops changing, through the mirror and Ultracite's real adapters, which agree in all 150.
+
+**Oracle:** `corpus/scripts/type-imports-oracle.cjs`, imported unchanged (a scratch examples folder per trace, so the prepared files are used without touching the corpus). The self-test has 49 cases, all as expected:
+
+- the three prepared subjects;
+- the corpus's 23 variants, made by `type-imports-examples.cjs`'s own `variantsOf` without running the script, normalised, and 7 of them as written. Their verdicts in every mode match `examples.json`;
+- 16 hand-made mutants.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=type-imports
+node scripts/prepare-subjects.cjs        # subjects/type-imports/ (runs ultracite init for each linter; stripped, checked, normalised; ~20 s)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (49), the diff.ts port (6), the v4 port (14) and the mirror against the CLI (49) -> results/type-imports/oracle-self-test.json (~4 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a:claude:1 b:codex:1 c:claude:1 ...   # 4 of each subject and agent
+node scripts/aggregate.cjs               # results.json, with the deterministic paths, the passes on the final files and the mutant matrix
+node scripts/report-tables.cjs > results/type-imports/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.33–0.38 a run (median $0.345, $4.15 for 12 runs).
+- Codex used 16.0k–34.9k tokens a run as reported (median 19.9k), and its forks 68.8k more in all, which Codex doesn't report.
+- Runs took 20.7–55.9 s, one attempt each, and measuring one takes about a minute.
+- The pilot (one run per agent on C) is in `results/type-imports/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's type-imports examples, results and calibration, every `type-imports-*` corpus script, the tRPC license copy, and the whole corpus `out/`, `repos/` (history clones included) and `biome-input/`;
+- `research/bibliography/type-imports.md` and the bibliography README;
+- `plans/`, `lint-configs/`, the temp directory's `ultracite-research-*` folders and the other topics' run roots;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: the orchestrating session's scratchpad (with the corpus run's `TYPE_IMPORTS_TMP` copies), other sessions' files that mention the subjects or the rules, this session's task outputs, the main checkout's corpus clones, plans and `lint-configs`, and the other worktrees' corpus `repos/` and `out/`.
+
+`node_modules` isn't locked. No checkout has Next.js or tRPC installed; the Bun cache has Next.js 15 and 16 builds with A's and C's compiled files. Reads were checked instead, and there were none.
+
+The method, numbers and caveats are in `agent-experiment/results/type-imports/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/type-imports.cjs` (new). It imports the corpus's `type-imports-oracle.cjs` and `type-imports-lib.cjs` unchanged and reads `type-imports-examples.cjs`'s `variantsOf` without running the script.
+- `scripts/ultracite-adapters.cjs`: the "v4" revision (the CLI at 60a16471), selected with `ULTRACITE_MIRROR=v4`, and a `jsPluginPackages` export. v1, v2 and v3 are unchanged.
+- `scripts/run-one.mjs`: a subject or run file may sit in a folder of the run dir; every further session log with the run dir as its cwd (a Codex agent's forks) is kept as `transcript.<k>.jsonl`; v4 reads as v3. With flat names and one log, as in every earlier run, nothing changes.
+- `harness-tests/type-imports/mutants.json` (new): 46 mutants.
+- `.gitignore`: comments name the topic, and `attempt*/transcript.*.jsonl` is ignored in `runs/` and `superseded-runs/`.
+- **Earlier topics,** re-measured, self-tested and re-aggregated from their committed runs before and after these changes: before and after match for all of them and prompt-revision except func-style, whose v1 mirror check depends on the order Oxlint's threads report files in (25, 22, 26 and 24 failures in four runs, two of them with HEAD's shared scripts). No committed run's response, outcome or oracle verdict changes. Five self-tests fail on the current repo before and after alike (accessibility, todo-comments, sort-keys, length-limits, func-style), for the reasons the nested-ternaries topic gives. Against the committed files the drift is what the nested-ternaries topic lists, plus 60a16471 (Ultracite 8.3.0) and nested-ternaries' `mirroredSlicesDriftNow` naming the three slices v4 ports.

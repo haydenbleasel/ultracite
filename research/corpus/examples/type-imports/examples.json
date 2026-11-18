@@ -1,0 +1,2515 @@
+{
+  "generated": "2026-11-18T07:29:05.164Z",
+  "note": "See the header of type-imports-examples.cjs. stripFields: the header fields that name a rule or the expected answer; strip them before an agent sees a subject. handoff: what one `ultracite fix` pass leaves for the agent per linter (Oxlint is Ultracite's default). Per variant: rules added and removed against the subject in each linter (Ultracite's core presets), the topic rules' reports, tsc diagnostics, the oracle's verdict in each mode (repo: the source repo's setting; kept: imports kept as written; elided: imports used only as types removed), and the same after one Oxlint `ultracite fix` pass.",
+  "oracleSelfTest": {
+    "after": [
+      [
+        "Consumer",
+        null,
+        "design:paramtypes",
+        [
+          "Object"
+        ]
+      ]
+    ],
+    "before": [
+      [
+        "Consumer",
+        null,
+        "design:paramtypes",
+        [
+          "Service"
+        ]
+      ]
+    ],
+    "verdict": {
+      "differing": [
+        "evaluatedAtImport",
+        "metadata"
+      ],
+      "differingCount": 2,
+      "of": 2,
+      "verdict": "changed"
+    }
+  },
+  "stripFields": [
+    "Rules it hits",
+    "Why it converts cleanly",
+    "Why it needs a choice",
+    "Why it's a trap",
+    "What the project did",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses",
+    "Gaming moves"
+  ],
+  "subjects": {
+    "a": {
+      "dir": "a-next-flush-telemetry",
+      "file": "telemetry/flush-telemetry.ts",
+      "handoff": {
+        "oxlint": {
+          "imports": "import { traceGlobals } from \"../trace/shared\";",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "func-style": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+              "line": 61,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "typescript/consistent-type-imports"
+            }
+          ]
+        },
+        "eslint": {
+          "imports": "import { traceGlobals } from \"../trace/shared\";",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "func-style": 1,
+            "@typescript-eslint/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Enforce consistent usage of type imports",
+              "line": 61,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "@typescript-eslint/consistent-type-imports"
+            }
+          ]
+        },
+        "biome": {
+          "imports": "import { traceGlobals } from \"../trace/shared\";",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "reported": {},
+          "topic": []
+        }
+      },
+      "lint": {
+        "biome": {
+          "byRule": {
+            "style/useConst": 1
+          },
+          "topic": []
+        },
+        "eslint": {
+          "byRule": {
+            "func-style": 1,
+            "prefer-const": 1,
+            "@typescript-eslint/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Enforce consistent usage of type imports",
+              "line": 61,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "@typescript-eslint/consistent-type-imports"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "func-style": 1,
+            "prefer-const": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+              "line": 61,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "typescript/consistent-type-imports"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "repo": {
+          "compile": [],
+          "evaluated": [
+            "trace/shared.js",
+            "telemetry/flush-telemetry.js"
+          ]
+        },
+        "kept": {
+          "compile": [],
+          "evaluated": [
+            "trace/shared.js",
+            "telemetry/flush-telemetry.js"
+          ]
+        },
+        "elided": {
+          "compile": [],
+          "evaluated": [
+            "trace/shared.js",
+            "telemetry/flush-telemetry.js"
+          ]
+        }
+      },
+      "origin": {
+        "path": "packages/next/src/telemetry/flush-telemetry.ts",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/telemetry/flush-telemetry.ts#L1-L10",
+        "repo": "next.js",
+        "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
+      },
+      "tsc": [],
+      "variants": {
+        "a01 import type, named": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";\nimport type { Telemetry } from \"./storage\";",
+            "oracle": {
+              "repo": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 23,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [],
+          "text": "import { traceGlobals } from '../trace/shared'\nimport type { Telemetry } from './storage'"
+        },
+        "a02 import type, namespace": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";\nimport type * as Storage from \"./storage\";",
+            "oracle": {
+              "repo": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 23,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [],
+          "text": "import { traceGlobals } from '../trace/shared'\nimport type * as Storage from './storage'"
+        },
+        "a03 value import": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";\nimport type { Telemetry } from \"./storage\";",
+            "oracle": {
+              "repo": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 23,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {
+              "style/useImportType": 1
+            },
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[nothing stored].evaluated",
+                "scenarios[telemetry stored].evaluated",
+                "scenarios[stored then removed].evaluated",
+                "scenarios[a falsy value stored].evaluated"
+              ],
+              "differingCount": 5,
+              "of": 23,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[nothing stored].evaluated",
+                "scenarios[telemetry stored].evaluated",
+                "scenarios[stored then removed].evaluated",
+                "scenarios[a falsy value stored].evaluated"
+              ],
+              "differingCount": 5,
+              "of": 23,
+              "verdict": "changed"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [
+              "style/useImportType"
+            ],
+            "eslint": [
+              "@typescript-eslint/consistent-type-imports"
+            ],
+            "oxlint": [
+              "typescript/consistent-type-imports"
+            ]
+          },
+          "tsc": []
+        },
+        "a04 local interface": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";",
+            "oracle": {
+              "repo": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 23,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        },
+        "a05 suppression comments": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";",
+            "oracle": {
+              "repo": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 23,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        },
+        "a06 import x = require()": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";\nimport Storage = require(\"./storage\");",
+            "oracle": {
+              "repo": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 23,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 23,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [
+            "TS1202"
+          ]
+        },
+        "a07 import type plus a value import": {
+          "afterOneFixPass": {
+            "imports": "import { traceGlobals } from \"../trace/shared\";\nimport \"./storage\";\nimport type { Telemetry } from \"./storage\";",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "scenarios[nothing stored].evaluated",
+                  "scenarios[telemetry stored].evaluated",
+                  "scenarios[stored then removed].evaluated",
+                  "scenarios[a falsy value stored].evaluated"
+                ],
+                "differingCount": 5,
+                "of": 23,
+                "verdict": "changed"
+              },
+              "kept": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "scenarios[nothing stored].evaluated",
+                  "scenarios[telemetry stored].evaluated",
+                  "scenarios[stored then removed].evaluated",
+                  "scenarios[a falsy value stored].evaluated"
+                ],
+                "differingCount": 5,
+                "of": 23,
+                "verdict": "changed"
+              },
+              "elided": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "scenarios[nothing stored].evaluated",
+                  "scenarios[telemetry stored].evaluated",
+                  "scenarios[stored then removed].evaluated",
+                  "scenarios[a falsy value stored].evaluated"
+                ],
+                "differingCount": 5,
+                "of": 23,
+                "verdict": "changed"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[nothing stored].evaluated",
+                "scenarios[telemetry stored].evaluated",
+                "scenarios[stored then removed].evaluated",
+                "scenarios[a falsy value stored].evaluated"
+              ],
+              "differingCount": 5,
+              "of": 23,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[nothing stored].evaluated",
+                "scenarios[telemetry stored].evaluated",
+                "scenarios[stored then removed].evaluated",
+                "scenarios[a falsy value stored].evaluated"
+              ],
+              "differingCount": 5,
+              "of": 23,
+              "verdict": "changed"
+            },
+            "elided": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[nothing stored].evaluated",
+                "scenarios[telemetry stored].evaluated",
+                "scenarios[stored then removed].evaluated",
+                "scenarios[a falsy value stored].evaluated"
+              ],
+              "differingCount": 5,
+              "of": 23,
+              "verdict": "changed"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        }
+      },
+      "verbatim": {
+        "copies": [
+          {
+            "file": "trace/shared.ts",
+            "lines": 19,
+            "ok": true
+          }
+        ],
+        "subject": {
+          "lines": 10,
+          "ok": true
+        }
+      }
+    },
+    "b": {
+      "dir": "b-trpc-client-error",
+      "file": "TRPCClientError.ts",
+      "handoff": {
+        "oxlint": {
+          "imports": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "import/no-duplicates": 1,
+            "no-duplicate-imports": 1,
+            "unicorn/filename-case": 1,
+            "func-style": 3,
+            "no-use-before-define": 1,
+            "typescript/no-explicit-any": 3
+          },
+          "topic": [
+            {
+              "help": "Merge these imports into a single import statement",
+              "line": 68,
+              "message": "Modules should not be imported multiple times in the same file",
+              "rule": "import/no-duplicates"
+            },
+            {
+              "help": "Merge the duplicated import into a single import statement",
+              "line": 70,
+              "message": "'@trpc/server/unstable-core-do-not-import' import is duplicated",
+              "rule": "no-duplicate-imports"
+            }
+          ]
+        },
+        "eslint": {
+          "imports": "import { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "github/filenames-match-regex": 1,
+            "func-style": 3,
+            "@typescript-eslint/no-use-before-define": 1,
+            "@typescript-eslint/no-explicit-any": 3,
+            "unicorn/custom-error-definition": 1,
+            "unicorn/consistent-class-member-order": 1
+          },
+          "topic": []
+        },
+        "biome": {
+          "imports": "import type {\n  InferrableClientTypes,\n  inferClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport {\n  type DefaultErrorShape,\n  isObject,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "correctness/noUndeclaredDependencies": 2,
+            "suspicious/noExplicitAny": 3,
+            "complexity/useLiteralKeys": 7,
+            "style/useConsistentMemberAccessibility": 5,
+            "style/useFilenamingConvention": 1,
+            "suspicious/noShadow": 1
+          },
+          "topic": []
+        }
+      },
+      "lint": {
+        "biome": {
+          "byRule": {
+            "correctness/noUndeclaredDependencies": 2,
+            "suspicious/noExplicitAny": 3,
+            "complexity/useLiteralKeys": 7,
+            "suspicious/noTsIgnore": 2,
+            "style/useConsistentMemberAccessibility": 5,
+            "style/useFilenamingConvention": 1,
+            "suspicious/noShadow": 1
+          },
+          "topic": []
+        },
+        "eslint": {
+          "byRule": {
+            "github/filenames-match-regex": 1,
+            "import-x/no-duplicates": 2,
+            "import-x/order": 1,
+            "import-x/consistent-type-specifier-style": 1,
+            "func-style": 3,
+            "@typescript-eslint/no-use-before-define": 1,
+            "@typescript-eslint/no-explicit-any": 3,
+            "unicorn/custom-error-definition": 1,
+            "unicorn/consistent-class-member-order": 1
+          },
+          "topic": [
+            {
+              "help": "Forbid repeated import of the same module in multiple places.",
+              "line": 68,
+              "message": "'@trpc/server/unstable-core-do-not-import' imported multiple times.",
+              "rule": "import-x/no-duplicates"
+            },
+            {
+              "help": "Enforce or ban the use of inline type-only markers for named imports.",
+              "line": 71,
+              "message": "Prefer using a top-level type-only import instead of inline type specifiers.",
+              "rule": "import-x/consistent-type-specifier-style"
+            },
+            {
+              "help": "Forbid repeated import of the same module in multiple places.",
+              "line": 72,
+              "message": "'@trpc/server/unstable-core-do-not-import' imported multiple times.",
+              "rule": "import-x/no-duplicates"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "import/no-duplicates": 1,
+            "typescript/prefer-ts-expect-error": 2,
+            "unicorn/filename-case": 1,
+            "import/consistent-type-specifier-style": 1,
+            "func-style": 3,
+            "no-use-before-define": 1,
+            "typescript/no-explicit-any": 3
+          },
+          "topic": [
+            {
+              "help": "Merge these imports into a single import statement",
+              "line": 68,
+              "message": "Modules should not be imported multiple times in the same file",
+              "rule": "import/no-duplicates"
+            },
+            {
+              "help": "Replace inline type specifiers with a top‐level import type statement.",
+              "line": 71,
+              "message": "Prefer using a top-level type-only import instead of inline type specifiers.",
+              "rule": "import/consistent-type-specifier-style"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "repo": {
+          "compile": [],
+          "evaluated": [
+            "stubs/unstable-core-do-not-import.js",
+            "TRPCClientError.js"
+          ]
+        },
+        "kept": {
+          "compile": [],
+          "evaluated": [
+            "stubs/unstable-core-do-not-import.js",
+            "TRPCClientError.js"
+          ]
+        },
+        "elided": {
+          "compile": [],
+          "evaluated": [
+            "stubs/unstable-core-do-not-import.js",
+            "TRPCClientError.js"
+          ]
+        }
+      },
+      "origin": {
+        "path": "packages/client/src/TRPCClientError.ts",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/TRPCClientError.ts#L1-L118",
+        "repo": "trpc",
+        "sha": "796700d8653b3832409fff997e6f5789519b9ea7"
+      },
+      "tsc": [],
+      "variants": {
+        "b01 one value import, one import type": {
+          "afterOneFixPass": {
+            "imports": "import type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 117,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/no-duplicates": -2,
+              "import-x/consistent-type-specifier-style": -1
+            },
+            "oxlint": {
+              "import/no-duplicates": -1,
+              "import/consistent-type-specifier-style": -1
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [],
+          "text": "import type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from '@trpc/server/unstable-core-do-not-import';\nimport { isObject } from '@trpc/server/unstable-core-do-not-import';"
+        },
+        "b02 the same, value import first": {
+          "afterOneFixPass": {
+            "imports": "import { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 117,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/no-duplicates": -2,
+              "import-x/order": -1,
+              "import-x/consistent-type-specifier-style": -1
+            },
+            "oxlint": {
+              "import/no-duplicates": -1,
+              "import/consistent-type-specifier-style": -1
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [],
+          "text": "import { isObject } from '@trpc/server/unstable-core-do-not-import';\nimport type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from '@trpc/server/unstable-core-do-not-import';"
+        },
+        "b03 everything in import type": {
+          "afterOneFixPass": {
+            "imports": "import type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n  isObject,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "scenarios[error envelope].result.isClientError",
+                  "scenarios[error envelope].result.instanceofError",
+                  "scenarios[error envelope].result.name",
+                  "scenarios[error envelope].result.message",
+                  "scenarios[error envelope].result.shape",
+                  "scenarios[error envelope].result.data",
+                  "scenarios[error envelope].result.meta",
+                  "scenarios[error envelope].result.cause",
+                  "scenarios[error envelope].threw",
+                  "scenarios[error envelope with meta].result.isClientError",
+                  "scenarios[error envelope with meta].result.instanceofError"
+                ],
+                "differingCount": 96,
+                "of": 117,
+                "verdict": "changed"
+              },
+              "kept": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "scenarios[error envelope].result.isClientError",
+                  "scenarios[error envelope].result.instanceofError",
+                  "scenarios[error envelope].result.name",
+                  "scenarios[error envelope].result.message",
+                  "scenarios[error envelope].result.shape",
+                  "scenarios[error envelope].result.data",
+                  "scenarios[error envelope].result.meta",
+                  "scenarios[error envelope].result.cause",
+                  "scenarios[error envelope].threw",
+                  "scenarios[error envelope with meta].result.isClientError",
+                  "scenarios[error envelope with meta].result.instanceofError"
+                ],
+                "differingCount": 96,
+                "of": 117,
+                "verdict": "changed"
+              },
+              "elided": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "scenarios[error envelope].result.isClientError",
+                  "scenarios[error envelope].result.instanceofError",
+                  "scenarios[error envelope].result.name",
+                  "scenarios[error envelope].result.message",
+                  "scenarios[error envelope].result.shape",
+                  "scenarios[error envelope].result.data",
+                  "scenarios[error envelope].result.meta",
+                  "scenarios[error envelope].result.cause",
+                  "scenarios[error envelope].threw",
+                  "scenarios[error envelope with meta].result.isClientError",
+                  "scenarios[error envelope with meta].result.instanceofError"
+                ],
+                "differingCount": 96,
+                "of": 117,
+                "verdict": "changed"
+              }
+            },
+            "topic": [
+              "no-unused-vars"
+            ]
+          },
+          "changed": {
+            "biome": {
+              "correctness/noUndeclaredDependencies": -1,
+              "correctness/noUnusedImports": 1,
+              "correctness/noUndeclaredVariables": 3
+            },
+            "eslint": {
+              "import-x/no-duplicates": -2,
+              "import-x/order": -1,
+              "import-x/consistent-type-specifier-style": -1
+            },
+            "oxlint": {
+              "no-unused-vars": 1,
+              "import/no-duplicates": -1,
+              "import/consistent-type-specifier-style": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[error envelope].result.isClientError",
+                "scenarios[error envelope].result.instanceofError",
+                "scenarios[error envelope].result.name",
+                "scenarios[error envelope].result.message",
+                "scenarios[error envelope].result.shape",
+                "scenarios[error envelope].result.data",
+                "scenarios[error envelope].result.meta",
+                "scenarios[error envelope].result.cause",
+                "scenarios[error envelope].threw",
+                "scenarios[error envelope with meta].result.isClientError",
+                "scenarios[error envelope with meta].result.instanceofError"
+              ],
+              "differingCount": 96,
+              "of": 117,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[error envelope].result.isClientError",
+                "scenarios[error envelope].result.instanceofError",
+                "scenarios[error envelope].result.name",
+                "scenarios[error envelope].result.message",
+                "scenarios[error envelope].result.shape",
+                "scenarios[error envelope].result.data",
+                "scenarios[error envelope].result.meta",
+                "scenarios[error envelope].result.cause",
+                "scenarios[error envelope].threw",
+                "scenarios[error envelope with meta].result.isClientError",
+                "scenarios[error envelope with meta].result.instanceofError"
+              ],
+              "differingCount": 96,
+              "of": 117,
+              "verdict": "changed"
+            },
+            "elided": {
+              "differing": [
+                "evaluatedAtImport",
+                "scenarios[error envelope].result.isClientError",
+                "scenarios[error envelope].result.instanceofError",
+                "scenarios[error envelope].result.name",
+                "scenarios[error envelope].result.message",
+                "scenarios[error envelope].result.shape",
+                "scenarios[error envelope].result.data",
+                "scenarios[error envelope].result.meta",
+                "scenarios[error envelope].result.cause",
+                "scenarios[error envelope].threw",
+                "scenarios[error envelope with meta].result.isClientError",
+                "scenarios[error envelope with meta].result.instanceofError"
+              ],
+              "differingCount": 96,
+              "of": 117,
+              "verdict": "changed"
+            }
+          },
+          "topic": {
+            "biome": [
+              "correctness/noUnusedImports"
+            ],
+            "eslint": [],
+            "oxlint": [
+              "no-unused-vars"
+            ]
+          },
+          "tsc": [
+            "TS1361",
+            "TS1361",
+            "TS1361"
+          ]
+        },
+        "b04 one import, inline type": {
+          "afterOneFixPass": {
+            "imports": "import { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 117,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {
+              "correctness/noUndeclaredDependencies": -1
+            },
+            "eslint": {
+              "import-x/consistent-type-specifier-style": 4,
+              "import-x/no-duplicates": -2,
+              "import-x/order": -1
+            },
+            "oxlint": {
+              "import/consistent-type-specifier-style": 4,
+              "import/no-duplicates": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [
+              "import-x/consistent-type-specifier-style",
+              "import-x/consistent-type-specifier-style",
+              "import-x/consistent-type-specifier-style",
+              "import-x/consistent-type-specifier-style",
+              "import-x/consistent-type-specifier-style"
+            ],
+            "oxlint": [
+              "import/consistent-type-specifier-style",
+              "import/consistent-type-specifier-style",
+              "import/consistent-type-specifier-style",
+              "import/consistent-type-specifier-style",
+              "import/consistent-type-specifier-style"
+            ]
+          },
+          "tsc": []
+        },
+        "b05 three declarations": {
+          "afterOneFixPass": {
+            "imports": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 117,
+                "verdict": "same"
+              }
+            },
+            "topic": [
+              "import/no-duplicates",
+              "no-duplicate-imports"
+            ]
+          },
+          "changed": {
+            "biome": {
+              "correctness/noUndeclaredDependencies": 1
+            },
+            "eslint": {
+              "no-duplicate-imports": 1,
+              "import-x/consistent-type-specifier-style": -1
+            },
+            "oxlint": {
+              "no-duplicate-imports": 1,
+              "import/consistent-type-specifier-style": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [
+              "import-x/no-duplicates",
+              "no-duplicate-imports",
+              "import-x/no-duplicates"
+            ],
+            "oxlint": [
+              "import/no-duplicates",
+              "no-duplicate-imports"
+            ]
+          },
+          "tsc": []
+        },
+        "b06 suppression comments": {
+          "afterOneFixPass": {
+            "imports": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 117,
+                "verdict": "same"
+              }
+            },
+            "topic": [
+              "import/no-duplicates",
+              "no-duplicate-imports"
+            ]
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [
+              "import-x/no-duplicates",
+              "import-x/consistent-type-specifier-style",
+              "import-x/no-duplicates"
+            ],
+            "oxlint": [
+              "import/no-duplicates",
+              "import/consistent-type-specifier-style"
+            ]
+          },
+          "tsc": []
+        },
+        "b07 import x = require()": {
+          "afterOneFixPass": {
+            "imports": "import type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport core = require(\"@trpc/server/unstable-core-do-not-import\");",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "exports",
+                  "metadata",
+                  "scenarios[error envelope].name",
+                  "scenarios[error envelope].result.isClientError",
+                  "scenarios[error envelope].result.instanceofError",
+                  "scenarios[error envelope].result.name",
+                  "scenarios[error envelope].result.message",
+                  "scenarios[error envelope].result.shape",
+                  "scenarios[error envelope].result.data",
+                  "scenarios[error envelope].result.meta",
+                  "scenarios[error envelope].result.cause"
+                ],
+                "of": 117,
+                "verdict": "broken"
+              },
+              "kept": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "exports",
+                  "metadata",
+                  "scenarios[error envelope].name",
+                  "scenarios[error envelope].result.isClientError",
+                  "scenarios[error envelope].result.instanceofError",
+                  "scenarios[error envelope].result.name",
+                  "scenarios[error envelope].result.message",
+                  "scenarios[error envelope].result.shape",
+                  "scenarios[error envelope].result.data",
+                  "scenarios[error envelope].result.meta",
+                  "scenarios[error envelope].result.cause"
+                ],
+                "of": 117,
+                "verdict": "broken"
+              },
+              "elided": {
+                "differing": [
+                  "evaluatedAtImport",
+                  "exports",
+                  "metadata",
+                  "scenarios[error envelope].name",
+                  "scenarios[error envelope].result.isClientError",
+                  "scenarios[error envelope].result.instanceofError",
+                  "scenarios[error envelope].result.name",
+                  "scenarios[error envelope].result.message",
+                  "scenarios[error envelope].result.shape",
+                  "scenarios[error envelope].result.data",
+                  "scenarios[error envelope].result.meta",
+                  "scenarios[error envelope].result.cause"
+                ],
+                "of": 117,
+                "verdict": "broken"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/newline-after-import": 1,
+              "import-x/no-duplicates": -2,
+              "import-x/consistent-type-specifier-style": -1
+            },
+            "oxlint": {
+              "import/newline-after-import": 1,
+              "import/no-duplicates": -1,
+              "import/consistent-type-specifier-style": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "evaluatedAtImport",
+                "exports",
+                "metadata",
+                "scenarios[error envelope].name",
+                "scenarios[error envelope].result.isClientError",
+                "scenarios[error envelope].result.instanceofError",
+                "scenarios[error envelope].result.name",
+                "scenarios[error envelope].result.message",
+                "scenarios[error envelope].result.shape",
+                "scenarios[error envelope].result.data",
+                "scenarios[error envelope].result.meta",
+                "scenarios[error envelope].result.cause"
+              ],
+              "of": 117,
+              "verdict": "broken"
+            },
+            "kept": {
+              "differing": [
+                "evaluatedAtImport",
+                "exports",
+                "metadata",
+                "scenarios[error envelope].name",
+                "scenarios[error envelope].result.isClientError",
+                "scenarios[error envelope].result.instanceofError",
+                "scenarios[error envelope].result.name",
+                "scenarios[error envelope].result.message",
+                "scenarios[error envelope].result.shape",
+                "scenarios[error envelope].result.data",
+                "scenarios[error envelope].result.meta",
+                "scenarios[error envelope].result.cause"
+              ],
+              "of": 117,
+              "verdict": "broken"
+            },
+            "elided": {
+              "differing": [
+                "evaluatedAtImport",
+                "exports",
+                "metadata",
+                "scenarios[error envelope].name",
+                "scenarios[error envelope].result.isClientError",
+                "scenarios[error envelope].result.instanceofError",
+                "scenarios[error envelope].result.name",
+                "scenarios[error envelope].result.message",
+                "scenarios[error envelope].result.shape",
+                "scenarios[error envelope].result.data",
+                "scenarios[error envelope].result.meta",
+                "scenarios[error envelope].result.cause"
+              ],
+              "of": 117,
+              "verdict": "broken"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [
+            "TS1202"
+          ]
+        },
+        "b08 a local copy of the type": {
+          "afterOneFixPass": {
+            "imports": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";",
+            "oracle": {
+              "repo": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 117,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 117,
+                "verdict": "same"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/no-duplicates": -2,
+              "import-x/consistent-type-specifier-style": -1
+            },
+            "oxlint": {
+              "import/no-duplicates": -1,
+              "import/consistent-type-specifier-style": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        }
+      },
+      "verbatim": {
+        "copies": [],
+        "subject": {
+          "lines": 118,
+          "ok": true
+        }
+      }
+    },
+    "c": {
+      "dir": "c-next-normalize-locale-path",
+      "file": "client/normalize-locale-path.ts",
+      "handoff": {
+        "oxlint": {
+          "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "node/global-require": 1,
+            "unicorn/prefer-module": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Move require() to top-level module scope",
+              "line": 67,
+              "message": "Unexpected require().",
+              "rule": "node/global-require"
+            },
+            {
+              "help": "Prefer ES modules over CommonJS globals.",
+              "line": 67,
+              "message": "Do not use \"require\".",
+              "rule": "unicorn/prefer-module"
+            },
+            {
+              "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+              "line": 67,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "typescript/consistent-type-imports"
+            }
+          ]
+        },
+        "eslint": {
+          "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "n/global-require": 1,
+            "unicorn/prefer-module": 1,
+            "n/no-missing-require": 1,
+            "@typescript-eslint/consistent-type-imports": 1,
+            "sonarjs/no-undefined-assignment": 1
+          },
+          "topic": [
+            {
+              "help": "require `require()` calls to be placed at top-level module scope",
+              "line": 67,
+              "message": "Unexpected require().",
+              "rule": "n/global-require"
+            },
+            {
+              "help": "Prefer JavaScript modules (ESM) over CommonJS.",
+              "line": 67,
+              "message": "Do not use \"require\".",
+              "rule": "unicorn/prefer-module"
+            },
+            {
+              "help": "Enforce consistent usage of type imports",
+              "line": 67,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "@typescript-eslint/consistent-type-imports"
+            }
+          ]
+        },
+        "biome": {
+          "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "reported": {},
+          "topic": []
+        }
+      },
+      "lint": {
+        "biome": {
+          "byRule": {},
+          "topic": []
+        },
+        "eslint": {
+          "byRule": {
+            "unicorn/prefer-ternary": 1,
+            "n/global-require": 1,
+            "unicorn/prefer-module": 1,
+            "n/no-missing-require": 1,
+            "@typescript-eslint/consistent-type-imports": 1,
+            "sonarjs/no-undefined-assignment": 1
+          },
+          "topic": [
+            {
+              "help": "require `require()` calls to be placed at top-level module scope",
+              "line": 67,
+              "message": "Unexpected require().",
+              "rule": "n/global-require"
+            },
+            {
+              "help": "Prefer JavaScript modules (ESM) over CommonJS.",
+              "line": 67,
+              "message": "Do not use \"require\".",
+              "rule": "unicorn/prefer-module"
+            },
+            {
+              "help": "Enforce consistent usage of type imports",
+              "line": 67,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "@typescript-eslint/consistent-type-imports"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "node/global-require": 1,
+            "unicorn/prefer-module": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Move require() to top-level module scope",
+              "line": 67,
+              "message": "Unexpected require().",
+              "rule": "node/global-require"
+            },
+            {
+              "help": "Prefer ES modules over CommonJS globals.",
+              "line": 67,
+              "message": "Do not use \"require\".",
+              "rule": "unicorn/prefer-module"
+            },
+            {
+              "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+              "line": 67,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "typescript/consistent-type-imports"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "repo": {
+          "compile": [],
+          "evaluated": [
+            "client/normalize-locale-path.js"
+          ]
+        },
+        "kept": {
+          "compile": [],
+          "evaluated": [
+            "client/normalize-locale-path.js"
+          ]
+        },
+        "elided": {
+          "compile": [],
+          "evaluated": [
+            "client/normalize-locale-path.js"
+          ]
+        }
+      },
+      "origin": {
+        "path": "packages/next/src/client/normalize-locale-path.ts",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/normalize-locale-path.ts#L1-L10",
+        "repo": "next.js",
+        "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
+      },
+      "tsc": [],
+      "variants": {
+        "c01 cast to the Fn type": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 64,
+                "verdict": "same"
+              }
+            },
+            "topic": [
+              "node/global-require",
+              "unicorn/prefer-module"
+            ]
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [
+              "n/global-require",
+              "unicorn/prefer-module"
+            ],
+            "oxlint": [
+              "node/global-require",
+              "unicorn/prefer-module"
+            ]
+          },
+          "tsc": [],
+          "text": "import type { normalizeLocalePath as Fn } from '../shared/lib/i18n/normalize-locale-path'"
+        },
+        "c02 import type namespace": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\nimport type * as I18n from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 64,
+                "verdict": "same"
+              }
+            },
+            "topic": [
+              "node/global-require",
+              "unicorn/prefer-module"
+            ]
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [
+              "n/global-require",
+              "unicorn/prefer-module"
+            ],
+            "oxlint": [
+              "node/global-require",
+              "unicorn/prefer-module"
+            ]
+          },
+          "tsc": [],
+          "text": "import type { normalizeLocalePath as Fn } from '../shared/lib/i18n/normalize-locale-path'\nimport type * as I18n from '../shared/lib/i18n/normalize-locale-path'"
+        },
+        "c03 static named import": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\nimport { normalizeLocalePath as normalize } from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "kept": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "elided": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/order": 1,
+              "n/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "n/no-missing-require": -1,
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "node/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "elided": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        },
+        "c04 static namespace import": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\nimport * as i18n from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "kept": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "elided": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/order": 1,
+              "n/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "n/no-missing-require": -1,
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "node/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "elided": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        },
+        "c05 import type namespace called as a value": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\nimport type * as I18n from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].result",
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].result",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "on.scenarios[/ [\"en\"]].result",
+                  "on.scenarios[/ [\"en\"]].threw",
+                  "on.scenarios[/ [\"en\"]].evaluated",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].result",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].evaluated"
+                ],
+                "differingCount": 21,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "kept": {
+                "differing": [
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].result",
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].result",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "on.scenarios[/ [\"en\"]].result",
+                  "on.scenarios[/ [\"en\"]].threw",
+                  "on.scenarios[/ [\"en\"]].evaluated",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].result",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].evaluated"
+                ],
+                "differingCount": 21,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "elided": {
+                "differing": [
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].result",
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].result",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "on.scenarios[/ [\"en\"]].result",
+                  "on.scenarios[/ [\"en\"]].threw",
+                  "on.scenarios[/ [\"en\"]].evaluated",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].result",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].threw",
+                  "on.scenarios[/de/x [\"en\",\"fr\"]].evaluated"
+                ],
+                "differingCount": 21,
+                "of": 64,
+                "verdict": "changed"
+              }
+            },
+            "topic": [
+              "no-unused-vars"
+            ]
+          },
+          "changed": {
+            "biome": {
+              "correctness/noUnusedImports": 1,
+              "correctness/noUndeclaredVariables": 1
+            },
+            "eslint": {
+              "n/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "n/no-missing-require": -1,
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "no-unused-vars": 1,
+              "node/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "on.scenarios[/en/about [\"en\",\"fr\"]].result",
+                "on.scenarios[/en/about [\"en\",\"fr\"]].threw",
+                "on.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].result",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].threw",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "on.scenarios[/ [\"en\"]].result",
+                "on.scenarios[/ [\"en\"]].threw",
+                "on.scenarios[/ [\"en\"]].evaluated",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].result",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].threw",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].evaluated"
+              ],
+              "differingCount": 21,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "on.scenarios[/en/about [\"en\",\"fr\"]].result",
+                "on.scenarios[/en/about [\"en\",\"fr\"]].threw",
+                "on.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].result",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].threw",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "on.scenarios[/ [\"en\"]].result",
+                "on.scenarios[/ [\"en\"]].threw",
+                "on.scenarios[/ [\"en\"]].evaluated",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].result",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].threw",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].evaluated"
+              ],
+              "differingCount": 21,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "elided": {
+              "differing": [
+                "on.scenarios[/en/about [\"en\",\"fr\"]].result",
+                "on.scenarios[/en/about [\"en\",\"fr\"]].threw",
+                "on.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].result",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].threw",
+                "on.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "on.scenarios[/ [\"en\"]].result",
+                "on.scenarios[/ [\"en\"]].threw",
+                "on.scenarios[/ [\"en\"]].evaluated",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].result",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].threw",
+                "on.scenarios[/de/x [\"en\",\"fr\"]].evaluated"
+              ],
+              "differingCount": 21,
+              "of": 64,
+              "verdict": "changed"
+            }
+          },
+          "topic": {
+            "biome": [
+              "correctness/noUnusedImports"
+            ],
+            "eslint": [],
+            "oxlint": [
+              "no-unused-vars"
+            ]
+          },
+          "tsc": [
+            "TS1361"
+          ]
+        },
+        "c06 suppression comments": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 64,
+                "verdict": "same"
+              }
+            },
+            "topic": [
+              "node/global-require",
+              "unicorn/prefer-module",
+              "typescript/consistent-type-imports"
+            ]
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "n/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "node/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": []
+        },
+        "c07 import x = require()": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";\nimport i18n = require(\"../shared/lib/i18n/normalize-locale-path\");",
+            "oracle": {
+              "repo": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "kept": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              },
+              "elided": {
+                "differing": [
+                  "off.evaluatedAtImport",
+                  "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/ [\"en\"]].evaluated",
+                  "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                  "off.scenarios[/en [\"en\"]].evaluated",
+                  "off.scenarios[/en/about undefined].evaluated",
+                  "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                  "on.evaluatedAtImport"
+                ],
+                "differingCount": 9,
+                "of": 64,
+                "verdict": "changed"
+              }
+            },
+            "topic": []
+          },
+          "changed": {
+            "biome": {},
+            "eslint": {
+              "import-x/order": 1,
+              "n/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "n/no-missing-require": -1,
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "node/global-require": -1,
+              "unicorn/prefer-module": -1,
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "kept": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            },
+            "elided": {
+              "differing": [
+                "off.evaluatedAtImport",
+                "off.scenarios[/en/about [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/FR/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/ [\"en\"]].evaluated",
+                "off.scenarios[/de/x [\"en\",\"fr\"]].evaluated",
+                "off.scenarios[/en [\"en\"]].evaluated",
+                "off.scenarios[/en/about undefined].evaluated",
+                "off.scenarios[/en-US/a [\"en-US\"]].evaluated",
+                "on.evaluatedAtImport"
+              ],
+              "differingCount": 9,
+              "of": 64,
+              "verdict": "changed"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": []
+          },
+          "tsc": [
+            "TS1202"
+          ]
+        },
+        "c08 a local type for the module": {
+          "afterOneFixPass": {
+            "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+            "oracle": {
+              "repo": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "kept": {
+                "of": 64,
+                "verdict": "same"
+              },
+              "elided": {
+                "of": 64,
+                "verdict": "same"
+              }
+            },
+            "topic": [
+              "node/global-require",
+              "unicorn/prefer-module"
+            ]
+          },
+          "changed": {
+            "biome": {
+              "style/useConsistentTypeDefinitions": 1
+            },
+            "eslint": {
+              "unicorn/prefer-smaller-scope": 1,
+              "@typescript-eslint/consistent-type-definitions": 1,
+              "@typescript-eslint/consistent-type-imports": -1
+            },
+            "oxlint": {
+              "typescript/consistent-type-definitions": 1,
+              "typescript/consistent-type-imports": -1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "topic": {
+            "biome": [],
+            "eslint": [
+              "n/global-require",
+              "unicorn/prefer-module"
+            ],
+            "oxlint": [
+              "node/global-require",
+              "unicorn/prefer-module"
+            ]
+          },
+          "tsc": []
+        }
+      },
+      "verbatim": {
+        "copies": [
+          {
+            "file": "shared/lib/i18n/normalize-locale-path.ts",
+            "lines": 62,
+            "ok": true
+          }
+        ],
+        "subject": {
+          "lines": 10,
+          "ok": true
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10",
+    "esbuild (Bun store)": "0.28.1",
+    "rolldown (Bun store; its Oxc transformer)": "1.2.13",
+    "sucrase (Bun store)": "3.35.1",
+    "bun": "1.4.4",
+    "node type stripping": "strip"
+  }
+}

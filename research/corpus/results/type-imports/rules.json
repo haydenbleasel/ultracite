@@ -1,0 +1,891 @@
+{
+  "generated": "2026-11-18T06:33:53.869Z",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10",
+    "esbuild (Bun store)": "0.28.1",
+    "rolldown (Bun store; its Oxc transformer)": "1.2.13",
+    "sucrase (Bun store)": "3.35.1",
+    "bun": "1.4.4",
+    "node type stripping": "strip"
+  },
+  "oxlint": {
+    "angular": {
+      "typescript/consistent-type-imports": "off"
+    },
+    "core": {
+      "typescript/consistent-type-imports": "error",
+      "typescript/consistent-type-exports": "error",
+      "typescript/no-import-type-side-effects": "error",
+      "import/consistent-type-specifier-style": [
+        "error",
+        "prefer-top-level"
+      ],
+      "import/no-duplicates": "error",
+      "no-duplicate-imports": [
+        "error",
+        {
+          "allowSeparateTypeImports": true
+        }
+      ],
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_",
+          "destructuredArrayIgnorePattern": "^_",
+          "ignoreRestSiblings": true,
+          "ignoreUsingDeclarations": true,
+          "varsIgnorePattern": "^_"
+        }
+      ],
+      "import/no-unassigned-import": "off",
+      "unicorn/prefer-export-from": "off"
+    },
+    "nestjs": {
+      "typescript/consistent-type-imports": "off"
+    }
+  },
+  "oxlintComments": {
+    "angular: typescript/consistent-type-imports": "The autofix turns the import of an injected class into `import type`. Constructor injection needs the class at runtime (`emitDecoratorMetadata` records it as the parameter's type), so the fix compiles and then fails to resolve the dependency.",
+    "core: import/consistent-type-specifier-style": "── import ─────────────────────────────────────────────────────────",
+    "core: no-unused-vars": "One convention for \"unused on purpose\" in every linter: a leading underscore, for parameters, variables, caught errors and destructured array elements. A property left out through a rest sibling (`const { secret, ...rest } = obj`) and a `using` declaration held only for its disposal aren't unused either.",
+    "core: unicorn/prefer-export-from": "Off until oxlint's fix is corrected: its suggestion, which `--fix-suggestions` and `--fix-dangerously` apply, rewrites `import { a } from \"./x\"; import { b } from \"./y\"; export { a, b };` to `export { a } from \"./x\";` and drops the export of `b` (https://github.com/oxc-project/oxc/issues/29318). The ESLint preset keeps the rule, whose fix is correct.",
+    "nestjs: typescript/consistent-type-imports": "The autofix turns the import of an injected class into `import type`. Constructor injection needs the class at runtime (`emitDecoratorMetadata` records it as the parameter's type), so the fix compiles and then fails to resolve the dependency."
+  },
+  "oxlintRules": [
+    {
+      "category": "style",
+      "default": false,
+      "fix": "pending",
+      "rule": "eslint/no-duplicate-imports",
+      "typeAware": false
+    },
+    {
+      "category": "correctness",
+      "default": true,
+      "fix": "conditional_dangerous_fix_or_suggestion",
+      "rule": "eslint/no-unused-vars",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "default": false,
+      "fix": "conditional_fix",
+      "rule": "import/consistent-type-specifier-style",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "default": false,
+      "fix": "conditional_fix",
+      "rule": "import/no-duplicates",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "default": false,
+      "fix": "none",
+      "rule": "import/no-unassigned-import",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "default": false,
+      "fix": "fixable_fix",
+      "rule": "typescript/consistent-type-exports",
+      "typeAware": true
+    },
+    {
+      "category": "style",
+      "default": false,
+      "fix": "conditional_fix",
+      "rule": "typescript/consistent-type-imports",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "default": false,
+      "fix": "fixable_fix",
+      "rule": "typescript/no-import-type-side-effects",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "default": false,
+      "fix": "fixable_suggestion",
+      "rule": "unicorn/prefer-export-from",
+      "typeAware": false
+    }
+  ],
+  "eslint": {
+    "core: src/example.ts": {
+      "parserOptions": {},
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          2
+        ],
+        "@typescript-eslint/consistent-type-exports": "(not configured)",
+        "@typescript-eslint/no-import-type-side-effects": [
+          2
+        ],
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "ignoreRestSiblings": true,
+            "ignoreUsingDeclarations": true,
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    },
+    "core: src/example.tsx": {
+      "parserOptions": {},
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          2
+        ],
+        "@typescript-eslint/consistent-type-exports": "(not configured)",
+        "@typescript-eslint/no-import-type-side-effects": [
+          2
+        ],
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "ignoreRestSiblings": true,
+            "ignoreUsingDeclarations": true,
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    },
+    "core: src/example.js": {
+      "parserOptions": {},
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": "(not configured)",
+        "@typescript-eslint/consistent-type-exports": "(not configured)",
+        "@typescript-eslint/no-import-type-side-effects": "(not configured)",
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": "(not configured)",
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    },
+    "core: src/example.test.ts": {
+      "parserOptions": {},
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          2
+        ],
+        "@typescript-eslint/consistent-type-exports": "(not configured)",
+        "@typescript-eslint/no-import-type-side-effects": [
+          2
+        ],
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "ignoreRestSiblings": true,
+            "ignoreUsingDeclarations": true,
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    },
+    "core+type-aware: src/example.ts": {
+      "parserOptions": {
+        "projectService": true
+      },
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          2
+        ],
+        "@typescript-eslint/consistent-type-exports": [
+          2
+        ],
+        "@typescript-eslint/no-import-type-side-effects": [
+          2
+        ],
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "ignoreRestSiblings": true,
+            "ignoreUsingDeclarations": true,
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    },
+    "core+nestjs: src/example.ts": {
+      "parserOptions": {},
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          0
+        ],
+        "@typescript-eslint/consistent-type-exports": "(not configured)",
+        "@typescript-eslint/no-import-type-side-effects": [
+          2
+        ],
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "ignoreRestSiblings": true,
+            "ignoreUsingDeclarations": true,
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    },
+    "core+angular: src/example.ts": {
+      "parserOptions": {},
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          0
+        ],
+        "@typescript-eslint/consistent-type-exports": "(not configured)",
+        "@typescript-eslint/no-import-type-side-effects": [
+          2
+        ],
+        "import-x/consistent-type-specifier-style": [
+          2,
+          "prefer-top-level"
+        ],
+        "import-x/no-duplicates": [
+          2
+        ],
+        "no-duplicate-imports": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_",
+            "destructuredArrayIgnorePattern": "^_",
+            "ignoreRestSiblings": true,
+            "ignoreUsingDeclarations": true,
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "unused-imports/no-unused-imports": [
+          2
+        ],
+        "import-x/no-unassigned-import": [
+          0
+        ]
+      },
+      "settings": {
+        "import-x/extensions": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts",
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ],
+        "import-x/external-module-folders": [
+          "node_modules",
+          "node_modules/@types"
+        ],
+        "import-x/parsers": {
+          "@typescript-eslint/parser": [
+            ".ts",
+            ".tsx",
+            ".cts",
+            ".mts"
+          ],
+          "espree": [
+            ".js",
+            ".jsx",
+            ".cjs",
+            ".mjs"
+          ]
+        },
+        "import-x/resolver": {
+          "typescript": true
+        }
+      }
+    }
+  },
+  "eslintMeta": {
+    "@typescript-eslint/consistent-type-exports": {
+      "defaultOptions": [
+        {
+          "fixMixedExportsWithInlineTypeSpecifier": false
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "multipleExportsAreTypes": "Type exports {{exportNames}} are not values and should be exported using `export type`.",
+        "singleExportIsType": "Type export {{exportNames}} is not a value and should be exported using `export type`.",
+        "typeOverValue": "All exports in the declaration are only used as types. Use `export type`."
+      },
+      "requiresTypeChecking": true,
+      "schema": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fixMixedExportsWithInlineTypeSpecifier": {
+              "type": "boolean",
+              "description": "Whether the rule will autofix \"mixed\" export cases using TS inline type specifiers."
+            }
+          }
+        }
+      ]
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "defaultOptions": [
+        {
+          "disallowTypeAnnotations": true,
+          "fixStyle": "separate-type-imports",
+          "prefer": "type-imports"
+        }
+      ],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "avoidImportType": "Use an `import` instead of an `import type`.",
+        "noImportTypeAnnotations": "`import()` type annotations are forbidden.",
+        "someImportsAreOnlyTypes": "Imports {{typeImports}} are only used as type.",
+        "typeOverValue": "All imports in the declaration are only used as types. Use `import type`."
+      },
+      "requiresTypeChecking": false,
+      "schema": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "disallowTypeAnnotations": {
+              "type": "boolean",
+              "description": "Whether to disallow type imports in type annotations (`import()`)."
+            },
+            "fixStyle": {
+              "type": "string",
+              "description": "The expected type modifier to be added when an import is detected as used only in the type position.",
+              "enum": [
+                "separate-type-imports",
+                "inline-type-imports"
+              ]
+            },
+            "prefer": {
+              "type": "string",
+              "description": "The expected import kind for type-only imports.",
+              "enum": [
+                "type-imports",
+                "no-type-imports"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "@typescript-eslint/no-import-type-side-effects": {
+      "defaultOptions": [],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "useTopLevelQualifier": "TypeScript will only remove the inline type specifiers which will leave behind a side effect import at runtime. Convert this to a top-level type qualifier to properly remove the entire import."
+      },
+      "requiresTypeChecking": false,
+      "schema": []
+    },
+    "import-x/consistent-type-specifier-style": {
+      "defaultOptions": [],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "inline": "Prefer using inline {{kind}} specifiers instead of a top-level {{kind}}-only import.",
+        "topLevel": "Prefer using a top-level {{kind}}-only import instead of inline {{kind}} specifiers."
+      },
+      "requiresTypeChecking": false,
+      "schema": [
+        {
+          "type": "string",
+          "enum": [
+            "prefer-top-level",
+            "prefer-inline"
+          ],
+          "default": "prefer-top-level"
+        }
+      ]
+    },
+    "import-x/no-duplicates": {
+      "defaultOptions": [],
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "duplicate": "'{{module}}' imported multiple times."
+      },
+      "requiresTypeChecking": false,
+      "schema": [
+        {
+          "type": "object",
+          "properties": {
+            "considerQueryString": {
+              "type": "boolean"
+            },
+            "prefer-inline": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "eslintComments": {
+    "typescript.mjs: @typescript-eslint/no-unused-vars": "The oxlint convention for \"unused on purpose\": a leading underscore, a rest sibling, a `using` declaration.",
+    "nestjs: @typescript-eslint/consistent-type-imports": "The autofix turns the import of an injected class into `import type`. Constructor injection needs the class at runtime, so the fix compiles and then fails to resolve the dependency. typescript-eslint only holds back when it can see `emitDecoratorMetadata`, which takes type information.",
+    "angular: @typescript-eslint/consistent-type-imports": "The autofix turns the import of an injected class into `import type`. Constructor injection needs the class at runtime, so the fix compiles and then fails to resolve the dependency. typescript-eslint only holds back when it can see `emitDecoratorMetadata`, which takes type information."
+  },
+  "biome": {
+    "angular": {
+      "style/useImportType": "off",
+      "parser": {
+        "unsafeParameterDecoratorsEnabled": true
+      }
+    },
+    "astro": {
+      "correctness/noUnusedImports (override [\"**/*.astro\"])": "off"
+    },
+    "core": {
+      "correctness/noUnusedImports": {
+        "fix": "safe",
+        "level": "error"
+      },
+      "correctness/noUnusedImports (override [\"**/*.{stories,story}.{ts,tsx,js,jsx}\"])": "off",
+      "style/useImportType": "error",
+      "style/useExportType": "error",
+      "style/noExportedImports": "error",
+      "assist/organizeImports": "on"
+    },
+    "nestjs": {
+      "style/useImportType": "off",
+      "parser": {
+        "unsafeParameterDecoratorsEnabled": true
+      }
+    },
+    "svelte": {
+      "correctness/noUnusedImports (override [\"**/*.svelte\"])": "off"
+    },
+    "vue": {
+      "correctness/noUnusedImports (override [\"**/*.vue\"])": "off"
+    }
+  },
+  "biomeComments": {
+    "angular: useImportType": "The fix turns the import of an injected class into `import type`, and constructor injection needs the class at runtime",
+    "nestjs: useImportType": "The fix turns the import of an injected class into `import type`, and constructor injection needs the class at runtime"
+  },
+  "biomeExplain": {
+    "noUnusedImports": {
+      "category": "lint/correctness/noUnusedImports",
+      "decoratorCaveat": false,
+      "defaultSeverity": "warn",
+      "fix": "unsafe",
+      "jsxRuntimeNote": true,
+      "recommended": true,
+      "since": "1.3.0",
+      "styleOption": null
+    },
+    "useImportType": {
+      "category": "lint/style/useImportType",
+      "decoratorCaveat": true,
+      "defaultSeverity": "warn",
+      "fix": "safe",
+      "jsxRuntimeNote": true,
+      "recommended": true,
+      "since": "1.5.0",
+      "styleOption": "use `import type { T }` or `import { type T, V }` when values are imported alongside types (default)"
+    },
+    "useExportType": {
+      "category": "lint/style/useExportType",
+      "decoratorCaveat": false,
+      "defaultSeverity": "warn",
+      "fix": "safe",
+      "jsxRuntimeNote": false,
+      "recommended": true,
+      "since": "1.5.0",
+      "styleOption": "use `export type { T }` or `export { type T, V }` when values are exported alongside types (default)"
+    },
+    "noExportedImports": {
+      "category": "lint/style/noExportedImports",
+      "decoratorCaveat": false,
+      "defaultSeverity": "info",
+      "fix": "none",
+      "jsxRuntimeNote": false,
+      "recommended": false,
+      "since": "1.9.0",
+      "styleOption": null
+    }
+  },
+  "prompt": [
+    "`Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: ${jsonPath}`,",
+    "- Edit only the file above. Do not create, delete, or modify any other file. If the proper fix needs changes outside this file (an import cycle, a barrel file), don't work around it here: leave the issue for review and say what the fix is.",
+    "- Make the minimal change that resolves each issue. For a style rule, keep runtime behavior the same. When a rule reports a bug (a lost rejection, a missing `await`), fixing that behavior is the point. If a fix would change behavior and it isn't clear that's intended, leave the issue for review and say why.",
+    "- Fix the underlying problem. An edit that only hides the code from the rule (rewording it, re-spelling it, an equivalent construct) is not a fix, even if the linter goes quiet. If that's the only way to clear an issue, leave it for review.",
+    "- The JSON file has each rule's help text, which describes the usual fix. When that fix doesn't fit this code (a TODO that's still true, key or declaration order the code depends on), leaving the issue for review is a valid result: the minimal change can be no change.",
+    "- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.",
+    "`- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. To leave an issue for review, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like \\`${LEFT_FOR_REVIEW_LABEL}: 2, 3\\`. Leave that line out when you left nothing.`,"
+  ],
+  "agentRulesTemplate": [
+    "- Avoid import cycles; move shared code into a module both sides import"
+  ],
+  "skillStandards": [
+    "- Avoid import cycles; move shared code into a module both sides import"
+  ],
+  "optionDrift": []
+}

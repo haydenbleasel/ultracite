@@ -1,0 +1,15 @@
+--- a/telemetry/flush-telemetry.ts
++++ b/telemetry/flush-telemetry.ts
+@@ -34,10 +34,11 @@
+  * SOFTWARE.
+  */
+ import { traceGlobals } from "../trace/shared";
++import type { Telemetry } from "./storage";
+ 
+ export async function flushTelemetry() {
+   const telemetry = traceGlobals.get("telemetry") as
+-    | InstanceType<typeof import("./storage").Telemetry>
++    | InstanceType<typeof Telemetry>
+     | undefined;
+   if (telemetry) {
+     await telemetry.flush();

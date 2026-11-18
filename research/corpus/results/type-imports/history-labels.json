@@ -1,0 +1,769 @@
+{
+  "note": "One rater (a subagent), from each commit message and file list, and where that was not enough, its diff read with git show on the history clone. The next.js and vscode clones are blobless and hold few of the files these commits touched, so most next.js and vscode labels rest on the message and file list alone.",
+  "labels": {
+    "zod 56222cd153": {
+      "label": "unrelated",
+      "what": "Typed the `.properties()` shape of instanceof schemas as a mapped type over the instance's keys; `type-only` in the message means the emitted JS is unchanged."
+    },
+    "zod 68a609ac9b": {
+      "label": "unrelated",
+      "what": "Typed property checks over the widened input of their schema so literal, enum and boolean checks compile without casts; `type-only` means no runtime change."
+    },
+    "zod a2a019a57e": {
+      "label": "unrelated",
+      "what": "Made `z.toZod` accept enum-typed targets by relaxing its type-level equality check; `type-only` means no runtime change."
+    },
+    "zod d6ca12ae3e": {
+      "label": "unrelated",
+      "what": "Dropped a compile-time discriminator check from `discriminatedUnion` so mutually recursive getter options infer; the keywords describe type-level changes, not imports."
+    },
+    "zod faf33a2880": {
+      "label": "conversion",
+      "what": "Replaced the `export type { X as Y }` specifiers for deprecated compat aliases with standalone `export type Y = ...` declarations, because the `@deprecated` tag on type-only export specifiers was dropped when the alias was re-exported again."
+    },
+    "zod 9d20fdc3c3": {
+      "label": "unrelated",
+      "what": "Threaded the preprocessor's argument type through the `ZodPreprocess` generics so `z.input` keeps it; `type-only` means no runtime change."
+    },
+    "zod c2be4f8190": {
+      "label": "unrelated",
+      "what": "Propagated a fallback flag through pipe boundaries and restored `z.preprocess` running on absent object keys; the keyword match is not about imports."
+    },
+    "zod b7b081d5cf": {
+      "label": "unrelated",
+      "what": "Widened the `z.function()` input type to accept an array as well as `z.tuple()`; `type only` describes the old type's limitation."
+    },
+    "zod 1e5b29e1e1": {
+      "label": "unrelated",
+      "what": "Extended email validation and added `// @ts-ignore` comments above the `@jest/globals` imports in several test files; `import type` comes from a sub-commit title, not a type-only import."
+    },
+    "zod 847cedf10d": {
+      "label": "style",
+      "what": "Rewrote the inline `type` specifiers in `parseUtil.ts` as separate top-level `import type` statements and pinned the TypeScript devDependency to 4.1."
+    },
+    "zod 95d61bbb68": {
+      "label": "config",
+      "what": "Merge commit that brings in the isolatedModules branch, setting `isolatedModules: true` in `tsconfig.base.json` and moving the type re-exports in `src/index.ts` to `export type`."
+    },
+    "zod 4b4fd28855": {
+      "label": "config",
+      "what": "Turned on `isolatedModules` in `tsconfig.base.json`, split the type re-exports in `src/index.ts` into `export type`, and added explicit `@jest/globals` imports to the tests."
+    },
+    "hono 2df0b47659": {
+      "label": "unrelated",
+      "what": "Added React-compatible `useRef` overloads and aligned `RefObject` with React 19; `type-only change` means the runtime is unchanged."
+    },
+    "hono 08a80e2a16": {
+      "label": "unrelated",
+      "what": "Narrowed the type `parseResponse` infers to success responses only; `type-only` refers to type-level tests."
+    },
+    "hono 6837649cd1": {
+      "label": "unrelated",
+      "what": "Added a JWK auth middleware and JWT helpers; the `import type` statements are part of the new code."
+    },
+    "hono fa92596817": {
+      "label": "unrelated",
+      "what": "Added a language detector middleware and accept-header helpers, whose new index file re-exports its types with `export type`."
+    },
+    "hono b6934cb210": {
+      "label": "unrelated",
+      "what": "Excluded more files that hold only types from Vitest coverage."
+    },
+    "hono 406abbb12c": {
+      "label": "unrelated",
+      "what": "Gave `parseBody` a detailed generic return type; a test import gained an inline `type BodyData` specifier as part of the feature."
+    },
+    "hono 0653153692": {
+      "label": "unrelated",
+      "what": "Added React-compatible APIs and type exports to hono/jsx; `export type` refers to newly exported types."
+    },
+    "hono b0d9417b55": {
+      "label": "unrelated",
+      "what": "Added the trailing-slash middleware's declaration path to `typesVersions` in `package.json`."
+    },
+    "hono 82dab2510d": {
+      "label": "conversion",
+      "what": "Moved the JSX implementation into `base.ts` and gathered hono/jsx's public types into a `types.ts` of `export type` re-exports, so the `JSXNode` class is now exported type-only, with a TODO to use `export type *` once a denoify bug is fixed."
+    },
+    "hono 85d5074bfc": {
+      "label": "unrelated",
+      "what": "Added missing declaration paths to `typesVersions` in `package.json`."
+    },
+    "hono 43749a0efd": {
+      "label": "unrelated",
+      "what": "Exposed the AWS Lambda context to handlers and exported its new `LambdaContext` type."
+    },
+    "hono cbd5616e9d": {
+      "label": "unrelated",
+      "what": "Added `CloudFrontConfig` and `CloudFrontResponse` to the Lambda@Edge adapter's type exports."
+    },
+    "hono f251706e6e": {
+      "label": "unrelated",
+      "what": "Exported `InferRequestType` and `ClientRequestOptions` from the Deno entry point alongside `InferResponseType`."
+    },
+    "hono 1eb49b8d96": {
+      "label": "unrelated",
+      "what": "Upgraded `@cloudflare/workers-types` to v4 and adjusted types to match, importing Workers types such as `KVNamespace` explicitly with `import type`."
+    },
+    "trpc 50543c8d41": {
+      "label": "unrelated",
+      "what": "Renovate bump of `@clack/prompts` to 1.8.1 whose release notes matched the keyword."
+    },
+    "trpc 1638ac173a": {
+      "label": "unrelated",
+      "what": "Renovate bump of `eslint-plugin-unicorn` to v64 whose release notes matched the keyword."
+    },
+    "trpc e472df168e": {
+      "label": "unrelated",
+      "what": "Exported the internal `SubscriptionResolver` and `TRPCResolverDef` types from `createTRPCClient.ts`."
+    },
+    "trpc fcb5463444": {
+      "label": "unrelated",
+      "what": "Renovate bump of `eslint-plugin-unicorn` to v62 whose release notes matched the keyword."
+    },
+    "trpc d0f98e9d31": {
+      "label": "unrelated",
+      "what": "Renovate bump of Deno to v2 in the CI workflow whose release notes matched the keyword."
+    },
+    "trpc 01a5f6c4ee": {
+      "label": "unrelated",
+      "what": "Renovate bump of `effect` to 3.19.3 in the tests package whose release notes matched the keyword."
+    },
+    "trpc 1e14c1ab41": {
+      "label": "unrelated",
+      "what": "Added a query and mutation key prefix option to `@trpc/tanstack-react-query`; `import type` appears only in the message's usage example."
+    },
+    "trpc 76e84502f7": {
+      "label": "unrelated",
+      "what": "Renovate bump of `effect` to 3.17.13 in the tests package whose release notes matched the keyword."
+    },
+    "trpc e272d68953": {
+      "label": "unrelated",
+      "what": "Exported the `DataTransformer` interface, marked public but never exported, from `@trpc/server` with a `TRPCDataTransformer` alias."
+    },
+    "trpc 463d4c4e6b": {
+      "label": "unrelated",
+      "what": "Renovate security bump of Next.js to 15.2.3 in the lockfile whose notes matched the keyword."
+    },
+    "trpc d1eaced0f7": {
+      "label": "conversion",
+      "what": "Replaced `export *` in the `@trpc/core` barrels with named exports, listing types under `export type` and values under `export`."
+    },
+    "trpc 42e6910cfb": {
+      "label": "unrelated",
+      "what": "Switched type tests to Vitest's expect-type; `type only` is part of the message's wording about that."
+    },
+    "trpc bcad0f8c1c": {
+      "label": "unrelated",
+      "what": "Docs change that exports the `Context` type in the authorization example."
+    },
+    "vite 2b8befab3c": {
+      "label": "tooling",
+      "what": "Documented that Vite supports `emitDecoratorMetadata` only partially, because full support needs type inference from the TypeScript compiler."
+    },
+    "vite 9151c2400f": {
+      "label": "unrelated",
+      "what": "Removed deprecated no-op properties from internal types; `type only` describes those properties."
+    },
+    "vite 455d083b70": {
+      "label": "config",
+      "what": "Switched the tsconfig playgrounds from `importsNotUsedAsValues: \"preserve\"` to `verbatimModuleSyntax: true` and updated the tests that check an unused import is kept."
+    },
+    "vite 8f28350291": {
+      "label": "config",
+      "what": "Set `isolatedModules` in the create-vite lit, svelte and vanilla TypeScript templates."
+    },
+    "vite 21990ea394": {
+      "label": "config",
+      "what": "Set `isolatedModules` in the create-vite Vue TypeScript template."
+    },
+    "vite 1a6e2da634": {
+      "label": "tooling",
+      "what": "Added a docs tip to use `import type` and `export type` syntax \"to avoid potential problems like type-only imports being incorrectly bundled\"."
+    },
+    "vite ea0c221f3d": {
+      "label": "tooling",
+      "what": "Documented a third-party Rollup plugin as an unsupported workaround for codebases that can't move to `isolatedModules: true`."
+    },
+    "vite daf783866b": {
+      "label": "tooling",
+      "what": "Made the dependency scanner's import regex skip `import type` statements, with a playground component that imports types from a types-only package."
+    },
+    "vite 46bb853cee": {
+      "label": "unrelated",
+      "what": "Renamed `EsbuildTransformResult` to `ESBuildTransformResult` and added `JsonOptions` to the exported types."
+    },
+    "astro 51723b100a": {
+      "label": "unrelated",
+      "what": "Refactored request handling into pure functions; some of its new `FetchState` imports are type-only, with comments saying that keeps the request core out of a module's runtime import graph and off the middleware import cycle."
+    },
+    "astro 7db6420d48": {
+      "label": "unrelated",
+      "what": "Added an `--ignore-lock` flag to `astro dev` so several dev servers can run at once; the keyword match is not about imports."
+    },
+    "astro b601e47aff": {
+      "label": "config",
+      "what": "Enabled Biome's `useImportType` rule, rewrote the inline `type` imports it flagged as top-level `import type`, and turned on Biome fixes on save in the VS Code settings."
+    },
+    "astro 29463dff52": {
+      "label": "unrelated",
+      "what": "Moved the `Database` type alias from `virtual.ts` to the `@astrojs/db/runtime` index so it is exported there."
+    },
+    "astro a0b6aac2f3": {
+      "label": "bug",
+      "what": "Changed `import type { IncomingMessage } from 'http'` to a value import in `core/app/node.ts`, where a class added in an earlier commit extends `IncomingMessage`."
+    },
+    "astro fec583909a": {
+      "label": "unrelated",
+      "what": "Added the experimental `@astrojs/markdoc` integration; the matches are sub-commit titles about importing types."
+    },
+    "astro 98a4a914bc": {
+      "label": "unrelated",
+      "what": "Removed `rawContent()` and `compiledContent()` from the `*.mdx` module declarations; `import types` means the types of MDX imports."
+    },
+    "astro 7d72aeeae8": {
+      "label": "unrelated",
+      "what": "Migrated the blog and docs starters to content collections, writing their new type imports as `import type` at the top of files."
+    },
+    "astro 94a9b6180a": {
+      "label": "unrelated",
+      "what": "Added rename support to the language server, whose new code uses `import type` for type-only imports."
+    },
+    "astro 1ac1ed86e9": {
+      "label": "bug",
+      "what": "Forced esbuild's `importsNotUsedAsValues` to `remove` when compiling Astro and JSX files, so `client:only` component imports are dropped even when a project's tsconfig sets it to `error`, with a fixture component that touches `document` at import time."
+    },
+    "astro 5ec0f6ed55": {
+      "label": "unrelated",
+      "what": "Added content collections; the `import type` matches are sub-commit titles in a large feature."
+    },
+    "astro a397b981f5": {
+      "label": "unrelated",
+      "what": "Rewrote the `@astrojs/image` type definitions as a static `client.d.ts` with explicit exports, including a new `export type` for `ImageMetadata`."
+    },
+    "excalidraw f207bd0a1c": {
+      "label": "unrelated",
+      "what": "Set up declaration output for `@excalidraw/utils`; `export types` means publishing its type declarations."
+    },
+    "excalidraw a8064ba3ee": {
+      "label": "unrelated",
+      "what": "Moved the package build from Webpack and UMD to esbuild ESM output and the example app to Vite, switching some example imports to `import type` along the way."
+    },
+    "excalidraw 9423ac3263": {
+      "label": "unrelated",
+      "what": "Turned the `Excalidraw` component into a named export instead of a default export."
+    },
+    "excalidraw 84d1d9993c": {
+      "label": "unrelated",
+      "what": "Added publishing libraries from the UI; `export type` refers to the type of the library export format."
+    },
+    "excalidraw 15f02ba191": {
+      "label": "conversion",
+      "what": "Moved shared types out of `App.tsx` into `types.ts` and changed the remaining imports of the `App` class that only use it as a type to `import type`."
+    },
+    "excalidraw a6706cff20": {
+      "label": "unrelated",
+      "what": "Added a `tsconfig-types.json` and supporting declarations to emit type declarations for `@excalidraw/excalidraw`."
+    },
+    "next.js 8619c015f8": {
+      "label": "unrelated",
+      "what": "Made the bundle analyzer record how emitted chunks can load other chunks for its agent skill; `export type` comes from the phrase `Export typed load relationships`."
+    },
+    "next.js 8d3606c1ee": {
+      "label": "unrelated",
+      "what": "Exported App, Pages and API route roots and client references into the bundle analyzer's JSON Lines data; `export type` comes from the phrase `Export typed`."
+    },
+    "next.js 5eb90193e8": {
+      "label": "unrelated",
+      "what": "Fixed a Turbopack build panic by letting `SideEffectsModule` skip side effects of modules that tree shaking pruned; the side-effect imports are about module evaluation in a barrel, not type imports."
+    },
+    "next.js 469a7c5573": {
+      "label": "unrelated",
+      "what": "Added symlinks and additional roots to Turbopack's NFT trace metadata; the keyword match is not about type imports."
+    },
+    "next.js c0dfeffa53": {
+      "label": "unrelated",
+      "what": "Re-exported the `CacheHandler` and `CacheEntry` types from `next/cache` with `export type` so custom cache handlers can import them with `import type`."
+    },
+    "next.js 259abbba51": {
+      "label": "unrelated",
+      "what": "Reverted enabling Turbopack's CJS tree shaking by default, because it elided object properties read only through an alias and broke packages at runtime; the elision is of properties, not imports."
+    },
+    "next.js 007058ef60": {
+      "label": "config",
+      "what": "Removed devlow-bench's exemption from the root ESLint config and fixed what it hid, including 13 autofixable `@typescript-eslint/consistent-type-imports` violations."
+    },
+    "next.js cc5bbaad05": {
+      "label": "tooling",
+      "what": "Made the server actions transform skip type-only named exports in its pre-pass so an `export type` no longer produces a `registerServerReference` call, with a fixture covering it."
+    },
+    "next.js 9fdd5bcd77": {
+      "label": "unrelated",
+      "what": "Docs change that uses the `ErrorInfo` type consistently in the `catchError` examples, merging a separate `import type { ErrorInfo }` into an inline `type` specifier along the way."
+    },
+    "next.js 6f669f1a73": {
+      "label": "unrelated",
+      "what": "Skipped the Lightning CSS `loadBindings()` check during `next start`, which meant promoting `PHASE_PRODUCTION_SERVER` from a type-only import to a value import so it could be compared at runtime."
+    },
+    "next.js 41ed440b50": {
+      "label": "bug",
+      "what": "Added `verbatimModuleSyntax` support to Turbopack's TypeScript transform because, under the classic JSX transform, that transform removed the `React` import before JSX became `React.createElement`, causing a runtime `React was not found` error."
+    },
+    "next.js 2eeaeb060b": {
+      "label": "unrelated",
+      "what": "Exported the missing `Instant` type for the `unstable_instant` config."
+    },
+    "next.js d2e62656b8": {
+      "label": "unrelated",
+      "what": "Stopped loading the `typescript` package at runtime to resolve the tsconfig when transpiling `next.config.ts`, reading the tsconfig file directly instead."
+    },
+    "next.js 9857ed1e09": {
+      "label": "tooling",
+      "what": "Added empty module declarations for `*.css`, `*.sass` and `*.scss` so CSS side-effect imports type-check under TypeScript's `noUncheckedSideEffectImports`."
+    },
+    "next.js 3f09e569dc": {
+      "label": "tooling",
+      "what": "Made Turbopack's server actions transform accept `export type ... from` in `use server` files instead of failing."
+    },
+    "next.js e0d612eb77": {
+      "label": "unrelated",
+      "what": "Fixed a build crash with parallel routes and root-level dynamic params; `paramtypes` matched `DynamicParamTypes`."
+    },
+    "next.js 7296aa624e": {
+      "label": "unrelated",
+      "what": "Docs change clarifying where `router.prefetch()` can be called; `before initialization` comes from a quoted router error."
+    },
+    "next.js 0f786e04f4": {
+      "label": "unrelated",
+      "what": "Made `eslint-config-next` a flat config by default; `import type` matched `import typescript` in the message's example."
+    },
+    "next.js c0a1a32ca3": {
+      "label": "unrelated",
+      "what": "Added Turbopack support for `import ... with { type: \"bytes\" }` import attributes, which are not type-only imports."
+    },
+    "next.js 9163d25a3c": {
+      "label": "unrelated",
+      "what": "Docs change replacing `new Resource()` with `resourceFromAttributes` in the OpenTelemetry guide, because `Resource` is an interface and using it as a value fails to type-check."
+    },
+    "next.js 2b5c714b57": {
+      "label": "tooling",
+      "what": "Changed the generated `next-env.d.ts` and the create-next-app templates to load `.next/types/routes.d.ts` with an ESM import instead of a triple-slash reference; the message describes `import type {}`, but the committed generator and templates write a bare `import \"./.next/types/routes.d.ts\"`."
+    },
+    "next.js badf4b6c17": {
+      "label": "unrelated",
+      "what": "Added client param parsing for PPR routes; `paramtypes` matched parameter-type names."
+    },
+    "next.js de89c8cd01": {
+      "label": "tooling",
+      "what": "Reverted a `use cache` misplacement fix in the server actions transform because it made `export type` declarations in `use server` files fail with an `Only async functions are allowed` error."
+    },
+    "next.js 54c3107e87": {
+      "label": "unrelated",
+      "what": "Made the Next.js TypeScript plugin warn when `metadata` or `generateMetadata` exports are missing their types; the message's `import type` is advice to import those types."
+    },
+    "next.js 64fc01d0e6": {
+      "label": "unrelated",
+      "what": "Added an `index.d.ts` to `@next/plugin-rspack`; `import type` appears only in the test plan."
+    },
+    "next.js 094d9096d5": {
+      "label": "tooling",
+      "what": "Simplified the production test for Turbopack's `emitDecoratorMetadata` support to reuse the page's code and drop a dependency."
+    },
+    "next.js 720518020c": {
+      "label": "unrelated",
+      "what": "Used `ResolvedVc` in Turbopack's `EsmExport` type; the `export type` match is that Rust type's name."
+    },
+    "next.js 7061f9428f": {
+      "label": "unrelated",
+      "what": "Escaped the dot in `.json` in static data route regexes; `import type` appears only in the message's sample page."
+    },
+    "next.js a40dd63cf4": {
+      "label": "unrelated",
+      "what": "Added docs for the experimental `inlineCss` option; `import type` appears only in the example config."
+    },
+    "next.js 2c05914fef": {
+      "label": "tooling",
+      "what": "Fixed how the async request API codemod handles a type-only `react` import, with new fixtures for it."
+    },
+    "next.js 1a81fe4408": {
+      "label": "unrelated",
+      "what": "Stopped omitting `alt` from the `ImgProps` return type of `getImgProps`."
+    },
+    "next.js 0090faa253": {
+      "label": "unrelated",
+      "what": "Added a codemod for the removed `geo` and `ip` properties of `NextRequest`; `import type` appears in its examples."
+    },
+    "next.js 56dc3ed5c9": {
+      "label": "unrelated",
+      "what": "Removed `geo` and `ip` from `NextRequest`; `import type` appears in the migration example."
+    },
+    "next.js 2cee0de01f": {
+      "label": "tooling",
+      "what": "Made the React Server Components transform allow type-only imports of `usePathname` in server components."
+    },
+    "next.js f412c5e72a": {
+      "label": "conversion",
+      "what": "Docs change adding `import type` to imports used only as types across a dozen App Router examples."
+    },
+    "next.js a7c24aca6f": {
+      "label": "unrelated",
+      "what": "Made the tsconfig verifier leave `module` and `esModuleInterop` alone when `module: preserve` is set; `isolatedModules` appears only in the sample output."
+    },
+    "next.js d407a016c0": {
+      "label": "unrelated",
+      "what": "Rewrote the `@next/mdx` declarations to use a namespace with `export =` and to import `Options` from `@mdx-js/loader`."
+    },
+    "next.js 492b4157f3": {
+      "label": "unrelated",
+      "what": "Exposed the `MiddlewareConfig` interface from `next/server`."
+    },
+    "next.js e039cc72fc": {
+      "label": "config",
+      "what": "Enabled `verbatimModuleSyntax` in the repo's TypeScript config to make type imports and exports explicit, touching 309 files."
+    },
+    "next.js e75c366826": {
+      "label": "tooling",
+      "what": "Stopped the tsconfig verifier adding `isolatedModules` when the project's tsconfig extends one that sets `verbatimModuleSyntax`."
+    },
+    "next.js aac4d9c3f7": {
+      "label": "conversion",
+      "what": "Docs change switching the metadata guide's TypeScript examples to `import type` for imports from `next`."
+    },
+    "next.js 7771e78207": {
+      "label": "unrelated",
+      "what": "Added the missing `color` field to the `IconDescriptor` metadata type."
+    },
+    "next.js 0ce55e3f09": {
+      "label": "unrelated",
+      "what": "Removed a redundant intersection from the `ImageElementProps` type."
+    },
+    "next.js be960ccd02": {
+      "label": "tooling",
+      "what": "Stopped the tsconfig verifier forcing `isolatedModules: true` when `verbatimModuleSyntax: true` is set, a combination the message says TypeScript rejects."
+    },
+    "next.js 55b29fb351": {
+      "label": "unrelated",
+      "what": "Updated Prettier, which adds parentheses around `typeof` in type positions such as an `export type` alias."
+    },
+    "next.js 2f3a503d8b": {
+      "label": "unrelated",
+      "what": "Made the server actions compiler accept export declarations with any initializer; `export type` means the kind of exported value."
+    },
+    "next.js 83afeb7642": {
+      "label": "unrelated",
+      "what": "Made `next-types-plugin` add the `ParamCheck` type only for `route.ts` files."
+    },
+    "next.js e7371bc3b7": {
+      "label": "unrelated",
+      "what": "Added file extensions to the imports in `next-types-plugin`'s generated files so they type-check under `Node16` and `NodeNext` module resolution."
+    },
+    "next.js 9acbf6e6ac": {
+      "label": "unrelated",
+      "what": "Disallowed `export *` in server entries because SWC can't statically analyse which exports they have."
+    },
+    "next.js 5cc9010277": {
+      "label": "unrelated",
+      "what": "Fixed `distDir` being written into `tsconfig.json` as an absolute path when running `next lint`."
+    },
+    "next.js d3e576dba3": {
+      "label": "tooling",
+      "what": "Made all of the Next.js codemods preserve type-only imports, moving their fixtures to TypeScript."
+    },
+    "next.js 54266bb590": {
+      "label": "tooling",
+      "what": "Made the `next-image-to-legacy-image` codemod preserve type-only imports, with TypeScript fixtures."
+    },
+    "next.js e12e4760ce": {
+      "label": "unrelated",
+      "what": "Fixed Turbopack's `unexpected export *` warning for client component pages by detecting CJS-style exports; the `export type` match is the warning's hint text."
+    },
+    "next.js d0e5a8d5b3": {
+      "label": "unrelated",
+      "what": "Fixed Turbopack's `unexpected export *` warning for client component pages by detecting CJS-style exports; the `export type` match is the warning's hint text."
+    },
+    "next.js fda355daa2": {
+      "label": "unrelated",
+      "what": "Generated type guard files during `next build` to check that entrypoints have the right export types."
+    },
+    "next.js 2c672c1d81": {
+      "label": "unrelated",
+      "what": "Migrated `eslint-plugin-next` to TypeScript with a `defineRule` helper."
+    },
+    "next.js 3943b20f55": {
+      "label": "unrelated",
+      "what": "Fixed `InferGetServerSidePropsType` and `InferGetStaticPropsType` inferring `never`."
+    },
+    "next.js 5bd155e220": {
+      "label": "unrelated",
+      "what": "Added `export {}` to the with-cypress example's TypeScript files so `--isolatedModules` treats them as modules rather than global scripts."
+    },
+    "next.js 20486c159d": {
+      "label": "unrelated",
+      "what": "Allowed importing blob assets in the edge runtime, with a review sub-commit switching type-only imports to `import type`."
+    },
+    "next.js 7b91a1c156": {
+      "label": "tooling",
+      "what": "Bumped `@babel/core` and related Babel packages from 7.15 to 7.18 to fix an issue with type-only import specifiers."
+    },
+    "next.js 305214476b": {
+      "label": "unrelated",
+      "what": "Made `NextApiRequestCookies` and `NextApiRequestQuery` partial records; `import type` appears in the message's example."
+    },
+    "next.js e0c7794208": {
+      "label": "tooling",
+      "what": "Turned on SWC's decorator metadata output when the project's tsconfig or jsconfig enables it, with a production test."
+    },
+    "next.js 85cc454023": {
+      "label": "unrelated",
+      "what": "Added `hostname` and `port` options to the Next server, and moved the server and dev server's type-only imports to `import type` statements at the top of their files."
+    },
+    "next.js 9d7900c209": {
+      "label": "tooling",
+      "what": "Updated the tsconfig verifier's stated reason for requiring `isolatedModules` and `esModuleInterop` to say they are still needed with SWC."
+    },
+    "next.js 04e1e01f18": {
+      "label": "unrelated",
+      "what": "Tested and documented URL imports from CSS and assets; `import types` means kinds of imports."
+    },
+    "next.js 1b733423d6": {
+      "label": "unrelated",
+      "what": "Used Sharp for image optimization when it is installed; `Import types for sharp` refers to its type declarations."
+    },
+    "next.js 917a9acc2c": {
+      "label": "unrelated",
+      "what": "Added the image import type declarations to `next-env.d.ts` only when image imports are enabled."
+    },
+    "next.js ec9ed57487": {
+      "label": "conversion",
+      "what": "Changed three `import type` statements in core files back to plain imports and updated a build-output test."
+    },
+    "next.js c98db81bf4": {
+      "label": "conversion",
+      "what": "Changed `import type` back to plain imports in core files because `import type` needs a newer TypeScript than Next.js then expected."
+    },
+    "next.js 9e59a6b57a": {
+      "label": "conversion",
+      "what": "Docs change adding the `type` keyword to the API Routes example's import, matching the other examples."
+    },
+    "next.js ff0571ae14": {
+      "label": "unrelated",
+      "what": "Removed an unused legacy router method; `export type` appears in the quoted `NextRouter` type."
+    },
+    "next.js 09e38847ea": {
+      "label": "unrelated",
+      "what": "Updated the HMR client runtime; `Type-Only` comes from a sub-commit title about dismissing an old overlay."
+    },
+    "next.js 7b25e2995e": {
+      "label": "unrelated",
+      "what": "Exported the `LinkProps` type from `next/link`."
+    },
+    "vscode a58d877430": {
+      "label": "unrelated",
+      "what": "Added a suggestion and an editor for cleaning up agent session storage; the side-effect import match is the removal of a duplicate contribution import."
+    },
+    "vscode fd249800b7": {
+      "label": "unrelated",
+      "what": "Tracked which API produced Copilot reasoning instead of inferring it from id prefixes; `type only` is about the API type."
+    },
+    "vscode 8d48b77e9f": {
+      "label": "unrelated",
+      "what": "Drained providers during standalone agent host shutdown; `before initialization` is about tracking connections."
+    },
+    "vscode 06ac30fdea": {
+      "label": "unrelated",
+      "what": "Omitted peer dependencies from the agent SDK tarballs, on the message's reasoning that VS Code reaches those packages only through erased `import type` references, later narrowed because zod is imported at runtime."
+    },
+    "vscode 759f7f6b94": {
+      "label": "unrelated",
+      "what": "Bumped the Copilot SDK and CLI and migrated to the renamed permission API; `elide` is about a test projection."
+    },
+    "vscode a29f231dfa": {
+      "label": "unrelated",
+      "what": "Bumped the Copilot SDK and CLI and migrated to the renamed permission API; `elide` is about a test projection."
+    },
+    "vscode 4b5f3abeb4": {
+      "label": "unrelated",
+      "what": "Moved the UI scenario runner from `test/mcp` into a new `test/scenario` package, noting that its MCP SDK import was type-only and already elided."
+    },
+    "vscode 69e459e483": {
+      "label": "unrelated",
+      "what": "Fixed signature help's active overload not updating; the `export type` match is not about type exports."
+    },
+    "vscode 07a63f4c0e": {
+      "label": "unrelated",
+      "what": "Rendered the `addComment` feedback tool call as a rich chat reference, with review sub-commits using `import type` in a test and merging a value and a type-only import for `no-duplicate-imports`."
+    },
+    "vscode 92408cb292": {
+      "label": "unrelated",
+      "what": "Opened added-only file edits in a normal editor rather than a diff, with a sub-commit making one import type-only."
+    },
+    "vscode 9a2c9f33e7": {
+      "label": "unrelated",
+      "what": "Added CI-failure and comment banners above the sessions chat input, with a sub-commit making the `ThemeIcon` import type-only."
+    },
+    "vscode eaf41b7ef2": {
+      "label": "unrelated",
+      "what": "Sent Agent Host completion attachments with chat requests, with a sub-commit marking some imports type-only to avoid runtime dependencies."
+    },
+    "vscode d40db46eab": {
+      "label": "unrelated",
+      "what": "Reported agent host build info through `RootState._meta`, with a sub-commit making the `IProductService` import type-only to avoid a runtime dependency and a possible circular import."
+    },
+    "vscode 1007508ea6": {
+      "label": "unrelated",
+      "what": "Implemented Claude session restoration in the agent host; `type only` describes an SDK type's fields."
+    },
+    "vscode c9b1f88ce7": {
+      "label": "unrelated",
+      "what": "Re-landed the Claude agent provider in the agent host, noting that `import type` from the Claude agent SDK keeps type-checking through its devDependency."
+    },
+    "vscode 298654bf21": {
+      "label": "unrelated",
+      "what": "Addressed OTel review feedback, including switching the `SpanStatusCode` import from type-only to a value import so the enum members can be used at runtime."
+    },
+    "vscode d431c9645a": {
+      "label": "unrelated",
+      "what": "Integrated terminal sandboxing with the network filter service, with a sub-commit titled `Fix terminal sandbox type-only exports`."
+    },
+    "vscode d72f98075f": {
+      "label": "unrelated",
+      "what": "Supported Copilot CLI todos through a worker, with a review sub-commit changing the `RpcProxy` import to `import type`."
+    },
+    "vscode 5e91606c6d": {
+      "label": "unrelated",
+      "what": "Decoupled the remote agent host session type from the URI scheme and gathered contribution side-effect imports into one file."
+    },
+    "vscode 37cbcaccab": {
+      "label": "unrelated",
+      "what": "Added typed DiagLogger registration for error telemetry and wired its module in through side-effect imports."
+    },
+    "vscode 5504188a37": {
+      "label": "conversion",
+      "what": "Changed the Copilot CLI chat session code to use type-only imports from `@github/copilot/sdk`."
+    },
+    "vscode eeb4486f12": {
+      "label": "unrelated",
+      "what": "Added a disable/enable toggle for built-in skills, moving menu registrations after the `const` declarations they use to avoid a `Cannot access before initialization` error."
+    },
+    "vscode 61b1b75efc": {
+      "label": "unrelated",
+      "what": "Added logs for async next-edit requests and rebase failures, with an autofix sub-commit preferring `import type`."
+    },
+    "vscode 3e15c2da57": {
+      "label": "unrelated",
+      "what": "Started an agent host from the server and taught the server's ESM resolver hook to load ESM packages as ESM, after a `does not provide an export named 'CopilotClient'` error from the hook treating them as CommonJS."
+    },
+    "vscode 2648263d3e": {
+      "label": "config",
+      "what": "Ran the build scripts directly as TypeScript instead of through ts-node, enabling `verbatimModuleSyntax` and switching an import to type-only along the way."
+    },
+    "vscode f9631e7eaa": {
+      "label": "conversion",
+      "what": "Merge commit for the pull request that changes the `@xterm/headless` import in the terminal capabilities file to `import type`."
+    },
+    "vscode 5aa62531fe": {
+      "label": "conversion",
+      "what": "Changed the `@xterm/headless` import in `capabilities.ts` to `import type`, with a `Fixes` reference to an issue the message doesn't describe."
+    },
+    "vscode fc5f9b2b0e": {
+      "label": "unrelated",
+      "what": "Moved prompt decoration types from a `.d.ts` file into a `.ts` file."
+    },
+    "vscode d18ee6f1a4": {
+      "label": "unrelated",
+      "what": "Restricted a chat prompt config schema to the `object` type."
+    },
+    "vscode f127036184": {
+      "label": "conversion",
+      "what": "One-file change to `extHost.protocol.ts` described only as `fix import type`; the blobless clone can't show the diff."
+    },
+    "vscode 2456c4b2f5": {
+      "label": "config",
+      "what": "Turned off `isolatedModules` in `src/tsconfig.json` because it prevents const enum inlining."
+    },
+    "vscode b9bca8844b": {
+      "label": "unrelated",
+      "what": "Fixed a `cannot access 'session' before initialization` error in the voice chat actions; nothing in the message ties it to imports."
+    },
+    "vscode 82ece597ee": {
+      "label": "tooling",
+      "what": "Added a TypeScript language features setting for preferring type-only auto-imports."
+    },
+    "vscode 3634912e8e": {
+      "label": "conversion",
+      "what": "Switched imports in `web.api.ts` to `import type`."
+    },
+    "vscode b931935042": {
+      "label": "conversion",
+      "what": "Switched an import in `assignment.ts` to an explicit `import type`."
+    },
+    "vscode 1fb956d2f5": {
+      "label": "unrelated",
+      "what": "Added a `removeUnusedImports` command to TypeScript language features, with a sub-commit asking whether the protocol import must be type-only."
+    },
+    "vscode 3b29b43074": {
+      "label": "unrelated",
+      "what": "Commit titled `web - only export types not interfaces` that touches the web API files and adds layering patterns to `.eslintrc.json`; the blobless clone can't show the source diff."
+    },
+    "vscode 3241883aaa": {
+      "label": "conversion",
+      "what": "Switched the web API and web factory files to `import type`."
+    },
+    "vscode 68912bd844": {
+      "label": "conversion",
+      "what": "Changed imports of `@jupyterlab/nbformat`, a types-only dev dependency, to `import type` so it can't be referenced as a value."
+    },
+    "vscode 3f531a7de3": {
+      "label": "unrelated",
+      "what": "Added the `notebookWorkspaceEdit` API proposal; `Export type from extHost` means exporting a new API type."
+    },
+    "vscode 4fb26ee9e6": {
+      "label": "unrelated",
+      "what": "Fixed a `ReferenceError` for accessing `SimplePriorityQueue` before initialization in a test scheduler file; nothing in the message ties it to imports."
+    },
+    "vscode fb824ca76f": {
+      "label": "unrelated",
+      "what": "Fixed a ref being used before initialization in the notebook cell renderer."
+    },
+    "vscode 5ea96ec9cd": {
+      "label": "unrelated",
+      "what": "Fixed `_colorMapOverride` being used before initialization in the standalone theme service."
+    },
+    "vscode dfba194f8d": {
+      "label": "conversion",
+      "what": "Switched references to `workbench.web.api` to `import type`."
+    },
+    "vscode c393e6a3a9": {
+      "label": "conversion",
+      "what": "Switched some imports in node and electron-browser files to `import type` to make sure those modules are not loaded."
+    },
+    "vscode 995302fd69": {
+      "label": "bug",
+      "what": "Loaded `node-pty` asynchronously in the terminal process to fix an issue, adding `import type` so the module can't be imported statically by accident."
+    },
+    "vscode bb2e67f6d6": {
+      "label": "bug",
+      "what": "Loaded `tas-client` asynchronously in the experiment service to fix an issue, using `import type` for its types."
+    },
+    "vscode 7d9dd5055c": {
+      "label": "unrelated",
+      "what": "Typed `IIdentifiedSingleEditOperation.range` as `IRange` instead of the `Range` class so callers need only a type dependency, which the message says `import type` makes more compelling."
+    },
+    "vscode c0c9e0043c": {
+      "label": "conversion",
+      "what": "Switched the TypeScript language features' protocol imports to type-only imports so they never become real imports in emitted code."
+    },
+    "vscode 1b70625f8c": {
+      "label": "conversion",
+      "what": "Switched imports of `vscode` under `src` to `import type`, because a real import of it fails to load."
+    },
+    "vscode 8a992a2ff1": {
+      "label": "unrelated",
+      "what": "Exported types from the web workbench API; the blobless clone can't show the diff."
+    },
+    "vscode a21ac50b5e": {
+      "label": "unrelated",
+      "what": "Fixed a use before initialization in the extension host API implementation."
+    }
+  }
+}

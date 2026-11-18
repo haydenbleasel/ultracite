@@ -1,0 +1,1335 @@
+[
+  {
+    "id": "a",
+    "base": "a",
+    "dir": "a-next-flush-telemetry",
+    "basename": "telemetry/flush-telemetry.ts",
+    "others": [
+      "telemetry/storage.ts",
+      "trace/shared.ts"
+    ],
+    "stubs": [
+      "telemetry/storage.ts"
+    ],
+    "kind": "converts cleanly",
+    "label": "A, converts cleanly",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+    "module": "./storage",
+    "exported": [
+      "flushTelemetry"
+    ],
+    "expected": [
+      "typescript/consistent-type-imports"
+    ],
+    "expectedCount": 1,
+    "source": "vercel/next.js packages/next/src/telemetry/flush-telemetry.ts @ d8bfc3c9, L1-10 (the whole file); trace/shared.ts copied from the same commit; telemetry/storage.ts a STUB",
+    "right": [
+      "import type, named",
+      "import type, namespace",
+      "import type, default"
+    ],
+    "rightText": "`import type { Telemetry } from './storage'` with `InstanceType<typeof Telemetry>` (or a type-only namespace import); storage never evaluates, in every mode",
+    "path": "subjects/type-imports/a/telemetry/flush-telemetry.ts",
+    "sha256": "b1e4cff5a8dbe4b03eb728385656915c28b3775fa1e3780c02fcad80ef8bc6fb",
+    "othersSha256": {
+      "telemetry/storage.ts": "a463bc558ba5b85fcb71ee196c9d63a9fce293ecf414114b6932a9e514445f40",
+      "trace/shared.ts": "52ec3383d45e53769b6ad330bc201c102325bf66709bcefd31c11e385a98d3a2"
+    },
+    "originalSha256": "d9db6b89801042a27d5f9e82df9f66eab98e94492026b94710a8e49d8fd0f94f",
+    "cleanedSha256": "aaf50af524e5c9357dc9295567f70afd021c065fb583d340f5e0ea5009ed8584",
+    "headerLinesRemoved": 21,
+    "stripFields": [
+      "Rules it hits",
+      "Why it converts cleanly",
+      "Why it needs a choice",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Type-imports subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * The lines below the license are copied verbatim. trace/shared.ts is copied verbatim from the same\n *   commit; telemetry/storage.ts is a STUB (the real module imports conf, ci-info and other compiled\n *   packages) that keeps the Telemetry class's flush().",
+          "to": " * The lines below the license come from that commit, edited since by automated tooling. trace/shared.ts\n *   is copied from the same commit, edited the same way; telemetry/storage.ts is a STUB (the real\n *   module imports conf, ci-info and other compiled packages) that keeps the Telemetry class's\n *   flush().",
+          "why": "said 'verbatim', which normalising made untrue (the fix pass and the formatter edit the files)"
+        },
+        {
+          "from": " * License of the source repository (vercel/next.js/license.md), reproduced (also in\n * research/corpus/examples/licenses/next.js-license.md):",
+          "to": " * License of the source repository (vercel/next.js/license.md), reproduced:",
+          "why": "named this repo's research folder (the license's copy there)"
+        }
+      ],
+      "telemetry/storage.ts": [
+        {
+          "from": " * STUB for type-imports subject A. Stands in for",
+          "to": " * STUB: stands in for",
+          "why": "named the topic and the experiment's subject"
+        },
+        {
+          "from": " and counts calls on the instance so the oracle\n * can see them. Not part of the source.",
+          "to": " and counts calls on the instance. Not part of\n * the source.",
+          "why": "named the behaviour oracle"
+        }
+      ],
+      "trace/shared.ts": [
+        {
+          "from": " * Copied verbatim (below this comment) from",
+          "to": " * Copied (below this comment) from",
+          "why": "said 'verbatim', which normalising made untrue (the fix pass and the formatter edit the files)"
+        },
+        {
+          "from": ", for type-imports subject A. Licensed as the subject\n * (research/corpus/examples/licenses/next.js-license.md).",
+          "to": ", edited since by automated tooling. MIT\n * License, as telemetry/flush-telemetry.ts.",
+          "why": "named the topic and the experiment's subject; named this repo's research folder (the license's copy there)"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/type[- ]?imports?\\b|import type|type[- ]only|import\\(\\)|\\bimport\\s*\\{\\s*type\\b/i",
+      "/\\binline\\b|top[- ]level|specifiers?\\b/i",
+      "/\\belid(e|es|ed|ing)\\b|elision|\\berased?\\b|\\bstrip(s|ped|ping)?\\b|compiled away/i",
+      "/verbatim|isolatedModules|preserveValueImports|importsNotUsedAsValues|onlyRemoveTypeImports/i",
+      "/side[- ]?effects?|\\beager(ly)?\\b|\\blaz(y|ily)\\b|\\bload(s|ed|ing)?\\b|\\bbundl(e|es|ed|er|ing)\\b|tree[- ]shak|dead[- ]code/i",
+      "/evaluat(e|es|ed|ing|ion)|\\bat runtime\\b|\\bruntime\\b/i",
+      "/__NEXT_I18N_SUPPORT|build[- ]time|static(ally)? import/i",
+      "/duplicat|\\bmerg(e|es|ed|ing)\\b|\\bsplit(s|ting)?\\b|\\bsettle/i",
+      "/consistent-type|no-duplicates|no-duplicate-imports|global-require|prefer-module|no-require-imports|useImportType|useExportType|specifier-style/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|\\bscenarios?\\b|harness/i",
+      "/Rules it hits|Why it (converts|needs|'s a trap)|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke|\\bwrong\\b|\\btrap\\b/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b/i",
+      "/\\b(84847|37313|80056|5274|5275|84800|56551|66186)\\b|27821674a6|daab64c27e|ef888e8eae|b93149c63|ab22b41f7|Javi Velasco|Sebastian Silbermann|Julius Marminge|\\bKATT\\b/",
+      "/deliberate|intentional|on purpose|by design|preference/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+        "why": "a line of the MIT License text (`merge` is the license's word)"
+      }
+    ],
+    "tsconfig": {
+      "text": "{\n  \"compilerOptions\": {\n    \"lib\": [\"es2023\", \"dom\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"noEmit\": true,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"target\": \"es2022\",\n    \"types\": [\"node\"],\n    \"verbatimModuleSyntax\": true\n  },\n  \"include\": [\"**/*.ts\"]\n}\n",
+      "moduleFlags": {
+        "verbatimModuleSyntax": true,
+        "isolatedModules": false,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "paths": null
+      }
+    },
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "changedPerPass": [
+        [
+          "package.json",
+          "telemetry/flush-telemetry.ts",
+          "trace/shared.ts",
+          "tsconfig.json"
+        ],
+        []
+      ],
+      "handoffImports": {
+        "corpusOnePass": "import { traceGlobals } from \"../trace/shared\";",
+        "ourOnePass": "import { traceGlobals } from \"../trace/shared\";",
+        "handedOver": "import { traceGlobals } from \"../trace/shared\";",
+        "onePassMatchesCorpus": true,
+        "handedOverMatchesOnePass": true
+      },
+      "whatChanged": {
+        "telemetry/flush-telemetry.ts": {
+          "rulesFixed": {
+            "prefer-const": 1
+          },
+          "oxlintBefore": {
+            "func-style": 1,
+            "prefer-const": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "oxlintAfter": {
+            "func-style": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "codeChanged": true,
+          "linesChanged": {
+            "removed": 5,
+            "added": 5
+          }
+        },
+        "telemetry/storage.ts": {
+          "rulesFixed": {},
+          "oxlintBefore": {
+            "require-await": 1
+          },
+          "oxlintAfter": {
+            "require-await": 1
+          },
+          "codeChanged": false,
+          "linesChanged": {
+            "removed": 0,
+            "added": 0
+          }
+        },
+        "trace/shared.ts": {
+          "rulesFixed": {},
+          "oxlintBefore": {
+            "typescript/no-explicit-any": 8
+          },
+          "oxlintAfter": {
+            "typescript/no-explicit-any": 8
+          },
+          "codeChanged": true,
+          "linesChanged": {
+            "removed": 7,
+            "added": 8
+          }
+        }
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "typescript/consistent-type-imports L40: `import()` type annotations are forbidden."
+      ],
+      "handoffCounts": {
+        "typescript/consistent-type-imports": 1
+      },
+      "handoffLines": [
+        40
+      ],
+      "help": [
+        "typescript/consistent-type-imports: Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/typescript/consistent-type-imports.html"
+      ],
+      "reportedBeforeFilter": 11,
+      "leftOutByFilter": {
+        "func-style": 1,
+        "require-await": 1,
+        "typescript/no-explicit-any": 8
+      },
+      "leftOutByFilterByFile": {
+        "telemetry/flush-telemetry.ts": 1,
+        "telemetry/storage.ts": 1,
+        "trace/shared.ts": 8
+      },
+      "leftOutInTheSubject": {
+        "func-style": 1
+      },
+      "fileLines": {
+        "corpus": 67,
+        "prepared": 46
+      },
+      "oracle": {
+        "repo": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 23,
+          "compile": [],
+          "loads": {
+            "atImport": [
+              "trace/shared.js",
+              "telemetry/flush-telemetry.js"
+            ],
+            "afterCalls": [
+              "trace/shared.js",
+              "telemetry/flush-telemetry.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        },
+        "kept": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 23,
+          "compile": [],
+          "loads": {
+            "atImport": [
+              "trace/shared.js",
+              "telemetry/flush-telemetry.js"
+            ],
+            "afterCalls": [
+              "trace/shared.js",
+              "telemetry/flush-telemetry.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        },
+        "elided": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 23,
+          "compile": [],
+          "loads": {
+            "atImport": [
+              "trace/shared.js",
+              "telemetry/flush-telemetry.js"
+            ],
+            "afterCalls": [
+              "trace/shared.js",
+              "telemetry/flush-telemetry.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        }
+      },
+      "typeErrors": {
+        "runDir": [],
+        "verbatim": [],
+        "elided": []
+      },
+      "corpusTypeErrors": {
+        "runDir": [],
+        "verbatim": [],
+        "elided": []
+      }
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "87120a5475e7931523d50a23c6dfdc5f08902dffabf67c8f585e6afd97e37012",
+      "package.json": "0d65a11192cadb4d5264d97c3c3bc1ee741b792a6f4ccff254adaf4e5def55a1"
+    },
+    "corpus": {
+      "oxlint": {
+        "func-style": 1,
+        "prefer-const": 1,
+        "typescript/consistent-type-imports": 1
+      },
+      "eslint": {
+        "func-style": 1,
+        "prefer-const": 1,
+        "@typescript-eslint/consistent-type-imports": 1
+      },
+      "biome": {
+        "style/useConst": 1
+      },
+      "handoff": {
+        "oxlint": {
+          "imports": "import { traceGlobals } from \"../trace/shared\";",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "func-style": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+              "line": 61,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "typescript/consistent-type-imports"
+            }
+          ]
+        },
+        "eslint": {
+          "imports": "import { traceGlobals } from \"../trace/shared\";",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "func-style": 1,
+            "@typescript-eslint/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Enforce consistent usage of type imports",
+              "line": 61,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "@typescript-eslint/consistent-type-imports"
+            }
+          ]
+        },
+        "biome": {
+          "imports": "import { traceGlobals } from \"../trace/shared\";",
+          "oracle": {
+            "repo": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 23,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 23,
+              "verdict": "same"
+            }
+          },
+          "reported": {},
+          "topic": []
+        }
+      },
+      "oracle": {
+        "repo": {
+          "compile": [],
+          "evaluated": [
+            "trace/shared.js",
+            "telemetry/flush-telemetry.js"
+          ]
+        },
+        "kept": {
+          "compile": [],
+          "evaluated": [
+            "trace/shared.js",
+            "telemetry/flush-telemetry.js"
+          ]
+        },
+        "elided": {
+          "compile": [],
+          "evaluated": [
+            "trace/shared.js",
+            "telemetry/flush-telemetry.js"
+          ]
+        }
+      },
+      "tsc": []
+    }
+  },
+  {
+    "id": "b",
+    "base": "b",
+    "dir": "b-trpc-client-error",
+    "basename": "TRPCClientError.ts",
+    "others": [
+      "stubs/unstable-core-do-not-import.ts"
+    ],
+    "stubs": [
+      "stubs/unstable-core-do-not-import.ts"
+    ],
+    "kind": "a style choice the fix passes fight over",
+    "label": "B, the fix passes fight",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+    "module": "@trpc/server/unstable-core-do-not-import",
+    "exported": [
+      "TRPCClientError",
+      "isTRPCClientError"
+    ],
+    "expected": [
+      "import/no-duplicates",
+      "no-duplicate-imports"
+    ],
+    "expectedCount": 2,
+    "source": "trpc/trpc packages/client/src/TRPCClientError.ts @ 796700d8, L1-118 (the whole file); '@trpc/server/unstable-core-do-not-import' a STUB through the tsconfig's paths",
+    "right": [
+      "one value import, one import type"
+    ],
+    "rightText": "one value import of isObject and one `import type` with all six types (either order); isObject still evaluates and every call behaves as before",
+    "path": "subjects/type-imports/b/TRPCClientError.ts",
+    "sha256": "e188123e64e3fcf3578d226d248e50ab6c9fa718dfbc0b7a954d72e82b162970",
+    "othersSha256": {
+      "stubs/unstable-core-do-not-import.ts": "a226aee114479bc3fbf8fc25cd91f148982717d70729831dd887b7c8cdea7e76"
+    },
+    "originalSha256": "384d276fc10a1758c65847ddbbabe7056935b0710065241aaa8f92004d45f6b1",
+    "cleanedSha256": "814f8eb48f3e2cb3c44692e96f92acd5a61c32b6dce1c235efbceff570d714fe",
+    "headerLinesRemoved": 27,
+    "stripFields": [
+      "Rules it hits",
+      "Why it converts cleanly",
+      "Why it needs a choice",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Type-imports subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * The lines below the license are copied verbatim. '@trpc/server/unstable-core-do-not-import' resolves\n *   to stubs/unstable-core-do-not-import.ts (STUB) through the examples' tsconfig paths and the oracle.",
+          "to": " * The lines below the license come from that commit, edited since by automated tooling.\n *   '@trpc/server/unstable-core-do-not-import' resolves to stubs/unstable-core-do-not-import.ts\n *   (STUB) through the tsconfig's paths.",
+          "why": "said 'verbatim', which normalising made untrue (the fix pass and the formatter edit the files); named the behaviour oracle and the examples folder"
+        },
+        {
+          "from": " * License of the source repository (trpc/trpc/LICENSE), the MIT License, reproduced (also in\n * research/corpus/examples/licenses/trpc-LICENSE):",
+          "to": " * License of the source repository (trpc/trpc/LICENSE), the MIT License, reproduced:",
+          "why": "named this repo's research folder (the license's copy there)"
+        }
+      ],
+      "stubs/unstable-core-do-not-import.ts": [
+        {
+          "from": " * STUB for type-imports subject B. Stands in for",
+          "to": " * STUB: stands in for",
+          "why": "named the topic and the experiment's subject"
+        },
+        {
+          "from": "(MIT, research/corpus/examples/licenses/\n * trpc-LICENSE)",
+          "to": "(MIT, as\n * TRPCClientError.ts)",
+          "why": "named this repo's research folder (the license's copy there)"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/type[- ]?imports?\\b|import type|type[- ]only|import\\(\\)|\\bimport\\s*\\{\\s*type\\b/i",
+      "/\\binline\\b|top[- ]level|specifiers?\\b/i",
+      "/\\belid(e|es|ed|ing)\\b|elision|\\berased?\\b|\\bstrip(s|ped|ping)?\\b|compiled away/i",
+      "/verbatim|isolatedModules|preserveValueImports|importsNotUsedAsValues|onlyRemoveTypeImports/i",
+      "/side[- ]?effects?|\\beager(ly)?\\b|\\blaz(y|ily)\\b|\\bload(s|ed|ing)?\\b|\\bbundl(e|es|ed|er|ing)\\b|tree[- ]shak|dead[- ]code/i",
+      "/evaluat(e|es|ed|ing|ion)|\\bat runtime\\b|\\bruntime\\b/i",
+      "/__NEXT_I18N_SUPPORT|build[- ]time|static(ally)? import/i",
+      "/duplicat|\\bmerg(e|es|ed|ing)\\b|\\bsplit(s|ting)?\\b|\\bsettle/i",
+      "/consistent-type|no-duplicates|no-duplicate-imports|global-require|prefer-module|no-require-imports|useImportType|useExportType|specifier-style/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|\\bscenarios?\\b|harness/i",
+      "/Rules it hits|Why it (converts|needs|'s a trap)|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke|\\bwrong\\b|\\btrap\\b/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b/i",
+      "/\\b(84847|37313|80056|5274|5275|84800|56551|66186)\\b|27821674a6|daab64c27e|ef888e8eae|b93149c63|ab22b41f7|Javi Velasco|Sebastian Silbermann|Julius Marminge|\\bKATT\\b/",
+      "/deliberate|intentional|on purpose|by design|preference/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+        "why": "a line of the MIT License text (`merge` is the license's word)"
+      },
+      {
+        "text": "eslint-disable-next-line @typescript-eslint/ban-ts-comment",
+        "why": "upstream's own directive (twice) for the two @ts- comments; it names a lint rule about TypeScript comments, not about imports"
+      },
+      {
+        "text": "biome-ignore lint/suspicious/noExplicitAny: stub",
+        "why": "the stub module's directive (three times) for its `any` stand-ins; it names no rule about imports"
+      }
+    ],
+    "tsconfig": {
+      "text": "{\n  \"compilerOptions\": {\n    \"lib\": [\"es2023\", \"dom\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"noEmit\": true,\n    \"paths\": {\n      \"@trpc/server/unstable-core-do-not-import\": [\n        \"./stubs/unstable-core-do-not-import.ts\"\n      ]\n    },\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"target\": \"es2022\",\n    \"types\": [\"node\"],\n    \"verbatimModuleSyntax\": true\n  },\n  \"include\": [\"**/*.ts\"]\n}\n",
+      "moduleFlags": {
+        "verbatimModuleSyntax": true,
+        "isolatedModules": false,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "paths": {
+          "@trpc/server/unstable-core-do-not-import": [
+            "./stubs/unstable-core-do-not-import.ts"
+          ]
+        }
+      }
+    },
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "changedPerPass": [
+        [
+          "package.json",
+          "stubs/unstable-core-do-not-import.ts",
+          "TRPCClientError.ts",
+          "tsconfig.json"
+        ],
+        []
+      ],
+      "handoffImports": {
+        "corpusOnePass": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+        "ourOnePass": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+        "handedOver": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+        "onePassMatchesCorpus": true,
+        "handedOverMatchesOnePass": true
+      },
+      "whatChanged": {
+        "TRPCClientError.ts": {
+          "rulesFixed": {
+            "import/consistent-type-specifier-style": 1,
+            "typescript/prefer-ts-expect-error": 2
+          },
+          "oxlintBefore": {
+            "func-style": 3,
+            "import/consistent-type-specifier-style": 1,
+            "import/no-duplicates": 1,
+            "no-use-before-define": 1,
+            "typescript/no-explicit-any": 3,
+            "typescript/prefer-ts-expect-error": 2,
+            "unicorn/filename-case": 1
+          },
+          "oxlintAfter": {
+            "func-style": 3,
+            "import/no-duplicates": 1,
+            "no-duplicate-imports": 1,
+            "no-use-before-define": 1,
+            "typescript/no-explicit-any": 3,
+            "unicorn/filename-case": 1
+          },
+          "codeChanged": true,
+          "linesChanged": {
+            "removed": 22,
+            "added": 18
+          }
+        },
+        "stubs/unstable-core-do-not-import.ts": {
+          "rulesFixed": {},
+          "oxlintBefore": {
+            "func-style": 1,
+            "typescript/no-explicit-any": 3
+          },
+          "oxlintAfter": {
+            "func-style": 1,
+            "typescript/no-explicit-any": 3
+          },
+          "codeChanged": false,
+          "linesChanged": {
+            "removed": 1,
+            "added": 1
+          }
+        }
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "import/no-duplicates L41: Modules should not be imported multiple times in the same file",
+        "no-duplicate-imports L43: '@trpc/server/unstable-core-do-not-import' import is duplicated"
+      ],
+      "handoffCounts": {
+        "import/no-duplicates": 1,
+        "no-duplicate-imports": 1
+      },
+      "handoffLines": [
+        41,
+        43
+      ],
+      "help": [
+        "import/no-duplicates: Merge these imports into a single import statement",
+        "no-duplicate-imports: Merge the duplicated import into a single import statement"
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/import/no-duplicates.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-duplicate-imports.html"
+      ],
+      "reportedBeforeFilter": 14,
+      "leftOutByFilter": {
+        "func-style": 4,
+        "no-use-before-define": 1,
+        "typescript/no-explicit-any": 6,
+        "unicorn/filename-case": 1
+      },
+      "leftOutByFilterByFile": {
+        "TRPCClientError.ts": 8,
+        "stubs/unstable-core-do-not-import.ts": 4
+      },
+      "leftOutInTheSubject": {
+        "func-style": 3,
+        "no-use-before-define": 1,
+        "typescript/no-explicit-any": 3,
+        "unicorn/filename-case": 1
+      },
+      "fileLines": {
+        "corpus": 181,
+        "prepared": 152
+      },
+      "oracle": {
+        "repo": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 117,
+          "compile": [],
+          "loads": {
+            "atImport": [
+              "stubs/unstable-core-do-not-import.js",
+              "TRPCClientError.js"
+            ],
+            "afterCalls": [
+              "stubs/unstable-core-do-not-import.js",
+              "TRPCClientError.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        },
+        "kept": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 117,
+          "compile": [],
+          "loads": {
+            "atImport": [
+              "stubs/unstable-core-do-not-import.js",
+              "TRPCClientError.js"
+            ],
+            "afterCalls": [
+              "stubs/unstable-core-do-not-import.js",
+              "TRPCClientError.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        },
+        "elided": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 117,
+          "compile": [],
+          "loads": {
+            "atImport": [
+              "stubs/unstable-core-do-not-import.js",
+              "TRPCClientError.js"
+            ],
+            "afterCalls": [
+              "stubs/unstable-core-do-not-import.js",
+              "TRPCClientError.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        }
+      },
+      "typeErrors": {
+        "runDir": [
+          "TRPCClientError.ts: TS2578 Unused '@ts-expect-error' directive.",
+          "TRPCClientError.ts: TS2578 Unused '@ts-expect-error' directive."
+        ],
+        "verbatim": [
+          "TRPCClientError.ts: TS2578 Unused '@ts-expect-error' directive.",
+          "TRPCClientError.ts: TS2578 Unused '@ts-expect-error' directive."
+        ],
+        "elided": [
+          "TRPCClientError.ts: TS2578 Unused '@ts-expect-error' directive.",
+          "TRPCClientError.ts: TS2578 Unused '@ts-expect-error' directive."
+        ]
+      },
+      "corpusTypeErrors": {
+        "runDir": [],
+        "verbatim": [],
+        "elided": []
+      }
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "87120a5475e7931523d50a23c6dfdc5f08902dffabf67c8f585e6afd97e37012",
+      "package.json": "0d65a11192cadb4d5264d97c3c3bc1ee741b792a6f4ccff254adaf4e5def55a1"
+    },
+    "corpus": {
+      "oxlint": {
+        "import/no-duplicates": 1,
+        "typescript/prefer-ts-expect-error": 2,
+        "unicorn/filename-case": 1,
+        "import/consistent-type-specifier-style": 1,
+        "func-style": 3,
+        "no-use-before-define": 1,
+        "typescript/no-explicit-any": 3
+      },
+      "eslint": {
+        "github/filenames-match-regex": 1,
+        "import-x/no-duplicates": 2,
+        "import-x/order": 1,
+        "import-x/consistent-type-specifier-style": 1,
+        "func-style": 3,
+        "@typescript-eslint/no-use-before-define": 1,
+        "@typescript-eslint/no-explicit-any": 3,
+        "unicorn/custom-error-definition": 1,
+        "unicorn/consistent-class-member-order": 1
+      },
+      "biome": {
+        "correctness/noUndeclaredDependencies": 2,
+        "suspicious/noExplicitAny": 3,
+        "complexity/useLiteralKeys": 7,
+        "suspicious/noTsIgnore": 2,
+        "style/useConsistentMemberAccessibility": 5,
+        "style/useFilenamingConvention": 1,
+        "suspicious/noShadow": 1
+      },
+      "handoff": {
+        "oxlint": {
+          "imports": "import type {\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type { DefaultErrorShape } from \"@trpc/server/unstable-core-do-not-import\";",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "import/no-duplicates": 1,
+            "no-duplicate-imports": 1,
+            "unicorn/filename-case": 1,
+            "func-style": 3,
+            "no-use-before-define": 1,
+            "typescript/no-explicit-any": 3
+          },
+          "topic": [
+            {
+              "help": "Merge these imports into a single import statement",
+              "line": 68,
+              "message": "Modules should not be imported multiple times in the same file",
+              "rule": "import/no-duplicates"
+            },
+            {
+              "help": "Merge the duplicated import into a single import statement",
+              "line": 70,
+              "message": "'@trpc/server/unstable-core-do-not-import' import is duplicated",
+              "rule": "no-duplicate-imports"
+            }
+          ]
+        },
+        "eslint": {
+          "imports": "import { isObject } from \"@trpc/server/unstable-core-do-not-import\";\nimport type {\n  DefaultErrorShape,\n  inferClientTypes,\n  InferrableClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "github/filenames-match-regex": 1,
+            "func-style": 3,
+            "@typescript-eslint/no-use-before-define": 1,
+            "@typescript-eslint/no-explicit-any": 3,
+            "unicorn/custom-error-definition": 1,
+            "unicorn/consistent-class-member-order": 1
+          },
+          "topic": []
+        },
+        "biome": {
+          "imports": "import type {\n  InferrableClientTypes,\n  inferClientTypes,\n  Maybe,\n  TRPCErrorResponse,\n} from \"@trpc/server/unstable-core-do-not-import\";\nimport {\n  type DefaultErrorShape,\n  isObject,\n} from \"@trpc/server/unstable-core-do-not-import\";",
+          "oracle": {
+            "repo": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 117,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 117,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "correctness/noUndeclaredDependencies": 2,
+            "suspicious/noExplicitAny": 3,
+            "complexity/useLiteralKeys": 7,
+            "style/useConsistentMemberAccessibility": 5,
+            "style/useFilenamingConvention": 1,
+            "suspicious/noShadow": 1
+          },
+          "topic": []
+        }
+      },
+      "oracle": {
+        "repo": {
+          "compile": [],
+          "evaluated": [
+            "stubs/unstable-core-do-not-import.js",
+            "TRPCClientError.js"
+          ]
+        },
+        "kept": {
+          "compile": [],
+          "evaluated": [
+            "stubs/unstable-core-do-not-import.js",
+            "TRPCClientError.js"
+          ]
+        },
+        "elided": {
+          "compile": [],
+          "evaluated": [
+            "stubs/unstable-core-do-not-import.js",
+            "TRPCClientError.js"
+          ]
+        }
+      },
+      "tsc": []
+    }
+  },
+  {
+    "id": "c",
+    "base": "c",
+    "dir": "c-next-normalize-locale-path",
+    "basename": "client/normalize-locale-path.ts",
+    "others": [
+      "shared/lib/i18n/normalize-locale-path.ts"
+    ],
+    "stubs": [],
+    "kind": "a trap",
+    "label": "C, the trap",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+    "module": "../shared/lib/i18n/normalize-locale-path",
+    "exported": [
+      "normalizeLocalePath"
+    ],
+    "expected": [
+      "node/global-require",
+      "typescript/consistent-type-imports",
+      "unicorn/prefer-module"
+    ],
+    "expectedCount": 3,
+    "source": "vercel/next.js packages/next/src/client/normalize-locale-path.ts @ d8bfc3c9, L1-10 (the whole file); shared/lib/i18n/normalize-locale-path.ts copied from the same commit",
+    "right": [
+      "cast to the existing Fn type",
+      "import type, namespace",
+      "import type, named",
+      "typeof on a value already in scope"
+    ],
+    "rightText": "keep the require inside the `__NEXT_I18N_SUPPORT` branch and type it without `import()` (a cast to `{ normalizeLocalePath: typeof Fn }`, or a type-only namespace import); leave node/global-require and unicorn/prefer-module for review, because a static import loads the i18n module in every app",
+    "path": "subjects/type-imports/c/client/normalize-locale-path.ts",
+    "sha256": "b5d6d9210630766770514bc81f881e6269d0ed05d02f3aca52c8381dd7af547e",
+    "othersSha256": {
+      "shared/lib/i18n/normalize-locale-path.ts": "9eb76230ee3043533cff6729db2ff080eee6db3cfd42a4cae02aa71fdf342510"
+    },
+    "originalSha256": "6818a00b5cf73294df4a8f1b8827837dcdc88c3ba681b152c8b473208e6f814e",
+    "cleanedSha256": "236bdeb7a20fdbd9dd0117fe14d8906c7dd8cf214cca5c7f2d24849230a85e7a",
+    "headerLinesRemoved": 29,
+    "stripFields": [
+      "Rules it hits",
+      "Why it converts cleanly",
+      "Why it needs a choice",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Type-imports subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * Function:  normalizeLocalePath for the browser router. When the app has i18n configured\n *   (process.env.__NEXT_I18N_SUPPORT, replaced at build time), it requires the shared implementation and\n *   strips the locale from a path; otherwise it returns the path as it is.",
+          "to": " * Function:  normalizeLocalePath for the browser router.",
+          "why": "described why the require sits in the branch (the build replaces the variable, so the branch drops out), which is the trap's analysis"
+        },
+        {
+          "from": " * The lines below the license are copied verbatim. shared/lib/i18n/normalize-locale-path.ts is copied\n *   verbatim from the same commit.",
+          "to": " * The lines below the license come from that commit, edited since by automated tooling.\n *   shared/lib/i18n/normalize-locale-path.ts is copied from the same commit, edited the same way.",
+          "why": "said 'verbatim', which normalising made untrue (the fix pass and the formatter edit the files)"
+        },
+        {
+          "from": " * License of the source repository (vercel/next.js/license.md), reproduced (also in\n * research/corpus/examples/licenses/next.js-license.md):",
+          "to": " * License of the source repository (vercel/next.js/license.md), reproduced:",
+          "why": "named this repo's research folder (the license's copy there)"
+        }
+      ],
+      "shared/lib/i18n/normalize-locale-path.ts": [
+        {
+          "from": " * Copied verbatim (below this comment) from",
+          "to": " * Copied (below this comment) from",
+          "why": "said 'verbatim', which normalising made untrue (the fix pass and the formatter edit the files)"
+        },
+        {
+          "from": ", for type-imports subject C. Licensed as the subject\n * (research/corpus/examples/licenses/next.js-license.md).",
+          "to": ", edited since by automated tooling. MIT\n * License, as client/normalize-locale-path.ts.",
+          "why": "named the topic and the experiment's subject; named this repo's research folder (the license's copy there)"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/type[- ]?imports?\\b|import type|type[- ]only|import\\(\\)|\\bimport\\s*\\{\\s*type\\b/i",
+      "/\\binline\\b|top[- ]level|specifiers?\\b/i",
+      "/\\belid(e|es|ed|ing)\\b|elision|\\berased?\\b|\\bstrip(s|ped|ping)?\\b|compiled away/i",
+      "/verbatim|isolatedModules|preserveValueImports|importsNotUsedAsValues|onlyRemoveTypeImports/i",
+      "/side[- ]?effects?|\\beager(ly)?\\b|\\blaz(y|ily)\\b|\\bload(s|ed|ing)?\\b|\\bbundl(e|es|ed|er|ing)\\b|tree[- ]shak|dead[- ]code/i",
+      "/evaluat(e|es|ed|ing|ion)|\\bat runtime\\b|\\bruntime\\b/i",
+      "/__NEXT_I18N_SUPPORT|build[- ]time|static(ally)? import/i",
+      "/duplicat|\\bmerg(e|es|ed|ing)\\b|\\bsplit(s|ting)?\\b|\\bsettle/i",
+      "/consistent-type|no-duplicates|no-duplicate-imports|global-require|prefer-module|no-require-imports|useImportType|useExportType|specifier-style/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|\\bscenarios?\\b|harness/i",
+      "/Rules it hits|Why it (converts|needs|'s a trap)|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke|\\bwrong\\b|\\btrap\\b/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b/i",
+      "/\\b(84847|37313|80056|5274|5275|84800|56551|66186)\\b|27821674a6|daab64c27e|ef888e8eae|b93149c63|ab22b41f7|Javi Velasco|Sebastian Silbermann|Julius Marminge|\\bKATT\\b/",
+      "/deliberate|intentional|on purpose|by design|preference/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+        "why": "a line of the MIT License text (`merge` is the license's word)"
+      }
+    ],
+    "tsconfig": {
+      "text": "{\n  \"compilerOptions\": {\n    \"lib\": [\"es2023\", \"dom\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"noEmit\": true,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"target\": \"es2022\",\n    \"types\": [\"node\"],\n    \"verbatimModuleSyntax\": true\n  },\n  \"include\": [\"**/*.ts\"]\n}\n",
+      "moduleFlags": {
+        "verbatimModuleSyntax": true,
+        "isolatedModules": false,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "paths": null
+      }
+    },
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "changedPerPass": [
+        [
+          "client/normalize-locale-path.ts",
+          "package.json",
+          "shared/lib/i18n/normalize-locale-path.ts",
+          "tsconfig.json"
+        ],
+        []
+      ],
+      "handoffImports": {
+        "corpusOnePass": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+        "ourOnePass": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+        "handedOver": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+        "onePassMatchesCorpus": true,
+        "handedOverMatchesOnePass": true
+      },
+      "whatChanged": {
+        "client/normalize-locale-path.ts": {
+          "rulesFixed": {},
+          "oxlintBefore": {
+            "node/global-require": 1,
+            "typescript/consistent-type-imports": 1,
+            "unicorn/prefer-module": 1
+          },
+          "oxlintAfter": {
+            "node/global-require": 1,
+            "typescript/consistent-type-imports": 1,
+            "unicorn/prefer-module": 1
+          },
+          "codeChanged": false,
+          "linesChanged": {
+            "removed": 5,
+            "added": 5
+          }
+        },
+        "shared/lib/i18n/normalize-locale-path.ts": {
+          "rulesFixed": {
+            "curly": 3,
+            "unicorn/consistent-existence-index-check": 1
+          },
+          "oxlintBefore": {
+            "curly": 3,
+            "func-style": 1,
+            "no-param-reassign": 1,
+            "prefer-const": 1,
+            "unicorn/consistent-existence-index-check": 1
+          },
+          "oxlintAfter": {
+            "func-style": 1,
+            "no-param-reassign": 1,
+            "prefer-const": 1
+          },
+          "codeChanged": true,
+          "linesChanged": {
+            "removed": 16,
+            "added": 19
+          }
+        }
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "node/global-require L38: Unexpected require().",
+        "unicorn/prefer-module L38: Do not use \"require\".",
+        "typescript/consistent-type-imports L38: `import()` type annotations are forbidden."
+      ],
+      "handoffCounts": {
+        "node/global-require": 1,
+        "typescript/consistent-type-imports": 1,
+        "unicorn/prefer-module": 1
+      },
+      "handoffLines": [
+        38
+      ],
+      "help": [
+        "node/global-require: Move require() to top-level module scope",
+        "unicorn/prefer-module: Prefer ES modules over CommonJS globals.",
+        "typescript/consistent-type-imports: Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/node/global-require.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/unicorn/prefer-module.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/typescript/consistent-type-imports.html"
+      ],
+      "reportedBeforeFilter": 6,
+      "leftOutByFilter": {
+        "func-style": 1,
+        "no-param-reassign": 1,
+        "prefer-const": 1
+      },
+      "leftOutByFilterByFile": {
+        "shared/lib/i18n/normalize-locale-path.ts": 3
+      },
+      "leftOutInTheSubject": {},
+      "fileLines": {
+        "corpus": 72,
+        "prepared": 43
+      },
+      "oracle": {
+        "repo": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 64,
+          "compile": [],
+          "loads": {
+            "offAtImport": [
+              "client/normalize-locale-path.js"
+            ],
+            "offAfterCalls": [
+              "client/normalize-locale-path.js"
+            ],
+            "onAtImport": [
+              "client/normalize-locale-path.js"
+            ],
+            "onAfterCalls": [
+              "client/normalize-locale-path.js",
+              "shared/lib/i18n/normalize-locale-path.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        },
+        "kept": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 64,
+          "compile": [],
+          "loads": {
+            "offAtImport": [
+              "client/normalize-locale-path.js"
+            ],
+            "offAfterCalls": [
+              "client/normalize-locale-path.js"
+            ],
+            "onAtImport": [
+              "client/normalize-locale-path.js"
+            ],
+            "onAfterCalls": [
+              "client/normalize-locale-path.js",
+              "shared/lib/i18n/normalize-locale-path.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        },
+        "elided": {
+          "againstCorpusFolder": "same",
+          "withTheCorpusOtherFiles": "same",
+          "fields": 64,
+          "compile": [],
+          "loads": {
+            "offAtImport": [
+              "client/normalize-locale-path.js"
+            ],
+            "offAfterCalls": [
+              "client/normalize-locale-path.js"
+            ],
+            "onAtImport": [
+              "client/normalize-locale-path.js"
+            ],
+            "onAfterCalls": [
+              "client/normalize-locale-path.js",
+              "shared/lib/i18n/normalize-locale-path.js"
+            ],
+            "importError": null,
+            "runError": null
+          }
+        }
+      },
+      "typeErrors": {
+        "runDir": [],
+        "verbatim": [],
+        "elided": []
+      },
+      "corpusTypeErrors": {
+        "runDir": [],
+        "verbatim": [],
+        "elided": []
+      }
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "87120a5475e7931523d50a23c6dfdc5f08902dffabf67c8f585e6afd97e37012",
+      "package.json": "0d65a11192cadb4d5264d97c3c3bc1ee741b792a6f4ccff254adaf4e5def55a1"
+    },
+    "corpus": {
+      "oxlint": {
+        "node/global-require": 1,
+        "unicorn/prefer-module": 1,
+        "typescript/consistent-type-imports": 1
+      },
+      "eslint": {
+        "unicorn/prefer-ternary": 1,
+        "n/global-require": 1,
+        "unicorn/prefer-module": 1,
+        "n/no-missing-require": 1,
+        "@typescript-eslint/consistent-type-imports": 1,
+        "sonarjs/no-undefined-assignment": 1
+      },
+      "biome": {},
+      "handoff": {
+        "oxlint": {
+          "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "node/global-require": 1,
+            "unicorn/prefer-module": 1,
+            "typescript/consistent-type-imports": 1
+          },
+          "topic": [
+            {
+              "help": "Move require() to top-level module scope",
+              "line": 67,
+              "message": "Unexpected require().",
+              "rule": "node/global-require"
+            },
+            {
+              "help": "Prefer ES modules over CommonJS globals.",
+              "line": 67,
+              "message": "Do not use \"require\".",
+              "rule": "unicorn/prefer-module"
+            },
+            {
+              "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+              "line": 67,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "typescript/consistent-type-imports"
+            }
+          ]
+        },
+        "eslint": {
+          "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "reported": {
+            "n/global-require": 1,
+            "unicorn/prefer-module": 1,
+            "n/no-missing-require": 1,
+            "@typescript-eslint/consistent-type-imports": 1,
+            "sonarjs/no-undefined-assignment": 1
+          },
+          "topic": [
+            {
+              "help": "require `require()` calls to be placed at top-level module scope",
+              "line": 67,
+              "message": "Unexpected require().",
+              "rule": "n/global-require"
+            },
+            {
+              "help": "Prefer JavaScript modules (ESM) over CommonJS.",
+              "line": 67,
+              "message": "Do not use \"require\".",
+              "rule": "unicorn/prefer-module"
+            },
+            {
+              "help": "Enforce consistent usage of type imports",
+              "line": 67,
+              "message": "`import()` type annotations are forbidden.",
+              "rule": "@typescript-eslint/consistent-type-imports"
+            }
+          ]
+        },
+        "biome": {
+          "imports": "import type { normalizeLocalePath as Fn } from \"../shared/lib/i18n/normalize-locale-path\";",
+          "oracle": {
+            "repo": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "kept": {
+              "of": 64,
+              "verdict": "same"
+            },
+            "elided": {
+              "of": 64,
+              "verdict": "same"
+            }
+          },
+          "reported": {},
+          "topic": []
+        }
+      },
+      "oracle": {
+        "repo": {
+          "compile": [],
+          "evaluated": [
+            "client/normalize-locale-path.js"
+          ]
+        },
+        "kept": {
+          "compile": [],
+          "evaluated": [
+            "client/normalize-locale-path.js"
+          ]
+        },
+        "elided": {
+          "compile": [],
+          "evaluated": [
+            "client/normalize-locale-path.js"
+          ]
+        }
+      },
+      "tsc": []
+    }
+  }
+]

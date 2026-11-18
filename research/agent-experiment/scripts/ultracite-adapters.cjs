@@ -169,9 +169,23 @@ const EXPECTED = {
 //     harness's Oxlint resolves plugins from this repo through its configs, so the mirror keeps
 //     v2's lookup; this topic's config loads no JS plugin.
 // v1 and v2 are unchanged: no code path of theirs reads anything v3 adds.
+// "v4" (added with the type-imports topic, which selects it) is the agent-fix code at 60a16471. It
+// is v3 with three slices changed, by commits after 9743dfcb:
+//   - linters.ts (Oxlint), f23eb8e8: the JS plugins whose rule help the adapter looks up include
+//     eslint-plugin-jsdoc (`jsdoc-js/...`) and eslint-plugin-tsdoc (`tsdoc/...`);
+//   - linters.ts (Biome), d0219d34: a rule `biome explain` can't describe is remembered (as null),
+//     so explain runs once per rule; what the adapter returns is the same;
+//   - linter-args.ts toStylelintTargets, 800bc5d6, 6c29ae8c and 4a32ea73: a glob that doesn't
+//     name a style extension (and doesn't exist as a path) is expanded and its style files kept,
+//     and a target with no extension is a directory unless it's a file on disk. For the targets
+//     the harness passes (none, `.`, or one .ts file) the result is the same as before.
+// The rest of v4 is v3's (diff.ts, index.ts and run-agent.ts haven't changed since 9743dfcb).
+// v1, v2 and v3 are unchanged: no code path of theirs reads anything v4 adds.
 const revision = () => process.env.ULTRACITE_MIRROR ?? "v1";
-// v2 and v3 share every change v2 made, except where v3 differs (above).
-const atLeastV2 = () => revision() === "v2" || revision() === "v3";
+// v2, v3 and v4 share every change v2 made, except where v3 differs (above).
+const atLeastV2 = () => ["v2", "v3", "v4"].includes(revision());
+// v3 and v4 share every change v3 made.
+const atLeastV3 = () => ["v3", "v4"].includes(revision());
 
 const EXPECTED_V2 = {
   ...EXPECTED,
@@ -193,12 +207,24 @@ const EXPECTED_V3 = {
     "826f76ae5436e14076375b0f2c6c04711adbd804e75a454634094a8ca0c42428",
   "diff.ts": "d8a0c826f8142f686440655c7f460a44aad87546b7107217383244fb0484a51a",
 };
+// The slices at 60a16471 (f23eb8e8, d0219d34, 4a32ea73 and the glob commits since 9743dfcb).
+const EXPECTED_V4 = {
+  ...EXPECTED_V3,
+  "linters.ts oxlint":
+    "ae7aa730a031094f76f2c69c573444c06d8d1766be45626deaa5b977ae52f489",
+  "linters.ts biome":
+    "68a40955e032e151e28b9b32ccdc2540f216e5fc992023bcb45ddb7cba5dfea8",
+  "linter-args.ts toStylelintTargets":
+    "d13e2b6c6d07eb5bf556ca2b8e81175184d7e8201fda428cf0d62122fcb7fd9e",
+};
 const expectedHashes = () =>
-  revision() === "v3"
-    ? EXPECTED_V3
-    : revision() === "v2"
-      ? EXPECTED_V2
-      : EXPECTED;
+  revision() === "v4"
+    ? EXPECTED_V4
+    : revision() === "v3"
+      ? EXPECTED_V3
+      : revision() === "v2"
+        ? EXPECTED_V2
+        : EXPECTED;
 
 /**
  * Hashes every mirrored slice. `strict` (a new run) throws when one differs from EXPECTED;
@@ -327,6 +353,18 @@ const JS_PLUGIN_PACKAGES = new Map([
   ["react-doctor", "oxlint-plugin-react-doctor"],
   ["sonarjs", "eslint-plugin-sonarjs"],
 ]);
+// linters.ts (v4, f23eb8e8): the jsdoc and tsdoc JS plugins too, in the CLI's order.
+const JS_PLUGIN_PACKAGES_V4 = new Map([
+  ["github", "eslint-plugin-github"],
+  ["jsdoc-js", "eslint-plugin-jsdoc"],
+  ["react-doctor", "oxlint-plugin-react-doctor"],
+  ["sonarjs", "eslint-plugin-sonarjs"],
+  ["tsdoc", "eslint-plugin-tsdoc"],
+]);
+const jsPluginPackageMap = () =>
+  revision() === "v4" ? JS_PLUGIN_PACKAGES_V4 : JS_PLUGIN_PACKAGES;
+/** The JS plugins this revision looks rule help up for, as [rule prefix, package] pairs. */
+const jsPluginPackages = () => [...jsPluginPackageMap()];
 const jsPlugins = new Map();
 function loadJsPlugin(packageName) {
   const cached = jsPlugins.get(packageName);
@@ -345,7 +383,7 @@ function loadJsPlugin(packageName) {
 }
 function jsPluginRuleDocs(ruleName) {
   const separator = ruleName.indexOf("/");
-  const packageName = JS_PLUGIN_PACKAGES.get(ruleName.slice(0, separator));
+  const packageName = jsPluginPackageMap().get(ruleName.slice(0, separator));
   if (separator === -1 || !packageName) {
     return {};
   }
@@ -466,7 +504,9 @@ function explainBiomeRule(category) {
   const cached = biomeRuleHelp.get(category);
   const parsed = parseBiomeRuleCategory(category);
   if (cached !== undefined || !parsed) {
-    return cached;
+    // v4 (d0219d34): null marks a rule biome explain couldn't describe. Earlier revisions never
+    // store null, so for them this is `cached` as before.
+    return cached ?? undefined;
   }
   const result = spawnSync(
     process.execPath,
@@ -479,7 +519,9 @@ function explainBiomeRule(category) {
     result.status === 0
       ? parseBiomeExplainDescription(String(result.stdout ?? ""))
       : undefined;
-  if (help !== undefined) {
+  if (revision() === "v4") {
+    biomeRuleHelp.set(category, help ?? null);
+  } else if (help !== undefined) {
     biomeRuleHelp.set(category, help);
   }
   return help;
@@ -565,6 +607,27 @@ const isDirectory = (file, cwd) => {
     return false;
   }
 };
+// linter-args.ts (v4): a glob is expanded when it doesn't exist as a path (800bc5d6, 3c0aef12),
+// with fast-glob from packages/cli as the CLI does, from `cwd`.
+const GLOB_CHARS_RE = /[*?[\]{}]/u;
+const GLOB_EXPANSION_IGNORES = ["**/node_modules/**", "**/.git/**"];
+const isGlobPattern = (arg) => GLOB_CHARS_RE.test(arg);
+const isUnexpandedGlob = (file, cwd) =>
+  isGlobPattern(file) && !existsSync(resolve(cwd, file));
+let fastGlob = null;
+const matchGlob = (file, cwd) => {
+  fastGlob ??= require(require.resolve("fast-glob", { paths: [CLI] }));
+  return fastGlob
+    .sync(file, { cwd, dot: true, ignore: GLOB_EXPANSION_IGNORES })
+    .toSorted();
+};
+const isFile = (file, cwd) => {
+  try {
+    return statSync(resolve(cwd, file)).isFile();
+  } catch {
+    return false;
+  }
+};
 function toStylelintTargets(files, cwd) {
   if (files.length === 0) {
     return [STYLE_FILE_GLOB];
@@ -573,6 +636,30 @@ function toStylelintTargets(files, cwd) {
   for (const file of files) {
     if (hasExtension(file, styleExtensions)) {
       targets.push(file);
+      continue;
+    }
+    // v4 (4a32ea73, 6c29ae8c): a glob that names no style extension is expanded and its style
+    // files kept; a target with no extension is a directory unless it's a file on disk.
+    if (revision() === "v4") {
+      if (isUnexpandedGlob(file, cwd)) {
+        targets.push(
+          ...matchGlob(file, cwd).filter((f) =>
+            hasExtension(f, styleExtensions)
+          )
+        );
+        continue;
+      }
+      if (
+        isDirectory(file, cwd) ||
+        (extname(file) === "" && !isFile(file, cwd))
+      ) {
+        const base = file.replace(/\/+$/u, "");
+        targets.push(
+          base === "." || base === ""
+            ? STYLE_FILE_GLOB
+            : `${escapeGlobPath(base)}/${STYLE_FILE_GLOB}`
+        );
+      }
       continue;
     }
     // (The CLI also turns Windows separators into `/` here.)
@@ -724,9 +811,8 @@ function verifySafely(verify, file, cwd) {
     const ownFile = allRemaining.filter(
       (diagnostic) => diagnostic.file === file
     );
-    // v3: what recordSourceLines returns is what's matched and handed over.
-    const remaining =
-      revision() === "v3" ? recordSourceLinesV3(ownFile, cwd) : ownFile;
+    // v3 (and v4): what recordSourceLines returns is what's matched and handed over.
+    const remaining = atLeastV3() ? recordSourceLinesV3(ownFile, cwd) : ownFile;
     if (revision() === "v2") {
       recordSourceLines(remaining, cwd);
     }
@@ -1151,7 +1237,7 @@ function partitionByRemainingV3(original, remaining) {
 }
 
 const partitionByRemaining = (original, remaining) => {
-  if (revision() === "v3") return partitionByRemainingV3(original, remaining);
+  if (atLeastV3()) return partitionByRemainingV3(original, remaining);
   return revision() === "v2"
     ? partitionByRemainingV2(original, remaining)
     : partitionByRemainingV1(original, remaining);
@@ -1388,6 +1474,8 @@ module.exports = {
   fingerprintSources,
   releaseSourceLines,
   revision,
+  // v4: the JS plugins the Oxlint adapter looks rule help up for.
+  jsPluginPackages,
   toOxlintRuleName,
   verifySafely,
 };

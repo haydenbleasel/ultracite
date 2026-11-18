@@ -1010,10 +1010,14 @@ async function runWithRetries() {
   const loop = mirror.contract();
   const ext = extname(subject.basename) || ".ts";
   const file = join(runDir, subject.basename);
+  // A subject or run file can sit in a folder of the run dir (the type-imports topic's subjects keep
+  // their source tree); for a plain name the folder is the run dir itself, which exists.
+  mkdirSync(dirname(file), { recursive: true });
   copyFileSync(lib.subjectPath(subject), file);
   chmodSync(file, 0o644);
   const runFiles = topic.runFiles(subject);
   for (const extra of runFiles) {
+    mkdirSync(dirname(join(runDir, extra.name)), { recursive: true });
     copyFileSync(extra.from, join(runDir, extra.name));
     chmodSync(join(runDir, extra.name), 0o644);
   }
@@ -1054,16 +1058,16 @@ async function runWithRetries() {
     throw new Error(
       `expected handoff ${JSON.stringify(want)}, got ${JSON.stringify(got)}`
     );
-  // v3 of the mirror (the nested-ternaries topic): runAgentFix records each file's issues at its
-  // turn, before its agent runs, and hands over what recordSourceLines returns (for the first file,
-  // the same diagnostics). Earlier topics run v1 or v2, where the group is used as it is.
-  const group =
-    mirror.revision() === "v3"
-      ? {
-          file: groups[0].file,
-          issues: mirror.recordSourceLinesV3(groups[0].issues, runDir),
-        }
-      : groups[0];
+  // v3 of the mirror (the nested-ternaries topic) and v4 (type-imports): runAgentFix records each
+  // file's issues at its turn, before its agent runs, and hands over what recordSourceLines returns
+  // (for the first file, the same diagnostics). Earlier topics run v1 or v2, where the group is used
+  // as it is.
+  const group = ["v3", "v4"].includes(mirror.revision())
+    ? {
+        file: groups[0].file,
+        issues: mirror.recordSourceLinesV3(groups[0].issues, runDir),
+      }
+    : groups[0];
   const handoffState = join(stagingDir, "handoff");
   copyTree(runDir, handoffState);
 
@@ -1171,6 +1175,14 @@ async function runWithRetries() {
     if (transcripts[0]) {
       claimed.add(transcripts[0]);
       copyFileSync(transcripts[0], join(attemptDir, "transcript.jsonl"));
+    }
+    // More session logs with this run dir as their cwd: the forks a Codex agent spawns (spawn_agent),
+    // each in a session log of its own, which starts after the agent's (added with the type-imports
+    // topic). They're kept as transcript.<k>.jsonl, gitignored like the first, and claimed, so a
+    // later attempt can't take one for its own. With one log, as in every earlier run, nothing changes.
+    for (const [k, p] of transcripts.slice(1).entries()) {
+      claimed.add(p);
+      copyFileSync(p, join(attemptDir, `transcript.${k + 2}.jsonl`));
     }
     // runAgent's `ok` is execa's `!failed`: a non-zero exit, a signal, a timeout or a spawn error
     // fails it. Its stderr feeds fixFileGroup's failure note, so the tail is kept when it failed.
@@ -1339,7 +1351,14 @@ async function runWithRetries() {
         )
       )
     );
-    for (const f of ["stdout.txt", "stderr.txt", "transcript.jsonl"]) {
+    for (const f of [
+      "stdout.txt",
+      "stderr.txt",
+      "transcript.jsonl",
+      ...readdirSync(from).filter((name) =>
+        /^transcript\.\d+\.jsonl$/.test(name)
+      ),
+    ]) {
       if (existsSync(join(from, f)))
         copyFileSync(join(from, f), join(resultDir, rel(f)));
     }
@@ -1391,7 +1410,7 @@ async function runWithRetries() {
       diffTsSha256: sources.diffTsSha256,
       mirroredSlicesSha256: sources.hashes,
       // Recorded from v3 on (added with the nested-ternaries topic); v1 and v2 runs don't carry it.
-      ...(mirror.revision() === "v3"
+      ...(["v3", "v4"].includes(mirror.revision())
         ? { mirrorRevision: mirror.revision() }
         : {}),
     },

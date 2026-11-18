@@ -1,0 +1,92 @@
+{
+  "diagnostics": [
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "client/normalize-locale-path.ts",
+      "help": "Move require() to top-level module scope",
+      "line": 38,
+      "message": "Unexpected require().",
+      "raw": {
+        "message": "Unexpected require().",
+        "code": "node(global-require)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/node/global-require.html",
+        "help": "Move require() to top-level module scope",
+        "filename": "client/normalize-locale-path.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 2011,
+              "length": 51,
+              "line": 38,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "node/global-require",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/node/global-require.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "client/normalize-locale-path.ts",
+      "help": "Prefer ES modules over CommonJS globals.",
+      "line": 38,
+      "message": "Do not use \"require\".",
+      "raw": {
+        "message": "Do not use \"require\".",
+        "code": "unicorn(prefer-module)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/unicorn/prefer-module.html",
+        "help": "Prefer ES modules over CommonJS globals.",
+        "filename": "client/normalize-locale-path.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 2011,
+              "length": 7,
+              "line": 38,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "unicorn/prefer-module",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/unicorn/prefer-module.html"
+    },
+    {
+      "column": 69,
+      "fatal": false,
+      "file": "client/normalize-locale-path.ts",
+      "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+      "line": 38,
+      "message": "`import()` type annotations are forbidden.",
+      "raw": {
+        "message": "`import()` type annotations are forbidden.",
+        "code": "typescript(consistent-type-imports)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/consistent-type-imports.html",
+        "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+        "filename": "client/normalize-locale-path.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 2073,
+              "length": 50,
+              "line": 38,
+              "column": 69
+            }
+          }
+        ]
+      },
+      "rule": "typescript/consistent-type-imports",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/consistent-type-imports.html"
+    }
+  ],
+  "file": "client/normalize-locale-path.ts"
+}

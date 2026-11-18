@@ -1,0 +1,13 @@
+--- a/client/normalize-locale-path.ts
++++ b/client/normalize-locale-path.ts
+@@ -35,7 +35,9 @@
+ export const normalizeLocalePath: typeof Fn = (pathname, locales) => {
+   if (process.env.__NEXT_I18N_SUPPORT) {
+     return (
+-      require("../shared/lib/i18n/normalize-locale-path") as { normalizeLocalePath: typeof Fn }
++      require("../shared/lib/i18n/normalize-locale-path") as {
++        normalizeLocalePath: typeof Fn;
++      }
+     ).normalizeLocalePath(pathname, locales);
+   }
+   return { pathname, detectedLocale: undefined };

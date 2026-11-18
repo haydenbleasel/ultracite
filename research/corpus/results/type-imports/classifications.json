@@ -1,0 +1,1484 @@
+{
+  "agreement": {
+    "safe": {
+      "agree": 24,
+      "kappa": 0.65,
+      "n": 32
+    },
+    "runtimeChange": {
+      "agree": 32,
+      "kappa": 1,
+      "n": 32
+    },
+    "reliesOnEffect": {
+      "agree": 32,
+      "kappa": 1,
+      "n": 32
+    },
+    "readability": {
+      "agree": 29,
+      "kappa": 0.83,
+      "n": 32
+    },
+    "rightResponse": {
+      "agree": 29,
+      "kappa": 0.85,
+      "n": 32
+    }
+  },
+  "blindSubset": [
+    "t01",
+    "t05",
+    "t06",
+    "t07",
+    "t08",
+    "t09",
+    "t10",
+    "t12",
+    "t15",
+    "t18",
+    "t22",
+    "t32",
+    "t34",
+    "t37",
+    "t46",
+    "t47",
+    "t48",
+    "t51",
+    "t53",
+    "t55",
+    "t57",
+    "t58",
+    "t60",
+    "t67",
+    "t68",
+    "t70",
+    "t71",
+    "t73",
+    "t74",
+    "t75",
+    "t79",
+    "t80"
+  ],
+  "byStratum": {
+    "D": {
+      "safe": {
+        "n/a": 4,
+        "no": 3,
+        "yes": 1
+      },
+      "runtimeChange": {
+        "none": 5,
+        "value-made-type": 2,
+        "other": 1
+      },
+      "reliesOnEffect": {
+        "no": 8
+      },
+      "readability": {
+        "better": 5,
+        "worse": 2,
+        "same": 1
+      },
+      "rightResponse": {
+        "merge": 4,
+        "keep": 3,
+        "convert": 1
+      }
+    },
+    "I": {
+      "safe": {
+        "n/a": 12
+      },
+      "runtimeChange": {
+        "none": 12
+      },
+      "reliesOnEffect": {
+        "no": 12
+      },
+      "readability": {
+        "same": 12
+      },
+      "rightResponse": {
+        "keep": 10,
+        "convert": 1,
+        "other": 1
+      }
+    },
+    "M": {
+      "safe": {
+        "yes": 12
+      },
+      "runtimeChange": {
+        "none": 12
+      },
+      "reliesOnEffect": {
+        "no": 12
+      },
+      "readability": {
+        "worse": 8,
+        "same": 4
+      },
+      "rightResponse": {
+        "split": 12
+      }
+    },
+    "N": {
+      "safe": {
+        "no": 2,
+        "depends": 2,
+        "yes": 4
+      },
+      "runtimeChange": {
+        "other": 2,
+        "none": 6
+      },
+      "reliesOnEffect": {
+        "no": 8
+      },
+      "readability": {
+        "worse": 2,
+        "better": 5,
+        "same": 1
+      },
+      "rightResponse": {
+        "merge": 2,
+        "convert": 6
+      }
+    },
+    "P": {
+      "safe": {
+        "n/a": 8
+      },
+      "runtimeChange": {
+        "none": 8
+      },
+      "reliesOnEffect": {
+        "no": 8
+      },
+      "readability": {
+        "same": 4,
+        "worse": 4
+      },
+      "rightResponse": {
+        "keep": 8
+      }
+    },
+    "T0": {
+      "safe": {
+        "yes": 13,
+        "depends": 1
+      },
+      "runtimeChange": {
+        "none": 14
+      },
+      "reliesOnEffect": {
+        "no": 14
+      },
+      "readability": {
+        "better": 13,
+        "same": 1
+      },
+      "rightResponse": {
+        "convert": 14
+      }
+    },
+    "T1": {
+      "safe": {
+        "depends": 14
+      },
+      "runtimeChange": {
+        "none": 14
+      },
+      "reliesOnEffect": {
+        "no": 14
+      },
+      "readability": {
+        "better": 14
+      },
+      "rightResponse": {
+        "convert": 14
+      }
+    },
+    "X": {
+      "safe": {
+        "depends": 2,
+        "yes": 2
+      },
+      "runtimeChange": {
+        "none": 4
+      },
+      "reliesOnEffect": {
+        "no": 4
+      },
+      "readability": {
+        "better": 2,
+        "worse": 1,
+        "same": 1
+      },
+      "rightResponse": {
+        "convert": 2,
+        "split": 2
+      }
+    }
+  },
+  "codebook": "safe           yes (what each linter's fix writes changes nothing at runtime under this repo's\n                 build) | depends (nothing changes under the repo's settings, but something would\n                 where imports are kept as written: verbatimModuleSyntax, Node's type stripping)\n                 | no (it changes what runs under the repo's own build) | n/a (style or\n                 duplicate only, nothing converted)\n  runtimeChange  none | module-not-loaded (a module that ran from this import no longer does) |\n                 metadata (decorator metadata changes) | order (evaluation order or a cycle\n                 changes) | value-made-type (a value ends up type-only and breaks) | other\n  reliesOnEffect yes (the file or its program needs the target's top-level code to run from this\n                 import) | no | unknown\n  readability    better | same | worse: the code after the fix Ultracite's Oxlint writes, against\n                 as written\n  rightResponse  convert (to `import type`) | split (values and types into two declarations) |\n                 merge (into one declaration per kind) | keep (as written) | other\n  notes          one line",
+  "generated": "2026-11-18T07:23:36.908Z",
+  "labels": {
+    "t01": {
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/Picker.tsx#L3",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "Two value imports of @excalidraw/common (L3, L5); all three fixes merge them and leave the separate import type of ColorPaletteCustom alone. Nothing converted."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "Two adjacent value imports from @excalidraw/common merged into one; the separate import type stays; nothing converted, no order change."
+      },
+      "stratum": "D"
+    },
+    "t02": {
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/optimistic-routes.ts#L49",
+      "rater1": {
+        "safe": "no",
+        "runtimeChange": "value-made-type",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "ESLint's no-duplicates folds the value import into the `import type` (writeRouteIntoCache, EntryStatus etc. become type-only, plus TS2206 on the inner `type`); Oxlint folds the four types into the value import as inline types, against its own prefer-top-level. As written is fine."
+      },
+      "stratum": "D"
+    },
+    "t03": {
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/static-build.ts#L18",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "trackPageData (L18) and getSSRAssets (L28) imported from ./internal.js in two declarations; all three merge them. L8 reaches the same file by another path and is left alone."
+      },
+      "stratum": "D"
+    },
+    "t04": {
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L4",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "Two value imports of @radix-ui/primitive (L4 and L23); all three merge them into one."
+      },
+      "stratum": "D"
+    },
+    "t05": {
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/TRPCClientError.ts#L1",
+      "rater1": {
+        "safe": "no",
+        "runtimeChange": "value-made-type",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "ESLint merges isObject into the `import type` (a value made type-only, and `type DefaultErrorShape` inside `import type` is TS2206, which Oxc rejects); Oxlint turns the separate import type into five inline types around one value. As written is fine."
+      },
+      "rater2": {
+        "safe": "no",
+        "runtimeChange": "value-made-type",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "merge",
+        "notes": "ESLint's no-duplicates fix puts isObject (called at L30, L41) inside import type, so it is undefined at runtime; Oxlint (one inline-type declaration) and Biome are fine. Best: move DefaultErrorShape into the import type, keep isObject as the value import."
+      },
+      "stratum": "D"
+    },
+    "t06": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Collection.tsx#L12",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Two all-type value-form imports of @react-types/shared, a types-only package. Oxlint and ESLint convert both but leave two `import type` declarations; Biome merges them. Converting and merging into one is the right end state."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "Both @react-types/shared imports are all types (a types-only package); fix converts both to import type, Oxlint leaves two declarations; best is one import type. Elided by SWC/Babel already."
+      },
+      "stratum": "D"
+    },
+    "t07": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SidePanelEditor.utils.tsx#L2",
+      "rater1": {
+        "safe": "no",
+        "runtimeChange": "other",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "ESLint's merge writes `import pgMeta, type { … }`, a syntax error (Prettier can't format it). Oxlint moves PGTablePrimaryKey into the default+named value import as an inline type. As written is fine."
+      },
+      "rater2": {
+        "safe": "no",
+        "runtimeChange": "other",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "merge",
+        "notes": "Worksheet shows ESLint's fix leaves no @supabase/pg-meta declaration (likely the default inserted into the import type), losing pgMeta and the SQL helpers; Oxlint inlines the type into the value import, Biome keeps both. Best: move type ForeignKey into the import type."
+      },
+      "stratum": "D"
+    },
+    "t08": {
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L2",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "Two `import type` declarations from ./checks.js beside the namespace import; Oxlint and ESLint merge them into one. Type-only either way."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "merge",
+        "notes": "Two adjacent import type declarations from ./checks.js merged; the namespace import has to stay separate."
+      },
+      "stratum": "D"
+    },
+    "t09": {
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/module-runner/importMetaResolver.ts#L46",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No linter autofixes import() type annotations. It types a module fetched with process.getBuiltinModule in module-runner code that must also run outside Node, so the type sits beside the lazy lookup."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "typeof import('node:module') types a module fetched lazily via process.getBuiltinModule; no autofix, and vite sets disallowTypeAnnotations: false on purpose."
+      },
+      "stratum": "I"
+    },
+    "t10": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/AccountLayout/AccountLayout.types.ts#L10",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "convert",
+        "notes": "No autofix. A plain type reference in a .types.ts file; `import type { ShortcutId }` at the top is erased the same way and is the conventional form."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "convert",
+        "notes": "Inline import() type in a plain types file with no dynamic import nearby; a top-level import type { ShortcutId } is equivalent and easier to find. No autofix."
+      },
+      "stratum": "I"
+    },
+    "t11": {
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/cli/check/index.ts#L27",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. @astrojs/check is an optional package installed on demand by getPackage, with @ts-ignore on the line; a top-level import type would need the same suppression."
+      },
+      "stratum": "I"
+    },
+    "t12": {
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/subset/subset-main.ts#L76",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. Types a lazily imported, cached chunk next to the import() that loads it (the file already has an import type of Commands from the same chunk)."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "Type of a lazily loaded chunk that is import()ed at L89; the inline type keeps the code-splitting intent visible. No autofix."
+      },
+      "stratum": "I"
+    },
+    "t13": {
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/web/adapter.ts#L237",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. A one-off cast of a constructor injected through params in the edge adapter; an import type would be erased too, but the inline form keeps the reference local. Close call with convert."
+      },
+      "stratum": "I"
+    },
+    "t14": {
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/packages.ts#L15",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. pnpapi exists only under Yarn PnP and is loaded with createRequire in a try; the inline type matches that."
+      },
+      "stratum": "I"
+    },
+    "t15": {
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/config/validate.ts#L78",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. @astrojs/markdown-remark is optional and imported dynamically in the try/catch right below."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "@astrojs/markdown-remark is an optional dependency loaded with await import() at L80; the inline typeof import() matches that. No autofix."
+      },
+      "stratum": "I"
+    },
+    "t16": {
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/subset/subset-main.ts#L75",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. Same lazy-chunk pattern as t12: the type mirrors the import(\"./subset-worker.chunk\") on L80."
+      },
+      "stratum": "I"
+    },
+    "t17": {
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/babel/preset.ts#L154",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. The typed require() idiom for compiled Babel plugins; each type sits on the require it describes."
+      },
+      "stratum": "I"
+    },
+    "t18": {
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/esbuild.ts#L77",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. esbuild is imported lazily (esbuild ||= import('esbuild')); the type matches the dynamic import."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "esbuild is loaded lazily with import('esbuild'); the inline type mirrors it, and vite allows type annotations deliberately. No autofix."
+      },
+      "stratum": "I"
+    },
+    "t19": {
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/config/validate.ts#L77",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "No autofix. Same optional dynamic import of @astrojs/markdown-remark as t15."
+      },
+      "stratum": "I"
+    },
+    "t20": {
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-upgrade.ts#L394",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "other",
+        "notes": "No autofix. A typed lazy require, but L20 already imports getInstalledNextVersion statically from the same module, so it loads at startup anyway; adding prepareUpgrade to that import is simpler."
+      },
+      "stratum": "I"
+    },
+    "t21": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/minimapTokensColorTracker.ts#L6",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "Event (type) split from Emitter; event.js still loads for Emitter in every mode. Two declarations for a two-name import; an inline type would read as well."
+      },
+      "stratum": "M"
+    },
+    "t22": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Switch.tsx#L35",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "ForwardedRef and Ref split from the React value import; React and the hooks stay values. react loads either way."
+      },
+      "rater2": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "ForwardedRef and Ref move to import type; react stays loaded through the value import under any setting. Inline type markers (Biome) would do equally well."
+      },
+      "stratum": "M"
+    },
+    "t23": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/JwtSecrets/algorithm-hover-card.tsx#L4",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "AlgorithmDetail split from algorithmDetails (a value, also used in typeof); the module still loads."
+      },
+      "stratum": "M"
+    },
+    "t24": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/textModelEvents.ts#L7",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "IRange split from Range; range.js still loads for Range."
+      },
+      "stratum": "M"
+    },
+    "t25": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/SelectionIndicator.tsx#L15",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "Two prop interfaces split from SharedElement, which is used in JSX; the module still loads."
+      },
+      "stratum": "M"
+    },
+    "t26": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Hooks/CreateHookSheet.tsx#L11",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "SubmitHandler split from useForm and useWatch; react-hook-form still loads."
+      },
+      "stratum": "M"
+    },
+    "t27": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursor.ts#L16",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "IRange split from Range (value and type); range.js still loads."
+      },
+      "stratum": "M"
+    },
+    "t28": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DateField.tsx#L30",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "Four state and segment types split from useDateFieldState; the module still loads."
+      },
+      "stratum": "M"
+    },
+    "t29": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Database/ConnectionPooling/ConnectionPooling.tsx#L7",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "Same as t26: SubmitHandler split from useForm and useWatch."
+      },
+      "stratum": "M"
+    },
+    "t30": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsImpl.ts#L8",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "IDisposable and IReference split from three classes; lifecycle.js still loads."
+      },
+      "stratum": "M"
+    },
+    "t31": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ColorField.tsx#L13",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "AriaColorFieldProps split from the two hooks; the module still loads."
+      },
+      "stratum": "M"
+    },
+    "t32": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/CardButton.tsx#L3",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "PropsWithChildren split from the React default import and cloneElement; React stays a value (React.isValidElement)."
+      },
+      "rater2": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "PropsWithChildren moves to import type; React and cloneElement stay in the value import, so react still loads. Inline type would be equivalent."
+      },
+      "stratum": "M"
+    },
+    "t33": {
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/utils/createUtilityFunctions.ts#L20",
+      "rater1": {
+        "safe": "no",
+        "runtimeChange": "other",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "merge",
+        "notes": "ESLint merges into `import type { A, type B }` (TS2206; Oxc rejects it, so the tsdown build fails). Oxlint merges the existing import type and this one into an inline-only declaration, the form no-import-type-side-effects reports. Biome's single import type is right. ../shared is a re-export barrel."
+      },
+      "stratum": "N"
+    },
+    "t34": {
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/css.ts#L39",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Inline-only import of the vite node barrel ('..'). Oxc drops it as configured, so nothing changes; where imports are kept it would be `import '..'`, loading the whole API and closing a cycle back to css.ts, which the conversion removes."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "import { type DevEnvironment } from '..' is dropped whole by Oxc today; under verbatimModuleSyntax/type stripping it would keep a side-effect import of the node index (a cycle back to css.ts), which the fix removes."
+      },
+      "stratum": "N"
+    },
+    "t35": {
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/fonts/Liberation/index.ts#L1",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Inline-only import of ../Fonts, which imports this file back for LiberationFontFaces. esbuild/Vite drop it as configured; where imports are kept it is a side-effect import that makes a Fonts-Liberation cycle, which the conversion removes."
+      },
+      "stratum": "N"
+    },
+    "t36": {
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-16/components/nav-secondary.tsx#L2",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Inline-only import of lucide-react for a type; SWC drops it as configured, and the package is side-effect-free and loaded for icons elsewhere."
+      },
+      "stratum": "N"
+    },
+    "t37": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectAPIDocs/SecondLevelNav.tsx#L2",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Inline-only import of react for ReactNode; dropped by SWC, and react is loaded by the JSX runtime anyway with no load-time effect to lose."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "import { type ReactNode } would become a bare import of react under verbatim settings; the fix drops it, but react still loads via react/jsx-runtime, so nothing observable."
+      },
+      "stratum": "N"
+    },
+    "t38": {
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/ws.ts#L16",
+      "rater1": {
+        "safe": "no",
+        "runtimeChange": "other",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "merge",
+        "notes": "As t33: ESLint writes `import type { TRPCRequestInfo, type BaseHandlerOptions }` (TS2206, rejected by Oxc); Oxlint merges into an inline-only declaration; Biome's merged import type is right. http.ts re-exports unstable-core-do-not-import."
+      },
+      "stratum": "N"
+    },
+    "t39": {
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/build.ts#L52",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Inline-only import of ./logger (no top-level effects) for the Logger interface; all three convert it to import type."
+      },
+      "stratum": "N"
+    },
+    "t40": {
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/scene/export.ts#L38",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "convert",
+        "notes": "Inline-only import of a types-only file. ESLint and Biome convert it; Oxlint's pass left it as written (the file didn't converge). Nothing runs from it in any mode."
+      },
+      "stratum": "N"
+    },
+    "t41": {
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/cropElement.ts#L1",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "One inline type among eleven values; prefer-top-level splits out `import type { Radians }`. The module loads for the values either way, so this is style only."
+      },
+      "stratum": "P"
+    },
+    "t42": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/Usage/ActiveCompute.tsx#L10",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Style only: an enum value plus an inline type become two declarations of the same module."
+      },
+      "stratum": "P"
+    },
+    "t43": {
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/links/httpSubscriptionLink.ts#L20",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Style only: resultOf plus one inline type split into two declarations; the module loads for resultOf either way."
+      },
+      "stratum": "P"
+    },
+    "t44": {
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/sync/index.ts#L25",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "Style only: ErrorWithMetadata moved out of a five-value import. Under verbatimModuleSyntax the mixed form already keeps only the values."
+      },
+      "stratum": "P"
+    },
+    "t45": {
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/collection/src/collection.tsx#L4",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Style only: `createSlot, type Slot` (Slot used through typeof) becomes two declarations; import type supports typeof, so it's correct either way."
+      },
+      "stratum": "P"
+    },
+    "t46": {
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/templates/app-route.ts#L1",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "Style only: two inline types split from AppRouteRouteModule in a build template; the module loads for the class either way."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Types were already marked inline; splitting them into a second declaration is style only and adds a duplicate specifier (verbatimModuleSyntax on, value import unchanged)."
+      },
+      "stratum": "P"
+    },
+    "t47": {
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/nativeConfigCompat.ts#L6",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Style only: `parseSync, type ESTree` becomes two declarations of rolldown/utils."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Already marked inline (type ESTree); the split is style only and repeats rolldown/utils."
+      },
+      "stratum": "P"
+    },
+    "t48": {
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-08/components/nav-projects.tsx#L3",
+      "rater1": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "keep",
+        "notes": "Style only: LucideIcon split from four icons used in JSX; lucide-react loads either way."
+      },
+      "rater2": {
+        "safe": "n/a",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "keep",
+        "notes": "Already marked inline (type LucideIcon); the split is style only and repeats lucide-react."
+      },
+      "stratum": "P"
+    },
+    "t49": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel.ts#L17",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Five bindings used only as types (EndOfLinePreference is a const enum, TextDirection an enum); model.ts has no top-level effects, and the full-program tsc build already elides the import."
+      },
+      "stratum": "T0"
+    },
+    "t50": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/BranchManagement/BranchManagement.utils.ts#L7",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Type alias from a query module with no top-level effects; SWC drops the import either way."
+      },
+      "stratum": "T0"
+    },
+    "t51": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L95",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Node and SelectionBehavior from the types-only @react-types/shared; Oxlint converts and folds them into the file's other @react-types/shared import."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Node and SelectionBehavior are types from the types-only @react-types/shared; the fix also folds them into the file's other shared import. Already elided by SWC/Babel."
+      },
+      "stratum": "T0"
+    },
+    "t52": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewEvents.ts#L6",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ScrollEvent used only as a type; base/common/scrollable.js isn't in the sparse clone, so its top-level code couldn't be checked. The full-program build elides the import either way."
+      },
+      "stratum": "T0"
+    },
+    "t53": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/UnifiedLogs/components/DownloadLogsButton.tsx#L29",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Type from a .types.ts file with no runtime code."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "QuerySearchParamsType is a type alias; UnifiedLogs.types has no runtime code to speak of; already elided by SWC."
+      },
+      "stratum": "T0"
+    },
+    "t54": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DateField.tsx#L40",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Types-only @react-types/shared; Oxlint converts and merges it with the HoverEvents import of the same package (L43)."
+      },
+      "stratum": "T0"
+    },
+    "t55": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/supports.ts#L6",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "LineTokens is a class but used here only as a parameter type; lineTokens.ts has no top-level effects."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "LineTokens (a class) and IViewLineTokens are only used as types; tsc elides today; under verbatim settings lineTokens.js would stop loading from this file, which nothing needs."
+      },
+      "stratum": "T0"
+    },
+    "t56": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Hooks/HookCard.tsx#L21",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Interface from a constants module with no top-level effects."
+      },
+      "stratum": "T0"
+    },
+    "t57": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Meter.tsx#L26",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Types from the types-only @react-types/shared."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "forwardRefType and GlobalDOMAttributes are types from the types-only @react-types/shared; already elided."
+      },
+      "stratum": "T0"
+    },
+    "t58": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursorCommon.ts#L11",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Interface from editorCommon.ts, which has no top-level effects."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ICommand is an interface; editorCommon.js has no side effects; tsc elides today."
+      },
+      "stratum": "T0"
+    },
+    "t59": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/api/content/graphql.ts#L1",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Request and response types from 'next'. SWC drops the import as configured; where imports are kept it would load next's server entry, which installs a require hook, and the conversion stops that from this API route."
+      },
+      "stratum": "T0"
+    },
+    "t60": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L61",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "convert",
+        "notes": "ESLint and Biome convert; Oxlint's pass left it as written (the file didn't converge). A react-aria hook module with no known load-time effects, dropped by SWC either way."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "convert",
+        "notes": "Both bindings are types; ESLint and Biome convert, Oxlint's fix left the line unchanged; react-aria/useDroppableCollection is already elided from this file by SWC."
+      },
+      "stratum": "T0"
+    },
+    "t61": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/commands/surroundSelectionCommand.ts#L9",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Three interfaces from editorCommon.ts, which has no top-level effects."
+      },
+      "stratum": "T0"
+    },
+    "t62": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/DataTable.utils.ts#L1",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "FilterFn type from @tanstack/react-table, a side-effect-free package; dropped by SWC either way."
+      },
+      "stratum": "T0"
+    },
+    "t63": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/UnifiedLogs/ServiceFlow/components/PostgresFlowDetail.tsx#L6",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ColumnSchema type from a module that builds zod schemas at load. SWC drops it as configured; where imports are kept the conversion stops that module loading from this file, and nothing here needs it."
+      },
+      "stratum": "T1"
+    },
+    "t64": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/commands/shiftCommand.ts#L13",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "A const enum used as a type. editorOptions.ts registers options at load but is imported for values all over the editor; the full-program tsc build already elides this import."
+      },
+      "stratum": "T1"
+    },
+    "t65": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/TextArea.tsx#L10",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Interface from Input.tsx, which creates a context and a component at load; TextArea needs none of it."
+      },
+      "stratum": "T1"
+    },
+    "t66": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Hooks/HTTPHeaders.tsx#L7",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Form-values type from a constants module that builds zod schemas at load; not needed from this file."
+      },
+      "stratum": "T1"
+    },
+    "t67": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/enterAction.ts#L9",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Same as t64: const enum EditorAutoIndentStrategy used as a parameter type."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "EditorAutoIndentStrategy is a const enum used only as a parameter type; editorOptions.js has heavy top-level code but tsc already drops this import."
+      },
+      "stratum": "T1"
+    },
+    "t68": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/TableLayout.ts#L14",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Interface used in `implements`; Virtualizer.tsx creates contexts at load, which TableLayout doesn't need."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "LayoutOptionsDelegate is an interface used in implements; Virtualizer's top-level code (contexts) never ran from this import under SWC."
+      },
+      "stratum": "T1"
+    },
+    "t69": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/CronJobs/EdgeFunctionSection.tsx#L37",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Form type from a constants module that builds zod schemas at load."
+      },
+      "stratum": "T1"
+    },
+    "t70": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/tokens/tokenWithTextArray.ts#L7",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ILanguageIdCodec from languages.ts, which constructs TokenizationRegistry at load; it's imported for values elsewhere."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ILanguageIdCodec is an interface; languages.ts creates TokenizationRegistry at top level, but tsc already elides this import and other modules load it."
+      },
+      "stratum": "T1"
+    },
+    "t71": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Select.tsx#L38",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Interface from Collection.tsx, which has load-time code; Select needs none of it from this import."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ItemRenderProps is an interface and the only binding from ./Collection here; already elided by SWC."
+      },
+      "stratum": "T1"
+    },
+    "t72": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/Landing/IntegrationCard.tsx#L7",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Type from Integrations.constants.tsx, which builds integration arrays at load."
+      },
+      "stratum": "T1"
+    },
+    "t73": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsImpl.ts#L16",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "TextModel used only as a type; textModel.ts imports this file back for BracketPairsTextModelPart, so where imports are kept the value form is a runtime cycle that the conversion removes."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "TextModel class used only as a constructor parameter type (no emitDecoratorMetadata); textModel.ts imports bracketPairsImpl, so under verbatim settings the fix would remove a cycle."
+      },
+      "stratum": "T1"
+    },
+    "t74": {
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridLayout.ts#L14",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Same as t68 for GridLayout."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Same as TableLayout: LayoutOptionsDelegate is an interface used in implements; already elided by SWC."
+      },
+      "stratum": "T1"
+    },
+    "t75": {
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/UnifiedLogs/components/LogsListPanel.tsx#L6",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Same target as t63 (zod schemas at load); ColumnSchema only as a type argument."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "ColumnSchema is z.infer of a schema; UnifiedLogs.schema only builds zod objects at top level, and SWC already elides this import."
+      },
+      "stratum": "T1"
+    },
+    "t76": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/services/textResourceConfigurationService.ts#L12",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Service identifier used only in `implements`; textResourceConfiguration.ts calls createDecorator at load, but the identifier is imported as a value wherever the service is registered or injected."
+      },
+      "stratum": "T1"
+    },
+    "t77": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/tokens/tokenizationTextModelPart.ts#L16",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "A class used as a parameter type in a decorated constructor. vscode doesn't set emitDecoratorMetadata, so no design:paramtypes is emitted (with it on, the class would serialise as Object); bracketPairsImpl.ts has load-time code."
+      },
+      "stratum": "X"
+    },
+    "t78": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/textModel.ts#L35",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "worse",
+        "rightResponse": "split",
+        "notes": "ILanguageService stays a value (it's the parameter decorator); only ILanguageSelection is split out. No emitDecoratorMetadata."
+      },
+      "stratum": "X"
+    },
+    "t79": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/services/semanticTokensProviderStyling.ts#L6",
+      "rater1": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "SemanticTokensLegend is in a decorated constructor's parameters, but emitDecoratorMetadata is off; languages.ts has load-time code."
+      },
+      "rater2": {
+        "safe": "depends",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "better",
+        "rightResponse": "convert",
+        "notes": "Decorated constructor, but vscode sets experimentalDecorators without emitDecoratorMetadata, and SemanticTokensLegend is an interface, so no metadata either way."
+      },
+      "stratum": "X"
+    },
+    "t80": {
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/services/textResourceConfigurationService.ts#L13",
+      "rater1": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "IConfigurationService (a decorator) and ConfigurationTarget (an enum value) stay values; two interfaces are split out. No emitDecoratorMetadata."
+      },
+      "rater2": {
+        "safe": "yes",
+        "runtimeChange": "none",
+        "reliesOnEffect": "no",
+        "readability": "same",
+        "rightResponse": "split",
+        "notes": "IConfigurationService (decorator value) and ConfigurationTarget stay in the value import, so configuration.js still loads; only two interfaces move to import type."
+      },
+      "stratum": "X"
+    }
+  },
+  "note": "Rater 1, a subagent, labelled all items from the worksheet with the automatic facts (each linter's fix, the target's top-level code, the repo's flags); rater 2, a separate subagent working blind (the code, the repo's settings and each fix's output, without the automatic facts), labelled the subset from the blind worksheet. Shares are rater 1's, weighted by each stratum's population (sample.json).",
+  "shares": {
+    "safe": {
+      "yes": 48.3,
+      "n/a": 40.7,
+      "depends": 8,
+      "no": 3
+    },
+    "runtimeChange": {
+      "none": 97,
+      "other": 1.8,
+      "value-made-type": 1.2
+    },
+    "reliesOnEffect": {
+      "no": 100
+    },
+    "readability": {
+      "better": 35.8,
+      "same": 35.5,
+      "worse": 28.8
+    },
+    "rightResponse": {
+      "keep": 38,
+      "convert": 37,
+      "split": 20.3,
+      "merge": 3.6,
+      "other": 1.1
+    }
+  },
+  "weights": {
+    "D": 26.375,
+    "I": 48.083333333333336,
+    "M": 75.91666666666667,
+    "N": 28.5,
+    "P": 145.25,
+    "T0": 86.64285714285714,
+    "T1": 15,
+    "X": 4.5
+  }
+}

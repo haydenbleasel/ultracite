@@ -1,0 +1,119 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "what `ultracite init --linter oxlint` writes (oxlint.config.ts: env, extends [core], ignorePatterns; oxfmt.config.ts: ...ultracite), unchanged, passed with -c and importing the presets by absolute URL",
+  "filter": "typescript/consistent-type-imports, typescript/consistent-type-exports, typescript/no-import-type-side-effects, import/consistent-type-specifier-style, import/no-duplicates, no-duplicate-imports, node/global-require, unicorn/prefer-module, plus any other diagnostic not among the prepared project's own (rule and message, file by file, as diff.ts matches them): a project that lints clean apart from these rules. Every re-lint uses the same filter.",
+  "mirrorRevision": "v4",
+  "diagnosticsReported": 6,
+  "diagnosticsHandedOver": 3,
+  "leftOutByFilter": {
+    "func-style": 1,
+    "no-param-reassign": 1,
+    "prefer-const": 1
+  },
+  "leftOutByFilterByFile": {
+    "shared/lib/i18n/normalize-locale-path.ts": 3
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "ae7aa730a031094f76f2c69c573444c06d8d1766be45626deaa5b977ae52f489",
+    "linters.ts biome": "68a40955e032e151e28b9b32ccdc2540f216e5fc992023bcb45ddb7cba5dfea8",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "d13e2b6c6d07eb5bf556ca2b8e81175184d7e8201fda428cf0d62122fcb7fd9e",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "826f76ae5436e14076375b0f2c6c04711adbd804e75a454634094a8ca0c42428",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "a0e2264c563d3dc778a6fcd519c3030f02df24ac2b4a539bd82fd27647fd6581",
+    "diff.ts": "d8a0c826f8142f686440655c7f460a44aad87546b7107217383244fb0484a51a"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "client/normalize-locale-path.ts",
+      "help": "Move require() to top-level module scope",
+      "line": 38,
+      "message": "Unexpected require().",
+      "raw": {
+        "message": "Unexpected require().",
+        "code": "node(global-require)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/node/global-require.html",
+        "help": "Move require() to top-level module scope",
+        "filename": "client/normalize-locale-path.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 2011,
+              "length": 51,
+              "line": 38,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "node/global-require",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/node/global-require.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "client/normalize-locale-path.ts",
+      "help": "Prefer ES modules over CommonJS globals.",
+      "line": 38,
+      "message": "Do not use \"require\".",
+      "raw": {
+        "message": "Do not use \"require\".",
+        "code": "unicorn(prefer-module)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/unicorn/prefer-module.html",
+        "help": "Prefer ES modules over CommonJS globals.",
+        "filename": "client/normalize-locale-path.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 2011,
+              "length": 7,
+              "line": 38,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "unicorn/prefer-module",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/unicorn/prefer-module.html"
+    },
+    {
+      "column": 69,
+      "fatal": false,
+      "file": "client/normalize-locale-path.ts",
+      "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+      "line": 38,
+      "message": "`import()` type annotations are forbidden.",
+      "raw": {
+        "message": "`import()` type annotations are forbidden.",
+        "code": "typescript(consistent-type-imports)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/consistent-type-imports.html",
+        "help": "Replace `import()` type annotations with a regular type import. For example, change `type T = import('module').Type` to `import type { Type } from 'module'; type T = Type`.",
+        "filename": "client/normalize-locale-path.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 2073,
+              "length": 50,
+              "line": 38,
+              "column": 69
+            }
+          }
+        ]
+      },
+      "rule": "typescript/consistent-type-imports",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/consistent-type-imports.html"
+    }
+  ]
+}

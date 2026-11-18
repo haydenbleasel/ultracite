@@ -1,0 +1,17 @@
+--- a/TRPCClientError.ts
++++ b/TRPCClientError.ts
+@@ -34,13 +34,13 @@
+  * SOFTWARE.
+  */
+ import type {
++  DefaultErrorShape,
+   inferClientTypes,
+   InferrableClientTypes,
+   Maybe,
+   TRPCErrorResponse,
+ } from "@trpc/server/unstable-core-do-not-import";
+ import { isObject } from "@trpc/server/unstable-core-do-not-import";
+-import type { DefaultErrorShape } from "@trpc/server/unstable-core-do-not-import";
+ 
+ type inferErrorShape<TInferrable extends InferrableClientTypes> =
+   inferClientTypes<TInferrable>["errorShape"];

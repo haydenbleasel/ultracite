@@ -1,0 +1,302 @@
+---
+title: What a type-only import leaves behind
+description: Why TypeScript always erases one way of marking a type import and can keep the other, what a dozen compilers and twelve codebases do with each, where the fixes break code, and what coding agents did with three type-import reports.
+date: 2026-11-18
+author: hayden
+next:
+  - label: Change or turn off a rule in your project
+    href: /docs/configuration#overriding-rules
+  - label: Why a fix can clear a type-only cycle
+    href: /docs/faq#q-why-does-an-import-cycle-go-away-after-ultracite-fix
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - consistent-type-imports
+  - no-import-type-side-effects
+  - consistent-type-exports
+  - import/consistent-type-specifier-style
+  - useImportType
+  - useExportType
+---
+
+TypeScript has two ways to mark an import as type-only. `import type { User } from "./user"` marks the whole statement, and `import { type User } from "./user"` marks one name. typescript-eslint's `consistent-type-imports` reports an import that is only used as a type but doesn't say so, and its fix adds the `type`. Two more rules decide where the keyword goes: `no-import-type-side-effects` and eslint-plugin-import's `consistent-type-specifier-style`. Oxlint has its own versions of all three, Biome has `useImportType` and `useExportType`, and Ultracite turns them on, with the keyword at the start of the statement.
+
+We chose that style for a concrete reason. When we picked it, `import { type User }` compiled to an empty `import {} from "./user"`. That still loads the module and runs whatever it does when it loads, and at the very least it's a wasted line. `import type` disappeared from the output entirely. There are many more TypeScript compilers now than there were then, from the Go port that became TypeScript 7 to Rust and native compilers and Bun's bundler, and we weren't sure the difference still held.
+
+So we tested it. We read how TypeScript came to have two syntaxes for one idea, what each compiler and runtime does with them, and what the rules were written for. We counted 42,297 import declarations in twelve codebases, ran each linter's version of the rules on them, and applied each linter's fix to copies of the code to see what it changes at runtime. Then we handed three type-import reports to Claude Code and Codex through Ultracite's agent fix.
+
+## Every import runs its module
+
+In JavaScript, whether a module runs depends on the import statement, not on what it names. The [ECMAScript specification](https://tc39.es/ecma262/multipage/ecmascript-language-scripts-and-modules.html) records a module request for every import declaration, whatever its bindings, and evaluates each requested module before the importing module's body, in source order. So `import {} from "./y"` loads and runs `./y` exactly as `import "./y"` does. Our [post on import cycles](/research/import-cycles) covers evaluation order and cycles in more detail.
+
+TypeScript has always removed imports whose names are only used as types. The language specification already described it in version 1.4, in 2014. Elision is what makes `import { User }` safe to write when `User` is an interface: there's nothing to import at runtime, so the compiler drops the line. But it drops the module's side effects with it. In 2016, a TypeScript user [reported](https://github.com/microsoft/TypeScript/issues/9191) an AngularJS app that broke this way. A service module registered itself when it loaded, and the component that needed it imported the class only as a constructor parameter type. The import vanished, so the registration never ran. Ryan Cavanaugh, on the TypeScript team, suggested a second, bare import, and later asked: "Are people seriously writing modules with non-idempotent load-time side effects?"
+
+Tools that compile one file at a time, such as TypeScript's own transpile API and later Babel and esbuild, had the opposite problem. A file that re-exports an imported name can't tell, on its own, whether the name is a type to drop or a value to keep. TypeScript added `isolatedModules` in 2015 to flag the cases a single-file compiler can't handle.
+
+## Proposed in 2015, shipped in 2020
+
+The syntax we use today was [proposed](https://github.com/microsoft/TypeScript/issues/2812) in April 2015, both `import type` and `type` on a single name. It was declined because "the import syntax is already complex enough," and `isolatedModules` was meant to cover the gap instead.
+
+TypeScript 3.8 [added](https://github.com/microsoft/TypeScript/pull/35200) `import type` and `export type` in 2020, as an answer to both complaints, and kept elision as the default. TypeScript 4.5 [added](https://github.com/microsoft/TypeScript/pull/45998) `type` on individual names in 2021, and its pull request is explicit about the difference: the keyword "plays no direct role in whether the parent import/export declaration is elided." `import type` removes the statement. `import { type User }` removes the name and leaves the statement to the usual rules.
+
+TypeScript 5.0 made those rules visible. Its [proposal](https://github.com/microsoft/TypeScript/issues/51479) noted that people had adopted type-only imports "everywhere possible" "as an explicit marker of what imports will survive compilation to JS." The new flag, `verbatimModuleSyntax`, replaced two older ones. It keeps every import exactly as written, minus whatever is marked as a type, which the [release notes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html) sum up as "what you see is what you get":
+
+{/* prettier-ignore */}
+```ts title="With verbatimModuleSyntax"
+import type { A } from "./a";    // removed
+import { b, type C } from "./b"; // becomes import { b } from "./b";
+import { type D } from "./d";    // becomes import {} from "./d";
+```
+
+Since TypeScript 5.9, `tsc --init` turns `verbatimModuleSyntax` on in every new project, so the empty import is now what a new project gets. The team's [notes](https://github.com/microsoft/TypeScript/issues/51810) from the meeting that led to the flag also judged an older compiler setting that reported unmarked type imports as errors: "Maybe this should have been a lint rule."
+
+## One import, a dozen compilers
+
+We wrote a module that records when it runs and imported it each way. Then we compiled each importer with every compiler we could run, in November 2026, and ran the output in Node:
+
+| Compiler or runtime | `import { type X } from "./y"` | `import type { X } from "./y"` |
+| --- | --- | --- |
+| TypeScript, default settings | removed | removed |
+| TypeScript, `verbatimModuleSyntax` | `import {} from "./y"`, and `y` runs | removed |
+| esbuild, sucrase | removed, or `import {}` and `y` runs when set to keep imports | removed |
+| Oxc (Rolldown, Vite) | removed, or `import "./y"` and `y` runs with `onlyRemoveTypeImports` | removed |
+| Bun | removed, even with `verbatimModuleSyntax` in the tsconfig | removed |
+| Node's type stripping | `import {} from "./y"`, and `y` runs | removed |
+
+`import type` is gone in every row. The inline form depends on the setting, and the settings that keep it are spreading: `verbatimModuleSyntax` in new projects, and Node, which has run TypeScript files by default since versions 23.6 and 22.18. Node's [docs](https://nodejs.org/api/typescript.html) make the keyword a runtime requirement: "the `type` keyword is necessary to" "correctly strip type imports." Import an interface without it, and Node stops at startup with a `SyntaxError` saying the module "does not provide an export named" the interface.
+
+We read the source of the compilers we didn't run. TypeScript 7's Go compiler applies the same rules as TypeScript 6. swc, Babel and Deno keep the inline import when their keep-imports option is on. [ts-rust](https://github.com/pingdotgg/ts-rust), a Rust port of TypeScript 7 that "keeps Go's algorithms and behavior", keeps `import {}` only under `verbatimModuleSyntax`, as TypeScript does. [scriptc](https://github.com/vercel-labs/scriptc), which compiles TypeScript to native code, follows Node unless the tsconfig leaves `verbatimModuleSyntax` off: an import whose names are all marked `type` "still loads its module, as it does under Node.js." Bun drops both forms in `bun build` too; we didn't trace `bun build --compile`. And the [proposal](https://github.com/tc39/proposal-type-annotations) to add type syntax to JavaScript itself, at Stage 1 since 2022, keeps the same split: inline-only imports "are retained even if all bindings are declared type-only."
+
+So our reason still holds wherever imports are kept as written, and more setups keep them every year. Under default elision both forms disappear, and the difference doesn't matter.
+
+When the inline form does cost something, the cost is concrete. In 2022 a Vite user [found](https://github.com/vitejs/vite/issues/8339) that `import { type Map } from 'mapbox-gl'` broke code splitting for a library they loaded lazily. esbuild was keeping the empty import, "which breaks tree-shaking/code-splitting in bundlers," as the [esbuild issue](https://github.com/evanw/esbuild/issues/2268) put it. Under `verbatimModuleSyntax`, that empty import is now the designed output. But we found no measured bundle-size or build-speed win from `import type` itself. With elision on, both forms produce the same bundle, and TypeScript's performance guidance doesn't mention type-only imports.
+
+## Style first, side effects second
+
+typescript-eslint's `consistent-type-imports` was [proposed](https://github.com/typescript-eslint/typescript-eslint/issues/2200) in June 2020, a few months after `import type` shipped. Asked why a linter should repeat a check the compiler could make, maintainer Brad Zacher answered: "TS compiler options stop the build." "For production builds this is great, but during dev this sucks." A lint rule reports and fixes without blocking anything.
+
+The rules about where the keyword goes came later. eslint-plugin-import's `consistent-type-specifier-style` was [proposed](https://github.com/import-js/eslint-plugin-import/issues/2469) in 2022 for consistency alone: "Users care about consistency when it comes to the use of inline type imports". Its docs give no reason to prefer either style. The side-effect argument arrived with TypeScript 5.0. Once the empty import became documented output, Brad Zacher [proposed](https://github.com/typescript-eslint/typescript-eslint/issues/6382) `no-import-type-side-effects`, because "code that looks like it is pure" "type-only code can have runtime side-effects!" The rule only matters where imports are kept as written, and its docs say it may not be useful otherwise.
+
+The two style rules can't both be satisfied the inline way. `prefer-inline` rewrites `import type { A }` to `import { type A }`, and `no-import-type-side-effects` rewrites it back. Ultracite's Oxlint preset asked for the inline style for about a month around the start of 2026, until we switched to `prefer-top-level` to end the conflict.
+
+None of these rules has ever been in typescript-eslint's recommended, strict or stylistic configs. When a user [asked](https://github.com/typescript-eslint/typescript-eslint/issues/9036) to add `consistent-type-imports`, Josh Goldberg replied that "There's no one single style that fits everyone." Brad Zacher disagreed: "TBH I personally would say that the rule itself is a correctness rule" "and the only stylistic thing is the fixer style." Among our twelve codebases, shadcn/ui asks for inline specifiers and Hono for top-level ones, as we do.
+
+## Decorators read the types
+
+In one place a type is a runtime value. With `experimentalDecorators` and `emitDecoratorMetadata`, TypeScript records a decorated constructor's parameter types, so a dependency injection container can read them. NestJS resolves services this way. A lint rule sees a class used only as a parameter type and converts its import to `import type`. The code still type-checks. But the class is no longer loaded, so TypeScript records `Function` in its place and single-file compilers record `Object`. In our calibration cases, a small container that reads this metadata failed to resolve the parameter after each linter's fix.
+
+NestJS's [docs](https://docs.nestjs.com/techniques/validation) warn about the same thing for request bodies: "Don't import DTOs with a type-only import, because" "type-only imports are erased at runtime." Nest's validation pipe reads the parameter's class from the same metadata, and when it gets `Object`, as single-file compilers record, it returns the body without validating it. Angular fails louder. Its compiler reads constructor types itself and stops the build with [NG2003](https://angular.dev/errors/NG2003): "This type is imported using a type-only import," "which prevents it from being usable as an injection token."
+
+typescript-eslint tried to model this, then [gave up](https://github.com/typescript-eslint/typescript-eslint/pull/8335) in 2024 with what Brad Zacher called "a sledge-hammer approach to fixing the problem". When it knows both decorator flags are on, from type information or from parser options, it skips every file that has a decorator. Oxlint's and Biome's versions have no decorator handling at all. None of our twelve codebases combines decorators with `emitDecoratorMetadata`, so the corpus can't say how often this bites.
+
+## 42,297 imports in twelve codebases
+
+We used the same twelve codebases as the earlier posts, each at a pinned commit. Eight are TypeScript projects (zod, Hono, tRPC, Vite, Astro, Excalidraw, Next.js and VS Code), and four are React codebases (shadcn/ui, Radix, React Aria and Supabase). Their source has 1,143,356 lines and 42,297 import declarations. 80.7% are plain value imports and 15.6% are `import type`. 2.8% mix an inline `type` with values, and 0.5%, 228 declarations, mark every name inline. Where code marks a type, five times in six it marks the whole statement.
+
+The rule is mostly satisfied already. 3,572 imported names are used only as types without saying so, and they're all in three codebases: Supabase (1,557), VS Code (1,092) and React Aria (923). The other nine have none, and each enforces type imports with a lint rule, `verbatimModuleSyntax` or Biome's recommended rules. Their history shows how they got there. Of 1,368 conversions to `import type` in eight codebases' history, 76.5% came in nine large commits that turned on a rule, a flag or import sorting, and after that new imports arrived marked: 8,840 imports were added with `type` already in place. Next.js turned on `verbatimModuleSyntax` in 2023 because, as the [pull request](https://github.com/vercel/next.js/pull/56551) says, the question had "come up in code review a few times."
+
+Even so, `consistent-type-imports` is one of the noisiest rules we've measured. It reported 2,929 times in Oxlint, the 7th most of the 1,242 rules Ultracite's Oxlint presets enabled in our census. 578 of those reports are `import()` type annotations, such as `typeof import("./storage")`, which no linter fixes, and 565 of them are in Next.js. ESLint and Oxlint flagged the same declarations, all but one. Biome reported 354 more, mostly inline-only imports and React imports used in JSX, which Biome doesn't count as a use of React by default. TypeScript's own error for a type imported without `type`, TS1484, covered 1,069 of the 2,352 declarations, because it doesn't report a class or enum used only as a type.
+
+## Under your own build, nothing moves
+
+We applied each linter's fix to copies of every codebase. Oxlint's changed 4,250 files. Then we compared which modules each file loads before and after, under each project's own build and under the other compiler settings.
+
+Under each project's own build, the conversions changed nothing that loads, apart from the fix bugs below. Every build here already drops imports used only as types, so adding `import type` only says what the compiler was going to do anyway. Where imports are kept as written, the same fix stops 1,664 imports from loading in 1,042 files. It also removes runtime import cycles: all nine of VS Code's cycle groups go away. That's the case for `import type`: the program is the same under every compiler.
+
+The corpus has 249 inline-only imports, 212 of them in Supabase. None of those codebases sets `verbatimModuleSyntax`, so today they compile to nothing. Under that flag or Node's type stripping, the 246 that are their module's only import would load it, which is exactly the case our reason is about.
+
+## Two right fixes make a wrong one
+
+The breakage we measured came from fixes combining, not from any rule deciding wrongly. React Aria's color swatch picker imports from the same module twice, five lines apart:
+
+{/* prettier-ignore */}
+```tsx title="ColorSwatchPicker.tsx (React Aria), lines 16 and 21"
+import {Color} from 'react-stately/Color';
+import {parseColor} from 'react-stately/Color';
+```
+
+`Color` is a type and `parseColor` is a function. `consistent-type-imports` rewrites the first line to `import type`, and `no-duplicates` merges the two. Each fix is right on its own, and they touch different lines, so Oxlint applies both in one pass:
+
+```tsx title="ColorSwatchPicker.tsx, after the fix"
+import type { Color, parseColor } from "react-stately/Color";
+```
+
+`parseColor` is now type-only. TypeScript rejects the call further down, and a compiler that doesn't type-check emits a call to a function that was never imported. With Ultracite's full preset, this broke 4 React Aria files with Oxlint 1.90. ESLint, with typescript-eslint and eslint-plugin-import-x, broke 12 files across four codebases, 8 of them with `import type { A, type B }`, which TypeScript rejects. Oxc has an [open issue](https://github.com/oxc-project/oxc/issues/28068) for one such combination.
+
+Merging can also change the order modules run in. Next.js's `next dev` loads its CPU profiler first, on purpose, so the profiler starts before anything else loads:
+
+{/* prettier-ignore */}
+```ts title="next-dev.ts (Next.js)"
+import '../server/lib/cpu-profile'
+import { saveCpuProfile } from '../server/lib/cpu-profile'
+```
+
+`no-duplicates` merges the two lines into one value import. That's no longer a side-effect import, so the import sorter moves it. After `ultracite fix`, it's the 24th of 31 imports with Oxlint and the 27th of 32 with ESLint. Biome leaves side-effect imports where they are.
+
+A few smaller problems turned up too:
+
+- Oxlint's fix split six Next.js imports that carry import attributes and copied the attributes onto the new `import type`, which TypeScript rejects.
+- Biome converted React imports used only in JSX to `import type`. That's harmless in the 126 files compiled with the automatic JSX runtime. But tRPC compiles 2 of them with the classic runtime, where JSX becomes `React.createElement`, and React is no longer imported.
+- Oxlint applies one round of fixes per run, and its split and merge hadn't settled after that round in 95 files.
+
+## What reaches an agent
+
+Because the safe fixes convert plain imports before anyone sees them, what Ultracite hands an agent is what the fixes can't do or leave unsettled: `import()` annotations, and duplicates that a split left behind. In 288 runs from our earlier experiments, agents added 34 imports, 29 value imports and 5 `import type`, and none left a type unmarked. All five `import type` edits were in the import cycles experiment, where turning `import { isValidPlacement, type Placement }` into `import type { Placement }`, and inlining the check, took the edge out of the cycle. We found no study that counts import forms in model-written TypeScript, and the agent vendors' docs we read don't mention type imports.
+
+## A telemetry type, a duplicate and a lazy require
+
+In November 2026 we set up a project the way Ultracite's setup leaves it for Oxlint, with a tsconfig that sets `verbatimModuleSyntax`, as Next.js does. The rules are on there already, so the user changes nothing. Then we picked three real files that need different responses:
+
+- **A, a clean conversion.** Next.js's [`flushTelemetry`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/telemetry/flush-telemetry.ts#L1-L10) types a value as `InstanceType<typeof import('./storage').Telemetry>`. The type-import rules report only the `import()` annotation. `import type { Telemetry }` fixes it, and the storage module still never loads.
+- **B, a fight between fixes.** tRPC's [`TRPCClientError`](https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/TRPCClientError.ts#L1-L118) imports from one module twice: once with `import type`, and once mixed, `isObject` next to `type DefaultErrorShape`. Oxlint's pass splits the mixed one into a value import and a second `import type`, then reports the duplicate it made. The answer is one value import and one `import type`. Merging everything into `import type` would make `isObject` type-only.
+- **C, a trap.** Next.js's client-side [`normalizeLocalePath`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/normalize-locale-path.ts#L1-L10) loads its implementation lazily:
+
+{/* prettier-ignore */}
+```ts title="normalize-locale-path.ts (Next.js)"
+import type { normalizeLocalePath as Fn } from '../shared/lib/i18n/normalize-locale-path'
+
+export const normalizeLocalePath: typeof Fn = (pathname, locales) => {
+  if (process.env.__NEXT_I18N_SUPPORT) {
+    return (
+      require('../shared/lib/i18n/normalize-locale-path') as typeof import('../shared/lib/i18n/normalize-locale-path')
+    ).normalizeLocalePath(pathname, locales)
+  }
+  return { pathname, detectedLocale: undefined }
+}
+```
+
+The `require` sits in a branch that Next.js's build removes when an app doesn't use i18n, so those apps never load the locale code. Three rules report the same line. `consistent-type-imports` says to replace the `import()` type with a regular type import, and the `global-require` and `prefer-module` rules both push toward a top-level import. A static import compiles, type-checks and works with i18n on, and it loads the locale module in every app.
+
+Each file went through Ultracite's agent fix as it ran in November 2026: the prompt, up to three attempts, and the same report a user sees. The prompt asks agents not to run the linter or other commands, because Ultracite re-lints the file afterwards. We ran each subject four times with Claude Code and four times with Codex, 24 runs in all. Then we checked which modules load, in what order, under the original project's setting, with imports kept as written and with imports elided.
+
+## The trap passed every check
+
+On A and B, all 16 runs were right in one attempt, and nothing they wrote changed what loads. On A, all eight added `import type { Telemetry }`, and three Claude runs also shortened the cast to `Telemetry | undefined`. On B, all eight made the same one-line edit and kept `isObject` as a value import:
+
+```diff title="TRPCClientError.ts, every run"
+ import type {
++  DefaultErrorShape,
+   inferClientTypes,
+   InferrableClientTypes,
+   Maybe,
+   TRPCErrorResponse,
+ } from "@trpc/server/unstable-core-do-not-import";
+ import { isObject } from "@trpc/server/unstable-core-do-not-import";
+-import type { DefaultErrorShape } from "@trpc/server/unstable-core-do-not-import";
+```
+
+On C, the agents split. Claude typed the `require` with the type the file already imports, in all four runs, and left the two require rules for review:
+
+```ts title="normalize-locale-path.ts, one Claude Code run"
+export const normalizeLocalePath: typeof Fn = (pathname, locales) => {
+  if (process.env.__NEXT_I18N_SUPPORT) {
+    return (
+      require("../shared/lib/i18n/normalize-locale-path") as {
+        normalizeLocalePath: typeof Fn;
+      }
+    ).normalizeLocalePath(pathname, locales);
+  }
+  return { pathname, detectedLocale: undefined };
+};
+```
+
+Every Claude run said why. A static import "would always load and bundle the i18n module, even when i18n support is off." Ultracite printed "Fixed 1 of 3 issues with Claude Code. 2 left for you to decide.", followed by the agent's explanation, and exited with an error, so the two reports stay in front of the user.
+
+Codex wrote the static import in three of its four runs:
+
+{/* prettier-ignore */}
+```ts title="normalize-locale-path.ts, one Codex run"
+import { normalizeLocalePath as Fn } from "../shared/lib/i18n/normalize-locale-path";
+
+export const normalizeLocalePath: typeof Fn = (pathname, locales) => {
+  if (process.env.__NEXT_I18N_SUPPORT) {
+    return Fn(pathname, locales);
+  }
+  return { pathname, detectedLocale: undefined };
+};
+```
+
+Every lint view went quiet, `tsc` was clean, and Ultracite printed "Fixed 3 of 3 issues with Codex." The locale module now loads whenever the file is imported, with i18n on or off. Every Codex run asked a copy of itself to review its plan. In our trial run on C, the reviewer approved: "A static named import is safe here." It checked what the module does when it loads, which is to create an empty `WeakMap`, and concluded that "evaluating that earlier does not change normal observable behavior." Its review didn't mention the apps that never load the module at all. The fourth Codex run wrote the cast instead, against its reviewer's advice, because "a static import would eagerly load the currently conditional module".
+
+No run retried, and none added a suppression, a type error or a report from another rule. We then ran Ultracite's fix passes on all 24 final files, with Oxlint, ESLint and Biome, safe and unsafe. None of them broke an edit, and none undid the static imports.
+
+Two raters, both Claude models, judged each final file against the original from a blind packet. Both called every A file easier to follow and every B file about the same. On C, both called the static imports easier to follow, so the most readable C files are the wrong ones. Claude Code's runs cost $4.15 in all, a median of about 35 cents each, and Codex used a median of 19,900 tokens, plus the tokens its reviewers used, which Codex doesn't report.
+
+No agent wrote `import { type X }` in any of the 24 runs or the 2 trial runs. Every new type import was a top-level `import type`. When we wrote the inline form into A by hand, it loaded the storage module under Next.js's setting, and Ultracite's next fix pass turned it into `import type`. So in Ultracite's loop the inline form doesn't survive. The one behavior change in these runs came from a value import, which the rules' help texts had pointed toward.
+
+## The build is outside the file
+
+**The rules can't see the build.** Whether a conversion changes anything depends on compiler settings outside the file. Under default elision the fix only restates what the compiler already does. Under `verbatimModuleSyntax` or Node, it changes which modules load, and the rule can't know whether that's wanted. In November 2026 Oxlint turned its `no-import-type-side-effects` fix into a suggestion, after a [report](https://github.com/oxc-project/oxc/issues/29491) that it removed a module's evaluation, "so `--fix` can remove side effects the program relies on."
+
+**A type position can be a value.** Decorator metadata turns a parameter type into a runtime lookup, a Vue, Svelte or Astro template uses imports the linter can't see, and the classic JSX runtime uses React without naming it. The linters handle these unevenly, and some not at all.
+
+**The fixes compose badly.** Each fix is right alone. Together, in one pass, they made functions type-only, moved a side-effect import out of first place and copied attributes where TypeScript rejects them. And Oxlint's single pass leaves some files unsettled for the next run, or for an agent.
+
+**The help can point the wrong way.** On C, all three help texts pointed at a static import, a static import cleared all three reports, and nothing in Ultracite's loop notices when an import starts loading eagerly.
+
+**The evidence is thin.** One [study](https://arxiv.org/abs/2303.09802) measures adoption, in 454 popular repositories from 2020 to 2022: "The most popular feature in this dataset is f4 (type modifiers on import)", the inline form. We found no study of what elision breaks, or of how models write imports. Our experiment was small: four runs per agent on each of three subjects, two Claude raters, a handoff filtered to these rules, and agents told not to run anything, so none checked its edit with `tsc`.
+
+## Mark the statement, not the name
+
+**Use `import type` at the start of the statement.** It's the only form every compiler erases, so it means the same thing under every build. For an import that mixes values and types, two statements say plainly which is which.
+
+**Import side effects on their own line.** If a module has to run, write `import "./register"` and add an `import type` for its types. That works under every compiler, and no rule reports it.
+
+**Let the compiler check it where imports are kept.** If you run TypeScript in Node or with a build that keeps imports, turn on `verbatimModuleSyntax`, and TypeScript reports a type imported without `type`. The lint rule is still worth having there, because it fixes the import while you work instead of stopping the build.
+
+**Turn the rule off where types are values.** If a framework reads decorator metadata for injection or validation, don't let a fix convert those imports. Tell typescript-eslint about the decorator flags, or [turn the rule off](/docs/configuration#overriding-rules) for that project.
+
+**Leave `import()` types next to lazy loads.** If an `import()` type describes a lazy `require` or a dynamic `import()`, a static import would load the module eagerly. Use a type you already import, or turn off the rule's `disallowTypeAnnotations` option, as Next.js, Vite and Excalidraw do. When an agent gets this report next to the require rules, leaving them for review is the right answer.
+
+**Review the import diff after a fix.** Look for duplicates merged into `import type` and side-effect imports that moved. If imports are still reported after one pass, run the fix again.
+
+`import type` disappears everywhere. `import { type X }` depends on the build, and more builds keep it each year, so our reason for the top-level form still holds. Under the builds most projects run today, the conversion changes nothing at runtime. The real risks are a type that is secretly a value, and fixes that are each correct but wrong together.
+
+<NextSteps />
+
+## References
+
+**The language and TypeScript**
+
+- Ecma International. [ECMAScript Language Specification: ECMAScript Language: Scripts and Modules](https://tc39.es/ecma262/multipage/ecmascript-language-scripts-and-modules.html).
+- [Should be possible to force import of "unused" modules in case there are side-effects](https://github.com/microsoft/TypeScript/issues/9191). microsoft/TypeScript #9191, 2016.
+- Mohamed Hegazy. [Implicit module import/export elision](https://github.com/microsoft/TypeScript/issues/2812). microsoft/TypeScript #2812, 2015.
+- Andrew Branch. [Type-only imports and exports](https://github.com/microsoft/TypeScript/pull/35200). microsoft/TypeScript #35200, 2019–2020.
+- Andrew Branch. [Type-only import specifiers](https://github.com/microsoft/TypeScript/pull/45998). microsoft/TypeScript #45998, 2021.
+- Andrew Branch. [Proposal: deprecate `importsNotUsedAsValues` and `preserveValueImports` in favor of single flag](https://github.com/microsoft/TypeScript/issues/51479). microsoft/TypeScript #51479, 2022, and the [design meeting notes](https://github.com/microsoft/TypeScript/issues/51810), #51810.
+- TypeScript. [TypeScript 5.0 release notes: `--verbatimModuleSyntax`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html), and [TypeScript 5.9 release notes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html).
+
+**Compilers and runtimes**
+
+- Node.js. [Modules: TypeScript](https://nodejs.org/api/typescript.html).
+- Ping. [ts-rust](https://github.com/pingdotgg/ts-rust).
+- Vercel Labs. [scriptc](https://github.com/vercel-labs/scriptc), and its [package resolution docs](https://github.com/vercel-labs/scriptc/blob/0febca3eef031a6b2c64d5ce4cde3439cd6849e9/docs/content/docs/dependencies.mdx).
+- Gil Tayar, Daniel Rosenwasser, Romulo Cintra and Rob Palmer. [ECMAScript proposal: Type Annotations](https://github.com/tc39/proposal-type-annotations).
+- [Tree shaking/Code splitting is failing with `import { type }` syntax](https://github.com/vitejs/vite/issues/8339). vitejs/vite #8339, 2022, and [Discrepancy with TS compiler in import elision with preserveValueImports:true](https://github.com/evanw/esbuild/issues/2268), evanw/esbuild #2268, 2022.
+
+**Decorators**
+
+- NestJS. [Validation](https://docs.nestjs.com/techniques/validation).
+- Angular. [NG2003: Missing Token](https://angular.dev/errors/NG2003).
+- Brad Zacher. [`consistent-type-imports`: ignore files with decorators, experimentalDecorators, and emitDecoratorMetadata](https://github.com/typescript-eslint/typescript-eslint/pull/8335). typescript-eslint #8335, 2024.
+
+**The rules**
+
+- typescript-eslint. [`consistent-type-imports`](https://typescript-eslint.io/rules/consistent-type-imports/), [`no-import-type-side-effects`](https://typescript-eslint.io/rules/no-import-type-side-effects/) and [`consistent-type-exports`](https://typescript-eslint.io/rules/consistent-type-exports/) rule documentation.
+- [Proposal for new rule - consistent style for type-only imports](https://github.com/typescript-eslint/typescript-eslint/issues/2200). typescript-eslint #2200, 2020.
+- Brad Zacher. [Rule proposal: warn against import declarations with no value specifiers and only inline type specifiers](https://github.com/typescript-eslint/typescript-eslint/issues/6382). typescript-eslint #6382, 2023.
+- [Configs: Make consistent-type-imports 'error' for the recommended config](https://github.com/typescript-eslint/typescript-eslint/issues/9036). typescript-eslint #9036, 2024.
+- Brad Zacher. [New rule: consistent inline type specifier usage](https://github.com/import-js/eslint-plugin-import/issues/2469). import-js/eslint-plugin-import #2469, 2022.
+- [linter: `typescript/no-import-type-side-effects` safe fix drops a module's evaluation at runtime](https://github.com/oxc-project/oxc/issues/29491). oxc-project/oxc #29491, 2026, and [linter: import/no-duplicates and typescript/no-import-type-side-effects fixes combine into an invalid type-only import](https://github.com/oxc-project/oxc/issues/28068), #28068, 2026.
+
+**Research and projects**
+
+- Joshua D. Scarsbrook, Mark Utting and Ryan K. L. Ko. [TypeScript's Evolution: An Analysis of Feature Adoption Over Time](https://arxiv.org/abs/2303.09802). arXiv:2303.09802, 2023.
+- Next.js. [enable `verbatimModuleSyntax` to make type imports/exports explicit](https://github.com/vercel/next.js/pull/56551). vercel/next.js #56551, 2023.
+
+**The examples and subjects**
+
+- React Aria. [`ColorSwatchPicker.tsx`](https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ColorSwatchPicker.tsx#L16-L21).
+- Next.js. [`next-dev.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-dev.ts#L3-L4), [`flush-telemetry.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/telemetry/flush-telemetry.ts#L1-L10) and [`normalize-locale-path.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/normalize-locale-path.ts#L1-L10).
+- tRPC. [`TRPCClientError.ts`](https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/TRPCClientError.ts#L1-L118).

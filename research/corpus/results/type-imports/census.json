@@ -1,0 +1,5858 @@
+{
+  "build": {
+    "astro": {
+      "evidence": "astro-scripts build",
+      "file": "packages/astro/package.json",
+      "perFile": true,
+      "tool": "esbuild (astro-scripts build), then tsc -b for declarations"
+    },
+    "excalidraw": {
+      "evidence": "node ../../scripts/buildPackage.js",
+      "file": "packages/excalidraw/package.json",
+      "perFile": true,
+      "tool": "esbuild (scripts/buildPackage.js); the app with Vite"
+    },
+    "hono": {
+      "evidence": "vp pack",
+      "file": "package.json",
+      "perFile": true,
+      "tool": "vp pack (Vite+, rolldown with Oxc)"
+    },
+    "next.js": {
+      "evidence": "taskr release",
+      "file": "packages/next/package.json",
+      "perFile": true,
+      "tool": "taskr with SWC"
+    },
+    "radix": {
+      "evidence": "\"build\": \"radix-build\"",
+      "file": "packages/react/primitive/package.json",
+      "perFile": null,
+      "tool": "radix-build (internal/builder, outside the sparse clone)"
+    },
+    "react-aria": {
+      "evidence": "parcel build",
+      "file": "package.json",
+      "perFile": true,
+      "tool": "Parcel (SWC)"
+    },
+    "shadcn": {
+      "evidence": "next build",
+      "file": "apps/v4/package.json",
+      "perFile": true,
+      "tool": "Next.js (SWC)"
+    },
+    "supabase": {
+      "evidence": "next build",
+      "file": "apps/studio/package.json",
+      "perFile": true,
+      "tool": "Next.js (SWC); a Vite build too"
+    },
+    "trpc": {
+      "evidence": "\"build\": \"tsdown\"",
+      "file": "packages/server/package.json",
+      "perFile": true,
+      "tool": "tsdown (rolldown with Oxc)"
+    },
+    "ultracite": {
+      "evidence": "Bun.build",
+      "file": "packages/cli/build.ts",
+      "perFile": true,
+      "tool": "Bun.build"
+    },
+    "vite": {
+      "evidence": "rolldown --config rolldown.config.ts",
+      "file": "packages/vite/package.json",
+      "perFile": true,
+      "tool": "rolldown (Oxc)"
+    },
+    "vscode": {
+      "evidence": "npm run gulp compile",
+      "file": "package.json",
+      "perFile": false,
+      "tool": "gulp compile (the TypeScript compiler over the program); an esbuild transpile for watch"
+    },
+    "zod": {
+      "evidence": "zshy --project tsconfig.build.json",
+      "file": "packages/zod/package.json",
+      "perFile": false,
+      "tool": "zshy (the TypeScript compiler API)"
+    }
+  },
+  "generated": "2026-11-18T07:05:48.834Z",
+  "repos": {
+    "zod": {
+      "build": {
+        "evidence": "zshy --project tsconfig.build.json",
+        "file": "packages/zod/package.json",
+        "perFile": false,
+        "tool": "zshy (the TypeScript compiler API)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 208,
+              "import type": 207,
+              "inline type": 30
+            },
+            "byUsage": {
+              "value": 152,
+              "export": 7,
+              "type": 237,
+              "both": 49
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 445,
+            "typeOnlyBySource": {
+              "type": 120,
+              "both": 22,
+              "unresolved": 2,
+              "namespace-module": 93
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 1017,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 2,
+            "namedFrom": 91,
+            "namedFromType": 7,
+            "namedFromInlineType": 2,
+            "star": 34,
+            "starAs": 12,
+            "starType": 0,
+            "typeListLocal": 2
+          },
+          "files": 125,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 134,
+              "namespace": 209,
+              "default": 5
+            },
+            "byForm": {
+              "value": 152,
+              "type": 185,
+              "mixed": 11
+            },
+            "total": 348,
+            "withAttributes": 0
+          },
+          "lines": 37903,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 20,
+              "local: declarations-run-code (already marked)": 150,
+              "local: statements (already marked)": 4
+            },
+            "examples": [],
+            "total": 174
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 764,
+              "import type": 9,
+              "inline type": 3
+            },
+            "byUsage": {
+              "value": 651,
+              "both": 113,
+              "type": 11,
+              "unused": 1
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 776,
+            "typeOnlyBySource": {
+              "type": 6,
+              "both": 2,
+              "namespace-module": 4
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 9,
+          "exports": {
+            "exportedTypeDeclarations": 7,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 198,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 286,
+              "namespace": 176,
+              "default": 12,
+              "none": 1
+            },
+            "byForm": {
+              "value": 463,
+              "type": 8,
+              "mixed": 3,
+              "side-effect": 1
+            },
+            "total": 475,
+            "withAttributes": 0
+          },
+          "lines": 50464,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 7,
+              "local: declarations-run-code (already marked)": 1
+            },
+            "examples": [],
+            "total": 8
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c",
+      "targetsSideEffects": {
+        "none": 8,
+        "declarations-run-code": 9,
+        "statements": 2
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": ".configs/tsconfig.base.json",
+              "flags": {
+                "isolatedModules": true,
+                "emitDecoratorMetadata": true,
+                "experimentalDecorators": true,
+                "module": "NodeNext",
+                "moduleResolution": "NodeNext",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "packages/zod/tsconfig.json",
+              "flags": {
+                "module": "nodenext"
+              }
+            }
+          ],
+          "effective": {
+            "isolatedModules": true,
+            "emitDecoratorMetadata": true,
+            "experimentalDecorators": true,
+            "module": "nodenext",
+            "moduleResolution": "NodeNext",
+            "jsx": "react"
+          },
+          "file": "packages/zod/tsconfig.json",
+          "files": {
+            "source": 125,
+            "tests": 198
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "hono": {
+      "build": {
+        "evidence": "vp pack",
+        "file": "package.json",
+        "perFile": true,
+        "tool": "vp pack (Vite+, rolldown with Oxc)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "import type": 453,
+              "none": 445
+            },
+            "byUsage": {
+              "type": 450,
+              "value": 419,
+              "both": 23,
+              "export": 5,
+              "export+type": 1
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 898,
+            "typeOnlyBySource": {
+              "both": 67,
+              "type": 380,
+              "value": 2,
+              "unresolved": 4
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 1,
+          "exports": {
+            "exportedTypeDeclarations": 258,
+            "localListTypeNamesWithoutType": 3,
+            "localListsWithTypeNames": 9,
+            "namedFrom": 79,
+            "namedFromType": 26,
+            "namedFromInlineType": 0,
+            "star": 4,
+            "starAs": 0,
+            "starType": 2,
+            "typeListLocal": 6
+          },
+          "files": 187,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 495,
+              "default": 2,
+              "namespace": 2,
+              "none": 4
+            },
+            "byForm": {
+              "type": 257,
+              "value": 243,
+              "side-effect": 3
+            },
+            "total": 503,
+            "withAttributes": 0
+          },
+          "lines": 25540,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 190,
+              "local: statements (already marked)": 2,
+              "local: declarations-run-code (already marked)": 2,
+              "local: side-effect-imports (already marked)": 2
+            },
+            "examples": [],
+            "total": 196
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 542,
+              "import type": 150
+            },
+            "byUsage": {
+              "value": 491,
+              "type": 150,
+              "both": 50,
+              "unused": 1
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 692,
+            "typeOnlyBySource": {
+              "type": 134,
+              "both": 10,
+              "value": 5,
+              "unresolved": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 4,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 124,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 403,
+              "namespace": 5,
+              "default+named": 3
+            },
+            "byForm": {
+              "value": 335,
+              "type": 76
+            },
+            "total": 411,
+            "withAttributes": 0
+          },
+          "lines": 55488,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 44,
+              "local: statements (already marked)": 1,
+              "local: declarations-run-code (already marked)": 1,
+              "package outside the clone: unknown (already marked)": 1
+            },
+            "examples": [],
+            "total": 47
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "targetsSideEffects": {
+        "none": 32,
+        "statements": 2,
+        "declarations-run-code": 3,
+        "side-effect-imports": 2
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "tsconfig.json",
+          "files": {
+            "source": 187,
+            "tests": 124
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "trpc": {
+      "build": {
+        "evidence": "\"build\": \"tsdown\"",
+        "file": "packages/server/package.json",
+        "perFile": true,
+        "tool": "tsdown (rolldown with Oxc)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "import type": 938,
+              "none": 484,
+              "inline type": 48
+            },
+            "byUsage": {
+              "type": 986,
+              "value": 446,
+              "both": 35,
+              "export": 3
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 1470,
+            "typeOnlyBySource": {
+              "type": 790,
+              "both": 26,
+              "unresolved": 168,
+              "value": 2
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 3,
+          "exports": {
+            "exportedTypeDeclarations": 464,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 4,
+            "namedFrom": 52,
+            "namedFromType": 19,
+            "namedFromInlineType": 9,
+            "star": 81,
+            "starAs": 1,
+            "starType": 1,
+            "typeListLocal": 3
+          },
+          "files": 176,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 695,
+              "default+named": 1,
+              "namespace": 20,
+              "default": 2
+            },
+            "byForm": {
+              "type": 396,
+              "mixed": 31,
+              "value": 285,
+              "inline": 6
+            },
+            "total": 718,
+            "withAttributes": 0
+          },
+          "lines": 25948,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 230,
+              "package outside the clone: unknown (already marked)": 34,
+              "local: declarations-run-code (already marked)": 19,
+              "builtin (already marked)": 5
+            },
+            "examples": [],
+            "total": 288
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 1178,
+              "inline type": 57,
+              "import type": 946
+            },
+            "byUsage": {
+              "value": 1129,
+              "type": 1002,
+              "both": 47,
+              "unused": 3
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 2181,
+            "typeOnlyBySource": {
+              "type": 960,
+              "both": 1,
+              "unresolved": 38,
+              "value": 4
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 1190,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 132,
+            "namedFromType": 66,
+            "namedFromInlineType": 11,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 314,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 981,
+              "default": 72,
+              "namespace": 35,
+              "none": 16,
+              "default+named": 17
+            },
+            "byForm": {
+              "mixed": 29,
+              "value": 779,
+              "type": 296,
+              "side-effect": 16,
+              "inline": 1
+            },
+            "total": 1121,
+            "withAttributes": 0
+          },
+          "lines": 57228,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 215,
+              "package outside the clone: unknown (already marked)": 13,
+              "local: declarations-run-code (already marked)": 13,
+              "builtin (already marked)": 2
+            },
+            "examples": [],
+            "total": 243
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "targetsSideEffects": {
+        "none": 152,
+        "declarations-run-code": 16
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/client/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "react"
+          },
+          "file": "packages/client/tsconfig.json",
+          "files": {
+            "source": 38,
+            "tests": 8
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/next/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "react"
+          },
+          "file": "packages/next/tsconfig.json",
+          "files": {
+            "source": 11,
+            "tests": 3
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/openapi/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "react"
+          },
+          "file": "packages/openapi/tsconfig.json",
+          "files": {
+            "source": 6,
+            "tests": 203
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/react-query/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "react"
+          },
+          "file": "packages/react-query/tsconfig.json",
+          "files": {
+            "source": 27,
+            "tests": 57
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/server/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "react"
+          },
+          "file": "packages/server/tsconfig.json",
+          "files": {
+            "source": 76,
+            "tests": 25
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/tanstack-react-query/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "react"
+          },
+          "file": "packages/tanstack-react-query/tsconfig.json",
+          "files": {
+            "source": 9,
+            "tests": 14
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "tsconfig.build.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "react"
+              }
+            },
+            {
+              "file": "tsconfig.json",
+              "flags": {}
+            },
+            {
+              "file": "packages/upgrade/tsconfig.json",
+              "flags": {
+                "module": "Preserve",
+                "jsx": "preserve"
+              }
+            }
+          ],
+          "effective": {
+            "module": "Preserve",
+            "jsx": "preserve"
+          },
+          "file": "packages/upgrade/tsconfig.json",
+          "files": {
+            "source": 9,
+            "tests": 4
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "vite": {
+      "build": {
+        "evidence": "rolldown --config rolldown.config.ts",
+        "file": "packages/vite/package.json",
+        "perFile": true,
+        "tool": "rolldown (Oxc)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 1364,
+              "import type": 616,
+              "inline type": 45
+            },
+            "byUsage": {
+              "value": 1326,
+              "type": 661,
+              "export+type": 1,
+              "both": 37
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 2025,
+            "typeOnlyBySource": {
+              "type": 387,
+              "both": 73,
+              "unresolved": 175,
+              "value": 6,
+              "namespace-module": 20
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 35,
+          "exports": {
+            "exportedTypeDeclarations": 192,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 3,
+            "namedFrom": 94,
+            "namedFromType": 53,
+            "namedFromInlineType": 6,
+            "star": 0,
+            "starAs": 1,
+            "starType": 0,
+            "typeListLocal": 5
+          },
+          "files": 124,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 1,
+            "total": 5,
+            "typeof": 5
+          },
+          "imports": {
+            "byClause": {
+              "named": 1001,
+              "none": 1,
+              "namespace": 11,
+              "default": 180,
+              "default+named": 3
+            },
+            "byForm": {
+              "value": 748,
+              "type": 416,
+              "mixed": 27,
+              "side-effect": 1,
+              "inline": 4
+            },
+            "total": 1196,
+            "withAttributes": 1
+          },
+          "lines": 45885,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 193,
+              "builtin (already marked)": 11,
+              "package outside the clone: unknown (already marked)": 61,
+              "local: declarations-run-code (already marked)": 78,
+              "local: statements (already marked)": 1
+            },
+            "examples": [],
+            "total": 344
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "import type": 98,
+              "inline type": 16,
+              "none": 554
+            },
+            "byUsage": {
+              "type": 114,
+              "value": 548,
+              "both": 6
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 668,
+            "typeOnlyBySource": {
+              "unresolved": 46,
+              "type": 63,
+              "both": 4,
+              "value": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 3,
+          "exports": {
+            "exportedTypeDeclarations": 8,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 4,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 89,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 5,
+            "typeof": 5
+          },
+          "imports": {
+            "byClause": {
+              "named": 326,
+              "default": 47,
+              "namespace": 1,
+              "none": 1,
+              "default+named": 1
+            },
+            "byForm": {
+              "type": 65,
+              "mixed": 11,
+              "value": 299,
+              "side-effect": 1
+            },
+            "total": 376,
+            "withAttributes": 0
+          },
+          "lines": 19613,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "package outside the clone: unknown (already marked)": 22,
+              "local: none (already marked)": 18,
+              "local: declarations-run-code (already marked)": 7,
+              "builtin (already marked)": 1
+            },
+            "examples": [],
+            "total": 48
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "targetsSideEffects": {
+        "none": 41,
+        "declarations-run-code": 18,
+        "statements": 1
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "packages/vite/tsconfig.base.json",
+              "flags": {
+                "module": "preserve",
+                "moduleResolution": "bundler"
+              }
+            },
+            {
+              "file": "packages/vite/src/client/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "preserve",
+            "moduleResolution": "bundler"
+          },
+          "file": "packages/vite/src/client/tsconfig.json",
+          "files": {
+            "source": 6,
+            "tests": 0
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/vite/tsconfig.base.json",
+              "flags": {
+                "module": "preserve",
+                "moduleResolution": "bundler"
+              }
+            },
+            {
+              "file": "packages/vite/src/module-runner/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "preserve",
+            "moduleResolution": "bundler"
+          },
+          "file": "packages/vite/src/module-runner/tsconfig.json",
+          "files": {
+            "source": 14,
+            "tests": 0
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/vite/tsconfig.base.json",
+              "flags": {
+                "module": "preserve",
+                "moduleResolution": "bundler"
+              }
+            },
+            {
+              "file": "packages/vite/src/node/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "preserve",
+            "moduleResolution": "bundler"
+          },
+          "file": "packages/vite/src/node/tsconfig.json",
+          "files": {
+            "source": 95,
+            "tests": 80
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/vite/tsconfig.base.json",
+              "flags": {
+                "module": "preserve",
+                "moduleResolution": "bundler"
+              }
+            },
+            {
+              "file": "packages/vite/src/shared/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "preserve",
+            "moduleResolution": "bundler"
+          },
+          "file": "packages/vite/src/shared/tsconfig.json",
+          "files": {
+            "source": 9,
+            "tests": 2
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/vite/tsconfig.base.json",
+              "flags": {
+                "module": "preserve",
+                "moduleResolution": "bundler"
+              }
+            },
+            {
+              "file": "packages/vite/src/module-runner/__tests_dts__/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "preserve",
+            "moduleResolution": "bundler"
+          },
+          "file": "packages/vite/src/module-runner/__tests_dts__/tsconfig.json",
+          "files": {
+            "source": 0,
+            "tests": 1
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/vite/tsconfig.base.json",
+              "flags": {
+                "module": "preserve",
+                "moduleResolution": "bundler"
+              }
+            },
+            {
+              "file": "packages/vite/src/node/__tests_dts__/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "preserve",
+            "moduleResolution": "bundler"
+          },
+          "file": "packages/vite/src/node/__tests_dts__/tsconfig.json",
+          "files": {
+            "source": 0,
+            "tests": 6
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "astro": {
+      "build": {
+        "evidence": "astro-scripts build",
+        "file": "packages/astro/package.json",
+        "perFile": true,
+        "tool": "esbuild (astro-scripts build), then tsc -b for declarations"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "import type": 1591,
+              "none": 2686,
+              "inline type": 187
+            },
+            "byUsage": {
+              "type": 1778,
+              "value": 2621,
+              "both": 59,
+              "export": 6
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 4464,
+            "typeOnlyBySource": {
+              "unresolved": 279,
+              "type": 1329,
+              "both": 152,
+              "value": 18
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 89,
+          "exports": {
+            "exportedTypeDeclarations": 510,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 11,
+            "namedFrom": 166,
+            "namedFromType": 35,
+            "namedFromInlineType": 13,
+            "star": 25,
+            "starAs": 3,
+            "starType": 13,
+            "typeListLocal": 8
+          },
+          "files": 635,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 2,
+            "total": 5,
+            "typeof": 5
+          },
+          "imports": {
+            "byClause": {
+              "default": 167,
+              "namespace": 90,
+              "named": 2863,
+              "default+named": 4
+            },
+            "byForm": {
+              "type": 1158,
+              "value": 1823,
+              "mixed": 143
+            },
+            "total": 3124,
+            "withAttributes": 0
+          },
+          "lines": 82969,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "builtin (already marked)": 36,
+              "local: none (already marked)": 790,
+              "local: declarations-run-code (already marked)": 166,
+              "package outside the clone: unknown (already marked)": 122,
+              "local: statements (already marked)": 2
+            },
+            "examples": [],
+            "total": 1116
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 4145,
+              "inline type": 343,
+              "import type": 313
+            },
+            "byUsage": {
+              "value": 4055,
+              "both": 90,
+              "type": 656
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 4801,
+            "typeOnlyBySource": {
+              "type": 594,
+              "both": 24,
+              "unresolved": 33,
+              "value": 5
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 35,
+          "exports": {
+            "exportedTypeDeclarations": 7,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 2,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 2
+          },
+          "files": 568,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 2,
+            "total": 6,
+            "typeof": 4
+          },
+          "imports": {
+            "byClause": {
+              "default": 543,
+              "named": 2063,
+              "namespace": 294,
+              "default+named": 2,
+              "none": 3
+            },
+            "byForm": {
+              "value": 2388,
+              "mixed": 255,
+              "type": 259,
+              "side-effect": 3
+            },
+            "total": 2905,
+            "withAttributes": 1
+          },
+          "lines": 94702,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: declarations-run-code (already marked)": 28,
+              "local: none (already marked)": 183,
+              "builtin (already marked)": 4,
+              "package outside the clone: unknown (already marked)": 15
+            },
+            "examples": [],
+            "total": 230
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "targetsSideEffects": {
+        "none": 100,
+        "declarations-run-code": 30,
+        "statements": 1
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "configs/tsconfig.base.json",
+              "flags": {
+                "verbatimModuleSyntax": true,
+                "module": "nodenext",
+                "moduleResolution": "nodenext"
+              }
+            },
+            {
+              "file": "packages/astro/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "verbatimModuleSyntax": true,
+            "module": "nodenext",
+            "moduleResolution": "nodenext"
+          },
+          "file": "packages/astro/tsconfig.json",
+          "files": {
+            "source": 635,
+            "tests": 557
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "configs/tsconfig.base.json",
+              "flags": {
+                "verbatimModuleSyntax": true,
+                "module": "nodenext",
+                "moduleResolution": "nodenext"
+              }
+            },
+            {
+              "file": "packages/astro/test/types/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "verbatimModuleSyntax": true,
+            "module": "nodenext",
+            "moduleResolution": "nodenext"
+          },
+          "file": "packages/astro/test/types/tsconfig.json",
+          "files": {
+            "source": 0,
+            "tests": 11
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "excalidraw": {
+      "build": {
+        "evidence": "node ../../scripts/buildPackage.js",
+        "file": "packages/excalidraw/package.json",
+        "perFile": true,
+        "tool": "esbuild (scripts/buildPackage.js); the app with Vite"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "import type": 1614,
+              "none": 4819,
+              "inline type": 120
+            },
+            "byUsage": {
+              "type": 1732,
+              "both": 127,
+              "value": 4678,
+              "export": 16
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 6553,
+            "typeOnlyBySource": {
+              "type": 1555,
+              "both": 82,
+              "unresolved": 81,
+              "value": 16
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 11,
+          "exports": {
+            "exportedTypeDeclarations": 389,
+            "localListTypeNamesWithoutType": 2,
+            "localListsWithTypeNames": 2,
+            "namedFrom": 84,
+            "namedFromType": 3,
+            "namedFromInlineType": 1,
+            "star": 83,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 1
+          },
+          "files": 444,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 2,
+            "typeof": 2
+          },
+          "imports": {
+            "byClause": {
+              "named": 2758,
+              "default": 282,
+              "none": 78,
+              "default+named": 35,
+              "namespace": 2
+            },
+            "byForm": {
+              "type": 735,
+              "value": 2255,
+              "mixed": 71,
+              "inline": 16,
+              "side-effect": 78
+            },
+            "total": 3155,
+            "withAttributes": 0
+          },
+          "lines": 128127,
+          "requires": 2,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 492,
+              "local: declarations-run-code (already marked)": 31,
+              "package outside the clone: unknown (already marked)": 34,
+              "local: statements (already marked)": 26
+            },
+            "examples": [],
+            "total": 583
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 1213,
+              "import type": 190,
+              "inline type": 15
+            },
+            "byUsage": {
+              "value": 1204,
+              "type": 205,
+              "both": 8,
+              "export": 1
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 1418,
+            "typeOnlyBySource": {
+              "type": 197,
+              "unresolved": 5,
+              "both": 2,
+              "value": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 2,
+          "exports": {
+            "exportedTypeDeclarations": 1,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 1,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 107,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 3,
+            "typeof": 3
+          },
+          "imports": {
+            "byClause": {
+              "named": 672,
+              "namespace": 27,
+              "default": 52,
+              "none": 4
+            },
+            "byForm": {
+              "value": 647,
+              "type": 95,
+              "mixed": 9,
+              "side-effect": 4
+            },
+            "total": 755,
+            "withAttributes": 0
+          },
+          "lines": 49621,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 73,
+              "local: statements (already marked)": 1,
+              "local: declarations-run-code (already marked)": 1
+            },
+            "examples": [],
+            "total": 75
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "targetsSideEffects": {
+        "none": 28,
+        "declarations-run-code": 12,
+        "statements": 2
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "packages/tsconfig.base.json",
+              "flags": {
+                "module": "ESNext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            },
+            {
+              "file": "packages/common/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "ESNext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "packages/common/tsconfig.json",
+          "files": {
+            "source": 18,
+            "tests": 3
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/tsconfig.base.json",
+              "flags": {
+                "module": "ESNext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            },
+            {
+              "file": "packages/element/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "ESNext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "packages/element/tsconfig.json",
+          "files": {
+            "source": 54,
+            "tests": 3
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/tsconfig.base.json",
+              "flags": {
+                "module": "ESNext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            },
+            {
+              "file": "packages/excalidraw/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "ESNext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "packages/excalidraw/tsconfig.json",
+          "files": {
+            "source": 353,
+            "tests": 100
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/tsconfig.base.json",
+              "flags": {
+                "module": "ESNext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            },
+            {
+              "file": "packages/math/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "ESNext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "packages/math/tsconfig.json",
+          "files": {
+            "source": 16,
+            "tests": 0
+          },
+          "missingBase": []
+        },
+        {
+          "chain": [
+            {
+              "file": "packages/tsconfig.base.json",
+              "flags": {
+                "module": "ESNext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            },
+            {
+              "file": "packages/utils/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {
+            "module": "ESNext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "packages/utils/tsconfig.json",
+          "files": {
+            "source": 3,
+            "tests": 1
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "next.js": {
+      "build": {
+        "evidence": "taskr release",
+        "file": "packages/next/package.json",
+        "perFile": true,
+        "tool": "taskr with SWC"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 7200,
+              "inline type": 607,
+              "import type": 2603
+            },
+            "byUsage": {
+              "value": 6844,
+              "type": 3201,
+              "both": 328,
+              "unused": 9,
+              "export": 27,
+              "export+type": 1
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 10410,
+            "typeOnlyBySource": {
+              "type": 2513,
+              "both": 352,
+              "unresolved": 300,
+              "value": 43,
+              "namespace-module": 2
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 44,
+          "exports": {
+            "exportedTypeDeclarations": 1154,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 28,
+            "namedFrom": 128,
+            "namedFromType": 20,
+            "namedFromInlineType": 1,
+            "star": 36,
+            "starAs": 2,
+            "starType": 2,
+            "typeListLocal": 27
+          },
+          "files": 1416,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 125,
+            "total": 565,
+            "typeof": 496
+          },
+          "imports": {
+            "byClause": {
+              "none": 79,
+              "default": 565,
+              "named": 6184,
+              "namespace": 132,
+              "default+named": 55
+            },
+            "byForm": {
+              "side-effect": 79,
+              "value": 4626,
+              "mixed": 392,
+              "type": 1918
+            },
+            "total": 7015,
+            "withAttributes": 45
+          },
+          "lines": 276128,
+          "requires": 451,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: declarations-run-code (already marked)": 468,
+              "local: statements (already marked)": 77,
+              "local: none (already marked)": 825,
+              "local: side-effect-imports (already marked)": 9,
+              "package outside the clone: unknown (already marked)": 72,
+              "workspace package: sideEffects \"(not declared)\" (already marked)": 76,
+              "builtin (already marked)": 152,
+              "local: unresolved (already marked)": 2
+            },
+            "examples": [],
+            "total": 1681
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 518,
+              "import type": 65,
+              "inline type": 17
+            },
+            "byUsage": {
+              "value": 505,
+              "type": 82,
+              "both": 13
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 600,
+            "typeOnlyBySource": {
+              "type": 71,
+              "unresolved": 5,
+              "both": 5,
+              "namespace-module": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 7,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 154,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 7,
+            "total": 43,
+            "typeof": 42
+          },
+          "imports": {
+            "byClause": {
+              "named": 316,
+              "default": 24,
+              "namespace": 3,
+              "none": 2,
+              "default+named": 2
+            },
+            "byForm": {
+              "value": 275,
+              "type": 55,
+              "mixed": 15,
+              "side-effect": 2
+            },
+            "total": 347,
+            "withAttributes": 0
+          },
+          "lines": 37761,
+          "requires": 107,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: declarations-run-code (already marked)": 12,
+              "local: none (already marked)": 30,
+              "builtin (already marked)": 5,
+              "local: statements (already marked)": 3
+            },
+            "examples": [],
+            "total": 50
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+      "targetsSideEffects": {
+        "declarations-run-code": 66,
+        "statements": 22,
+        "none": 203,
+        "side-effect-imports": 4
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "packages/next/tsconfig.json",
+              "flags": {
+                "verbatimModuleSyntax": true,
+                "module": "ESNext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            }
+          ],
+          "effective": {
+            "verbatimModuleSyntax": true,
+            "module": "ESNext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "packages/next/tsconfig.json",
+          "files": {
+            "source": 1416,
+            "tests": 154
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "vscode": {
+      "build": {
+        "evidence": "npm run gulp compile",
+        "file": "package.json",
+        "perFile": false,
+        "tool": "gulp compile (the TypeScript compiler over the program); an esbuild transpile for watch"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 2343,
+              "import type": 16
+            },
+            "byUsage": {
+              "value": 848,
+              "both": 403,
+              "type": 1107,
+              "unused": 1
+            },
+            "reportable": 1092,
+            "reportableBySource": {
+              "type": 600,
+              "both": 306,
+              "unresolved": 185,
+              "namespace-module": 1
+            },
+            "total": 2359,
+            "typeOnlyBySource": {
+              "type": 601,
+              "both": 311,
+              "unresolved": 195,
+              "namespace-module": 1
+            }
+          },
+          "decorators": {
+            "files": 15,
+            "metadataRefs": 53,
+            "metadataRefsWithFlag": 0,
+            "total": 37
+          },
+          "dynamicImports": 1,
+          "exports": {
+            "exportedTypeDeclarations": 464,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 1,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 226,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 1388,
+              "namespace": 65,
+              "default": 1
+            },
+            "byForm": {
+              "value": 1442,
+              "type": 12
+            },
+            "total": 1454,
+            "withAttributes": 0
+          },
+          "lines": 71809,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (unmarked)": 309,
+              "local: declarations-run-code (unmarked)": 83,
+              "local: unresolved (unmarked)": 102,
+              "local: unresolved (already marked)": 2,
+              "local: none (already marked)": 2,
+              "local: declarations-run-code (already marked)": 1,
+              "local: statements (unmarked)": 25,
+              "package outside the clone: unknown (already marked)": 5,
+              "local: statements (already marked)": 2
+            },
+            "examples": [
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/commands/shiftCommand.ts",
+                "line": 13,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/commands/shiftCommand.ts#L13",
+                "spec": "../config/editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/config/diffEditor.ts",
+                "line": 6,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/diffEditor.ts#L6",
+                "spec": "./editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/config/editorConfiguration.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/editorConfiguration.ts#L8",
+                "spec": "./editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/config/fontInfo.ts",
+                "line": 7,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/fontInfo.ts#L7",
+                "spec": "./editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 289,
+                      "text": "export class StringEdit extends BaseStringEdit<StringReplacement, StringEdit> { /** * Parses an edit"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 507,
+                      "text": "export class AnnotatedStringEdit<T extends IEditData<T>> extends BaseStringEdit<AnnotatedStringRepla"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/core/edits/textEdit.ts",
+                "line": 11,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/textEdit.ts#L11",
+                "spec": "./stringEdit.js",
+                "target": "src/vs/editor/common/core/edits/stringEdit.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 15,
+                      "text": "export class LineRange { public static ofLength(startLineNumber: number, length: number): LineRange "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/core/text/abstractText.ts",
+                "line": 10,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/text/abstractText.ts#L10",
+                "spec": "../ranges/lineRange.js",
+                "target": "src/vs/editor/common/core/ranges/lineRange.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 289,
+                      "text": "export class StringEdit extends BaseStringEdit<StringReplacement, StringEdit> { /** * Parses an edit"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 507,
+                      "text": "export class AnnotatedStringEdit<T extends IEditData<T>> extends BaseStringEdit<AnnotatedStringRepla"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/core/text/positionToOffsetImpl.ts",
+                "line": 7,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/text/positionToOffsetImpl.ts#L7",
+                "spec": "../edits/stringEdit.js",
+                "target": "src/vs/editor/common/core/edits/stringEdit.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/cursor/cursorDeleteOperations.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorDeleteOperations.ts#L8",
+                "spec": "../config/editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/cursor/cursorWordOperations.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorWordOperations.ts#L8",
+                "spec": "../config/editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 50,
+                      "text": "export const DEFAULT_WORD_REGEXP = createWordRegExp();"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 86,
+                      "text": "const _defaultConfig = new LinkedList<IGetWordAtTextConfig>();"
+                    },
+                    {
+                      "kind": "ExpressionStatement",
+                      "line": 87,
+                      "text": "_defaultConfig.unshift({ maxLen: 1000, windowSize: 15, timeBudget: 150 });"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 1,
+                  "label": "statements"
+                },
+                "file": "src/vs/editor/common/cursor/cursorWordOperations.ts",
+                "line": 16,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorWordOperations.ts#L16",
+                "spec": "../core/wordHelper.js",
+                "target": "src/vs/editor/common/core/wordHelper.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 57,
+                      "text": "export const ILanguageConfigurationService = createDecorator<ILanguageConfigurationService>('languag"
+                    },
+                    {
+                      "kind": "ExpressionStatement",
+                      "line": 480,
+                      "text": "registerSingleton(ILanguageConfigurationService, LanguageConfigurationService, InstantiationType.Del"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 1,
+                  "label": "statements"
+                },
+                "file": "src/vs/editor/common/cursorCommon.ts",
+                "line": 15,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursorCommon.ts#L15",
+                "spec": "./languages/languageConfigurationRegistry.js",
+                "target": "src/vs/editor/common/languages/languageConfigurationRegistry.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 127,
+                      "text": "export class OffsetPair { public static readonly zero = new OffsetPair(0, 0); public static readonly"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 176,
+                      "text": "export class InfiniteTimeout implements ITimeout { public static instance = new InfiniteTimeout(); i"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/diff/defaultLinesDiffComputer/lineSequence.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/diff/defaultLinesDiffComputer/lineSequence.ts#L8",
+                "spec": "./algorithms/diffAlgorithm.js",
+                "target": "src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/diffAlgorithm.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 127,
+                      "text": "export class OffsetPair { public static readonly zero = new OffsetPair(0, 0); public static readonly"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 176,
+                      "text": "export class InfiniteTimeout implements ITimeout { public static instance = new InfiniteTimeout(); i"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/diff/defaultLinesDiffComputer/linesSliceCharSequence.ts",
+                "line": 11,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/diff/defaultLinesDiffComputer/linesSliceCharSequence.ts#L11",
+                "spec": "./algorithms/diffAlgorithm.js",
+                "target": "src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/diffAlgorithm.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 15,
+                      "text": "export class LineRange { public static ofLength(startLineNumber: number, length: number): LineRange "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/diff/defaultLinesDiffComputer/utils.ts",
+                "line": 7,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/diff/defaultLinesDiffComputer/utils.ts#L7",
+                "spec": "../../core/ranges/lineRange.js",
+                "target": "src/vs/editor/common/core/ranges/lineRange.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/editorCommon.ts",
+                "line": 11,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/editorCommon.ts#L11",
+                "spec": "./config/editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 14,
+                      "text": "const privateSymbol = Symbol('TextModelEditSource');"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages.ts",
+                "line": 29,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages.ts#L29",
+                "spec": "./textModelEditSource.js",
+                "target": "src/vs/editor/common/textModelEditSource.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 57,
+                      "text": "export const ILanguageConfigurationService = createDecorator<ILanguageConfigurationService>('languag"
+                    },
+                    {
+                      "kind": "ExpressionStatement",
+                      "line": 480,
+                      "text": "registerSingleton(ILanguageConfigurationService, LanguageConfigurationService, InstantiationType.Del"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 1,
+                  "label": "statements"
+                },
+                "file": "src/vs/editor/common/languages/autoIndent.ts",
+                "line": 12,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/autoIndent.ts#L12",
+                "spec": "./languageConfigurationRegistry.js",
+                "target": "src/vs/editor/common/languages/languageConfigurationRegistry.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 388,
+                      "text": "export namespace CompletionItemKinds { const byKind = new Map<CompletionItemKind, ThemeIcon>(); byKi"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 1627,
+                      "text": "export const symbolKindNames: { [symbol: number]: string } = { [SymbolKind.Array]: localize('Array',"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 1670,
+                      "text": "export namespace SymbolKinds { const byKind = new Map<SymbolKind, ThemeIcon>(); byKind.set(SymbolKin"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/defaultDocumentColorsComputer.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/defaultDocumentColorsComputer.ts#L8",
+                "spec": "../languages.js",
+                "target": "src/vs/editor/common/languages.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/enterAction.ts",
+                "line": 9,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/enterAction.ts#L9",
+                "spec": "../config/editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 388,
+                      "text": "export namespace CompletionItemKinds { const byKind = new Map<CompletionItemKind, ThemeIcon>(); byKi"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 1627,
+                      "text": "export const symbolKindNames: { [symbol: number]: string } = { [SymbolKind.Array]: localize('Array',"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 1670,
+                      "text": "export namespace SymbolKinds { const byKind = new Map<SymbolKind, ThemeIcon>(); byKind.set(SymbolKin"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/language.ts",
+                "line": 9,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/language.ts#L9",
+                "spec": "../languages.js",
+                "target": "src/vs/editor/common/languages.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6030,
+                      "text": "export const EditorOptions = { acceptSuggestionOnCommitCharacter: register(new EditorBooleanOption( "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/languageConfigurationRegistry.ts",
+                "line": 17,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/languageConfigurationRegistry.ts#L17",
+                "spec": "../config/editorOptions.js",
+                "target": "src/vs/editor/common/config/editorOptions.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 388,
+                      "text": "export namespace CompletionItemKinds { const byKind = new Map<CompletionItemKind, ThemeIcon>(); byKi"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 1627,
+                      "text": "export const symbolKindNames: { [symbol: number]: string } = { [SymbolKind.Array]: localize('Array',"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 1670,
+                      "text": "export namespace SymbolKinds { const byKind = new Map<SymbolKind, ThemeIcon>(); byKind.set(SymbolKin"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/linkComputer.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/linkComputer.ts#L8",
+                "spec": "../languages.js",
+                "target": "src/vs/editor/common/languages.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 12,
+                      "text": "export const ILanguageService = createDecorator<ILanguageService>('languageService');"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/modesRegistry.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/modesRegistry.ts#L8",
+                "spec": "./language.js",
+                "target": "src/vs/editor/common/languages/language.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "new",
+                      "line": 388,
+                      "text": "export namespace CompletionItemKinds { const byKind = new Map<CompletionItemKind, ThemeIcon>(); byKi"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 1627,
+                      "text": "export const symbolKindNames: { [symbol: number]: string } = { [SymbolKind.Array]: localize('Array',"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 1670,
+                      "text": "export namespace SymbolKinds { const byKind = new Map<SymbolKind, ThemeIcon>(); byKind.set(SymbolKin"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "src/vs/editor/common/languages/supports.ts",
+                "line": 8,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/supports.ts#L8",
+                "spec": "../languages.js",
+                "target": "src/vs/editor/common/languages.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 57,
+                      "text": "export const ILanguageConfigurationService = createDecorator<ILanguageConfigurationService>('languag"
+                    },
+                    {
+                      "kind": "ExpressionStatement",
+                      "line": 480,
+                      "text": "registerSingleton(ILanguageConfigurationService, LanguageConfigurationService, InstantiationType.Del"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 1,
+                  "label": "statements"
+                },
+                "file": "src/vs/editor/common/languages/supports/indentationLineProcessor.ts",
+                "line": 9,
+                "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/supports/indentationLineProcessor.ts#L9",
+                "spec": "../languageConfigurationRegistry.js",
+                "target": "src/vs/editor/common/languages/languageConfigurationRegistry.ts"
+              }
+            ],
+            "total": 531
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {},
+            "byUsage": {},
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 0,
+            "typeOnlyBySource": {}
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 0,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {},
+            "byForm": {},
+            "total": 0,
+            "withAttributes": 0
+          },
+          "lines": 0,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {},
+            "examples": [],
+            "total": 0
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "core",
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+      "targetsSideEffects": {
+        "none": 64,
+        "declarations-run-code": 17,
+        "statements": 4
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "src/tsconfig.base.json",
+              "flags": {
+                "experimentalDecorators": true,
+                "module": "nodenext",
+                "moduleResolution": "nodenext"
+              }
+            },
+            {
+              "file": "src/tsconfig.json",
+              "flags": {
+                "isolatedModules": false
+              }
+            }
+          ],
+          "effective": {
+            "experimentalDecorators": true,
+            "module": "nodenext",
+            "moduleResolution": "nodenext",
+            "isolatedModules": false
+          },
+          "file": "src/tsconfig.json",
+          "files": {
+            "source": 226,
+            "tests": 0
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "shadcn": {
+      "build": {
+        "evidence": "next build",
+        "file": "apps/v4/package.json",
+        "perFile": true,
+        "tool": "Next.js (SWC)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "inline type": 48,
+              "none": 1512,
+              "import type": 2
+            },
+            "byUsage": {
+              "type": 50,
+              "both": 152,
+              "value": 1356,
+              "unused": 1,
+              "export": 3
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 1562,
+            "typeOnlyBySource": {
+              "unresolved": 47,
+              "type": 2,
+              "value": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 1,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 1,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 165,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 548,
+              "namespace": 84,
+              "default": 3,
+              "default+named": 1
+            },
+            "byForm": {
+              "inline": 10,
+              "value": 592,
+              "mixed": 32,
+              "type": 2
+            },
+            "total": 636,
+            "withAttributes": 0
+          },
+          "lines": 18473,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "package outside the clone: unknown (already marked)": 10
+            },
+            "examples": [],
+            "total": 10
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {},
+            "byUsage": {},
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 0,
+            "typeOnlyBySource": {}
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 0,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {},
+            "byForm": {},
+            "total": 0,
+            "withAttributes": 0
+          },
+          "lines": 0,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {},
+            "examples": [],
+            "total": 0
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "react",
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+      "targetsSideEffects": {},
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "apps/v4/tsconfig.json",
+              "flags": {
+                "isolatedModules": true,
+                "module": "esnext",
+                "moduleResolution": "bundler",
+                "jsx": "react-jsx"
+              }
+            }
+          ],
+          "effective": {
+            "isolatedModules": true,
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "apps/v4/tsconfig.json",
+          "files": {
+            "source": 165,
+            "tests": 0
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "radix": {
+      "build": {
+        "evidence": "\"build\": \"radix-build\"",
+        "file": "packages/react/primitive/package.json",
+        "perFile": null,
+        "tool": "radix-build (internal/builder, outside the sparse clone)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 448,
+              "import type": 37,
+              "inline type": 5
+            },
+            "byUsage": {
+              "both": 141,
+              "value": 307,
+              "type": 42
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 490,
+            "typeOnlyBySource": {
+              "type": 35,
+              "value": 3,
+              "unresolved": 4
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 9,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 47,
+            "namedFrom": 116,
+            "namedFromType": 47,
+            "namedFromInlineType": 0,
+            "star": 35,
+            "starAs": 45,
+            "starType": 0,
+            "typeListLocal": 47
+          },
+          "files": 160,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "namespace": 95,
+              "named": 362
+            },
+            "byForm": {
+              "value": 416,
+              "type": 36,
+              "mixed": 5
+            },
+            "total": 457,
+            "withAttributes": 0
+          },
+          "lines": 25594,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "package outside the clone: unknown (already marked)": 1
+            },
+            "examples": [],
+            "total": 1
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 596,
+              "import type": 20,
+              "inline type": 4
+            },
+            "byUsage": {
+              "both": 40,
+              "value": 556,
+              "type": 24
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 620,
+            "typeOnlyBySource": {
+              "unresolved": 23,
+              "type": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 46,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "namespace": 87,
+              "named": 153,
+              "default": 7
+            },
+            "byForm": {
+              "value": 223,
+              "type": 20,
+              "mixed": 4
+            },
+            "total": 247,
+            "withAttributes": 0
+          },
+          "lines": 27654,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {},
+            "examples": [],
+            "total": 0
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "react",
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "targetsSideEffects": {},
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/accessible-icon/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/accessible-icon/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/accordion/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/accordion/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/alert-dialog/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/alert-dialog/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/announce/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/announce/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/arrow/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/arrow/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/aspect-ratio/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/aspect-ratio/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/avatar/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/avatar/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/checkbox/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/checkbox/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/collapsible/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/collapsible/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/collection/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/collection/tsconfig.json",
+          "files": {
+            "source": 4,
+            "tests": 2
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/compose-refs/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/compose-refs/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/context-menu/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/context-menu/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/context/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/context/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/dialog/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/dialog/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/direction/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/direction/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/dismissable-layer/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/dismissable-layer/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/dropdown-menu/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/dropdown-menu/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/focus-guards/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/focus-guards/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/focus-scope/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/focus-scope/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/form/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/form/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/hover-card/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/hover-card/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/id/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/id/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/label/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/label/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/menu/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/menu/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/menubar/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/menubar/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/navigation-menu/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/navigation-menu/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/one-time-password-field/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/one-time-password-field/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/password-toggle-field/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/password-toggle-field/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/popover/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/popover/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/popper/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/popper/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/portal/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/portal/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/presence/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/presence/tsconfig.json",
+          "files": {
+            "source": 3,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/primitive/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/primitive/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/progress/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/progress/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/radio-group/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/radio-group/tsconfig.json",
+          "files": {
+            "source": 3,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/radix-ui/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/radix-ui/tsconfig.json",
+          "files": {
+            "source": 37,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/roving-focus/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/roving-focus/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/scroll-area/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/scroll-area/tsconfig.json",
+          "files": {
+            "source": 3,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/select/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/select/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/separator/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/separator/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/slider/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/slider/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/slot/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/slot/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/switch/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/switch/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/tabs/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/tabs/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/toast/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/toast/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/toggle-group/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/toggle-group/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/toggle/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/toggle/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/toolbar/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/toolbar/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/tooltip/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/tooltip/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-callback-ref/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-callback-ref/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-controllable-state/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-controllable-state/tsconfig.json",
+          "files": {
+            "source": 3,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-effect-event/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-effect-event/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-escape-keydown/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-escape-keydown/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-is-hydrated/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-is-hydrated/tsconfig.json",
+          "files": {
+            "source": 3,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-layout-effect/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-layout-effect/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-previous/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-previous/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-rect/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-rect/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 0
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/use-size/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/use-size/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        },
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "@repo/typescript-config/react-library.json"
+            },
+            {
+              "file": "packages/react/visually-hidden/tsconfig.json",
+              "flags": {}
+            }
+          ],
+          "effective": {},
+          "file": "packages/react/visually-hidden/tsconfig.json",
+          "files": {
+            "source": 2,
+            "tests": 1
+          },
+          "missingBase": [
+            "@repo/typescript-config/react-library.json"
+          ]
+        }
+      ]
+    },
+    "react-aria": {
+      "build": {
+        "evidence": "parcel build",
+        "file": "package.json",
+        "perFile": true,
+        "tool": "Parcel (SWC)"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 2253,
+              "import type": 9
+            },
+            "byUsage": {
+              "type": 932,
+              "value": 1310,
+              "both": 20
+            },
+            "reportable": 923,
+            "reportableBySource": {
+              "unresolved": 606,
+              "type": 317
+            },
+            "total": 2262,
+            "typeOnlyBySource": {
+              "unresolved": 612,
+              "type": 320
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 270,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 2,
+            "namedFromType": 1,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 71,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 838,
+              "default+named": 67,
+              "default": 5
+            },
+            "byForm": {
+              "value": 903,
+              "type": 7
+            },
+            "total": 910,
+            "withAttributes": 0
+          },
+          "lines": 22407,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "package outside the clone: unknown (unmarked)": 90,
+              "local: declarations-run-code (unmarked)": 6,
+              "package outside the clone: unknown (already marked)": 5,
+              "local: declarations-run-code (already marked)": 1,
+              "local: none (already marked)": 1,
+              "local: none (unmarked)": 4
+            },
+            "examples": [
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 37,
+                      "text": "export const DEFAULT_SLOT = Symbol('default');"
+                    },
+                    {
+                      "kind": "new",
+                      "line": 509,
+                      "text": "export const dom = new Proxy( {}, { get(target, elementType) { if (typeof elementType !== 'string') "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "packages/react-aria-components/src/Collection.tsx",
+                "line": 43,
+                "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Collection.tsx#L43",
+                "spec": "./utils",
+                "target": "packages/react-aria-components/src/utils.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 63,
+                      "text": "const VirtualizerContext = createContext<VirtualizerState<any, any> | null>(null);"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 64,
+                      "text": "const VirtualizerOptionsContext = createContext<VirtualizerOptionsContextValue | null>(null);"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "packages/react-aria-components/src/GridLayout.ts",
+                "line": 14,
+                "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridLayout.ts#L14",
+                "spec": "./Virtualizer",
+                "target": "packages/react-aria-components/src/Virtualizer.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 3,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 150,
+                      "text": "export const SectionContext = createContext<SectionContextValue | null>(null);"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 153,
+                      "text": "export const Section = /*#__PURE__*/ createBranchComponent( 'section', <T extends any>( props: Secti"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 287,
+                      "text": "export const CollectionRendererContext = createContext<CollectionRenderer>(DefaultCollectionRenderer"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "packages/react-aria-components/src/Select.tsx",
+                "line": 38,
+                "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Select.tsx#L38",
+                "spec": "./Collection",
+                "target": "packages/react-aria-components/src/Collection.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 63,
+                      "text": "const VirtualizerContext = createContext<VirtualizerState<any, any> | null>(null);"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 64,
+                      "text": "const VirtualizerOptionsContext = createContext<VirtualizerOptionsContextValue | null>(null);"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "packages/react-aria-components/src/TableLayout.ts",
+                "line": 14,
+                "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/TableLayout.ts#L14",
+                "spec": "./Virtualizer",
+                "target": "packages/react-aria-components/src/Virtualizer.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 80,
+                      "text": "export const InputContext = createContext<ContextValue<InputProps, HTMLInputElement>>({});"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 91,
+                      "text": "export const Input = /*#__PURE__*/ createHideableComponent(function Input( props: InputProps, ref: F"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "packages/react-aria-components/src/TextArea.tsx",
+                "line": 10,
+                "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/TextArea.tsx#L10",
+                "spec": "./Input",
+                "target": "packages/react-aria-components/src/Input.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 100,
+                      "text": "export const ButtonContext = createContext<ContextValue<ButtonContextValue, HTMLButtonElement>>({});"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 105,
+                      "text": "export const Button = /*#__PURE__*/ createHideableComponent(function Button( props: ButtonProps, ref"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "packages/react-aria-components/src/ToggleButton.tsx",
+                "line": 15,
+                "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ToggleButton.tsx#L15",
+                "spec": "./Button",
+                "target": "packages/react-aria-components/src/Button.tsx"
+              }
+            ],
+            "total": 107
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 1194,
+              "inline type": 3
+            },
+            "byUsage": {
+              "value": 1174,
+              "type": 19,
+              "both": 4
+            },
+            "reportable": 16,
+            "reportableBySource": {
+              "unresolved": 15,
+              "type": 1
+            },
+            "total": 1197,
+            "typeOnlyBySource": {
+              "unresolved": 16,
+              "type": 3
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 0,
+          "exports": {
+            "exportedTypeDeclarations": 1,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 86,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 552,
+              "default": 100,
+              "none": 1,
+              "default+named": 25,
+              "namespace": 4
+            },
+            "byForm": {
+              "value": 679,
+              "side-effect": 1,
+              "mixed": 2
+            },
+            "total": 682,
+            "withAttributes": 0
+          },
+          "lines": 44831,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "package outside the clone: unknown (unmarked)": 4
+            },
+            "examples": [],
+            "total": 4
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "react",
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+      "targetsSideEffects": {
+        "declarations-run-code": 5,
+        "none": 1
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "tsconfig.json",
+              "flags": {
+                "isolatedModules": true,
+                "module": "esnext",
+                "moduleResolution": "bundler",
+                "jsx": "preserve"
+              }
+            }
+          ],
+          "effective": {
+            "isolatedModules": true,
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "jsx": "preserve"
+          },
+          "file": "tsconfig.json",
+          "files": {
+            "source": 71,
+            "tests": 86
+          },
+          "missingBase": []
+        }
+      ]
+    },
+    "supabase": {
+      "build": {
+        "evidence": "next build",
+        "file": "apps/studio/package.json",
+        "perFile": true,
+        "tool": "Next.js (SWC); a Vite build too"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "import type": 1798,
+              "none": 35105,
+              "inline type": 801
+            },
+            "byUsage": {
+              "type": 4156,
+              "value": 33208,
+              "both": 338,
+              "export": 2
+            },
+            "reportable": 1557,
+            "reportableBySource": {
+              "unresolved": 799,
+              "type": 708,
+              "both": 36,
+              "value": 14
+            },
+            "total": 37704,
+            "typeOnlyBySource": {
+              "unresolved": 1519,
+              "type": 2544,
+              "both": 74,
+              "value": 19
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 66,
+          "exports": {
+            "exportedTypeDeclarations": 988,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 2,
+            "namedFrom": 28,
+            "namedFromType": 12,
+            "namedFromInlineType": 0,
+            "star": 5,
+            "starAs": 0,
+            "starType": 5,
+            "typeListLocal": 2
+          },
+          "files": 2759,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 1,
+            "total": 1,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 21412,
+              "default": 1206,
+              "namespace": 104,
+              "default+named": 37,
+              "none": 22
+            },
+            "byForm": {
+              "type": 1468,
+              "value": 20632,
+              "mixed": 467,
+              "inline": 192,
+              "side-effect": 22
+            },
+            "total": 22781,
+            "withAttributes": 0
+          },
+          "lines": 382573,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "package outside the clone: unknown (already marked)": 309,
+              "local: none (already marked)": 1071,
+              "package outside the clone: unknown (unmarked)": 321,
+              "local: none (unmarked)": 354,
+              "local: declarations-run-code (unmarked)": 103,
+              "local: declarations-run-code (already marked)": 173,
+              "local: statements (already marked)": 10,
+              "builtin (already marked)": 1
+            },
+            "examples": [
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 50,
+                      "text": "const impersonatedUserSchema = z .record(z.string(), z.unknown()) .transform((value) => value as unk"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "const aalSchema = z.enum(['aal1', 'aal2'])"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 56,
+                      "text": "const postgrestImpersonationRoleSchema = z.union([ z.object({ type: z.literal('postgrest'), role: z."
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/grid/SupabaseGrid.tsx",
+                "line": 17,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/grid/SupabaseGrid.tsx#L17",
+                "spec": "@/lib/role-impersonation",
+                "target": "apps/studio/lib/role-impersonation.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 50,
+                      "text": "const impersonatedUserSchema = z .record(z.string(), z.unknown()) .transform((value) => value as unk"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "const aalSchema = z.enum(['aal1', 'aal2'])"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 56,
+                      "text": "const postgrestImpersonationRoleSchema = z.union([ z.object({ type: z.literal('postgrest'), role: z."
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/grid/components/editor/JsonEditor.tsx",
+                "line": 26,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/grid/components/editor/JsonEditor.tsx#L26",
+                "spec": "@/lib/role-impersonation",
+                "target": "apps/studio/lib/role-impersonation.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 50,
+                      "text": "const impersonatedUserSchema = z .record(z.string(), z.unknown()) .transform((value) => value as unk"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "const aalSchema = z.enum(['aal1', 'aal2'])"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 56,
+                      "text": "const postgrestImpersonationRoleSchema = z.union([ z.object({ type: z.literal('postgrest'), role: z."
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/grid/components/editor/TextEditor.tsx",
+                "line": 29,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/grid/components/editor/TextEditor.tsx#L29",
+                "spec": "@/lib/role-impersonation",
+                "target": "apps/studio/lib/role-impersonation.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 50,
+                      "text": "const impersonatedUserSchema = z .record(z.string(), z.unknown()) .transform((value) => value as unk"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "const aalSchema = z.enum(['aal1', 'aal2'])"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 56,
+                      "text": "const postgrestImpersonationRoleSchema = z.union([ z.object({ type: z.literal('postgrest'), role: z."
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/grid/components/footer/pagination/Pagination.tsx",
+                "line": 19,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/grid/components/footer/pagination/Pagination.tsx#L19",
+                "spec": "@/lib/role-impersonation",
+                "target": "apps/studio/lib/role-impersonation.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 50,
+                      "text": "const impersonatedUserSchema = z .record(z.string(), z.unknown()) .transform((value) => value as unk"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "const aalSchema = z.enum(['aal1', 'aal2'])"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 56,
+                      "text": "const postgrestImpersonationRoleSchema = z.union([ z.object({ type: z.literal('postgrest'), role: z."
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/grid/components/header/Header.tsx",
+                "line": 41,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/grid/components/header/Header.tsx#L41",
+                "spec": "@/lib/role-impersonation",
+                "target": "apps/studio/lib/role-impersonation.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 59,
+                      "text": "export const TokenFormSchema = z .object({ tokenName: z.string().trim().min(1, 'Please enter a name "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/PermissionRow.tsx",
+                "line": 17,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/PermissionRow.tsx#L17",
+                "spec": "./NewScopedTokenForm.utils",
+                "target": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenForm.utils.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 59,
+                      "text": "export const TokenFormSchema = z .object({ tokenName: z.string().trim().min(1, 'Please enter a name "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/PermissionsAccordion.tsx",
+                "line": 15,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/PermissionsAccordion.tsx#L15",
+                "spec": "./NewScopedTokenForm.utils",
+                "target": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenForm.utils.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "export const PROVIDER_FILTER_OPTIONS = PROVIDERS_SCHEMAS.map((provider) => ({ name: provider.title, "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Auth/Users/Users.utils.tsx",
+                "line": 17,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Users/Users.utils.tsx#L17",
+                "spec": "./Users.constants",
+                "target": "apps/studio/components/interfaces/Auth/Users/Users.constants.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 32,
+                      "text": "export const TABLE_EVENT_VALUES: TableEventAction[] = Object.values(TABLE_EVENT_ACTIONS)"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Auth/Users/UsersSearch.tsx",
+                "line": 1,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Users/UsersSearch.tsx#L1",
+                "spec": "common/telemetry-constants",
+                "target": "packages/common/telemetry-constants.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6,
+                      "text": "const httpRequestSchema = z.object({ function_type: z.literal('http_request'), http_url: httpEndpoin"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 15,
+                      "text": "const supabaseFunctionSchema = z.object({ function_type: z.literal('supabase_function'), http_url: z"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 23,
+                      "text": "const httpHeadersSchema = z.array( z.object({ id: z.string(), name: z.string().trim(), value: z.stri"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Hooks/FormContents.tsx",
+                "line": 25,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Hooks/FormContents.tsx#L25",
+                "spec": "./EditHookPanel.constants",
+                "target": "apps/studio/components/interfaces/Database/Hooks/EditHookPanel.constants.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6,
+                      "text": "const httpRequestSchema = z.object({ function_type: z.literal('http_request'), http_url: httpEndpoin"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 15,
+                      "text": "const supabaseFunctionSchema = z.object({ function_type: z.literal('supabase_function'), http_url: z"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 23,
+                      "text": "const httpHeadersSchema = z.array( z.object({ id: z.string(), name: z.string().trim(), value: z.stri"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Hooks/HTTPHeaders.tsx",
+                "line": 7,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Hooks/HTTPHeaders.tsx#L7",
+                "spec": "./EditHookPanel.constants",
+                "target": "apps/studio/components/interfaces/Database/Hooks/EditHookPanel.constants.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6,
+                      "text": "const httpRequestSchema = z.object({ function_type: z.literal('http_request'), http_url: httpEndpoin"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 15,
+                      "text": "const supabaseFunctionSchema = z.object({ function_type: z.literal('supabase_function'), http_url: z"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 23,
+                      "text": "const httpHeadersSchema = z.array( z.object({ id: z.string(), name: z.string().trim(), value: z.stri"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Hooks/HTTPParameters.tsx",
+                "line": 4,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Hooks/HTTPParameters.tsx#L4",
+                "spec": "./EditHookPanel.constants",
+                "target": "apps/studio/components/interfaces/Database/Hooks/EditHookPanel.constants.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 5,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 6,
+                      "text": "const httpRequestSchema = z.object({ function_type: z.literal('http_request'), http_url: httpEndpoin"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 15,
+                      "text": "const supabaseFunctionSchema = z.object({ function_type: z.literal('supabase_function'), http_url: z"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 23,
+                      "text": "const httpHeadersSchema = z.array( z.object({ id: z.string(), name: z.string().trim(), value: z.stri"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Hooks/HTTPRequestConfig.tsx",
+                "line": 18,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Hooks/HTTPRequestConfig.tsx#L18",
+                "spec": "./EditHookPanel.constants",
+                "target": "apps/studio/components/interfaces/Database/Hooks/EditHookPanel.constants.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 14,
+                      "text": "const CommonFormSchema = z.object({ name: z.string().min(1, 'Name is required.'), publicationName: z"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "export const DestinationPanelFormSchema = CommonFormSchema.extend(BigQueryFormSchema.shape) .extend("
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Replication/DestinationPanel/DestinationForm/DestinationForm.utils.ts",
+                "line": 16,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Replication/DestinationPanel/DestinationForm/DestinationForm.utils.ts#L16",
+                "spec": "./DestinationForm.schema",
+                "target": "apps/studio/components/interfaces/Database/Replication/DestinationPanel/DestinationForm/DestinationForm.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 2,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 14,
+                      "text": "const CommonFormSchema = z.object({ name: z.string().min(1, 'Name is required.'), publicationName: z"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 54,
+                      "text": "export const DestinationPanelFormSchema = CommonFormSchema.extend(BigQueryFormSchema.shape) .extend("
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Replication/DestinationPanel/DestinationForm/useDestinationForm.ts",
+                "line": 8,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Replication/DestinationPanel/DestinationForm/useDestinationForm.ts#L8",
+                "spec": "./DestinationForm.schema",
+                "target": "apps/studio/components/interfaces/Database/Replication/DestinationPanel/DestinationForm/DestinationForm.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 28,
+                      "text": "const PipelineRequestStatusContext = createContext<PipelineRequestStatusContextType | undefined>( un"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Replication/ReplicationPipelineStatus/PipelineOverview.utils.ts",
+                "line": 6,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Replication/ReplicationPipelineStatus/PipelineOverview.utils.ts#L6",
+                "spec": "@/state/replication-pipeline-request-status",
+                "target": "apps/studio/state/replication-pipeline-request-status.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 28,
+                      "text": "const PipelineRequestStatusContext = createContext<PipelineRequestStatusContextType | undefined>( un"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Database/Replication/ReplicationPipelineStatus/ReplicationPipelineStatus.utils.tsx",
+                "line": 14,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Replication/ReplicationPipelineStatus/ReplicationPipelineStatus.utils.tsx#L14",
+                "spec": "@/state/replication-pipeline-request-status",
+                "target": "apps/studio/state/replication-pipeline-request-status.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/DiskManagementForm.sections.tsx",
+                "line": 15,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/DiskManagementForm.sections.tsx#L15",
+                "spec": "./DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/DiskManagementReviewAndSubmitDialog/DiskManagementReviewAndSubmitDialog.hooks.ts",
+                "line": 4,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/DiskManagementReviewAndSubmitDialog/DiskManagementReviewAndSubmitDialog.hooks.ts#L4",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/DiskManagementReviewAndSubmitDialog/DiskManagementReviewAndSubmitDialog.tsx",
+                "line": 21,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/DiskManagementReviewAndSubmitDialog/DiskManagementReviewAndSubmitDialog.tsx#L21",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/fields/AutoScaleFields.tsx",
+                "line": 14,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/fields/AutoScaleFields.tsx#L14",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/fields/ComputeSizeField.tsx",
+                "line": 21,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/fields/ComputeSizeField.tsx#L21",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/fields/DiskSizeField.tsx",
+                "line": 17,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/fields/DiskSizeField.tsx#L17",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/fields/IOPSField.tsx",
+                "line": 13,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/fields/IOPSField.tsx#L13",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 1,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 20,
+                      "text": "const baseSchema = z.object({ storageType: z.enum(['io2', 'gp3']).describe('Type of storage: io2 or "
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/DiskManagement/fields/StorageTypeField.tsx",
+                "line": 22,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/DiskManagement/fields/StorageTypeField.tsx#L22",
+                "spec": "../DiskManagement.schema",
+                "target": "apps/studio/components/interfaces/DiskManagement/DiskManagement.schema.ts"
+              }
+            ],
+            "total": 2342
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 4451,
+              "import type": 276,
+              "inline type": 99
+            },
+            "byUsage": {
+              "value": 4360,
+              "type": 420,
+              "both": 46
+            },
+            "reportable": 46,
+            "reportableBySource": {
+              "type": 17,
+              "unresolved": 29
+            },
+            "total": 4826,
+            "typeOnlyBySource": {
+              "type": 278,
+              "unresolved": 139,
+              "both": 2,
+              "value": 2
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 37,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 458,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 73,
+            "typeof": 73
+          },
+          "imports": {
+            "byClause": {
+              "named": 2311,
+              "default": 125,
+              "default+named": 1
+            },
+            "byForm": {
+              "value": 2103,
+              "type": 246,
+              "mixed": 68,
+              "inline": 20
+            },
+            "total": 2437,
+            "withAttributes": 0
+          },
+          "lines": 79558,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 157,
+              "package outside the clone: unknown (unmarked)": 23,
+              "local: declarations-run-code (already marked)": 43,
+              "package outside the clone: unknown (already marked)": 58,
+              "local: none (unmarked)": 12,
+              "local: declarations-run-code (unmarked)": 2,
+              "local: statements (already marked)": 3
+            },
+            "examples": [
+              {
+                "effects": {
+                  "declarationsRunningCode": 3,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 140,
+                      "text": "const SUPABASE_INTEGRATIONS: Array<IntegrationDefinition> = [ { id: 'queues', type: 'postgres_extens"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 515,
+                      "text": "const WRAPPER_INTEGRATIONS: Array<IntegrationDefinition> = WRAPPERS.map((w) => { return { id: w.name"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 688,
+                      "text": "const INTEGRATIONS_WITH_CATEGORIES = [ ...WRAPPER_INTEGRATIONS, ...SUPABASE_INTEGRATIONS.map((integr"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/Integrations/Integration/IntegrationOverviewTabV2/InstallIntegrationSheet.test.tsx",
+                "line": 7,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/Integration/IntegrationOverviewTabV2/InstallIntegrationSheet.test.tsx#L7",
+                "spec": "../../Landing/Integrations.constants",
+                "target": "apps/studio/components/interfaces/Integrations/Landing/Integrations.constants.tsx"
+              },
+              {
+                "effects": {
+                  "declarationsRunningCode": 4,
+                  "examples": [
+                    {
+                      "kind": "call",
+                      "line": 10,
+                      "text": "export const columnSchema = z.object({ id: z.string(), log_type: z.enum(LOG_TYPES), method: z.enum(M"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 28,
+                      "text": "export const columnFilterSchema = z.object({ level: z .string() .transform((val) => val.split(ARRAY_"
+                    },
+                    {
+                      "kind": "call",
+                      "line": 60,
+                      "text": "export const facetMetadataSchema = z.object({ rows: z.array(z.object({ value: z.any(), total: z.numb"
+                    }
+                  ],
+                  "sideEffectImports": 0,
+                  "statements": 0,
+                  "label": "declarations-run-code"
+                },
+                "file": "apps/studio/components/interfaces/UnifiedLogs/LogSelection.test.tsx",
+                "line": 14,
+                "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/UnifiedLogs/LogSelection.test.tsx#L14",
+                "spec": "./UnifiedLogs.schema",
+                "target": "apps/studio/components/interfaces/UnifiedLogs/UnifiedLogs.schema.ts"
+              }
+            ],
+            "total": 298
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "react",
+      "sha": "09f80f528ec47569841408a81668dff90525c48a",
+      "targetsSideEffects": {
+        "none": 280,
+        "declarations-run-code": 77,
+        "statements": 7
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": null,
+              "missing": "tsconfig/nextjs.json"
+            },
+            {
+              "file": "apps/studio/tsconfig.json",
+              "flags": {
+                "module": "ESNext",
+                "moduleResolution": "Bundler",
+                "jsx": "react-jsx"
+              }
+            }
+          ],
+          "effective": {
+            "module": "ESNext",
+            "moduleResolution": "Bundler",
+            "jsx": "react-jsx"
+          },
+          "file": "apps/studio/tsconfig.json",
+          "files": {
+            "source": 2759,
+            "tests": 458
+          },
+          "missingBase": [
+            "tsconfig/nextjs.json"
+          ]
+        }
+      ]
+    },
+    "ultracite": {
+      "build": {
+        "evidence": "Bun.build",
+        "file": "packages/cli/build.ts",
+        "perFile": true,
+        "tool": "Bun.build"
+      },
+      "counts": {
+        "source": {
+          "bindings": {
+            "byMarker": {
+              "none": 554,
+              "import type": 117
+            },
+            "byUsage": {
+              "value": 532,
+              "type": 117,
+              "both": 22
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 671,
+            "typeOnlyBySource": {
+              "type": 81,
+              "unresolved": 28,
+              "value": 8
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 1,
+          "exports": {
+            "exportedTypeDeclarations": 59,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 1,
+            "namedFromType": 1,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 56,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 362,
+              "default": 51
+            },
+            "byForm": {
+              "value": 320,
+              "type": 93
+            },
+            "total": 413,
+            "withAttributes": 9
+          },
+          "lines": 19253,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: declarations-run-code (already marked)": 17,
+              "local: none (already marked)": 21,
+              "package outside the clone: unknown (already marked)": 4,
+              "builtin (already marked)": 1
+            },
+            "examples": [],
+            "total": 43
+          }
+        },
+        "tests": {
+          "bindings": {
+            "byMarker": {
+              "none": 511,
+              "import type": 32
+            },
+            "byUsage": {
+              "value": 498,
+              "type": 32,
+              "both": 13
+            },
+            "reportable": 0,
+            "reportableBySource": {},
+            "total": 543,
+            "typeOnlyBySource": {
+              "type": 19,
+              "unresolved": 12,
+              "namespace-module": 1
+            }
+          },
+          "decorators": {
+            "files": 0,
+            "metadataRefs": 0,
+            "metadataRefsWithFlag": 0,
+            "total": 0
+          },
+          "dynamicImports": 17,
+          "exports": {
+            "exportedTypeDeclarations": 0,
+            "localListTypeNamesWithoutType": 0,
+            "localListsWithTypeNames": 0,
+            "namedFrom": 0,
+            "namedFromType": 0,
+            "namedFromInlineType": 0,
+            "star": 0,
+            "starAs": 0,
+            "starType": 0,
+            "typeListLocal": 0
+          },
+          "files": 52,
+          "importEquals": {
+            "alias": 0,
+            "require": 0,
+            "requireType": 0,
+            "requireTypeOnlyUse": 0
+          },
+          "importTypes": {
+            "qualified": 0,
+            "total": 0,
+            "typeof": 0
+          },
+          "imports": {
+            "byClause": {
+              "named": 183,
+              "default": 49,
+              "namespace": 13,
+              "default+named": 3,
+              "none": 1
+            },
+            "byForm": {
+              "value": 220,
+              "type": 28,
+              "side-effect": 1
+            },
+            "total": 249,
+            "withAttributes": 1
+          },
+          "lines": 30433,
+          "requires": 0,
+          "typeOnlyModules": {
+            "byTarget": {
+              "local: none (already marked)": 9,
+              "package outside the clone: unknown (already marked)": 7,
+              "local: declarations-run-code (already marked)": 1,
+              "builtin (already marked)": 1
+            },
+            "examples": [],
+            "total": 18
+          }
+        }
+      },
+      "joinMisses": 0,
+      "parseErrors": 0,
+      "set": "dogfood",
+      "sha": "60a164713b69595d6f71f84925abbc00a9d81a0f",
+      "targetsSideEffects": {
+        "declarations-run-code": 5,
+        "none": 6
+      },
+      "tsconfigs": [
+        {
+          "chain": [
+            {
+              "file": "packages/cli/tsconfig.json",
+              "flags": {
+                "isolatedModules": true,
+                "module": "ESNext",
+                "moduleResolution": "Bundler"
+              }
+            }
+          ],
+          "effective": {
+            "isolatedModules": true,
+            "module": "ESNext",
+            "moduleResolution": "Bundler"
+          },
+          "file": "packages/cli/tsconfig.json",
+          "files": {
+            "source": 56,
+            "tests": 52
+          },
+          "missingBase": []
+        }
+      ]
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.14.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.4",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.1",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.75.0",
+    "prettier": "3.9.10",
+    "esbuild (Bun store)": "0.28.1",
+    "rolldown (Bun store; its Oxc transformer)": "1.2.13",
+    "sucrase (Bun store)": "3.35.1",
+    "bun": "1.4.4",
+    "node type stripping": "strip"
+  }
+}

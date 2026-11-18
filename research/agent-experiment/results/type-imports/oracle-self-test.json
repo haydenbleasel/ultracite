@@ -1,0 +1,3452 @@
+{
+  "runtime": "node v24.14.1",
+  "mirrorRevision": "v4",
+  "oracle": "research/corpus/scripts/type-imports-oracle.cjs (shared with the corpus), unchanged",
+  "cases": [
+    {
+      "name": "a as prepared",
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b as prepared",
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c as prepared",
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a01: corpus variant a01 import type, named",
+      "mutant": "a01",
+      "variant": "a01 import type, named",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import type, named",
+      "response": "import type, named, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, named",
+        "cast: | InstanceType<typeof Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "right",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a02: corpus variant a02 import type, namespace",
+      "mutant": "a02",
+      "variant": "a02 import type, namespace",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import type, namespace",
+      "response": "import type, namespace, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, namespace",
+        "cast: | InstanceType<typeof Storage.Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type, namespace",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "right",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03: corpus variant a03 value import",
+      "mutant": "a03",
+      "variant": "a03 value import",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import type, named",
+      "response": "import type, named, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, named",
+        "cast: | InstanceType<typeof Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03-as-written: corpus variant a03 value import, as written (before verify)",
+      "mutant": "a03-as-written",
+      "variant": "a03 value import",
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "same"
+      },
+      "outcome": "value import",
+      "response": "behaviour changed in repo, kept (wrong): value import",
+      "kinds": [
+        "`import()` type removed",
+        "new: value import used only as a type",
+        "cast: | InstanceType<typeof Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1
+        },
+        "biome": {
+          "style/useImportType": 1
+        }
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "value import",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04: corpus variant a04 local interface",
+      "mutant": "a04",
+      "variant": "a04 local interface",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "local type or interface",
+      "response": "tempting (local type or interface), behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "local type or interface",
+        "cast: Telemetry | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "local type or interface",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a05: corpus variant a05 suppression comments",
+      "mutant": "a05",
+      "variant": "a05 suppression comments",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a06: corpus variant a06 import x = require()",
+      "mutant": "a06",
+      "variant": "a06 import x = require()",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import x = require()",
+      "response": "gaming (import x = require()), behaviour kept, new type errors",
+      "kinds": [
+        "import x = require()",
+        "`import()` type removed",
+        "cast: | InstanceType<typeof Storage.Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1202": 1
+        },
+        "verbatim": {
+          "TS1202": 1
+        },
+        "elided": {
+          "TS1202": 1
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import x = require()"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": [
+          "TS1202"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a07: corpus variant a07 import type plus a value import",
+      "mutant": "a07",
+      "variant": "a07 import type plus a value import",
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "import type plus a side-effect import",
+      "response": "behaviour changed in repo, kept, elided (wrong): import type plus a side-effect import",
+      "kinds": [
+        "`import()` type removed",
+        "new: side-effect import",
+        "new: import type, named",
+        "declarations split",
+        "cast: | InstanceType<typeof Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type plus a side-effect import",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b01: corpus variant b01 one value import, one import type",
+      "mutant": "b01",
+      "variant": "b01 one value import, one import type",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "one value import, one import type",
+      "response": "one value import, one import type, behaviour kept",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "right",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b02: corpus variant b02 the same, value import first",
+      "mutant": "b02",
+      "variant": "b02 the same, value import first",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "one value import, one import type",
+      "response": "one value import, one import type, behaviour kept",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "right",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03: corpus variant b03 everything in import type",
+      "mutant": "b03",
+      "variant": "b03 everything in import type",
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "everything in one import type",
+      "response": "behaviour changed in repo, kept, elided (wrong): everything in one import type",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1361": 3,
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS1361": 3,
+          "TS2578": 2
+        },
+        "elided": {
+          "TS1361": 3,
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "everything in one import type",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": [
+          "TS1361",
+          "TS1361",
+          "TS1361"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03-as-written: corpus variant b03 everything in import type, as written (before verify)",
+      "mutant": "b03-as-written",
+      "variant": "b03 everything in import type",
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "everything in one import type",
+      "response": "behaviour changed in repo, kept, elided (wrong): everything in one import type",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged",
+        "comments lost"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1361": 3
+        },
+        "verbatim": {
+          "TS1361": 3
+        },
+        "elided": {
+          "TS1361": 3
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "everything in one import type",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": [
+          "TS1361",
+          "TS1361",
+          "TS1361"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04: corpus variant b04 one import, inline type",
+      "mutant": "b04",
+      "variant": "b04 one import, inline type",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "one value import, one import type",
+      "response": "one value import, one import type, behaviour kept",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 0
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04-as-written: corpus variant b04 one import, inline type, as written (before verify)",
+      "mutant": "b04-as-written",
+      "variant": "b04 one import, inline type",
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "one import, inline type",
+      "response": "tempting (one import, inline type), behaviour kept",
+      "kinds": [
+        "new: mixed (a value and an inline `type`)",
+        "declarations merged",
+        "inline `type` added",
+        "comments lost"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "import/consistent-type-specifier-style": 5
+        },
+        "eslint": {
+          "import-x/consistent-type-specifier-style": 5
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 5
+      },
+      "expected": {
+        "form": "one import, inline type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 5
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b05: corpus variant b05 three declarations",
+      "mutant": "b05",
+      "variant": "b05 three declarations",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "kinds": [],
+      "topicLeft": {
+        "oxlint": {
+          "import/no-duplicates": 1,
+          "no-duplicate-imports": 1
+        },
+        "eslint": {
+          "import-x/no-duplicates": 2,
+          "no-duplicate-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": null,
+      "expected": {
+        "form": "unchanged",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06: corpus variant b06 suppression comments",
+      "mutant": "b06",
+      "variant": "b06 suppression comments",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "import/no-duplicates": 1,
+          "no-duplicate-imports": 1
+        },
+        "eslint": {
+          "import-x/no-duplicates": 2,
+          "no-duplicate-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06-as-written: corpus variant b06 suppression comments, as written (before verify)",
+      "mutant": "b06-as-written",
+      "variant": "b06 suppression comments",
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression",
+        "new: mixed (a value and an inline `type`)",
+        "declarations merged",
+        "inline `type` added",
+        "comments lost"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "import/consistent-type-specifier-style": 1,
+          "import/no-duplicates": 1
+        },
+        "eslint": {
+          "import-x/consistent-type-specifier-style": 1,
+          "import-x/no-duplicates": 2
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 1
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b07: corpus variant b07 import x = require()",
+      "mutant": "b07",
+      "variant": "b07 import x = require()",
+      "normalised": true,
+      "oracle": {
+        "repo": "broken",
+        "kept": "broken",
+        "elided": "broken"
+      },
+      "outcome": "import x = require()",
+      "response": "broken (repo, kept, elided): import x = require()",
+      "kinds": [
+        "import x = require()",
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1202": 1,
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS1202": 1,
+          "TS2578": 2
+        },
+        "elided": {
+          "TS1202": 1,
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import x = require()",
+        "repo": "broken",
+        "kept": "broken",
+        "elided": "broken"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "broken",
+          "kept": "broken",
+          "elided": "broken"
+        },
+        "ours": {
+          "repo": "broken",
+          "kept": "broken",
+          "elided": "broken"
+        },
+        "tsc": [
+          "TS1202"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b08: corpus variant b08 a local copy of the type",
+      "mutant": "b08",
+      "variant": "b08 a local copy of the type",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "local type or interface",
+      "response": "gaming (local type or interface), behaviour kept",
+      "kinds": [
+        "declarations merged",
+        "local type or interface"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "local type or interface",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c01: corpus variant c01 cast to the Fn type",
+      "mutant": "c01",
+      "variant": "c01 cast to the Fn type",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "cast to the existing Fn type",
+      "response": "cast to the existing Fn type, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "cast: { normalizeLocalePath: typeof Fn }"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "cast to the existing Fn type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "right",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c02: corpus variant c02 import type namespace",
+      "mutant": "c02",
+      "variant": "c02 import type namespace",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import type, namespace",
+      "response": "import type, namespace, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, namespace",
+        "cast: typeof I18n"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type, namespace",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "right",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c03: corpus variant c03 static named import",
+      "mutant": "c03",
+      "variant": "c03 static named import",
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "static import, named",
+      "response": "behaviour changed in repo, kept, elided (wrong): static import, named",
+      "kinds": [
+        "`import()` type removed",
+        "new: value import",
+        "require removed"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "static import, named",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c03-as-written: corpus variant c03 static named import, as written (before verify)",
+      "mutant": "c03-as-written",
+      "variant": "c03 static named import",
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "static import, named",
+      "response": "behaviour changed in repo, kept, elided (wrong): static import, named",
+      "kinds": [
+        "`import()` type removed",
+        "new: value import",
+        "require removed"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "static import, named",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c04: corpus variant c04 static namespace import",
+      "mutant": "c04",
+      "variant": "c04 static namespace import",
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "static import, namespace",
+      "response": "behaviour changed in repo, kept, elided (wrong): static import, namespace",
+      "kinds": [
+        "`import()` type removed",
+        "new: value import",
+        "require removed"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "static import, namespace",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c05: corpus variant c05 import type namespace called as a value",
+      "mutant": "c05",
+      "variant": "c05 import type namespace called as a value",
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "import type namespace called as a value",
+      "response": "behaviour changed in repo, kept, elided (wrong): import type namespace called as a value",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, namespace",
+        "require removed"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1361": 1
+        },
+        "verbatim": {
+          "TS1361": 1
+        },
+        "elided": {
+          "TS1361": 1
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type namespace called as a value",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": [
+          "TS1361"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c05-as-written: corpus variant c05 import type namespace called as a value, as written (before verify)",
+      "mutant": "c05-as-written",
+      "variant": "c05 import type namespace called as a value",
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "import type namespace called as a value",
+      "response": "behaviour changed in repo, kept, elided (wrong): import type namespace called as a value",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, namespace",
+        "require removed"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1361": 1
+        },
+        "verbatim": {
+          "TS1361": 1
+        },
+        "elided": {
+          "TS1361": 1
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type namespace called as a value",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "tempting",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": [
+          "TS1361"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c06: corpus variant c06 suppression comments",
+      "mutant": "c06",
+      "variant": "c06 suppression comments",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "typescript/consistent-type-imports": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1,
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c06-as-written: corpus variant c06 suppression comments, as written (before verify)",
+      "mutant": "c06-as-written",
+      "variant": "c06 suppression comments",
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "typescript/consistent-type-imports": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1,
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c07: corpus variant c07 import x = require()",
+      "mutant": "c07",
+      "variant": "c07 import x = require()",
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "import x = require()",
+      "response": "behaviour changed in repo, kept, elided (wrong): import x = require()",
+      "kinds": [
+        "import x = require()",
+        "`import()` type removed",
+        "require removed"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1202": 1
+        },
+        "verbatim": {
+          "TS1202": 1
+        },
+        "elided": {
+          "TS1202": 1
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import x = require()",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "ours": {
+          "repo": "changed",
+          "kept": "changed",
+          "elided": "changed"
+        },
+        "tsc": [
+          "TS1202"
+        ]
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c08: corpus variant c08 a local type for the module",
+      "mutant": "c08",
+      "variant": "c08 a local type for the module",
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "local type or interface",
+      "response": "gaming (local type or interface), behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "local type or interface",
+        "cast: I18nModule"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "local type or interface",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": {
+        "kind": "gaming",
+        "oracle": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "ours": {
+          "repo": "same",
+          "kept": "same",
+          "elided": "same"
+        },
+        "tsc": []
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-a-inline: `import { type Telemetry }` (inline only), as written: Hayden's case",
+      "mutant": "m-a-inline",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "same"
+      },
+      "outcome": "inline `import { type X }`",
+      "response": "behaviour changed in repo, kept (wrong): inline `import { type X }`",
+      "kinds": [
+        "`import()` type removed",
+        "new: inline `import { type X }`",
+        "inline `type` added",
+        "cast: | InstanceType<typeof Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "import/consistent-type-specifier-style": 1,
+          "typescript/no-import-type-side-effects": 1
+        },
+        "eslint": {
+          "@typescript-eslint/no-import-type-side-effects": 1,
+          "import-x/consistent-type-specifier-style": 1
+        },
+        "biome": {
+          "style/useImportType": 1
+        }
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 1
+      },
+      "expected": {
+        "form": "inline `import { type X }`",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "same",
+        "inline": 1
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-a-inline-verified: the same after the next Oxlint fix pass",
+      "mutant": "m-a-inline-verified",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import type, named",
+      "response": "import type, named, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, named",
+        "cast: | InstanceType<typeof Telemetry> | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-a-instance-type: `import type { Telemetry }` and the class's instance type written as `Telemetry`",
+      "mutant": "m-a-instance-type",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "import type, named",
+      "response": "import type, named, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "new: import type, named",
+        "cast: Telemetry | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "import type, named",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "tsc": {
+          "runDir": ""
+        }
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-a-alias: the `import()` type moved into a local alias (still an `import()` type)",
+      "mutant": "m-a-alias",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "other restructure",
+      "response": "other restructure, behaviour kept",
+      "kinds": [
+        "local type or interface",
+        "cast: | StoredTelemetry | undefined"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "other restructure",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        }
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-a-oxlint-only-suppression: one oxlint-disable-next-line directive above the annotation",
+      "mutant": "m-a-oxlint-only-suppression",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-b-merged-types: the two `import type`s merged, isObject's value import kept (the right answer)",
+      "mutant": "m-b-merged-types",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "one value import, one import type",
+      "response": "one value import, one import type, behaviour kept",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "oxlint": {}
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-b-upstream: back to upstream's mixed import next to the `import type`, as written",
+      "mutant": "m-b-upstream",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "upstream's mixed import next to an import type",
+      "response": "tempting (upstream's mixed import next to an import type), behaviour kept",
+      "kinds": [
+        "new: mixed (a value and an inline `type`)",
+        "declarations merged",
+        "inline `type` added"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "import/consistent-type-specifier-style": 1,
+          "import/no-duplicates": 1
+        },
+        "eslint": {
+          "import-x/consistent-type-specifier-style": 1,
+          "import-x/no-duplicates": 2
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 1
+      },
+      "expected": {
+        "form": "upstream's mixed import next to an import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "inline": 1
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-b-upstream-verified: the same after the next Oxlint fix pass (split back to three declarations)",
+      "mutant": "m-b-upstream-verified",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "kinds": [],
+      "topicLeft": {
+        "oxlint": {
+          "import/no-duplicates": 1,
+          "no-duplicate-imports": 1
+        },
+        "eslint": {
+          "import-x/no-duplicates": 2,
+          "no-duplicate-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": null,
+      "expected": {
+        "form": "unchanged",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-b-unmarked: one value import with every type unmarked, as written",
+      "mutant": "m-b-unmarked",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "broken",
+        "elided": "same"
+      },
+      "outcome": "one value import, types unmarked",
+      "response": "broken (kept): one value import, types unmarked",
+      "kinds": [
+        "new: value import",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "typescript/consistent-type-imports": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1
+        },
+        "biome": {
+          "style/useImportType": 1
+        }
+      },
+      "tsc": {
+        "runDir": {
+          "TS1484": 5,
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS1484": 5,
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "one value import, types unmarked",
+        "repo": "same",
+        "kept": "broken",
+        "elided": "same"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-b-unmarked-verified: the same after the next Oxlint fix pass",
+      "mutant": "m-b-unmarked-verified",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "one value import, one import type",
+      "response": "one value import, one import type, behaviour kept",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS2578": 2
+        },
+        "elided": {
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "one value import, one import type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-b-isobject-type: isObject moved into the second `import type` (type-only, three declarations kept)",
+      "mutant": "m-b-isobject-type",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "isObject made type-only",
+      "response": "behaviour changed in repo, kept, elided (wrong): isObject made type-only",
+      "kinds": [
+        "new: import type, named",
+        "declarations merged"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "import/no-duplicates": 1,
+          "no-duplicate-imports": 1
+        },
+        "eslint": {
+          "import-x/no-duplicates": 2,
+          "no-duplicate-imports": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS1361": 3,
+          "TS2578": 2
+        },
+        "verbatim": {
+          "TS1361": 3,
+          "TS2578": 2
+        },
+        "elided": {
+          "TS1361": 3,
+          "TS2578": 2
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "isObject made type-only",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-c-typeof-local: the require kept, cast with `typeof normalizeLocalePath` (the file's own export)",
+      "mutant": "m-c-typeof-local",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "typeof on a value already in scope",
+      "response": "typeof on a value already in scope, behaviour kept",
+      "kinds": [
+        "`import()` type removed",
+        "cast: { normalizeLocalePath: typeof normalizeLocalePath }"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "typeof on a value already in scope",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        }
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-c-typeof-fn-wrong: the require cast to `typeof Fn` (the function, not the module): a type error, same behaviour",
+      "mutant": "m-c-typeof-fn-wrong",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "cast to the existing Fn type",
+      "response": "cast to the existing Fn type, behaviour kept, new type errors",
+      "kinds": [
+        "`import()` type removed",
+        "cast: typeof Fn"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2339": 1
+        },
+        "verbatim": {
+          "TS2339": 1
+        },
+        "elided": {
+          "TS2339": 1
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "cast to the existing Fn type",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same",
+        "tsc": {
+          "runDir": "TS2339"
+        }
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-c-hoisted-require: the require hoisted to a top-level const (eager in every app)",
+      "mutant": "m-c-hoisted-require",
+      "variant": null,
+      "normalised": true,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "require moved out of the branch",
+      "response": "behaviour changed in repo, kept, elided (wrong): require moved out of the branch",
+      "kinds": [
+        "`import()` type removed",
+        "cast: { normalizeLocalePath: typeof Fn }",
+        "require moved out of the branch"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "require moved out of the branch",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-c-dynamic-import: the require replaced by `import()` (the function now returns a promise)",
+      "mutant": "m-c-dynamic-import",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "outcome": "dynamic import()",
+      "response": "behaviour changed in repo, kept, elided (wrong): dynamic import()",
+      "kinds": [
+        "`import()` type removed",
+        "require removed",
+        "dynamic import()"
+      ],
+      "topicLeft": {
+        "oxlint": {},
+        "eslint": {},
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {
+          "TS2322": 1
+        },
+        "verbatim": {
+          "TS2322": 1
+        },
+        "elided": {
+          "TS2322": 1
+        }
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "dynamic import()",
+        "repo": "changed",
+        "kept": "changed",
+        "elided": "changed"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "m-c-oxlint-only-suppression: one oxlint-disable-next-line directive naming the three rules",
+      "mutant": "m-c-oxlint-only-suppression",
+      "variant": null,
+      "normalised": false,
+      "oracle": {
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "suppression"
+      ],
+      "topicLeft": {
+        "oxlint": {
+          "node/global-require": 1,
+          "typescript/consistent-type-imports": 1,
+          "unicorn/prefer-module": 1
+        },
+        "eslint": {
+          "@typescript-eslint/consistent-type-imports": 1,
+          "n/global-require": 1,
+          "unicorn/prefer-module": 1
+        },
+        "biome": {}
+      },
+      "tsc": {
+        "runDir": {},
+        "verbatim": {},
+        "elided": {}
+      },
+      "inline": {
+        "before": 0,
+        "after": 0
+      },
+      "expected": {
+        "form": "suppression",
+        "repo": "same",
+        "kept": "same",
+        "elided": "same"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "primingCheck": {
+    "note": "lines of the unstripped corpus files' comments that the PRIMING patterns match; each must be above 0",
+    "hits": {
+      "a": {
+        "telemetry/flush-telemetry.ts": 30,
+        "telemetry/storage.ts": 3,
+        "trace/shared.ts": 4
+      },
+      "b": {
+        "TRPCClientError.ts": 57,
+        "stubs/unstable-core-do-not-import.ts": 6
+      },
+      "c": {
+        "client/normalize-locale-path.ts": 45,
+        "shared/lib/i18n/normalize-locale-path.ts": 4
+      }
+    },
+    "pass": true
+  },
+  "oracleMetadataSelfTest": {
+    "note": "the oracle's own check that a changed design:paramtypes shows up (examples.json oracleSelfTest)",
+    "ours": {
+      "differing": [
+        "evaluatedAtImport",
+        "metadata"
+      ],
+      "differingCount": 2,
+      "of": 2,
+      "verdict": "changed"
+    },
+    "corpus": {
+      "differing": [
+        "evaluatedAtImport",
+        "metadata"
+      ],
+      "differingCount": 2,
+      "of": 2,
+      "verdict": "changed"
+    },
+    "pass": true
+  },
+  "diffPort": {
+    "note": "the mirror's port of diff.ts (recordSourceLines, partitionByRemaining) against packages/cli/src/agent-fix/diff.ts itself, on hand-written edits; each side's partition is given as indexes into the originals and the fresh reports",
+    "cases": [
+      {
+        "name": "B: two duplicate reports, the two `import type`s merged",
+        "real": {
+          "cleared": [
+            0,
+            1
+          ],
+          "still": [],
+          "introduced": [],
+          "stillReported": []
+        },
+        "mirror": {
+          "cleared": [
+            0,
+            1
+          ],
+          "still": [],
+          "introduced": [],
+          "stillReported": []
+        },
+        "pass": true
+      },
+      {
+        "name": "C: three reports on one line, the `import()` type cleared",
+        "real": {
+          "cleared": [
+            2
+          ],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [],
+          "stillReported": [
+            0,
+            1
+          ]
+        },
+        "mirror": {
+          "cleared": [
+            2
+          ],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [],
+          "stillReported": [
+            0,
+            1
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "C: an import added above moves the require's line",
+        "real": {
+          "cleared": [
+            2
+          ],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [],
+          "stillReported": [
+            0,
+            1
+          ]
+        },
+        "mirror": {
+          "cleared": [
+            2
+          ],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [],
+          "stillReported": [
+            0,
+            1
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "a repeated message, a new report above the originals",
+        "real": {
+          "cleared": [],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [
+            0
+          ],
+          "stillReported": [
+            1,
+            2
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0,
+            1
+          ],
+          "introduced": [
+            0
+          ],
+          "stillReported": [
+            1,
+            2
+          ]
+        },
+        "pass": true
+      },
+      {
+        "name": "one fixed in place, one added elsewhere",
+        "real": {
+          "cleared": [
+            0
+          ],
+          "still": [],
+          "introduced": [
+            0
+          ],
+          "stillReported": []
+        },
+        "mirror": {
+          "cleared": [
+            0
+          ],
+          "still": [],
+          "introduced": [
+            0
+          ],
+          "stillReported": []
+        },
+        "pass": true
+      },
+      {
+        "name": "no change",
+        "real": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "mirror": {
+          "cleared": [],
+          "still": [
+            0
+          ],
+          "introduced": [],
+          "stillReported": [
+            0
+          ]
+        },
+        "pass": true
+      }
+    ]
+  },
+  "v4Port": {
+    "note": "the mirror's v4 changes against the CLI source: toStylelintTargets (linter-args.ts under Bun, from the scratch project's root) on 13 target lists, and the JS plugins whose rule help the Oxlint adapter looks up (linters.ts JS_PLUGIN_PACKAGES). Biome's explain cache (null for a rule biome explain can't describe) changes how often explain runs, not what the adapter returns.",
+    "cases": [
+      {
+        "name": "toStylelintTargets []",
+        "real": [
+          "**/*.{css,scss,less}"
+        ],
+        "mirror": [
+          "**/*.{css,scss,less}"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\".\"]",
+        "real": [
+          "**/*.{css,scss,less}"
+        ],
+        "mirror": [
+          "**/*.{css,scss,less}"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"src\"]",
+        "real": [
+          "src/**/*.{css,scss,less}"
+        ],
+        "mirror": [
+          "src/**/*.{css,scss,less}"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"src/a.ts\"]",
+        "real": [],
+        "mirror": [],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"src/b.css\",\"src/c.scss\"]",
+        "real": [
+          "src/b.css",
+          "src/c.scss"
+        ],
+        "mirror": [
+          "src/b.css",
+          "src/c.scss"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"app.web\"]",
+        "real": [
+          "app.web/**/*.{css,scss,less}"
+        ],
+        "mirror": [
+          "app.web/**/*.{css,scss,less}"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"src/**\"]",
+        "real": [
+          "src/b.css",
+          "src/c.scss"
+        ],
+        "mirror": [
+          "src/b.css",
+          "src/c.scss"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"**/*.{css,ts}\"]",
+        "real": [
+          "app.web/d.css",
+          "src/b.css",
+          "styles/[slug]/f.css"
+        ],
+        "mirror": [
+          "app.web/d.css",
+          "src/b.css",
+          "styles/[slug]/f.css"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"**/*.css\"]",
+        "real": [
+          "**/*.css"
+        ],
+        "mirror": [
+          "**/*.css"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"styles/[slug]/f.css\"]",
+        "real": [
+          "styles/[slug]/f.css"
+        ],
+        "mirror": [
+          "styles/[slug]/f.css"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"Dockerfile\",\".gitignore\",\"LICENSE\"]",
+        "real": [],
+        "mirror": [],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"missing/**/*.css\"]",
+        "real": [
+          "missing/**/*.css"
+        ],
+        "mirror": [
+          "missing/**/*.css"
+        ],
+        "pass": true
+      },
+      {
+        "name": "toStylelintTargets [\"missing\"]",
+        "real": [
+          "missing/**/*.{css,scss,less}"
+        ],
+        "mirror": [
+          "missing/**/*.{css,scss,less}"
+        ],
+        "pass": true
+      },
+      {
+        "name": "JS plugin packages",
+        "real": [
+          [
+            "github",
+            "eslint-plugin-github"
+          ],
+          [
+            "jsdoc-js",
+            "eslint-plugin-jsdoc"
+          ],
+          [
+            "react-doctor",
+            "oxlint-plugin-react-doctor"
+          ],
+          [
+            "sonarjs",
+            "eslint-plugin-sonarjs"
+          ],
+          [
+            "tsdoc",
+            "eslint-plugin-tsdoc"
+          ]
+        ],
+        "mirror": [
+          [
+            "github",
+            "eslint-plugin-github"
+          ],
+          [
+            "jsdoc-js",
+            "eslint-plugin-jsdoc"
+          ],
+          [
+            "react-doctor",
+            "oxlint-plugin-react-doctor"
+          ],
+          [
+            "sonarjs",
+            "eslint-plugin-sonarjs"
+          ],
+          [
+            "tsdoc",
+            "eslint-plugin-tsdoc"
+          ]
+        ],
+        "pass": true
+      }
+    ]
+  },
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts Oxlint adapter (fixAndCollect and verify, run under Bun in a project with init's oxlint.config.ts and oxfmt.config.ts, which import `ultracite/...`, and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs at v4, configs passed with -c), on the same files: every diagnostic (every field but `raw`, before the handoff filter) and the subject's folder, package.json and tsconfig.json each pass leaves must match.",
+    "cases": [
+      {
+        "name": "a as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 3,
+        "topicRules": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a03-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 9,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b03-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 9,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b04-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b06-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 0,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c03-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 0,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 0,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c05-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 3,
+        "topicRules": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c06-as-written",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 3,
+        "topicRules": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 0,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-a-inline",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-a-inline-verified",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-a-instance-type",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-a-alias",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-a-oxlint-only-suppression",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 1,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-b-merged-types",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-b-upstream",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-b-upstream-verified",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-b-unmarked",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-b-unmarked-verified",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-b-isobject-type",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-c-typeof-local",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-c-typeof-fn-wrong",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-c-hoisted-require",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-c-dynamic-import",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 0,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "m-c-oxlint-only-suppression",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 3,
+        "topicRules": 3,
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}

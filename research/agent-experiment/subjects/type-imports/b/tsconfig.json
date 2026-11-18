@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["es2023", "dom"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "paths": {
+      "@trpc/server/unstable-core-do-not-import": [
+        "./stubs/unstable-core-do-not-import.ts"
+      ]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "types": ["node"],
+    "verbatimModuleSyntax": true
+  },
+  "include": ["**/*.ts"]
+}

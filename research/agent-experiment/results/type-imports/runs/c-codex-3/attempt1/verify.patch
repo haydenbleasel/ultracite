@@ -1,0 +1,14 @@
+--- a/client/normalize-locale-path.ts
++++ b/client/normalize-locale-path.ts
+@@ -32,7 +32,10 @@
+  */
+ import { normalizeLocalePath as normalizeLocalePathImpl } from "../shared/lib/i18n/normalize-locale-path";
+ 
+-export const normalizeLocalePath: typeof normalizeLocalePathImpl = (pathname, locales) => {
++export const normalizeLocalePath: typeof normalizeLocalePathImpl = (
++  pathname,
++  locales
++) => {
+   if (process.env.__NEXT_I18N_SUPPORT) {
+     return normalizeLocalePathImpl(pathname, locales);
+   }

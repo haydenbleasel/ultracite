@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["es2023", "dom"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "paths": {
+      "@trpc/server/unstable-core-do-not-import": ["./b-trpc-client-error/stubs/unstable-core-do-not-import.ts"]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "types": ["node"],
+    "verbatimModuleSyntax": true
+  },
+  "include": ["a-next-flush-telemetry/**/*.ts", "b-trpc-client-error/**/*.ts", "c-next-normalize-locale-path/**/*.ts"]
+}
