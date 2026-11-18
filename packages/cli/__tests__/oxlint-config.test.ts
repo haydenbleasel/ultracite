@@ -25,6 +25,7 @@ import jsPlugins, {
   selectJsPlugins,
 } from "../config/oxlint/js-plugins/index.mjs";
 import type { OxlintJsPluginName } from "../config/oxlint/js-plugins/index.mjs";
+import landmines from "../config/oxlint/landmines/index.mjs";
 import nextJsPlugins from "../config/oxlint/next/js-plugins/index.mjs";
 import reactPreset from "../config/oxlint/react/index.mjs";
 import shadcn from "../config/oxlint/shadcn/index.mjs";
@@ -382,6 +383,7 @@ describe("oxlint package exports", () => {
       ...jsPlugins.jsPlugins,
       ...selectJsPlugins(["github"]).jsPlugins,
       ...shadcn.jsPlugins,
+      ...landmines.jsPlugins,
       ...antiSlop.jsPlugins,
       ...gdp.jsPlugins,
       ...nextJsPlugins.jsPlugins,
@@ -1142,6 +1144,97 @@ describe("oxlint anti-slop config", () => {
     expect(output).toContain(
       "anti-slop(require-safety-comment-for-type-assertion)"
     );
+  });
+});
+
+describe("oxlint landmines config", () => {
+  const LANDMINES_PLUGINS = ["structure", "style", "testing", "types"];
+
+  const LANDMINES_RULES = [
+    "landmines-structure/colocated-tests",
+    "landmines-structure/package-exports",
+    "landmines-structure/test-file-names",
+    "landmines-style/no-comments",
+    "landmines-testing/no-fixed-sleep",
+    "landmines-testing/no-flake-masking",
+    "landmines-testing/no-test-doubles",
+    "landmines-testing/no-unsignaled-poll",
+    "landmines-testing/strict-msw",
+    "landmines-types/no-explicit-return-types",
+  ];
+
+  test("declares every @interfere/landmines entry point as a JS plugin", async () => {
+    const config = await readOxlintConfig("landmines");
+
+    expect(config.jsPlugins).toEqual(
+      LANDMINES_PLUGINS.map((plugin) => ({
+        name: `landmines-${plugin}`,
+        specifier: `@interfere/landmines/${plugin}`,
+      }))
+    );
+
+    // A new entry point upstream means a plugin this preset does not load.
+    const landminesPackage = await import("@interfere/landmines/package.json");
+
+    const entryPoints = Object.keys(landminesPackage.default.exports)
+      .filter((entry) => !entry.endsWith(".json"))
+      .map((entry) => entry.replace("./", ""))
+      .toSorted();
+
+    expect(entryPoints).toEqual(LANDMINES_PLUGINS);
+  });
+
+  test("enables every rule the plugins register at error", async () => {
+    const config = await readOxlintConfig("landmines");
+
+    const plugins = await Promise.all([
+      import("@interfere/landmines/structure"),
+      import("@interfere/landmines/style"),
+      import("@interfere/landmines/testing"),
+      import("@interfere/landmines/types"),
+    ]);
+
+    const registered = plugins
+      .flatMap(({ default: plugin }) =>
+        Object.keys(plugin.rules).map((rule) => `${plugin.meta?.name}/${rule}`)
+      )
+      .toSorted();
+
+    expect(registered).toEqual(LANDMINES_RULES);
+    expect(config.rules).toEqual(
+      Object.fromEntries(LANDMINES_RULES.map((rule) => [rule, "error"]))
+    );
+  });
+
+  // Run oxlint for real with core + landmines loaded via a committed fixture
+  // and assert the plugins' diagnostics actually fire — a config that loads
+  // but silently registers nothing would pass the static checks.
+  test("landmines loads through oxlint and reports violations", () => {
+    const { flaggedBy, output } = lintFixture("landmines-load", ".");
+
+    expect(output).not.toContain("Failed to parse oxlint configuration");
+    expect(output).not.toContain("Failed to load JS plugin");
+
+    for (const rule of LANDMINES_RULES) {
+      expect(flaggedBy(rule.replace("/", "("))).not.toEqual([]);
+    }
+
+    expect(flaggedBy("landmines-structure(colocated-tests)")).toEqual([
+      "detached.test.ts",
+    ]);
+    expect(flaggedBy("landmines-structure(test-file-names)")).toEqual([
+      "math.spec.ts",
+      "nested.test.ts",
+    ]);
+  });
+
+  test("directives and TSDoc on exports are not prose comments", () => {
+    const { flaggedBy } = lintFixture("landmines-load", ".");
+
+    expect(flaggedBy("landmines-style(no-comments)")).not.toContain("clean.ts");
+    expect(
+      flaggedBy("landmines-types(no-explicit-return-types)")
+    ).not.toContain("clean.ts");
   });
 });
 

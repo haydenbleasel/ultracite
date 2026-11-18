@@ -28,6 +28,7 @@ export const toolchainPeerRanges = packageJson.peerDependencies;
 export type ToolchainPackageName = keyof typeof toolchainPeerRanges;
 
 export const oxlintJsPlugins = [
+  "@interfere/landmines",
   "@shadcn/lint",
   "anti-slop",
   "eslint-plugin-github",
@@ -73,6 +74,7 @@ export const oxfmtFrameworkDevDependencies: Partial<
 };
 
 export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
+  "@interfere/landmines": packageJson.devDependencies["@interfere/landmines"],
   "@shadcn/lint": packageJson.devDependencies["@shadcn/lint"],
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-jsdoc": packageJson.devDependencies["eslint-plugin-jsdoc"],
@@ -320,6 +322,7 @@ export const dependencyNamesByLinter = {
   ]),
   oxlint: new Set([
     "@astrojs/compiler-rs",
+    "@interfere/landmines",
     "@shadcn/lint",
     "eslint-plugin-github",
     "eslint-plugin-jsdoc",

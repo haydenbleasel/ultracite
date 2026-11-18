@@ -28,6 +28,9 @@ export default defineConfig({
     // Deliberately violates the @shadcn/lint rules so the plugin load test
     // can assert the design-system diagnostics actually fire.
     "packages/cli/__tests__/fixtures/shadcn-load",
+    // Deliberately violates the @interfere/landmines rules so the plugin load
+    // test can assert their diagnostics actually fire.
+    "packages/cli/__tests__/fixtures/landmines-load",
     // Deliberately forges and leaks gdp-ts proofs so the plugin load test can
     // assert the gdp diagnostics actually fire.
     "packages/cli/__tests__/fixtures/gdp-load",

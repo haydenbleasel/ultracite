@@ -3,5 +3,10 @@
 preload = ["./packages/cli/__tests__/preload.ts"]
 # Bun doesn't skip gitignored folders, so a bare `bun test` would also run the
 # test files in the cloned research corpus and the tmp scratch project. The
-# research calibration cases are lint input, not tests.
-pathIgnorePatterns = ["research/**", "tmp/**"]
+# research calibration cases are lint input, not tests, and neither are the
+# test files in the lint fixtures (landmines-load).
+pathIgnorePatterns = [
+  "research/**",
+  "tmp/**",
+  "packages/cli/__tests__/fixtures/**",
+]

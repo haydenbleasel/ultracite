@@ -1,9 +1,9 @@
 ---
 title: Optional Presets
-description: Opt-in Ultracite presets for ESLint parity, TSDoc, anti-slop rules, shadcn design systems and gdp-ts authorization proofs, and how to set each one up.
+description: Opt-in Ultracite presets for ESLint parity, TSDoc, anti-slop rules, shadcn design systems, landmines and gdp-ts authorization proofs, and how to set each one up.
 ---
 
-Ultracite's core and framework presets are on when you run `init`. The presets on this page are opt-in: each adds rules that suit some projects and not others, and most run through Oxlint's JS plugin API, which is slower than Oxlint's native rules. The JS plugin, TSDoc, anti-slop and `@shadcn/lint` presets are for Oxlint; the gdp-ts preset works with Oxlint and ESLint.
+Ultracite's core and framework presets are on when you run `init`. The presets on this page are opt-in: each adds rules that suit some projects and not others, and most run through Oxlint's JS plugin API, which is slower than Oxlint's native rules. The JS plugin, TSDoc, anti-slop, `@shadcn/lint` and landmines presets are for Oxlint; the gdp-ts preset works with Oxlint and ESLint.
 
 ## ESLint Parity
 
@@ -203,6 +203,71 @@ export default defineConfig({
 ```
 
 Per-component policies (`contracts`), custom messages, and exceptions for external stylesheets are configured on the rules themselves — see the [`@shadcn/lint` documentation](https://github.com/shadcn-ui/lint/blob/main/docs/rules.md). `no-unknown-classes` asks your installed Tailwind v4 which classes exist; when Tailwind or the theme cannot be loaded it falls back to a bundled grammar and warns once.
+
+## Agent Shortcut Rules with landmines
+
+Ultracite also ships an opt-in `landmines` preset built on [`@interfere/landmines`](https://github.com/interfere-inc/landmines), a set of Oxlint rules for the shortcuts a coding agent takes to get a green check: mocking the thing under test, sleeping until a race usually goes its way, retrying a flake, raising a timeout and narrating the diff in comments. Each error says what to do instead.
+
+This preset is **off by default**. It adds a dependency, runs through Oxlint's slower JS-plugin pass, and enforces conventions that most existing codebases don't follow. You can enable it during setup: it appears as `@interfere/landmines` in the JS-plugins prompt, and non-interactive setup accepts it via `--js-plugins`:
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins @interfere/landmines
+```
+
+Or add it to your config manually:
+
+```package-install
+npm install -D @interfere/landmines
+```
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import landmines from "ultracite/oxlint/landmines";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, landmines],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: landmines.jsPlugins,
+});
+```
+
+All ten rules are enabled at the `error` level, following the upstream recommended configuration:
+
+| Rule | What it stops |
+| --- | --- |
+| `landmines-testing/no-test-doubles` | Replacing a dependency's behaviour in a test: module mocks, `vi.fn(impl)`, stubbed globals, patched prototypes and fake responses. Spies that only observe are allowed. |
+| `landmines-testing/strict-msw` | Starting MSW without `onUnhandledRequest: "error"`, which lets unmocked requests reach the network. |
+| `landmines-testing/no-fixed-sleep` | Awaiting a fixed real-time delay in a test or hook. |
+| `landmines-testing/no-unsignaled-poll` | `expect.poll` and `vi.waitFor` on request recorders and spy state. |
+| `landmines-testing/no-flake-masking` | Test retries and raised timeouts. |
+| `landmines-style/no-comments` | Prose comments. Directives (`oxlint-disable`, `@ts-expect-error`), single-line `// WARNING:` comments and TSDoc on exported API are allowed. |
+| `landmines-structure/colocated-tests` | A test that lives away from the implementation it imports. |
+| `landmines-structure/test-file-names` | `.spec.ts`, `.tests.ts`, `.helpers.ts`, `.mocks.ts` and `__tests__` directories. It wants `.test.ts`, `.fixture.ts` and `.test-utils.ts`. |
+| `landmines-structure/package-exports` | A `package.json` that exports its whole source tree, such as `"./*": "./src/*.ts"`. |
+| `landmines-types/no-explicit-return-types` | An annotated return type on a function with a body, other than a type predicate or `never`. |
+
+Some of these reach well beyond tests, so check them against your codebase before turning the preset on:
+
+- **`no-comments` and core.** Core's `no-empty` and `no-fallthrough` accept a comment as the way to mark an empty block or a fallthrough as deliberate. With `no-comments` on, restructure the code instead.
+- **`no-comments` and anti-slop.** `anti-slop/require-safety-comment-for-type-assertion` requires a `SAFETY:` comment on every type assertion, and `no-comments` reports that comment, so an assertion can't pass both ([interfere-inc/landmines#4](https://github.com/interfere-inc/landmines/issues/4)). If you extend both presets, turn one of the two rules off.
+- **`test-file-names` and `.spec.ts`.** Playwright, Cypress, Angular and NestJS projects usually name tests `.spec.ts`. Turn the rule off if you keep that convention.
+- **`no-explicit-return-types` and `no-comments` and your agent rules.** The rules file `init` writes tells agents to annotate return types where it helps and to comment complex logic. Edit those lines if you enable this preset.
+
+```ts title="oxlint.config.ts"
+export default defineConfig({
+  env: core.env,
+  extends: [core, landmines],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: landmines.jsPlugins,
+  rules: {
+    "landmines-structure/test-file-names": "off",
+  },
+});
+```
+
+`no-fixed-sleep`, `strict-msw` and `no-flake-masking` take an `allow` map of file path to exact violation count, so you can adopt them in an existing codebase and ratchet down. See the [landmines documentation](https://github.com/interfere-inc/landmines#rules) for the options.
 
 ## Authorization Proofs with gdp-ts
 

@@ -258,6 +258,7 @@ export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
 
 // Prompt hints for the JS plugins that need a word of explanation.
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
+  "@interfere/landmines": "strict rules against agent shortcuts in tests",
   "@shadcn/lint": "design-system rules for Tailwind v4 components",
   "anti-slop": "vendored opinionated preset, nothing to install",
   "eslint-plugin-jsdoc": "require docs for public TypeScript APIs",

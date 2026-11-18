@@ -45,9 +45,12 @@ const findOxlintRcFile = (): (typeof oxlintRcFiles)[number] | null =>
 
 // Standalone presets are enabled as a plain `ultracite/oxlint/<preset>`
 // extend rather than through selectJsPlugins: anti-slop is vendored inside
-// the ultracite package (nothing extra to install), and @shadcn/lint ships
-// its own design-system preset at ultracite/oxlint/shadcn.
+// the ultracite package (nothing extra to install), and @shadcn/lint and
+// @interfere/landmines each have a preset of their own at
+// ultracite/oxlint/shadcn and ultracite/oxlint/landmines.
 const antiSlopPreset = "anti-slop";
+const landminesPlugin = "@interfere/landmines";
+const landminesPreset = "landmines";
 const shadcnPlugin = "@shadcn/lint";
 const shadcnPreset = "shadcn";
 
@@ -63,6 +66,7 @@ const oxlintSelectableJsPluginNames = [
 
 const oxlintJsPluginNames = [
   antiSlopPreset,
+  landminesPlugin,
   shadcnPlugin,
   ...oxlintSelectableJsPluginNames,
 ] as const;
@@ -74,7 +78,9 @@ type OxlintSelectableJsPlugin = (typeof oxlintSelectableJsPluginNames)[number];
 const isSelectableJsPlugin = (
   jsPlugin: OxlintJsPlugin
 ): jsPlugin is OxlintSelectableJsPlugin =>
-  jsPlugin !== antiSlopPreset && jsPlugin !== shadcnPlugin;
+  jsPlugin !== antiSlopPreset &&
+  jsPlugin !== landminesPlugin &&
+  jsPlugin !== shadcnPlugin;
 
 // The plugins the full js-plugins preset enables; the documentation plugins
 // are only ever selected explicitly.
@@ -127,6 +133,7 @@ const getOxlintConfigIdentifier = (configPath: string) => {
 const corePath = getOxlintConfigPath("core");
 const antiSlopPath = getOxlintConfigPath(antiSlopPreset);
 const jsPluginsPath = getOxlintConfigPath("js-plugins");
+const landminesPath = getOxlintConfigPath(landminesPreset);
 const shadcnPath = getOxlintConfigPath(shadcnPreset);
 
 // The js-plugins selection is bound to a `jsPlugins` const, mirroring the
@@ -151,6 +158,7 @@ const presetOrder = [
     getOxlintConfigPath(`${framework}/js-plugins`)
   ),
   shadcnPath,
+  landminesPath,
   antiSlopPath,
 ];
 
@@ -190,6 +198,10 @@ const resolvePresets = (
 
   if (jsPlugins.includes(shadcnPlugin)) {
     resolved.add(shadcnPath);
+  }
+
+  if (jsPlugins.includes(landminesPlugin)) {
+    resolved.add(landminesPath);
   }
 
   if (jsPlugins.includes(antiSlopPreset)) {
@@ -410,6 +422,30 @@ const renderOverride = (
   return "entry" in override ? override.entry : override.build(generated);
 };
 
+// The root config's `jsPlugins` value for the presets whose plugins are
+// hoisted onto it: one preset's list as it is, several spread into an array
+// that wraps once it no longer fits on a line.
+const renderHoistedJsPlugins = (identifiers: string[]): string | null => {
+  const [first] = identifiers;
+
+  if (first === undefined) {
+    return null;
+  }
+
+  if (identifiers.length === 1) {
+    return `${first}.jsPlugins`;
+  }
+
+  const spreads = identifiers.map((identifier) => `...${identifier}.jsPlugins`);
+  const singleLine = `[${spreads.join(", ")}]`;
+
+  if (`  jsPlugins: ${singleLine},`.length <= generatedLineWidth) {
+    return singleLine;
+  }
+
+  return `[\n${spreads.map((spread) => `    ${spread},`).join("\n")}\n  ]`;
+};
+
 const generateConfigContent = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[] = [],
@@ -417,7 +453,7 @@ const generateConfigContent = (
   typeAware = false,
   bindings: PresetBindings = bindPresets(extendsList, jsPlugins, extras)
 ) => {
-  // anti-slop and @shadcn/lint have their own presets, so they become plain
+  // anti-slop, @shadcn/lint and landmines have their own presets, so they become plain
   // extends instead of selectJsPlugins entries.
   const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
@@ -500,24 +536,18 @@ const generateConfigContent = (
   // config — they never walk `extends` — so re-declare the selected plugin
   // specifiers there or the packages are reported as unused (#784). oxlint
   // dedupes a plugin that appears in both the root and an extended config.
-  // The shadcn preset declares its own plugin package, so it is hoisted the
-  // same way (spread together with the js-plugins selection when both are
-  // present).
-  const hoistedJsPluginIdentifiers = [jsPluginsPath, shadcnPath].flatMap(
-    (preset) => (resolvedExtends.includes(preset) ? [identifierOf(preset)] : [])
+  // The shadcn and landmines presets declare their own plugin packages, so
+  // they are hoisted the same way (spread together with the js-plugins
+  // selection when more than one is present).
+  const hoistedJsPluginIdentifiers = [
+    jsPluginsPath,
+    shadcnPath,
+    landminesPath,
+  ].flatMap((preset) =>
+    resolvedExtends.includes(preset) ? [identifierOf(preset)] : []
   );
 
-  let jsPluginsValue: string | null = null;
-
-  if (hoistedJsPluginIdentifiers.length === 1) {
-    jsPluginsValue = `${hoistedJsPluginIdentifiers[0]}.jsPlugins`;
-  } else if (hoistedJsPluginIdentifiers.length > 1) {
-    const spread = hoistedJsPluginIdentifiers
-      .map((identifier) => `...${identifier}.jsPlugins`)
-      .join(", ");
-
-    jsPluginsValue = `[${spread}]`;
-  }
+  const jsPluginsValue = renderHoistedJsPlugins(hoistedJsPluginIdentifiers);
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
 
@@ -1084,8 +1114,8 @@ const readLoadedPresets = (contents: string): LoadedPresets => {
 
 /**
  * The npm JS plugins a config loads: a selectJsPlugins selection, the full
- * js-plugins preset, the React Doctor framework add-ons, the shadcn preset,
- * or a plugin package the config names itself. anti-slop is vendored inside
+ * js-plugins preset, the React Doctor framework add-ons, the shadcn or
+ * landmines preset, or a plugin package the config names itself. anti-slop is vendored inside
  * Ultracite, so it never appears here.
  */
 export const findLoadedJsPlugins = (
@@ -1113,6 +1143,15 @@ export const findLoadedJsPlugins = (
 
   if (presets.includes(getOxlintConfigPath(shadcnPreset))) {
     loaded.add(shadcnPlugin);
+  }
+
+  // A config that registers landmines itself names an entry point, such as
+  // "@interfere/landmines/testing", never the bare package.
+  if (
+    presets.includes(landminesPath) ||
+    contents.includes(`${landminesPlugin}/`)
+  ) {
+    loaded.add(landminesPlugin);
   }
 
   for (const plugin of oxlintJsPluginNames) {

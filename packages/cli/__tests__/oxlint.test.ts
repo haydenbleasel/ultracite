@@ -353,6 +353,69 @@ describe("oxlint linter", () => {
       expect(content).not.toContain("jsPluginSettings");
     });
 
+    test("adds the landmines preset as a plain extend and hoists its jsPlugins", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["@interfere/landmines"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import landmines from "ultracite/oxlint/landmines";'
+      );
+      expect(content).toContain("extends: [core, landmines],");
+      // The preset declares the @interfere/landmines entry points itself, so
+      // they are re-declared on the root config for dependency analyzers
+      // (#784).
+      expect(content).toContain("jsPlugins: landmines.jsPlugins,");
+      expect(content).not.toContain("selectJsPlugins");
+      expect(content).not.toContain('"ultracite/oxlint/js-plugins"');
+    });
+
+    test("combines the landmines preset with shadcn, npm js-plugins and anti-slop", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: [
+          "@interfere/landmines",
+          "@shadcn/lint",
+          "anti-slop",
+          "eslint-plugin-github",
+        ],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain('selectJsPlugins(["github"])');
+      // anti-slop still comes last, so its core-rule overrides win.
+      expect(content).toContain(
+        "extends: [core, jsPlugins, shadcn, landmines, antiSlop],"
+      );
+      expect(content).toContain("...jsPlugins.jsPlugins,");
+      expect(content).toContain("...shadcn.jsPlugins,");
+      expect(content).toContain("...landmines.jsPlugins,");
+    });
+
     test("combines the shadcn preset with npm js-plugins and anti-slop", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -2621,6 +2684,23 @@ describe("findLoadedJsPlugins", () => {
         )
       )
     ).toEqual(["oxlint-plugin-react-doctor", "@shadcn/lint"]);
+  });
+
+  test("counts the landmines preset and its entry points", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith('import landmines from "ultracite/oxlint/landmines";')
+      )
+    ).toEqual(["@interfere/landmines"]);
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith(
+          "export default {",
+          '  jsPlugins: [{ name: "landmines-testing", specifier: "@interfere/landmines/testing" }],',
+          "};"
+        )
+      )
+    ).toEqual(["@interfere/landmines"]);
   });
 
   test("finds plugin packages a config names itself", () => {

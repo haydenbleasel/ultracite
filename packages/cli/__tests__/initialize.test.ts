@@ -525,6 +525,7 @@ describe("initialize", () => {
     const mockMultiselect = mock((promptOptions: { message?: string }) => {
       if (promptOptions.message?.includes("JS plugins")) {
         return Promise.resolve([
+          "@interfere/landmines",
           "@shadcn/lint",
           "anti-slop",
           "eslint-plugin-github",
@@ -589,6 +590,11 @@ describe("initialize", () => {
         message: "Which JS plugins would you like to add (optional)?",
         options: [
           {
+            hint: "strict rules against agent shortcuts in tests",
+            label: "@interfere/landmines",
+            value: "@interfere/landmines",
+          },
+          {
             hint: "design-system rules for Tailwind v4 components",
             label: "@shadcn/lint",
             value: "@shadcn/lint",
@@ -632,6 +638,11 @@ describe("initialize", () => {
         content.includes('"ultracite/oxlint/shadcn"')
       )
     ).toBe(true);
+    expect(
+      writtenContents.some((content) =>
+        content.includes('"ultracite/oxlint/landmines"')
+      )
+    ).toBe(true);
   });
 
   test("installs Oxlint JS plugin dependencies when js-plugins flag is set", async () => {
@@ -666,6 +677,7 @@ describe("initialize", () => {
       hooks: [],
       integrations: [],
       "js-plugins": [
+        "@interfere/landmines",
         "@shadcn/lint",
         "anti-slop",
         "eslint-plugin-github",
@@ -679,6 +691,7 @@ describe("initialize", () => {
       skipInstall: false,
     });
 
+    expect(installedPackages).toContain("@interfere/landmines@^0.1.0");
     expect(installedPackages).toContain("@shadcn/lint@^0.2.3");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
     expect(installedPackages).toContain("eslint-plugin-jsdoc@^65.4.2");
