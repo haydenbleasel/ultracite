@@ -27,6 +27,7 @@ import {
   oxfmtFrameworkDevDependencies,
 } from "../dependencies";
 import type { FixAgent } from "../linter-args";
+import { addMissingBiomeJsxRuntime } from "../linters/biome";
 import { addMissingOxlintEnv } from "../linters/oxlint";
 import {
   getRootInstallOptions,
@@ -541,6 +542,17 @@ export const upgrade = async (
   if (envConfig) {
     log.info(
       `Added \`env\` to ${envConfig}. Oxlint doesn't inherit it through \`extends\`, so \`no-implied-eval\` and \`no-eval\` were missing string timers and \`window.eval\`.`
+    );
+  }
+
+  // Likewise a Biome config init wrote before it read the tsconfig's `jsx`:
+  // under the classic runtime, `fix` deletes the React import JSX needs.
+  const jsxRuntimeConfig =
+    linter === "biome" ? await addMissingBiomeJsxRuntime() : null;
+
+  if (jsxRuntimeConfig) {
+    log.info(
+      `Set \`javascript.jsxRuntime\` to \`reactClassic\` in ${jsxRuntimeConfig}. The tsconfig compiles JSX with the classic runtime (\`"jsx": "react"\`), and without it \`ultracite fix\` removes the React import that JSX needs.`
     );
   }
 

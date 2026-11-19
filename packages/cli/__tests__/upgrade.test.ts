@@ -13,6 +13,7 @@ import {
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
   OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../src/dependencies";
+import * as biomeLinter from "../src/linters/biome";
 import * as oxlintLinter from "../src/linters/oxlint";
 import * as schemas from "../src/schemas";
 import * as upgradeAgent from "../src/upgrade-agent";
@@ -29,6 +30,7 @@ const realNypm = { ...nypm };
 const realDoctor = { ...doctorModule };
 const realConfigResolution = { ...configResolution };
 const realOxlintLinter = { ...oxlintLinter };
+const realBiomeLinter = { ...biomeLinter };
 const realSchemas = { ...schemas };
 const realUtils = { ...utils };
 const realUpgradeAgent = { ...upgradeAgent };
@@ -100,6 +102,7 @@ afterAll(() => {
   mock.module("../src/config-resolution", () => realConfigResolution);
   mock.module("../src/schemas", () => realSchemas);
   mock.module("../src/linters/oxlint", () => realOxlintLinter);
+  mock.module("../src/linters/biome", () => realBiomeLinter);
   mock.module("../src/commands/doctor", () => realDoctor);
   mock.module("../src/upgrade-agent", () => realUpgradeAgent);
   mock.module("../src/upgrade-guides", () => realUpgradeGuides);
@@ -124,6 +127,8 @@ interface SetupOptions {
   checks?: DiagnosticCheck[];
   /** The Oxlint config upgrade adds `env` to, when one lacks it. */
   envConfig?: string | null;
+  /** The Biome config upgrade sets the classic JSX runtime in. */
+  jsxRuntimeConfig?: string | null;
   /** What every install rejects with, when installs should fail. */
   installError?: Error;
   linter?: string | null;
@@ -140,6 +145,7 @@ const setup = (options: SetupOptions = {}): Harness => {
     checks = [passingCheck],
     envConfig = null,
     installError,
+    jsxRuntimeConfig = null,
     leftAfterAgent = [],
     linter = "biome",
     pending = [],
@@ -209,6 +215,10 @@ const setup = (options: SetupOptions = {}): Harness => {
   mock.module("../src/linters/oxlint", () => ({
     ...realOxlintLinter,
     addMissingOxlintEnv: mock(() => Promise.resolve(envConfig)),
+  }));
+  mock.module("../src/linters/biome", () => ({
+    ...realBiomeLinter,
+    addMissingBiomeJsxRuntime: mock(() => Promise.resolve(jsxRuntimeConfig)),
   }));
   mock.module("../src/commands/doctor", () => ({
     ...realDoctor,
@@ -457,6 +467,25 @@ describe("upgrade", () => {
     expect(
       info.mock.calls.some(([message]) =>
         String(message).includes("Added `env` to oxlint.config.ts")
+      )
+    ).toBe(true);
+  });
+
+  test("says so when it sets the classic JSX runtime in a Biome config", async () => {
+    setup({
+      jsxRuntimeConfig: "biome.jsonc",
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+    info.mockClear();
+
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
+    expect(
+      info.mock.calls.some(([message]) =>
+        String(message).includes(
+          "Set `javascript.jsxRuntime` to `reactClassic` in biome.jsonc"
+        )
       )
     ).toBe(true);
   });

@@ -1,7 +1,8 @@
 import { describe, expect, mock, test } from "bun:test";
 import path from "node:path";
 
-import { tsconfig } from "../src/tsconfig";
+import { tsconfig, usesClassicJsxRuntime } from "../src/tsconfig";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 mock.module("fast-glob", () => ({
   default: mock(() => Promise.resolve([])),
@@ -322,5 +323,104 @@ describe("strictNullChecks decisions", () => {
     const [[writtenPath, content]] = project.writeFile.mock.calls;
     expect(writtenPath).toBe("tsconfig.json");
     expect(JSON.parse(content).compilerOptions.strictNullChecks).toBe(true);
+  });
+});
+
+// Whether the project made of these files, keyed by path inside it,
+// compiles JSX with the classic runtime.
+const classicJsx = (files: Record<string, string>): boolean => {
+  const dir = path.resolve("project");
+
+  mockFileSystem(
+    Object.fromEntries(
+      Object.entries(files).map(([file, content]) => [
+        path.join(dir, file),
+        content,
+      ])
+    )
+  );
+
+  try {
+    return usesClassicJsxRuntime(dir);
+  } finally {
+    restoreFileSystemMock();
+  }
+};
+
+const jsxConfig = (jsx: string): string =>
+  JSON.stringify({ compilerOptions: { jsx } });
+
+describe("usesClassicJsxRuntime", () => {
+  test("is true for jsx: react only", () => {
+    expect(classicJsx({ "tsconfig.json": jsxConfig("react") })).toBe(true);
+    expect(classicJsx({ "tsconfig.json": jsxConfig("React") })).toBe(true);
+
+    for (const jsx of [
+      "react-jsx",
+      "react-jsxdev",
+      "preserve",
+      "react-native",
+    ]) {
+      expect(classicJsx({ "tsconfig.json": jsxConfig(jsx) })).toBe(false);
+    }
+  });
+
+  test("is false without a tsconfig, or without a jsx option", () => {
+    expect(classicJsx({})).toBe(false);
+    expect(
+      classicJsx({
+        "tsconfig.json": '{ "compilerOptions": { "strict": true } }',
+      })
+    ).toBe(false);
+    expect(classicJsx({ "tsconfig.json": "{ not json" })).toBe(false);
+  });
+
+  test("reads a tsconfig with comments and trailing commas", () => {
+    expect(
+      classicJsx({
+        "tsconfig.json":
+          '{\n  // React 16\n  "compilerOptions": {\n    /* classic */ "jsx": "react",\n  },\n}\n',
+      })
+    ).toBe(true);
+  });
+
+  test("reads a jsconfig.json when there is no tsconfig.json", () => {
+    expect(classicJsx({ "jsconfig.json": jsxConfig("react") })).toBe(true);
+    expect(
+      classicJsx({
+        "jsconfig.json": jsxConfig("react"),
+        "tsconfig.json": jsxConfig("react-jsx"),
+      })
+    ).toBe(false);
+  });
+
+  test("follows extends, the config's own value winning", () => {
+    expect(
+      classicJsx({
+        "tsconfig.base.json": jsxConfig("react"),
+        "tsconfig.json": '{ "extends": "./tsconfig.base.json" }',
+      })
+    ).toBe(true);
+    expect(
+      classicJsx({
+        "node_modules/@acme/tsconfig/tsconfig.json": jsxConfig("react"),
+        "tsconfig.json": '{ "extends": "@acme/tsconfig/tsconfig.json" }',
+      })
+    ).toBe(true);
+    expect(
+      classicJsx({
+        "tsconfig.base.json": jsxConfig("react"),
+        "tsconfig.json":
+          '{ "extends": "./tsconfig.base.json", "compilerOptions": { "jsx": "react-jsx" } }',
+      })
+    ).toBe(false);
+    // Later entries override earlier ones.
+    expect(
+      classicJsx({
+        "a.json": jsxConfig("react"),
+        "b.json": jsxConfig("react-jsx"),
+        "tsconfig.json": '{ "extends": ["./a.json", "./b.json"] }',
+      })
+    ).toBe(false);
   });
 });

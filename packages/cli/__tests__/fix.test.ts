@@ -27,6 +27,41 @@ const realRunAgent = {
   runAgent: runAgentModule.runAgent,
 };
 
+let oxlintPassSpawn = mock(
+  (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({})
+);
+
+// Oxlint returns each of `passes` in turn (the last one from then on), and
+// oxfmt succeeds.
+const mockOxlintPasses = (
+  passes: { signal?: string; status: number | null; stdout?: string }[]
+) => {
+  let pass = 0;
+
+  oxlintPassSpawn = mock(
+    (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
+      if (cmd !== "oxlint") {
+        return { status: 0 };
+      }
+
+      const result = passes[Math.min(pass, passes.length - 1)];
+      pass += 1;
+
+      return result ?? { status: 0 };
+    }
+  );
+
+  mock.module("../src/spawn-sync", () => ({ spawnSync: oxlintPassSpawn }));
+  mock.module("../src/utils", () => ({
+    detectLinter: mock(() => "oxlint"),
+  }));
+
+  return oxlintPassSpawn;
+};
+
+const spawnedCommands = (): string[] =>
+  oxlintPassSpawn.mock.calls.map((call) => call[0]);
+
 describe("fix", () => {
   afterEach(() => {
     mock.restore();
@@ -618,8 +653,16 @@ describe("fix", () => {
       detectLinter: mock(() => "oxlint"),
     }));
 
+    // Oxlint's failure is the one thrown, though oxfmt failed before the
+    // check pass ran.
     expect(() => fix([])).toThrow("Oxlint exited with code 1");
-    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    // Two fixing Oxlint passes, since both reported, oxfmt, then the check.
+    expect(mockSpawn.mock.calls.map((call) => call[0])).toEqual([
+      "oxlint",
+      "oxlint",
+      "oxfmt",
+      "oxlint",
+    ]);
   });
 
   test("oxlint fix still runs oxfmt when oxlint exits non-zero", () => {
@@ -637,10 +680,216 @@ describe("fix", () => {
     }));
 
     expect(() => fix([])).toThrow("Oxlint exited with code 1");
-    expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const [oxlintCall, oxfmtCall] = mockSpawn.mock.calls;
-    expect(oxlintCall[0]).toBe("oxlint");
-    expect(oxfmtCall[0]).toBe("oxfmt");
+    expect(mockSpawn.mock.calls.map((call) => call[0])).toEqual([
+      "oxlint",
+      "oxlint",
+      "oxfmt",
+      "oxlint",
+    ]);
+  });
+
+  test("fails with oxfmt's exit code when Oxlint has nothing left to report", () => {
+    for (const passes of [
+      [{ status: 0 }],
+      [{ status: 1 }, { status: 0 }],
+      [{ status: 1 }, { status: 1 }, { status: 0 }],
+    ]) {
+      let pass = 0;
+
+      const mockSpawn = mock(
+        (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
+          if (cmd !== "oxlint") {
+            return { status: 2 };
+          }
+
+          pass += 1;
+
+          return passes[pass - 1] ?? { status: 0 };
+        }
+      );
+
+      mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+      mock.module("../src/utils", () => ({
+        detectLinter: mock(() => "oxlint"),
+      }));
+
+      expect(() => fix(["src/a.ts"])).toThrow("oxfmt exited with code 2");
+      expect(pass).toBe(passes.length);
+    }
+  });
+
+  test("runs one Oxlint pass when it reports nothing, and prints what it printed", () => {
+    const summary =
+      "Found 0 warnings and 0 errors.\nFinished in 20ms on 1 file with 418 rules using 10 threads.";
+
+    mockOxlintPasses([{ status: 0, stdout: summary }]);
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    try {
+      fix(["src/a.ts"]);
+
+      expect(spawnedCommands()).toEqual(["oxlint", "oxfmt"]);
+      expect(write.mock.calls).toEqual([[`${summary}\n`]]);
+    } finally {
+      write.mockRestore();
+    }
+  });
+
+  test("runs a second Oxlint pass when the first reports, and returns the second's result", () => {
+    const summary = "Found 0 warnings and 0 errors.";
+
+    const mockSpawn = mockOxlintPasses([
+      { status: 1, stdout: "src/a.ts:1:1: error stale" },
+      { status: 0, stdout: summary },
+    ]);
+
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    try {
+      // The first pass exited 1; the second, clean, is the result.
+      expect(() => fix(["src/a.ts"])).not.toThrow();
+
+      expect(spawnedCommands()).toEqual(["oxlint", "oxlint", "oxfmt"]);
+
+      // Both passes are captured. The first's stale report is never
+      // printed, the second's clean summary is, and the formatter comes
+      // after both.
+      const [first, second, oxfmt] = mockSpawn.mock.calls;
+      expect(first[2].stdio).toBe("pipe");
+      expect(second[2].stdio).toBe("pipe");
+      expect(second[1]).toEqual(first[1]);
+      expect(oxfmt[2].stdio).toBe("inherit");
+      expect(write.mock.calls).toEqual([[`${summary}\n`]]);
+    } finally {
+      write.mockRestore();
+    }
+  });
+
+  test("checks once more, after oxfmt, when the second Oxlint pass still reports", () => {
+    const mockSpawn = mockOxlintPasses([
+      { status: 1, stdout: "src/a.ts:1:1: error stale" },
+      { status: 1, stdout: "src/a.ts:2:1: error stale too" },
+      { status: 0 },
+    ]);
+
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    try {
+      // Both fixing passes exited 1; the check pass, clean, is the result.
+      expect(() => fix(["src/a.ts"])).not.toThrow();
+
+      expect(spawnedCommands()).toEqual([
+        "oxlint",
+        "oxlint",
+        "oxfmt",
+        "oxlint",
+      ]);
+
+      // Neither fixing pass is printed; the check pass prints for itself.
+      const [first, second, , check] = mockSpawn.mock.calls;
+      expect(first[2].stdio).toBe("pipe");
+      expect(second[2].stdio).toBe("pipe");
+      expect(check[2].stdio).toBe("inherit");
+      expect(check[1]).toEqual(["src/a.ts"]);
+      expect(write).not.toHaveBeenCalled();
+    } finally {
+      write.mockRestore();
+    }
+  });
+
+  test("fails with the check pass's exit code, not a fixing pass's", () => {
+    mockOxlintPasses([{ status: 1 }, { status: 1 }, { status: 3 }]);
+
+    expect(() => fix(["src/a.ts"])).toThrow("Oxlint exited with code 3");
+    expect(spawnedCommands()).toEqual(["oxlint", "oxlint", "oxfmt", "oxlint"]);
+  });
+
+  test("keeps the fix flags out of the check pass and the passthrough flags in", () => {
+    const mockSpawn = mockOxlintPasses([
+      { status: 1 },
+      { status: 1 },
+      { status: 0 },
+    ]);
+
+    fix(
+      ["src/a.ts", "src/b.ts"],
+      ["--unsafe", "--fix-suggestions", "--type-aware", "-f", "json"]
+    );
+
+    const [first, second, oxfmt, check] = mockSpawn.mock.calls;
+
+    expect(first[1]).toEqual([
+      "--fix-dangerously",
+      "--fix-suggestions",
+      "--type-aware",
+      "-f",
+      "json",
+      "src/a.ts",
+      "src/b.ts",
+    ]);
+    expect(second[1]).toEqual(first[1]);
+    expect(oxfmt[0]).toBe("oxfmt");
+    expect(check[1]).toEqual([
+      "--type-aware",
+      "-f",
+      "json",
+      "src/a.ts",
+      "src/b.ts",
+    ]);
+  });
+
+  test("checks instead of failing when the second Oxlint pass was killed", () => {
+    mockOxlintPasses([
+      { status: 1 },
+      { signal: "SIGTERM", status: null },
+      { status: 1 },
+    ]);
+
+    expect(() => fix(["src/a.ts"])).toThrow("Oxlint exited with code 1");
+    expect(spawnedCommands()).toEqual(["oxlint", "oxlint", "oxfmt", "oxlint"]);
+  });
+
+  test("runs the second Oxlint pass for warnings and for another reporter's output", () => {
+    for (const stdout of [
+      "src/a.ts:1:1: warning no-console\nFound 1 warning and 0 errors.",
+      '{ "diagnostics": [] }',
+    ]) {
+      mockOxlintPasses([{ status: 0, stdout }, { status: 0 }]);
+
+      fix(["src/a.ts"]);
+
+      expect(spawnedCommands()).toEqual(["oxlint", "oxlint", "oxfmt"]);
+
+      // Still there after the second pass, they are what the check reports.
+      mockOxlintPasses([{ status: 0, stdout }]);
+
+      fix(["src/a.ts"]);
+
+      expect(spawnedCommands()).toEqual([
+        "oxlint",
+        "oxlint",
+        "oxfmt",
+        "oxlint",
+      ]);
+    }
+  });
+
+  test("carries the passthrough flags over to the second Oxlint pass", () => {
+    const mockSpawn = mockOxlintPasses([{ status: 1 }, { status: 0 }]);
+
+    fix(["src/a.ts"], ["--unsafe", "--type-aware"]);
+
+    const [first, second, oxfmt] = mockSpawn.mock.calls;
+    expect(first[1]).toEqual(["--fix-dangerously", "--type-aware", "src/a.ts"]);
+    expect(second[1]).toEqual(first[1]);
+    expect(oxfmt[1]).not.toContain("--type-aware");
+  });
+
+  test("runs Oxlint again when the first pass was killed, as when it prints more than can be captured", () => {
+    mockOxlintPasses([{ signal: "SIGTERM", status: null }, { status: 0 }]);
+
+    expect(() => fix(["src/a.ts"])).not.toThrow();
+    expect(spawnedCommands()).toEqual(["oxlint", "oxlint", "oxfmt"]);
   });
 
   test("passes through --type-aware flag to oxlint", () => {
@@ -1361,10 +1610,63 @@ describe("fix reporting to the agent", () => {
     fix(["src/a.ts"], [], { report: "stderr" });
 
     const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
-    expect(stdios).toEqual([
+    // The first Oxlint pass is captured; with nothing to report it's the
+    // only one.
+    expect(stdios).toEqual(["pipe", ["inherit", 2, "inherit"]]);
+  });
+
+  test("sends the check pass's output, and a clean fixing pass's, to stderr", () => {
+    const mockSpawn = mockLinter("oxlint", (cmd) => (cmd === "oxlint" ? 1 : 0));
+
+    const error = captureError(() =>
+      fix(["src/a.ts"], [], { report: "stderr" })
+    );
+
+    // Both fixing passes are captured; oxfmt and the check pass, whose
+    // failure is the feedback, print to stderr.
+    expect(error).toMatchObject({
+      commandName: "Oxlint",
+      exitCode: HOOK_FEEDBACK_EXIT_CODE,
+    });
+    expect(mockSpawn.mock.calls.map((call) => call[2].stdio)).toEqual([
+      "pipe",
+      "pipe",
       ["inherit", 2, "inherit"],
       ["inherit", 2, "inherit"],
     ]);
+    expect(mockSpawn.mock.calls.map((call) => call[1])).toEqual([
+      ["--fix", "src/a.ts"],
+      ["--fix", "src/a.ts"],
+      ["--write", "--no-error-on-unmatched-pattern", "src/a.ts"],
+      ["src/a.ts"],
+    ]);
+
+    mock.restore();
+    mockOxlintPasses([{ status: 1 }, { status: 1 }, { status: 0 }]);
+
+    // A stale report from the second fixing pass is no feedback at all.
+    expect(() => fix(["src/a.ts"], [], { report: "stderr" })).not.toThrow();
+
+    mock.restore();
+    mockOxlintPasses([{ status: 0, stdout: "Finished in 2ms on 1 files." }]);
+
+    const stdout = spyOn(process.stdout, "write").mockImplementation(
+      () => true
+    );
+
+    const stderr = spyOn(process.stderr, "write").mockImplementation(
+      () => true
+    );
+
+    try {
+      fix(["src/a.ts"], [], { report: "stderr" });
+
+      expect(stdout).not.toHaveBeenCalled();
+      expect(stderr.mock.calls).toEqual([["Finished in 2ms on 1 files.\n"]]);
+    } finally {
+      stdout.mockRestore();
+      stderr.mockRestore();
+    }
   });
 
   // #483: between an agent's edits, an import it just added is still unused.
@@ -1393,7 +1695,7 @@ describe("fix reporting to the agent", () => {
     fix(["src/a.ts"]);
 
     const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
-    expect(stdios).toEqual(["inherit", "inherit"]);
+    expect(stdios).toEqual(["pipe", "inherit"]);
   });
 
   test("exits with the feedback code when problems remain", () => {
@@ -1482,7 +1784,7 @@ describe("fix reporting to Devin", () => {
     expect(() => fix(["src/a.ts"], [], { report: "context" })).not.toThrow();
 
     const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
-    expect(stdios).toEqual(["pipe", "pipe"]);
+    expect(stdios).toEqual(["pipe", "pipe", "pipe", "pipe"]);
     const [[printed]] = write.mock.calls;
     const output = JSON.parse(String(printed));
     expect(output.hookSpecificOutput.hookEventName).toBe("PostToolUse");
@@ -1490,6 +1792,48 @@ describe("fix reporting to Devin", () => {
       "src/a.ts:3:7 no-var"
     );
     write.mockRestore();
+  });
+
+  test("hands the agent the check pass's report, not a fixing pass's", () => {
+    mockOxlintPasses([
+      { status: 1, stdout: "src/a.ts:1:1 stale" },
+      { status: 1, stdout: "src/a.ts:2:1 stale too" },
+      { status: 1, stdout: "src/a.ts:3:7 no-var" },
+    ]);
+
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    try {
+      fix(["src/a.ts"], [], { report: "context" });
+
+      const [[printed]] = write.mock.calls;
+
+      const context: string = JSON.parse(String(printed)).hookSpecificOutput
+        .additionalContext;
+
+      expect(context).toContain("src/a.ts:3:7 no-var");
+      expect(context).not.toContain("stale");
+    } finally {
+      write.mockRestore();
+    }
+  });
+
+  test("hands the agent nothing when only the fixing passes reported", () => {
+    mockOxlintPasses([
+      { status: 1, stdout: "src/a.ts:1:1 stale" },
+      { status: 1, stdout: "src/a.ts:2:1 stale too" },
+      { status: 0, stdout: "Finished in 2ms on 1 files." },
+    ]);
+
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    try {
+      fix(["src/a.ts"], [], { report: "context" });
+
+      expect(write).not.toHaveBeenCalled();
+    } finally {
+      write.mockRestore();
+    }
   });
 
   test("prints nothing when everything was fixed", () => {

@@ -1,0 +1,5 @@
+---
+"ultracite": patch
+---
+
+`ultracite fix` now runs Oxlint's fix pass a second time when the first one reports anything, and when the second still reports something it finishes with a pass that only checks, after Oxfmt, and reports what that found. Oxlint applies fixes in a single pass: some fixes only become possible after another has run (two imports of a module are merged, then split into values and types), and when one fix also settles what another rule reported, Oxlint still printed that diagnostic and exited non-zero, so `fix` failed on a file it had just made clean and passed when run again. `import { type Foo } from "./types"` was enough to see it. A pass that changes nothing can't report a problem it has just fixed, so what `fix` prints and its exit code now describe the files as it left them, with positions from the formatted file. The same goes for `fix --hook`, which no longer hands the agent a problem that's already gone, and the autofix pass of `fix --claude` and `fix --codex` runs twice in the same way before its report. A run with nothing to report costs one Oxlint pass, as before, and Oxfmt still runs after the last pass that changes files.

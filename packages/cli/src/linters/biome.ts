@@ -4,6 +4,7 @@ import process from "node:process";
 
 import { log } from "@clack/prompts";
 import { applyEdits, modify } from "jsonc-parser";
+import type { z } from "zod";
 
 import type { options } from "../data/options";
 import {
@@ -11,6 +12,7 @@ import {
   detectJsonFormatting,
   parseJsoncStrict,
 } from "../schemas";
+import { usesClassicJsxRuntime } from "../tsconfig";
 import {
   biomeConfigNames,
   exists,
@@ -92,6 +94,44 @@ const getBiomeConfigPath = (): string => {
   return "./biome.jsonc";
 };
 
+// The core preset marks the noUnusedImports fix safe, so `ultracite fix`
+// deletes an `import React from "react"` that only JSX uses. That is right
+// under the automatic JSX runtime and breaks a project that compiles JSX to
+// `React.createElement` (`"jsx": "react"` in its tsconfig), where Biome has
+// to be told the import is in use.
+const CLASSIC_JSX_RUNTIME = "reactClassic";
+
+type BiomeConfig = z.infer<typeof biomeConfigSchema>;
+
+// A config that sets a jsxRuntime, either one, has made its own choice.
+const needsClassicJsxRuntime = (config: BiomeConfig): boolean =>
+  config.javascript?.jsxRuntime === undefined && usesClassicJsxRuntime(".");
+
+// Sets the one key, leaving the rest of `javascript` and any comments alone.
+// jsonc-parser reformats the lines an edit touches, so in an existing
+// `javascript` the key goes first: after the last setting, it would re-wrap
+// that setting's value.
+const withClassicJsxRuntime = (
+  contents: string,
+  config: BiomeConfig
+): string => {
+  const formattingOptions = detectJsonFormatting(contents);
+
+  const edits = config.javascript
+    ? modify(contents, ["javascript", "jsxRuntime"], CLASSIC_JSX_RUNTIME, {
+        formattingOptions,
+        getInsertionIndex: () => 0,
+      })
+    : modify(
+        contents,
+        ["javascript"],
+        { jsxRuntime: CLASSIC_JSX_RUNTIME },
+        { formattingOptions }
+      );
+
+  return applyEdits(contents, edits);
+};
+
 interface BiomeOptions {
   frameworks?: (typeof options.frameworks)[number][];
   typeAware?: boolean;
@@ -164,10 +204,17 @@ export const biome = {
 
     const vcsRoot = findVcsRoot();
 
-    const config: typeof defaultConfig & { vcs?: { root: string } } = {
+    const config: typeof defaultConfig & {
+      javascript?: { jsxRuntime: string };
+      vcs?: { root: string };
+    } = {
       ...defaultConfig,
       extends: extendsList,
     };
+
+    if (usesClassicJsxRuntime(".")) {
+      config.javascript = { jsxRuntime: CLASSIC_JSX_RUNTIME };
+    }
 
     if (vcsRoot) {
       config.vcs = { root: vcsRoot };
@@ -303,10 +350,46 @@ export const biome = {
       );
     }
 
+    if (needsClassicJsxRuntime(parsed)) {
+      contents = withClassicJsxRuntime(contents, parsed);
+    }
+
     await writeProjectFile(path, contents);
 
     if (!setsVcs) {
       await ensureIgnoreFile(vcsRoot);
     }
   },
+};
+
+/**
+ * Adds `javascript.jsxRuntime` to the Biome config of a project that compiles
+ * JSX with the classic runtime and doesn't say so, and returns the config's
+ * name, or null when there was nothing to add. For `ultracite upgrade`:
+ * configs init wrote before it set this lose their React imports to `fix`.
+ */
+export const addMissingBiomeJsxRuntime = async (): Promise<string | null> => {
+  const path = getBiomeConfigPath();
+
+  // The tsconfig first: most projects stop here, without the config read.
+  if (!(usesClassicJsxRuntime(".") && exists(path))) {
+    return null;
+  }
+
+  const contents = await readFile(path, "utf-8");
+  const parsed = parseJsoncStrict(contents, biomeConfigSchema);
+
+  // A nested config that inherits the root one is left to the root, as in
+  // update.
+  if (
+    !parsed ||
+    [parsed.extends ?? []].flat().includes(ROOT_CONFIG_EXTENDS) ||
+    !needsClassicJsxRuntime(parsed)
+  ) {
+    return null;
+  }
+
+  await writeProjectFile(path, withClassicJsxRuntime(contents, parsed));
+
+  return path.slice(2);
 };

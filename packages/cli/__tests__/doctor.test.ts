@@ -222,6 +222,31 @@ const checkOxlintEnv = (contents: string) => {
   }
 };
 
+// Doctor's JSX runtime check for a Biome project made of these files.
+const checkBiomeJsxRuntime = (files: Record<string, string>) => {
+  mockFileSystem(
+    Object.fromEntries(
+      Object.entries(files).map(([file, content]) => [
+        nodePath.join(process.cwd(), file),
+        content,
+      ])
+    )
+  );
+
+  try {
+    return runDiagnostics("biome").find(
+      (result) => result.name === "Biome JSX runtime"
+    );
+  } finally {
+    restoreFileSystemMock();
+  }
+};
+
+const classicTsConfig =
+  '{\n  // React 16\n  "compilerOptions": { "jsx": "react", },\n}\n';
+
+const biomeCoreConfig = '{ "extends": ["ultracite/biome/core"] }';
+
 describe("doctor", () => {
   // ---------------------------------------------------------------------------
   // No linter detected
@@ -1757,5 +1782,102 @@ export default defineConfig({
       status: "warn",
     });
     expect(checks.filter((check) => check.status === "fail")).toEqual([]);
+  });
+
+  test("warns about a Biome config that doesn't set the classic JSX runtime the tsconfig uses", () => {
+    const check = checkBiomeJsxRuntime({
+      "biome.jsonc": biomeCoreConfig,
+      "tsconfig.json": classicTsConfig,
+    });
+
+    expect(check?.status).toBe("warn");
+    expect(check?.message).toContain(
+      '`ultracite fix` removes the `import React from "react"` that JSX needs'
+    );
+    expect(check?.message).toContain(
+      'Set `"javascript": { "jsxRuntime": "reactClassic" }` in biome.jsonc'
+    );
+    expect(check?.message).toContain("run `ultracite upgrade`");
+  });
+
+  test("warns about a jsxRuntime that contradicts the tsconfig, without suggesting upgrade", () => {
+    const check = checkBiomeJsxRuntime({
+      "biome.jsonc":
+        '{ "extends": ["ultracite/biome/core"], "javascript": { "jsxRuntime": "transparent" } }',
+      "tsconfig.json": classicTsConfig,
+    });
+
+    expect(check?.status).toBe("warn");
+    // upgrade leaves a jsxRuntime the config sets alone.
+    expect(check?.message).not.toContain("ultracite upgrade");
+  });
+
+  test("passes a Biome config that sets the classic JSX runtime", () => {
+    expect(
+      checkBiomeJsxRuntime({
+        "biome.jsonc":
+          '{\n  // classic\n  "extends": ["ultracite/biome/core"],\n  "javascript": { "jsxRuntime": "reactClassic" }\n}\n',
+        "tsconfig.json": classicTsConfig,
+      })
+    ).toMatchObject({ status: "pass" });
+  });
+
+  test("reads the classic JSX runtime from a jsconfig.json and through extends", () => {
+    expect(
+      checkBiomeJsxRuntime({
+        "biome.jsonc": biomeCoreConfig,
+        "jsconfig.json": '{ "compilerOptions": { "jsx": "react" } }',
+      })
+    ).toMatchObject({ status: "warn" });
+    expect(
+      checkBiomeJsxRuntime({
+        "biome.jsonc": biomeCoreConfig,
+        "tsconfig.base.json": '{ "compilerOptions": { "jsx": "react" } }',
+        "tsconfig.json": '{ "extends": "./tsconfig.base.json" }',
+      })
+    ).toMatchObject({ status: "warn" });
+  });
+
+  test("skips the JSX runtime check without a classic jsx in the tsconfig", () => {
+    const projects: Record<string, string>[] = [
+      { "biome.jsonc": biomeCoreConfig },
+      { "biome.jsonc": biomeCoreConfig, "tsconfig.json": "{}" },
+      {
+        "biome.jsonc": biomeCoreConfig,
+        "tsconfig.json": '{ "compilerOptions": { "jsx": "react-jsx" } }',
+      },
+      {
+        "biome.jsonc": biomeCoreConfig,
+        "tsconfig.json": '{ "compilerOptions": { "jsx": "preserve" } }',
+      },
+    ];
+
+    for (const files of projects) {
+      expect(checkBiomeJsxRuntime(files)).toBeUndefined();
+    }
+  });
+
+  test("skips the JSX runtime check for other linters and for a Biome config that doesn't parse", () => {
+    mockFileSystem({
+      [nodePath.join(process.cwd(), "oxlint.config.ts")]: "",
+      [nodePath.join(process.cwd(), "tsconfig.json")]: classicTsConfig,
+    });
+
+    try {
+      for (const linter of ["oxlint", "eslint"] as const) {
+        expect(
+          findCheck(runDiagnostics(linter), "Biome JSX runtime")
+        ).toBeUndefined();
+      }
+    } finally {
+      restoreFileSystemMock();
+    }
+
+    expect(
+      checkBiomeJsxRuntime({
+        "biome.jsonc": '{ "extends": [',
+        "tsconfig.json": classicTsConfig,
+      })
+    ).toBeUndefined();
   });
 });

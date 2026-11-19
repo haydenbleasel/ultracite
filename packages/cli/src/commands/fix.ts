@@ -25,7 +25,11 @@ import {
   STYLELINT_MISSING_MESSAGE,
 } from "../run-command";
 import { spawnSync } from "../spawn-sync";
-import type { SpawnSyncOptions, StdoutToStderr } from "../spawn-sync";
+import type {
+  SpawnSyncOptions,
+  SpawnSyncResult,
+  StdoutToStderr,
+} from "../spawn-sync";
 import { detectLinter } from "../utils";
 
 const UNSAFE_FLAG = "--unsafe";
@@ -48,13 +52,12 @@ interface FixIo {
   stdio: FixStdio;
 }
 
+const printed = (text: string | undefined): text is string =>
+  text !== undefined && text.trim() !== "";
+
 const runTool = (command: string, args: string[], io: FixIo) => {
   const result = spawnSync(command, args, { stdio: io.stdio });
-  io.collected?.push(
-    ...[result.stdout, result.stderr].filter(
-      (text): text is string => text !== undefined && text.trim() !== ""
-    )
-  );
+  io.collected?.push(...[result.stdout, result.stderr].filter(printed));
 
   return result;
 };
@@ -157,15 +160,83 @@ const runStylelintFix = (
   exitOnCommandFailure("Stylelint", result);
 };
 
-const runOxlintFix = (
+// A project with a few thousand diagnostics prints more than the default
+// output buffer holds, which would kill the captured pass.
+const CAPTURE_MAX_BUFFER = 512 * 1024 * 1024;
+
+// Everything Oxlint prints when it has nothing to report: its summary, and
+// under an agent only the timing line.
+const OXLINT_CLEAN_LINE_RE =
+  /^(?:Found 0 warnings and 0 errors\.|Finished in \S+ on \d+ files?\b.*)$/u;
+
+const LINE_BREAK_RE = /\r?\n/u;
+
+// Exit code 0 alone isn't enough: warnings leave it at 0, and so does a
+// reporter chosen with `-f`, whose output isn't recognised here. Either gets
+// the second pass, which prints as it always has.
+const reportedNothing = (result: SpawnSyncResult): boolean =>
+  result.status === 0 &&
+  [result.stdout ?? "", result.stderr ?? ""]
+    .flatMap((text) => text.split(LINE_BREAK_RE))
+    .every(
+      (line) => line.trim() === "" || OXLINT_CLEAN_LINE_RE.test(line.trim())
+    );
+
+// Print a captured run where `io` would have sent it.
+const replay = (result: SpawnSyncResult, io: FixIo): void => {
+  if (io.stdio === "pipe") {
+    io.collected?.push(...[result.stdout, result.stderr].filter(printed));
+
+    return;
+  }
+
+  if (io.stdio === "ignore") {
+    return;
+  }
+
+  if (printed(result.stdout)) {
+    (io.stdio === "inherit" ? process.stdout : process.stderr).write(
+      `${result.stdout}\n`
+    );
+  }
+
+  if (printed(result.stderr)) {
+    process.stderr.write(`${result.stderr}\n`);
+  }
+};
+
+// The flags that make Oxlint write to files. The check pass that follows the
+// formatter must change nothing, so none of them reach it.
+const OXLINT_FIX_FLAGS = new Set([
+  "--fix",
+  "--fix-dangerously",
+  "--fix-suggestions",
+]);
+
+/**
+ * Oxlint applies fixes in a single pass, and one pass isn't always enough.
+ * Some fixes only become possible once another has run (two imports of a
+ * module are merged, then the merged import is split into values and types),
+ * and when the fix that ran also settles what another rule reported, Oxlint
+ * still prints that rule's diagnostic and exits non-zero for a file that is
+ * now clean. So a first pass that reports anything is followed by a second.
+ *
+ * Both are captured, not streamed, so a stale diagnostic never reaches the
+ * user. A pass with nothing to report is the result: its output is printed
+ * as it was and nothing follows it, so a clean project costs one run. The
+ * second pass can print a diagnostic it has just fixed, exactly as the first
+ * can, so when it reports anything it isn't the result either. This returns
+ * true, and runOxlintCheck reports once the formatter has run.
+ */
+const runOxlintFixPasses = (
   files: string[],
   passthrough: string[],
   io: FixIo
-): void => {
+): boolean => {
   const targets = toOxlintTargets(files);
 
   if (targets.length === 0) {
-    return;
+    return false;
   }
 
   // Check if --unsafe is in passthrough, use --fix-dangerously instead
@@ -176,6 +247,60 @@ const runOxlintFix = (
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
     ...targets,
+  ];
+
+  const first = spawnSync("oxlint", args, {
+    maxBuffer: CAPTURE_MAX_BUFFER,
+    stdio: "pipe",
+  });
+
+  if (reportedNothing(first)) {
+    replay(first, io);
+
+    return false;
+  }
+
+  // A pass that never started (Oxlint isn't installed) fails the same way
+  // every time. One that was killed is followed by the next: that is also
+  // how output too large to capture ends, and the check pass streams.
+  if (first.error) {
+    exitOnCommandFailure("Oxlint", first);
+  }
+
+  const second = spawnSync("oxlint", args, {
+    maxBuffer: CAPTURE_MAX_BUFFER,
+    stdio: "pipe",
+  });
+
+  if (reportedNothing(second)) {
+    replay(second, io);
+
+    return false;
+  }
+
+  if (second.error) {
+    exitOnCommandFailure("Oxlint", second);
+  }
+
+  return true;
+};
+
+/**
+ * The pass that reports when two fixing passes still had something to say.
+ * It only checks, so everything it prints is true of the files as they are,
+ * and it runs after oxfmt, so the positions it prints are the ones in the
+ * formatted file. Its output and exit code are the result of the fix.
+ */
+const runOxlintCheck = (
+  files: string[],
+  passthrough: string[],
+  io: FixIo
+): void => {
+  const args = [
+    ...passthrough.filter(
+      (arg) => arg !== UNSAFE_FLAG && !OXLINT_FIX_FLAGS.has(arg)
+    ),
+    ...toOxlintTargets(files),
   ];
 
   const result = runTool("oxlint", args, io);
@@ -242,10 +367,30 @@ const runLinterFixes = (
       break;
     }
 
+    // Up to two fixing Oxlint passes, then oxfmt, then at most one Oxlint
+    // pass that only checks. The formatter follows the last pass that can
+    // change a file, so it is the last thing to touch one. The check pass
+    // runs only when the second fixing pass still reported something, and
+    // comes after the formatter so that what it reports, positions included,
+    // describes the files as they were left. It runs in a `finally`, so a
+    // failing formatter doesn't stop it and its own failure is the one
+    // thrown: Oxlint's comes before oxfmt's, as it did when Oxlint ran first.
     case "oxlint": {
+      let unsettled = false;
+
       runSteps([
-        () => runOxlintFix(files, passthrough, io),
-        () => runOxfmtFix(files, [], io),
+        () => {
+          unsettled = runOxlintFixPasses(files, passthrough, io);
+        },
+        () => {
+          try {
+            runOxfmtFix(files, [], io);
+          } finally {
+            if (unsettled) {
+              runOxlintCheck(files, passthrough, io);
+            }
+          }
+        },
       ]);
       break;
     }

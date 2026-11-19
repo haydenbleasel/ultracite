@@ -94,8 +94,9 @@ describe("agent-fix linter adapters", () => {
   });
 
   test("oxlint adapter runs oxlint --fix, oxfmt, then a report-only oxlint pass and parses its diagnostics", () => {
-    const mockSpawn = mock((cmd: string, _args: string[]) => ({
-      status: cmd === "oxlint" ? 1 : 0,
+    const mockSpawn = mock((cmd: string, args: string[]) => ({
+      // The fix pass has nothing left to report; the report pass does.
+      status: cmd === "oxlint" && args.includes("-f") ? 1 : 0,
       stdout: cmd === "oxlint" ? oxlintJson : "",
     }));
 
@@ -103,6 +104,7 @@ describe("agent-fix linter adapters", () => {
 
     const diagnostics = getLinterAdapter("oxlint").fixAndCollect([], []);
 
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
     const [fixCall, oxfmtCall, collectCall] = mockSpawn.mock.calls;
     expect(fixCall[0]).toBe("oxlint");
     expect(fixCall[1]).toEqual(["--fix", "."]);
@@ -125,6 +127,31 @@ describe("agent-fix linter adapters", () => {
         url: "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-eval.html",
       },
     ]);
+  });
+
+  test("oxlint adapter runs a second fix pass when the first reports, before the formatter", () => {
+    const mockSpawn = mock((cmd: string, _args: string[]) => ({
+      status: cmd === "oxlint" ? 1 : 0,
+      stdout: cmd === "oxlint" ? oxlintJson : "",
+    }));
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const diagnostics = getLinterAdapter("oxlint").fixAndCollect(
+      ["src/bad.ts"],
+      ["--unsafe", "--type-aware"]
+    );
+
+    const fixArgs = ["--fix-dangerously", "--type-aware", "src/bad.ts"];
+
+    expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, args])).toEqual([
+      ["oxlint", fixArgs],
+      ["oxlint", fixArgs],
+      ["oxfmt", ["--write", "src/bad.ts"]],
+      ["oxlint", ["--type-aware", "-f", "json", "src/bad.ts"]],
+    ]);
+    // What's handed to the agent still comes from the report-only pass.
+    expect(diagnostics).toHaveLength(1);
   });
 
   test("oxlint adapter names plugin rules as the config does and flags parse errors", () => {

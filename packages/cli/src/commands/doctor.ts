@@ -22,6 +22,7 @@ import { readCoreEnv } from "../linters/oxlint";
 import type { CoreEnv, EnvBlocker } from "../linters/oxlint";
 import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
+import { usesClassicJsxRuntime } from "../tsconfig";
 import {
   biomeConfigNames,
   detectLinter,
@@ -46,6 +47,7 @@ const BIOME_CHECK = "Biome configuration";
 const ESLINT_CHECK = "ESLint configuration";
 const PRETTIER_CHECK = "Prettier configuration";
 const STYLELINT_CHECK = "Stylelint configuration";
+const BIOME_JSX_RUNTIME_CHECK = "Biome JSX runtime";
 const OXLINT_CHECK = "Oxlint configuration";
 const OXLINT_ENV_CHECK = "Oxlint environment";
 const OXFMT_CHECK = "oxfmt configuration";
@@ -355,6 +357,70 @@ const checkBiomeConfig = (): DiagnosticCheck => {
       status: "fail",
     };
   }
+};
+
+// The `javascript.jsxRuntime` a Biome config sets itself.
+const readBiomeJsxRuntime = (configPath: string): string | undefined => {
+  const config = biomeConfigSchema.safeParse(
+    parse(readFileSync(configPath, "utf-8"))
+  );
+
+  return config.success ? config.data.javascript?.jsxRuntime : undefined;
+};
+
+/**
+ * Biome treats `import React from "react"` as unused in a file that only
+ * uses JSX unless `javascript.jsxRuntime` is `reactClassic`, and the core
+ * preset's safe fix for unused imports deletes it. A project whose tsconfig
+ * compiles JSX with the classic runtime needs that import. Read from the
+ * tsconfig.json or jsconfig.json beside the nearest Biome config; skipped
+ * when it doesn't say `"jsx": "react"`, and for a config that can't be read.
+ */
+const checkBiomeJsxRuntime = (): DiagnosticCheck | null => {
+  const nearest = findNearestFile(biomeConfigNames);
+
+  try {
+    if (!(nearest && usesClassicJsxRuntime(nearest.dir))) {
+      return null;
+    }
+
+    // A nested config that extends "//" inherits the root config's setting.
+    const root = findRootBiomeConfig() ?? nearest;
+
+    const runtime =
+      readBiomeJsxRuntime(nearest.path) ?? readBiomeJsxRuntime(root.path);
+
+    if (runtime === "reactClassic") {
+      return {
+        message: `${root.fileName} sets the classic JSX runtime the tsconfig compiles with`,
+        name: BIOME_JSX_RUNTIME_CHECK,
+        status: "pass",
+      };
+    }
+
+    // upgrade and init read the tsconfig and the config in the directory
+    // they run in, and leave a `jsxRuntime` the config already sets alone.
+    const command =
+      runtime === undefined && root.dir === process.cwd()
+        ? ", or run `ultracite upgrade` to have it added"
+        : "";
+
+    return {
+      message: `The tsconfig compiles JSX with the classic runtime (\`"jsx": "react"\`), which needs React in scope, but ${root.fileName} doesn't tell Biome so. \`ultracite fix\` removes the \`import React from "react"\` that JSX needs. Set \`"javascript": { "jsxRuntime": "reactClassic" }\` in ${root.fileName}${command}`,
+      name: BIOME_JSX_RUNTIME_CHECK,
+      status: "warn",
+    };
+  } catch {
+    return null;
+  }
+};
+
+// The JSX runtime check only runs on a config Biome can load.
+const checkBiomeConfigAndJsxRuntime = (): DiagnosticCheck[] => {
+  const config = checkBiomeConfig();
+  const jsxRuntime = config.status === "fail" ? null : checkBiomeJsxRuntime();
+
+  return jsxRuntime ? [config, jsxRuntime] : [config];
 };
 
 const checkEslintConfig = (): DiagnosticCheck => {
@@ -816,7 +882,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           fn: () => checkToolVersion("@biomejs/biome", true),
           name: "Biome version",
         },
-        { fn: checkBiomeConfig, name: BIOME_CHECK }
+        { fn: checkBiomeConfigAndJsxRuntime, name: BIOME_CHECK }
       );
       break;
     }

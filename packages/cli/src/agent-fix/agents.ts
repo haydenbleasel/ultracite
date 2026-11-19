@@ -19,8 +19,10 @@ export interface AgentAdapter {
 export const agentAdapters = {
   claude: {
     // -p with no prompt argument reads the prompt from stdin. acceptEdits
-    // auto-approves file edits; the allowed-tools list keeps the agent to
-    // reading and editing — Bash and network tools are denied.
+    // auto-approves file edits, and the allowed-tools list pre-approves
+    // reading and searching, so the run never stops to ask. The list doesn't
+    // deny anything: other tools go through the permission mode, under which
+    // read-only shell commands (`cat`, `ls`) can still run.
     args: [
       "-p",
       "--permission-mode",

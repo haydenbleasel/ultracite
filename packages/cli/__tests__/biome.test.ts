@@ -2,7 +2,9 @@ import { beforeEach, describe, expect, mock, test } from "bun:test";
 import nodePath from "node:path";
 import process from "node:process";
 
-import { biome } from "../src/linters/biome";
+import { parse } from "jsonc-parser";
+
+import { addMissingBiomeJsxRuntime, biome } from "../src/linters/biome";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
@@ -35,6 +37,46 @@ const mockBiomeConfig = (
     existsSync: mock(() => false),
     readFileSync: mock(() => "{}"),
   }));
+};
+
+const classicTsConfig =
+  '{\n  // React 16\n  "compilerOptions": { "jsx": "react", },\n}\n';
+
+// A project with a .gitignore and these files, keyed by the path the CLI
+// reads them from; `./biome.jsonc` is the Biome config.
+const mockProject = (files: Record<string, string>) => {
+  const mockWriteFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+
+  const present = new Map(
+    Object.entries({ ".gitignore": "node_modules\n", ...files })
+  );
+
+  const read = (path: string): string => {
+    const content = present.get(String(path));
+
+    if (content === undefined) {
+      throw new Error("ENOENT");
+    }
+
+    return content;
+  };
+
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.resolve()),
+    readFile: mock((path: string) => Promise.resolve(read(path))),
+    writeFile: mockWriteFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      read(path);
+    }),
+    existsSync: mock(() => false),
+    readFileSync: mock(read),
+  }));
+
+  return mockWriteFile;
 };
 
 // Biome reads ignore files only from its config's folder, and stops when
@@ -688,6 +730,187 @@ describe("biome", () => {
       expect(written.indexOf('"$schema"')).toBeLessThan(
         written.indexOf('"extends"')
       );
+    });
+  });
+
+  describe("classic JSX runtime", () => {
+    test("create sets jsxRuntime when the tsconfig compiles JSX with the classic runtime", async () => {
+      const mockWriteFile = mockProject({ "tsconfig.json": classicTsConfig });
+
+      await biome.create({ frameworks: ["react"] });
+
+      const [[writtenPath, written]] = mockWriteFile.mock.calls;
+      expect(writtenPath).toBe("./biome.jsonc");
+      expect(JSON.parse(written)).toEqual({
+        $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
+        extends: ["ultracite/biome/core", "ultracite/biome/react"],
+        javascript: { jsxRuntime: "reactClassic" },
+      });
+    });
+
+    test("create reads a jsconfig.json too", async () => {
+      const mockWriteFile = mockProject({
+        "jsconfig.json": '{ "compilerOptions": { "jsx": "react" } }',
+      });
+
+      await biome.create();
+
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1]).javascript).toEqual({
+        jsxRuntime: "reactClassic",
+      });
+    });
+
+    test.each([
+      [
+        "the automatic runtime",
+        { "tsconfig.json": '{ "compilerOptions": { "jsx": "react-jsx" } }' },
+      ],
+      [
+        "a jsx left for another tool",
+        { "tsconfig.json": '{ "compilerOptions": { "jsx": "preserve" } }' },
+      ],
+      ["no tsconfig", {}],
+    ])("create leaves javascript out with %s", async (_name, files) => {
+      const mockWriteFile = mockProject(files);
+
+      await biome.create();
+
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1])).not.toHaveProperty(
+        "javascript"
+      );
+    });
+
+    test("update adds jsxRuntime to a config without a javascript section", async () => {
+      const mockWriteFile = mockProject({
+        "./biome.jsonc": '{\n  "extends": ["ultracite/biome/core"]\n}\n',
+        "tsconfig.json": classicTsConfig,
+      });
+
+      await biome.update();
+
+      const [[, written]] = mockWriteFile.mock.calls;
+      expect(JSON.parse(written).javascript).toEqual({
+        jsxRuntime: "reactClassic",
+      });
+      expect(written.indexOf('"extends"')).toBeLessThan(
+        written.indexOf('"javascript"')
+      );
+    });
+
+    test("update adds jsxRuntime beside the javascript settings already there", async () => {
+      const mockWriteFile = mockProject({
+        "./biome.jsonc": [
+          "{",
+          '  "extends": ["ultracite/biome/core"],',
+          '  "javascript": {',
+          "    // browser extension",
+          '    "globals": ["chrome"],',
+          '    "formatter": { "quoteStyle": "single" }',
+          "  }",
+          "}",
+          "",
+        ].join("\n"),
+        "tsconfig.json": classicTsConfig,
+      });
+
+      await biome.update();
+
+      const [[, written]] = mockWriteFile.mock.calls;
+      expect(written).toContain("// browser extension");
+      expect(written).toContain('"globals": ["chrome"],');
+      expect(written).toContain('"formatter": { "quoteStyle": "single" }');
+      // jsonc-parser reads the comments the document keeps.
+      expect(parse(written).javascript).toEqual({
+        formatter: { quoteStyle: "single" },
+        globals: ["chrome"],
+        jsxRuntime: "reactClassic",
+      });
+    });
+
+    test.each(["transparent", "reactClassic"])(
+      "update leaves a jsxRuntime of %s the config already sets",
+      async (runtime) => {
+        const mockWriteFile = mockProject({
+          "./biome.jsonc": `{ "extends": ["ultracite/biome/core"], "javascript": { "jsxRuntime": "${runtime}" } }`,
+          "tsconfig.json": classicTsConfig,
+        });
+
+        await biome.update();
+
+        expect(JSON.parse(mockWriteFile.mock.calls[0][1]).javascript).toEqual({
+          jsxRuntime: runtime,
+        });
+      }
+    );
+
+    test("update adds nothing under the automatic runtime", async () => {
+      const mockWriteFile = mockProject({
+        "./biome.jsonc": '{ "extends": ["ultracite/biome/core"] }',
+        "tsconfig.json": '{ "compilerOptions": { "jsx": "react-jsx" } }',
+      });
+
+      await biome.update();
+
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1])).not.toHaveProperty(
+        "javascript"
+      );
+    });
+
+    test("addMissingBiomeJsxRuntime sets it and names the config", async () => {
+      const mockWriteFile = mockProject({
+        "./biome.jsonc":
+          '{\n  // ours\n  "extends": ["ultracite/biome/core"]\n}\n',
+        "tsconfig.json": classicTsConfig,
+      });
+
+      await expect(addMissingBiomeJsxRuntime()).resolves.toBe("biome.jsonc");
+
+      const [[writtenPath, written]] = mockWriteFile.mock.calls;
+      expect(writtenPath).toBe("./biome.jsonc");
+      // Only the one key is added: no $schema, no new presets.
+      expect(written).toContain("// ours");
+      expect(parse(written)).toEqual({
+        extends: ["ultracite/biome/core"],
+        javascript: { jsxRuntime: "reactClassic" },
+      });
+    });
+
+    const coreConfig = '{ "extends": ["ultracite/biome/core"] }';
+
+    test.each([
+      [
+        "under the automatic runtime",
+        {
+          "./biome.jsonc": coreConfig,
+          "tsconfig.json": '{ "compilerOptions": { "jsx": "react-jsx" } }',
+        },
+      ],
+      ["without a tsconfig", { "./biome.jsonc": coreConfig }],
+      [
+        "when the config sets a jsxRuntime",
+        {
+          "./biome.jsonc":
+            '{ "extends": ["ultracite/biome/core"], "javascript": { "jsxRuntime": "transparent" } }',
+          "tsconfig.json": classicTsConfig,
+        },
+      ],
+      ["without a Biome config", { "tsconfig.json": classicTsConfig }],
+      [
+        "to a config that inherits the root's",
+        {
+          "./biome.jsonc": '{ "root": false, "extends": "//" }',
+          "tsconfig.json": classicTsConfig,
+        },
+      ],
+      [
+        "to a config that doesn't parse",
+        { "./biome.jsonc": '{ "extends": [', "tsconfig.json": classicTsConfig },
+      ],
+    ])("addMissingBiomeJsxRuntime writes nothing %s", async (_name, files) => {
+      const mockWriteFile = mockProject(files);
+
+      await expect(addMissingBiomeJsxRuntime()).resolves.toBeNull();
+      expect(mockWriteFile).not.toHaveBeenCalled();
     });
   });
 });

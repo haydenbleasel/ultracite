@@ -23,18 +23,24 @@ const STDERR_TAIL_LENGTH = 500;
 // output buffer and abort the run with ENOBUFS, so raise it explicitly.
 const PIPED_MAX_BUFFER = 512 * 1024 * 1024;
 
-const runPiped = (
+interface PipedRun {
+  /** The exit code: non-zero when the linter reported something. */
+  status: number;
+  stdout: string;
+}
+
+const runPipedCommand = (
   command: string,
   args: string[],
   { optional = false } = {}
-): string => {
+): PipedRun => {
   const result = spawnSync(command, args, {
     maxBuffer: PIPED_MAX_BUFFER,
   });
 
   // An optional tool that isn't installed is skipped, as in the plain fix flow.
   if (optional && result.errorCode === "ENOENT") {
-    return "";
+    return { status: 0, stdout: "" };
   }
 
   if (result.error) {
@@ -47,8 +53,14 @@ const runPiped = (
     );
   }
 
-  return String(result.stdout ?? "");
+  return { status: result.status, stdout: String(result.stdout ?? "") };
 };
+
+const runPiped = (
+  command: string,
+  args: string[],
+  options?: { optional?: boolean }
+): string => runPipedCommand(command, args, options).stdout;
 
 /**
  * Parse a linter's JSON report. The type argument names the reporter's
@@ -299,6 +311,12 @@ const parseOxlintDiagnostics = (
 // a formatter-first pass would report "no issues" on a file that still fails
 // `oxfmt --check`. The diagnostics handed to the agent come from a final
 // report-only pass so their line numbers reflect the formatted file.
+//
+// Oxlint applies fixes in one pass, and some only become possible after
+// another has run (an import is merged, then split into values and types).
+// A fix pass that reports anything is followed by a second, as in the plain
+// path, so the agent isn't handed what one more autofix pass clears. Both go
+// before oxfmt, so the formatter is the last to touch the file.
 const runOxlintPass = (
   files: string[],
   passthrough: string[]
@@ -307,11 +325,15 @@ const runOxlintPass = (
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
   const targets = toTargets(files, ".");
 
-  runPiped("oxlint", [
+  const fixArgs = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
     ...targets,
-  ]);
+  ];
+
+  if (runPipedCommand("oxlint", fixArgs).status !== 0) {
+    runPiped("oxlint", fixArgs);
+  }
 
   runPiped("oxfmt", ["--write", ...targets]);
 

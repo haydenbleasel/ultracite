@@ -81,11 +81,19 @@ export const readPackageJson = async (
 // monorepo config that inherits the root configuration.
 export const biomeConfigSchema = z.looseObject({
   extends: z.union([z.string(), z.array(z.string())]).optional(),
+  javascript: z
+    .looseObject({
+      // Read, never validated: a value Biome wouldn't accept is Biome's to
+      // report, and must not make the whole config look unparseable.
+      jsxRuntime: z.string().optional().catch(undefined),
+    })
+    .optional(),
 });
 
 export const tsConfigSchema = z.looseObject({
   compilerOptions: z
     .looseObject({
+      jsx: z.string().optional(),
       strict: z.boolean().optional(),
       strictNullChecks: z.boolean().optional(),
     })

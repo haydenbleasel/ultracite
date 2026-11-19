@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -133,6 +134,60 @@ const inheritedStrictFlags = async (
   );
 
   return Object.assign({}, ...bases);
+};
+
+// TypeScript reads tsconfig.json, and jsconfig.json is the same file for a
+// JavaScript project.
+const PROJECT_CONFIG_NAMES = ["tsconfig.json", "jsconfig.json"];
+
+// The `jsx` compiler option a config ends up with: its own, or the one it
+// inherits through `extends`, later entries overriding earlier ones as in
+// TypeScript. Undefined for a config that can't be read or sets none.
+const readJsxOption = (configPath: string, depth = 0): string | undefined => {
+  let config: TsConfig | undefined;
+
+  try {
+    config = parseJsonc(readFileSync(configPath, "utf-8"), tsConfigSchema);
+  } catch {
+    return undefined;
+  }
+
+  const own = config?.compilerOptions?.jsx;
+
+  if (own !== undefined || depth >= MAX_EXTENDS_DEPTH) {
+    return own;
+  }
+
+  for (const specifier of [config?.extends ?? []].flat().toReversed()) {
+    const basePath = resolveExtends(specifier, path.dirname(configPath));
+    const inherited = basePath ? readJsxOption(basePath, depth + 1) : undefined;
+
+    if (inherited !== undefined) {
+      return inherited;
+    }
+  }
+
+  return undefined;
+};
+
+/**
+ * Whether the project in `dir` compiles JSX with the classic runtime, where
+ * every JSX element becomes a `React.createElement` call and so needs React
+ * in scope. That is `"jsx": "react"` alone: `react-jsx` and `react-jsxdev`
+ * are the automatic runtime, and `preserve` and `react-native` leave JSX for
+ * a later tool, so the tsconfig doesn't say which runtime it compiles to.
+ * False as well when there is no tsconfig.json or jsconfig.json in `dir`, or
+ * it sets no `jsx`.
+ */
+export const usesClassicJsxRuntime = (dir: string): boolean => {
+  const configName = PROJECT_CONFIG_NAMES.find((name) =>
+    exists(path.join(dir, name))
+  );
+
+  return (
+    configName !== undefined &&
+    readJsxOption(path.join(dir, configName))?.toLowerCase() === "react"
+  );
 };
 
 export interface TsConfigUpdate {
