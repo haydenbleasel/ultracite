@@ -31,6 +31,10 @@ export default defineConfig({
     // Deliberately violates the @interfere/landmines rules so the plugin load
     // test can assert their diagnostics actually fire.
     "packages/cli/__tests__/fixtures/landmines-load",
+    // Deliberately leaves a type assertion without its `SAFETY:` comment and
+    // writes a prose comment so the test can assert landmines and anti-slop
+    // agree on which comments are allowed.
+    "packages/cli/__tests__/fixtures/landmines-anti-slop-load",
     // Deliberately forges and leaks gdp-ts proofs so the plugin load test can
     // assert the gdp diagnostics actually fire.
     "packages/cli/__tests__/fixtures/gdp-load",

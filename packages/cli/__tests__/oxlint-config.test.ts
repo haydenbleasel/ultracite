@@ -1201,9 +1201,13 @@ describe("oxlint landmines config", () => {
       .toSorted();
 
     expect(registered).toEqual(LANDMINES_RULES);
-    expect(config.rules).toEqual(
-      Object.fromEntries(LANDMINES_RULES.map((rule) => [rule, "error"]))
-    );
+    expect(config.rules).toEqual({
+      ...Object.fromEntries(LANDMINES_RULES.map((rule) => [rule, "error"])),
+      "landmines-style/no-comments": [
+        "error",
+        { allow: ["WARNING", "SAFETY"] },
+      ],
+    });
   });
 
   // Run oxlint for real with core + landmines loaded via a committed fixture
@@ -1235,6 +1239,22 @@ describe("oxlint landmines config", () => {
     expect(
       flaggedBy("landmines-types(no-explicit-return-types)")
     ).not.toContain("clean.ts");
+  });
+});
+
+describe("oxlint landmines and anti-slop together", () => {
+  // anti-slop demands a `SAFETY:` comment on a type assertion, and
+  // no-comments used to report it (interfere-inc/landmines#4). The fixture
+  // extends both presets and holds one assertion with the comment and one
+  // without.
+  test("a SAFETY comment satisfies both presets", () => {
+    const { flaggedBy, output } = lintFixture("landmines-anti-slop-load");
+    const safetyRule = "anti-slop(require-safety-comment-for-type-assertion)";
+
+    expect(output).not.toContain("Failed to parse oxlint configuration");
+    expect(output).not.toContain("Failed to load JS plugin");
+    expect(flaggedBy(safetyRule)).toEqual(["unchecked.ts"]);
+    expect(flaggedBy("landmines-style(no-comments)")).toEqual(["prose.ts"]);
   });
 });
 

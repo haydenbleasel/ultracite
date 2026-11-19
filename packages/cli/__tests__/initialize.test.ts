@@ -691,7 +691,7 @@ describe("initialize", () => {
       skipInstall: false,
     });
 
-    expect(installedPackages).toContain("@interfere/landmines@^0.1.0");
+    expect(installedPackages).toContain("@interfere/landmines@^0.1.1");
     expect(installedPackages).toContain("@shadcn/lint@^0.2.3");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
     expect(installedPackages).toContain("eslint-plugin-jsdoc@^65.4.2");

@@ -242,7 +242,7 @@ All ten rules are enabled at the `error` level, following the upstream recommend
 | `landmines-testing/no-fixed-sleep` | Awaiting a fixed real-time delay in a test or hook. |
 | `landmines-testing/no-unsignaled-poll` | `expect.poll` and `vi.waitFor` on request recorders and spy state. |
 | `landmines-testing/no-flake-masking` | Test retries and raised timeouts. |
-| `landmines-style/no-comments` | Prose comments. Directives (`oxlint-disable`, `@ts-expect-error`), single-line `// WARNING:` comments and TSDoc on exported API are allowed. |
+| `landmines-style/no-comments` | Prose comments. Directives (`oxlint-disable`, `@ts-expect-error`), single-line `// WARNING:` and `// SAFETY:` comments and TSDoc on exported API are allowed. |
 | `landmines-structure/colocated-tests` | A test that lives away from the implementation it imports. |
 | `landmines-structure/test-file-names` | `.spec.ts`, `.tests.ts`, `.helpers.ts`, `.mocks.ts` and `__tests__` directories. It wants `.test.ts`, `.fixture.ts` and `.test-utils.ts`. |
 | `landmines-structure/package-exports` | A `package.json` that exports its whole source tree, such as `"./*": "./src/*.ts"`. |
@@ -251,7 +251,7 @@ All ten rules are enabled at the `error` level, following the upstream recommend
 Some of these reach well beyond tests, so check them against your codebase before turning the preset on:
 
 - **`no-comments` and core.** Core's `no-empty` and `no-fallthrough` accept a comment as the way to mark an empty block or a fallthrough as deliberate. With `no-comments` on, restructure the code instead.
-- **`no-comments` and anti-slop.** `anti-slop/require-safety-comment-for-type-assertion` requires a `SAFETY:` comment on every type assertion, and `no-comments` reports that comment, so an assertion can't pass both ([interfere-inc/landmines#4](https://github.com/interfere-inc/landmines/issues/4)). If you extend both presets, turn one of the two rules off.
+- **`no-comments` and anti-slop.** `anti-slop/require-safety-comment-for-type-assertion` requires a `SAFETY:` comment on every type assertion. The preset sets the rule's `allow` option to `["WARNING", "SAFETY"]` so that comment passes and you can extend both presets. The option needs `@interfere/landmines` 0.1.1 or later; `ultracite upgrade` installs it.
 - **`test-file-names` and `.spec.ts`.** Playwright, Cypress, Angular and NestJS projects usually name tests `.spec.ts`. Turn the rule off if you keep that convention.
 - **`no-explicit-return-types` and `no-comments` and your agent rules.** The rules file `init` writes tells agents to annotate return types where it helps and to comment complex logic. Edit those lines if you enable this preset.
 

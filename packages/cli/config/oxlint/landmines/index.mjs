@@ -34,11 +34,11 @@ import { defineConfig } from "oxlint";
 //
 // - landmines-style/no-comments leaves no way to write the comment core's
 //   no-empty and no-fallthrough accept as an escape, so restructure the code
-//   instead. It also rejects the `SAFETY:` comment that
-//   anti-slop/require-safety-comment-for-type-assertion demands, so a type
-//   assertion cannot pass both presets
-//   (https://github.com/interfere-inc/landmines/issues/4). Turn one of the
-//   two rules off when extending both.
+//   instead. Its `allow` option lists the single-line comment prefixes to
+//   keep. Upstream defaults to `WARNING`; the preset adds `SAFETY`, the
+//   comment anti-slop/require-safety-comment-for-type-assertion demands, so a
+//   type assertion can pass both presets. The option needs
+//   @interfere/landmines 0.1.1.
 // - landmines-structure/test-file-names wants `.test.ts`, `.fixture.ts` and
 //   `.test-utils.ts`, and rejects `.spec.ts` and `__tests__` directories.
 //   Turn it off for a framework whose convention is `.spec.ts` (Playwright,
@@ -65,7 +65,7 @@ export default defineConfig({
     "landmines-structure/test-file-names": "error",
 
     // ── landmines-style ──
-    "landmines-style/no-comments": "error",
+    "landmines-style/no-comments": ["error", { allow: ["WARNING", "SAFETY"] }],
 
     // ── landmines-testing ──
     "landmines-testing/no-fixed-sleep": "error",
