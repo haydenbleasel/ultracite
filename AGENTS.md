@@ -39,6 +39,7 @@ benchmark/                    PR-time performance regression gate for check/fix 
 research/                     Research harnesses: verified bibliography, real-codebase corpus, agent fix experiment (see research/README.md)
 scripts/                      validate-configs (loads every preset + runs the ESLint/oxlint parity check)
 patches/                      bun patchedDependencies (currently oxfmt)
+upstream.md                   Issues and pull requests we've opened on the tools Ultracite depends on
 .changeset/                   Changesets; every user-facing change needs one
 tmp/                          Gitignored scratch area for hand-testing the CLI against a sample project
 ```
@@ -162,6 +163,8 @@ Some rules are off, or missing, only until a linter or plugin changes. Nothing e
 | Oxlint, ESLint | The same handler rules on Solid's `on:click` (and, on Oxlint only, lowercase `onclick`) | Oxlint and eslint-plugin-jsx-a11y recognising those forms (the same two issues). eslint-plugin-jsx-a11y already matches `onclick` | Remove the limit from the Solid presets' comments and the docs. |
 | Oxlint, ESLint | `vitest/prefer-importing-vitest-globals` | The rule leaving alone a `test`, `expect` or other name the file already imports from another module (`@playwright/test`, `bun:test`, `node:test`). Today it reports it as a global and its fix adds a second import from `vitest`, which doesn't parse: [oxc-project/oxc#29284](https://github.com/oxc-project/oxc/issues/29284) and [vitest-dev/eslint-plugin-vitest#864](https://github.com/vitest-dev/eslint-plugin-vitest/issues/864) | Turn it back on in both vitest presets and flip the `forbid` in the vitest fixture of `eslint-smoke.ts`. |
 | typescript-eslint | `no-use-before-define` | Its planned deprecation ([typescript-eslint#11014](https://github.com/typescript-eslint/typescript-eslint/issues/11014)); a test fails when it lands | Turn the base rule back on for TypeScript files, since the preset drops deprecated rules. |
+
+`upstream.md` at the repo root lists every issue and pull request we've opened on these tools ourselves, open and closed. Add a row there in the same change that files one, check the open rows on every bump, and move a row to "Closed" once you've acted on it.
 
 `bun run bump-tools` updates the linter/formatter packages; `bun run bump-deps` updates everything else. Upgrading oxfmt has needed a clean reinstall (`rm -rf node_modules && bun install`) and a regenerated `patches/oxfmt@*.patch` in the past.
 
