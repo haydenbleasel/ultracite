@@ -28,8 +28,12 @@ import { providerLogos } from "../../lib/logos";
 // examples and the timings. Rechecked on this date for Biome 2.6.4 and
 // Ultracite 8.2.0 (packed from main at 2bd7aaad plus the preset changes it
 // releases, before it was published): the rule counts, the assist actions,
-// the examples and the timings.
-const lastModified = "2026-11-11";
+// the examples and the timings. Rechecked on this date for Biome 2.6.8 and
+// Ultracite 8.3.1 (packed from main at 71744dd4, before it was published): the rule
+// counts, the assist actions, the examples and what the formatter covers
+// (core now formats Markdown). The timings were not re-run (the machine was
+// busy) and are still the 8.2.0 session's, on Biome 2.6.4.
+const lastModified = "2026-11-18";
 const command = "npx ultracite@latest init --linter biome";
 const small = runFor(42);
 const large = runFor(420);
@@ -52,11 +56,11 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "No. Biome formats JavaScript, TypeScript, JSX, JSON, CSS and GraphQL itself, and Ultracite sets it to Prettier’s style: 80 columns, double quotes, semicolons and ES5 trailing commas. Biome doesn’t run Prettier plugins, so if you depend on one, pick Ultracite’s ESLint provider, which uses Prettier.",
+      "No. Biome formats JavaScript, TypeScript, JSX, JSON, CSS, GraphQL and Markdown itself, and Ultracite sets it to Prettier’s style: 80 columns, double quotes, semicolons and ES5 trailing commas. Biome doesn’t run Prettier plugins, so if you depend on one, pick Ultracite’s ESLint provider, which uses Prettier.",
     question: "Do I still need Prettier?",
   },
   {
-    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files the two were level, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (474 in its core preset to Biome’s 350), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files the two were level, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (475 in its core preset to Biome’s 350), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
     question: "Should I use Biome or Oxlint?",
   },
   {
@@ -114,7 +118,7 @@ const nextSteps: NextStep[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description={`Ultracite turns on 350 of Biome’s 670 rules (the default is 218), sorts imports, JSX attributes and Tailwind classes, sets up VS Code, Zed and your agents, and checks 420 files in ${formatMs(large.ms.biome)}.`}
+  description={`Ultracite turns on 350 of Biome’s 816 rules (the default is 218), sorts imports, JSX attributes and Tailwind classes, sets up VS Code, Zed and your agents, and checks 420 files in ${formatMs(large.ms.biome)}.`}
   faqs={faqs}
   lastModified={lastModified}
   title="Ultracite for Biome — Strict biome.jsonc Config"
@@ -126,7 +130,7 @@ const nextSteps: NextStep[] = [
     name="Biome"
     title="The strict Biome config, in one line of extends"
   >
-    Biome ships 670 rules and turns on 218. Ultracite turns on 350 and adds the
+    Biome ships 816 rules and turns on 218. Ultracite turns on 350 and adds the
     sorting, formatting and editor settings to match, all from one{" "}
     <code class="text-foreground font-mono text-base">biome.jsonc</code>.
     <Fragment slot="note">

@@ -2,30 +2,30 @@
 import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
-// ESLint 10.14.0 and the plugins ultracite/eslint/core loads, against
-// Ultracite 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases). `available` counts each one's rules that aren't
+// ESLint 10.15.0 and the plugins ultracite/eslint/core loads, against
+// Ultracite 8.3.1 (recounted 2026-11-18 from main at 71744dd4, before it was published). `available` counts each one's rules that aren't
 // deprecated; `defaults` counts the rules in its own recommended config
 // (typescript-eslint's `recommended`) that core keeps on; `enabled` counts the
 // rules `eslint --print-config` reports on for a TypeScript file. Not drawn:
 // unused-imports and compat, one rule each. Re-derive when a version moves.
 //
-// Type information: ultracite/eslint/type-aware turns on 62 typescript-eslint
+// Type information: ultracite/eslint/type-aware turns on 63 typescript-eslint
 // rules (replacing five of ESLint's) and the 37 SonarJS rules and two Unicorn
 // rules that register no listeners without a TypeScript program. It also gives
 // that program to the 32 SonarJS rules in core that use types when there are
 // some (all marked `requiresTypeChecking` by their plugins).
-const catalogSize = 1192;
-const recommendedCount = 726;
-const coreCount = 910;
-const typedPresetCount = 101;
+const catalogSize = 1200;
+const recommendedCount = 728;
+const coreCount = 913;
+const typedPresetCount = 102;
 const typedCoreCount = 32;
 
 const plugins: CoverageRow[] = [
   {
-    available: 376,
-    defaults: 317,
+    available: 379,
+    defaults: 319,
     description: "Modern, idiomatic JavaScript",
-    enabled: 343,
+    enabled: 346,
     mono: true,
     name: "unicorn",
   },
@@ -46,9 +46,9 @@ const plugins: CoverageRow[] = [
     name: "eslint",
   },
   {
-    available: 127,
+    available: 128,
     defaults: 19,
-    description: "TypeScript, with 62 more in type-aware",
+    description: "TypeScript, with 63 more in type-aware",
     enabled: 57,
     mono: true,
     name: "@typescript-eslint",
@@ -62,7 +62,7 @@ const plugins: CoverageRow[] = [
     name: "jsdoc",
   },
   {
-    available: 46,
+    available: 50,
     defaults: 7,
     description: "Imports and exports",
     enabled: 27,
@@ -97,7 +97,7 @@ const plugins: CoverageRow[] = [
 ---
 
 <Coverage
-  caption="ESLint 10.14.0 and Ultracite 8.2.0, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
+  caption="ESLint 10.15.0 and Ultracite 8.3.1, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
   defaultsLabel="In the plugin’s recommended config"
   id="es-rules"
   notes={[

@@ -3,8 +3,8 @@ import SectionHeading from "../../home/section-heading.astro";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
 
-// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.2.0,
-// recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases;
+// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.3.1,
+// recounted 2026-11-18 from main at 71744dd4, before it was published;
 // counted by importing each preset; for Vue, Svelte, Astro and Angular, only
 // their plugins' rules, as those presets also run core's rules on component
 // scripts (Angular: on the inline scripts of HTML files), and for Playwright
@@ -24,30 +24,30 @@ const presets: {
     name: "react",
     plugins: "React, hooks, jsx-a11y, React Doctor",
   },
-  // 209 from eslint-plugin-vue and 21 from eslint-plugin-vuejs-accessibility.
+  // 210 from eslint-plugin-vue and 21 from eslint-plugin-vuejs-accessibility.
   {
-    count: 230,
+    count: 231,
     name: "vue",
     plugins: "eslint-plugin-vue, vuejs-accessibility",
     templates: true,
   },
-  // 45 from @angular-eslint/eslint-plugin and 39 from its template plugin.
+  // 46 from @angular-eslint/eslint-plugin and 41 from its template plugin.
   {
-    count: 84,
+    count: 87,
     name: "angular",
     plugins: "@angular-eslint, its template plugin",
     templates: true,
     typeAware: 6,
   },
-  { count: 70, name: "vitest", plugins: "@vitest/eslint-plugin", typeAware: 1 },
+  // 36 from eslint-plugin-solid and 34 from eslint-plugin-jsx-a11y.
+  { count: 70, name: "solid", plugins: "eslint-plugin-solid, jsx-a11y" },
+  { count: 68, name: "vitest", plugins: "@vitest/eslint-plugin", typeAware: 2 },
   {
     count: 68,
     name: "svelte",
     plugins: "eslint-plugin-svelte",
     templates: true,
   },
-  // 34 from eslint-plugin-solid and 34 from eslint-plugin-jsx-a11y.
-  { count: 68, name: "solid", plugins: "eslint-plugin-solid, jsx-a11y" },
   { count: 64, name: "playwright", plugins: "eslint-plugin-playwright" },
   { count: 63, name: "jest", plugins: "eslint-plugin-jest", typeAware: 4 },
   { count: 52, name: "astro", plugins: "eslint-plugin-astro", templates: true },
@@ -91,9 +91,9 @@ const width = (count: number): string => `${(count / scale) * 100}%`;
 
 // A component written for the example, and what `ultracite check` printed
 // for it under ultracite/eslint/core and ultracite/eslint/vue with ESLint
-// 10.14.0 and Ultracite 8.1.1 (run for real; Prettier's "Checking
+// 10.15.0 and Ultracite 8.3.1 (run for real; Prettier's "Checking
 // formatting..." line and ESLint's file header line left out). Re-run
-// 2026-11-11 on Ultracite 8.2.0: unchanged.
+// 2026-11-18 from main at 71744dd4, before it was published: unchanged.
 const component = `<script setup lang="ts">
 defineProps<{ tasks: { id: string; title: string; notes: string }[] }>();
 </script>

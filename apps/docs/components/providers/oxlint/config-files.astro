@@ -2,15 +2,15 @@
 // The whole Oxlint setup `ultracite init --linter oxlint` writes for a React
 // and Next.js app (rendered by lib/providers.ts, as on the homepage), with the
 // rule count each preset brings. Counts are rules set to "error" in
-// packages/cli/config/oxlint/<preset> as of Ultracite 8.2.0 (recounted
-// 2026-11-11 from main at 2bd7aaad plus the preset changes it releases).
+// packages/cli/config/oxlint/<preset> as of Ultracite 8.3.1 (recounted
+// 2026-11-18 from main at 71744dd4, before it was published).
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 
 const PRESETS = ["core", "react", "next"];
 
 const ruleCounts = new Map([
-  ["core", 474],
+  ["core", 475],
   ["next", 21],
   ["react", 106],
 ]);

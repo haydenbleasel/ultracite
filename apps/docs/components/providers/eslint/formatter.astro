@@ -3,14 +3,15 @@ import Terminal from "../../landing/terminal.astro";
 import BeforeAfter from "../before-after.astro";
 
 // The component from the Oxlint and Biome pages, and what `ultracite fix`
-// made of it with ESLint 10.14.0 and Prettier 3.9.10 under
-// ultracite/eslint/core and Ultracite 8.1.1, in a project with React and Radix
+// made of it with ESLint 10.15.0 and Prettier 3.10.1 under
+// ultracite/eslint/core and Ultracite 8.3.1, in a project with React and Radix
 // and a tsconfig `@/*` path to lib/utils.ts (run for real; regenerate when the
 // configs change). `problems` is what fix left. Adding
 // ultracite/eslint/type-aware also left
 // `@typescript-eslint/strict-boolean-expressions` on `asChild` and
-// `sonarjs/prefer-read-only-props` on the props. Re-run 2026-11-11 on Ultracite
-// 8.2.0: unchanged (Prettier's time for the file varies by a few ms a run).
+// `sonarjs/prefer-read-only-props` on the props. Re-run 2026-11-18
+// from main at 71744dd4, before it was published: unchanged (Prettier's time for
+// the file varies by a few ms a run; the one shown is from a quiet machine).
 const before = `import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
 import type { ReactNode } from 'react'

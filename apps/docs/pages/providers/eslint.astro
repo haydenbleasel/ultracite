@@ -24,11 +24,11 @@ import {
 } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
-// Facts on this page were checked against ESLint 10.14.0, Prettier 3.9.10,
-// Stylelint 17.16.0 and Ultracite 8.2.0 (packed from main at 2bd7aaad plus the
-// preset changes it releases, before it was published) on this date: the rule
-// counts, the examples and the timings.
-const lastModified = "2026-11-11";
+// Facts on this page were checked against ESLint 10.15.0, Prettier 3.10.1,
+// Stylelint 17.16.0 and Ultracite 8.3.1 (packed from main at 71744dd4, before it was published) on this date: the rule counts and the examples. The timings
+// were not re-run (the machine was busy) and are still the 2026-11-11
+// session's, with ESLint 10.14.0, Prettier 3.9.10 and Ultracite 8.2.0.
+const lastModified = "2026-11-18";
 const command = "npx ultracite@latest init --linter eslint";
 const small = runFor(42);
 const large = runFor(420);
@@ -41,7 +41,7 @@ const breadcrumbs: Crumb[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 910 across ESLint and ten plugins, among them typescript-eslint, Unicorn, SonarJS and import-x. Framework presets add more: 542 rules for React, 47 for Next.js and 230 for Vue. The opt-in type-aware preset adds 101 rules that read your types. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
+      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 913 across ESLint and ten plugins, among them typescript-eslint, Unicorn, SonarJS and import-x. Framework presets add more: 542 rules for React, 47 for Next.js and 231 for Vue. The opt-in type-aware preset adds 102 rules that read your types. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
     question: "What does Ultracite add on top of ESLint?",
   },
   {
@@ -107,7 +107,7 @@ const nextSteps: NextStep[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description="Ultracite turns on 910 rules across ESLint and ten plugins, sets up Prettier and Stylelint, and adds presets for 18 frameworks."
+  description="Ultracite turns on 913 rules across ESLint and ten plugins, sets up Prettier and Stylelint, and adds presets for 18 frameworks."
   faqs={faqs}
   lastModified={lastModified}
   title="Ultracite for ESLint — Strict ESLint, Prettier and Stylelint"
@@ -119,7 +119,7 @@ const nextSteps: NextStep[] = [
     name="ESLint"
     title="ESLint, Prettier and Stylelint, set up as one"
   >
-    Ultracite turns on 910 rules from ESLint and ten plugins, then sets up
+    Ultracite turns on 913 rules from ESLint and ten plugins, then sets up
     Prettier and Stylelint to match. Three short config files extend
     Ultracite’s, so the only rules you maintain are your own.
     <Fragment slot="note">
@@ -137,7 +137,7 @@ const nextSteps: NextStep[] = [
         Biome
       </a>
       <span aria-hidden="true">·</span>
-      <span>Checked against ESLint 10.14</span>
+      <span>Checked against ESLint 10.15</span>
     </Fragment>
     <ConfigFiles slot="visual" />
   </LandingHero>

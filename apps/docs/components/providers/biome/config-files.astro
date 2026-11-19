@@ -2,9 +2,9 @@
 // The biome.jsonc `ultracite init --linter biome` writes for a React and
 // Next.js app (rendered by lib/providers.ts, as on the homepage), with the
 // rules each preset turns on, and what the core preset sets besides rules.
-// Counts are from `biome rage --linter` with Biome 2.6.4 and Ultracite
-// 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes
-// it releases): core alone, then each preset added (React sets 20 rules, 3 of
+// Counts are from `biome rage --linter` with Biome 2.6.8 and Ultracite
+// 8.3.1 (recounted 2026-11-18 from main at 71744dd4, before it was published):
+// core alone, then each preset added (React sets 20 rules, 3 of
 // which core already has on).
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
@@ -75,10 +75,12 @@ const settings = [
       </dl>
     </div>
   </AnnotatedCode>
-  {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.6.4 printed
+  {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.6.8 printed
       it with `react` declared in package.json, as an app would: one diagnostic
       with its message, frame and first note, the other by its header, then
-      the summary. Re-run 2026-11-11 on Ultracite 8.2.0: unchanged. */}
+      the summary. Re-run 2026-11-18 on Ultracite 8.3.1: unchanged, apart from
+      Biome's own time, which is the quiet-machine figure from 2.6.4 (the
+      machine was busy for this run). */}
   <Terminal class="lg:col-span-5">
     <p class="text-panel-foreground mb-3 truncate">
       <span class="text-signal">$</span> npx ultracite fix

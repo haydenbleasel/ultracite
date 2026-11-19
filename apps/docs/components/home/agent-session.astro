@@ -3,7 +3,8 @@
 // Code's PostToolUse hook runs `ultracite fix --hook`, the 9 problems it
 // can't fix go back to the agent, and the next run is clean. The diagnostics
 // and timings are what Ultracite's Oxlint core + React presets report for this
-// component on an M1 Pro (diagnostics and timings rechecked with oxlint 1.90.0
+// component on an M1 Pro (diagnostics rechecked with oxlint 1.94.0 and oxfmt
+// 0.79.0 on 2026-11-18: unchanged; timings last rechecked with oxlint 1.90.0
 // and oxfmt 0.75.0 on 2026-11-11: `ultracite fix --hook` with a Write payload
 // on stdin, medians over 20 runs of 331 ms on the file as written (326 to 342)
 // and 329 ms on the fixed one (323 to 339), within noise of the figures shown).

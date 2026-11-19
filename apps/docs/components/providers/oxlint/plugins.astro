@@ -4,16 +4,16 @@ import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
 import SectionHeading from "../../home/section-heading.astro";
 
 // Rules set to "error" per preset (packages/cli/config/oxlint), Ultracite
-// 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases; jest and vitest set theirs in test-file overrides). Native presets run in Oxlint's Rust engine; the rest load ESLint
+// 8.3.1 (recounted 2026-11-18 from main at 71744dd4, before it was published; jest and vitest set theirs in test-file overrides, and the override in solid that turns a core rule off isn't counted). Native presets run in Oxlint's Rust engine; the rest load ESLint
 // plugins through Oxlint's JS plugin API.
 const native = [
   {
-    count: 474,
+    count: 475,
     description: "ESLint, TypeScript, Unicorn, imports, promises",
     name: "core",
   },
   { count: 106, description: "React, hooks and jsx-a11y", name: "react" },
-  { count: 63, description: "Vitest test files", name: "vitest" },
+  { count: 62, description: "Vitest test files", name: "vitest" },
   { count: 56, description: "Jest test files", name: "jest" },
   { count: 45, description: "Vue script blocks", name: "vue" },
   { count: 34, description: "jsx-a11y for Solid’s JSX", name: "solid" },
