@@ -23,6 +23,11 @@ const solid = [
     rules: {
       ...solidRules,
       ...jsxA11yRules,
+      // Solid's compiler assigns the variable passed to `ref`, which the
+      // core rule can't know, so it reports every `let el; <div ref={el} />`.
+      // solid/no-unassigned-vars is the same rule with `ref` counted as an
+      // assignment.
+      "no-unassigned-vars": "off",
     },
     settings: {
       // Accepts `for` as a label's target, which is what Solid writes.

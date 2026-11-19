@@ -71,10 +71,20 @@ const overrideRules = {
     "error",
     { checkComputedMemberAccess: true, checkVaryingBase: true },
   ],
+  // Also report two or more trailing optional parameters when the function
+  // has no options object yet, as in clamp(value, minimum = 0, maximum = 1).
+  // Off by default upstream. oxlint has no prefer-options-parameter, so this
+  // is ESLint-only.
+  "unicorn/prefer-options-parameter": [
+    "error",
+    { checkWithoutOptionsObject: true },
+  ],
   "unicorn/prefer-string-raw": "off",
   // Enforces Temporal over Date, but Temporal still lacks broad runtime
   // support; unicorn ships it off by default. Premature to enforce.
   "unicorn/prefer-temporal": "off",
+  // checkNestedTernaries (v80) stays off: it asks for the nested ternary
+  // that no-nested-ternary reports.
   "unicorn/prefer-ternary": [
     "error",
     "always",

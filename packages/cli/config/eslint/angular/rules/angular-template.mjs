@@ -43,6 +43,13 @@ const overrideRules = {
     "error",
     { allowBindToStyle: "dynamic", allowNgStyle: "dynamic" },
   ],
+  // Also report a unit written into the value, as in
+  // [style.height]="`${height()}em`", which [style.height.em]="height()"
+  // says without the string. Off by default upstream.
+  "@angular-eslint/template/prefer-style-binding": [
+    "error",
+    { bindUnits: true },
+  ],
 };
 
 const config = Object.assign(baseRules, overrideRules);

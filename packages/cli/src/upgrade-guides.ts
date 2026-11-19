@@ -165,6 +165,7 @@ const TYPE_CHECKED_RULES = {
     "no-unsafe-argument",
     "no-unsafe-assignment",
     "no-unsafe-call",
+    "no-unsafe-class-instance-assignment",
     "no-unsafe-enum-assignment",
     "no-unsafe-enum-comparison",
     "no-unsafe-member-access",

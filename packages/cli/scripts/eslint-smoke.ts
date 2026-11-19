@@ -810,6 +810,18 @@ export const foo: unknown = Foo;
           "jsx-a11y/no-autofocus",
         ],
       },
+      "src/search-field.tsx": {
+        // Solid's compiler assigns the variable passed to `ref`, so neither
+        // the core rule nor the plugin's version of it may report one.
+        content: `export const SearchField = () => {
+  let field: HTMLInputElement | undefined;
+
+  return <input ref={field} type="search" />;
+};
+`,
+        expect: [],
+        forbid: ["no-unassigned-vars", "solid/no-unassigned-vars"],
+      },
       "src/signup-form.tsx": {
         // The accessibility rules: an image with no alt text, a label with no
         // control and a click handler on a div.
