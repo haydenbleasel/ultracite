@@ -1700,7 +1700,7 @@ export default defineConfig({
     const store = cwdPath(
       "node_modules",
       ".pnpm",
-      "eslint-plugin-react-doctor@0.9.21",
+      "eslint-plugin-react-doctor@0.9.23",
       "node_modules"
     );
 
