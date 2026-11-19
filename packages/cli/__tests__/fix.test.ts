@@ -797,6 +797,31 @@ describe("fix", () => {
     }
   });
 
+  test("takes a JSON report with no diagnostics as a clean pass", () => {
+    const report =
+      '{ "diagnostics": [],\n  "number_of_files": 1,\n  "number_of_rules": 539\n}';
+
+    mockOxlintPasses([{ status: 0, stdout: report }]);
+
+    fix(["src/a.ts"], ["-f", "json"]);
+
+    expect(spawnedCommands()).toEqual(["oxlint", "oxfmt"]);
+  });
+
+  test("runs the second pass for a JSON report that has diagnostics", () => {
+    const report =
+      '{ "diagnostics": [{ "message": "x", "severity": "warning" }] }';
+
+    mockOxlintPasses([
+      { status: 0, stdout: report },
+      { status: 0, stdout: '{ "diagnostics": [] }' },
+    ]);
+
+    fix(["src/a.ts"], ["-f", "json"]);
+
+    expect(spawnedCommands()).toEqual(["oxlint", "oxlint", "oxfmt"]);
+  });
+
   test("fails with the check pass's exit code, not a fixing pass's", () => {
     mockOxlintPasses([{ status: 1 }, { status: 1 }, { status: 3 }]);
 
@@ -852,7 +877,7 @@ describe("fix", () => {
   test("runs the second Oxlint pass for warnings and for another reporter's output", () => {
     for (const stdout of [
       "src/a.ts:1:1: warning no-console\nFound 1 warning and 0 errors.",
-      '{ "diagnostics": [] }',
+      '<?xml version="1.0" encoding="utf-8"?><checkstyle version="4.3"></checkstyle>',
     ]) {
       mockOxlintPasses([{ status: 0, stdout }, { status: 0 }]);
 

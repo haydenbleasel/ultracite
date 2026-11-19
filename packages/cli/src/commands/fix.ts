@@ -1,6 +1,7 @@
 import process from "node:process";
 
 import { log } from "@clack/prompts";
+import { z } from "zod";
 
 import { runAgentFix } from "../agent-fix";
 import {
@@ -171,16 +172,48 @@ const OXLINT_CLEAN_LINE_RE =
 
 const LINE_BREAK_RE = /\r?\n/u;
 
+const isCleanLine = (line: string): boolean =>
+  line.trim() === "" || OXLINT_CLEAN_LINE_RE.test(line.trim());
+
+// The JSON reporter (`-f json`) prints one object. With nothing to report,
+// its `diagnostics` array is empty.
+const cleanJsonReportSchema = z.looseObject({
+  diagnostics: z.array(z.unknown()).length(0),
+});
+
+const isCleanJsonReport = (stdout: string): boolean => {
+  const text = stdout.trim();
+
+  if (!text.startsWith("{")) {
+    return false;
+  }
+
+  try {
+    return cleanJsonReportSchema.safeParse(JSON.parse(text)).success;
+  } catch {
+    return false;
+  }
+};
+
 // Exit code 0 alone isn't enough: warnings leave it at 0, and so does a
-// reporter chosen with `-f`, whose output isn't recognised here. Either gets
+// reporter chosen with `-f` whose output isn't recognised here. Either gets
 // the second pass, which prints as it always has.
-const reportedNothing = (result: SpawnSyncResult): boolean =>
-  result.status === 0 &&
-  [result.stdout ?? "", result.stderr ?? ""]
-    .flatMap((text) => text.split(LINE_BREAK_RE))
-    .every(
-      (line) => line.trim() === "" || OXLINT_CLEAN_LINE_RE.test(line.trim())
-    );
+const reportedNothing = (result: SpawnSyncResult): boolean => {
+  if (result.status !== 0) {
+    return false;
+  }
+
+  const stdout = result.stdout ?? "";
+  const stderr = result.stderr ?? "";
+
+  if (!stderr.split(LINE_BREAK_RE).every(isCleanLine)) {
+    return false;
+  }
+
+  return (
+    stdout.split(LINE_BREAK_RE).every(isCleanLine) || isCleanJsonReport(stdout)
+  );
+};
 
 // Print a captured run where `io` would have sent it.
 const replay = (result: SpawnSyncResult, io: FixIo): void => {
