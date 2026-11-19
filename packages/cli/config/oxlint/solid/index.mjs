@@ -8,10 +8,10 @@ import jsxA11yRules from "../react/jsx-a11y.mjs";
 // The rules that look at event handlers (click-events-have-key-events,
 // mouse-events-have-key-events, interactive-supports-focus,
 // no-static-element-interactions and no-noninteractive-element-interactions)
-// only know the camelCase names (`onClick`). They don't see Solid's
-// `on:click` or lowercase `onclick`, so they say nothing about an element
-// that only has those. They stay on: camelCase is what most Solid code
-// writes, and the other forms get checked once Oxlint knows them.
+// match `onClick` and lowercase `onclick`. They don't see Solid's
+// `on:click`, so they say nothing about an element that only has that. They
+// stay on: camelCase is what most Solid code writes, and `on:click` gets
+// checked once Oxlint knows it.
 export default defineConfig({
   plugins: ["jsx-a11y"],
   rules: {

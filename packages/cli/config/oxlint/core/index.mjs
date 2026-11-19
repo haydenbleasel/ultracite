@@ -614,13 +614,7 @@ export default defineConfig({
     "unicorn/prefer-dom-node-remove": "error",
     "unicorn/prefer-dom-node-text-content": "error",
     "unicorn/prefer-event-target": "error",
-    // Off until oxlint's fix is corrected: its suggestion, which
-    // `--fix-suggestions` and `--fix-dangerously` apply, rewrites
-    // `import { a } from "./x"; import { b } from "./y"; export { a, b };`
-    // to `export { a } from "./x";` and drops the export of `b`
-    // (https://github.com/oxc-project/oxc/issues/29318). The ESLint preset
-    // keeps the rule, whose fix is correct.
-    "unicorn/prefer-export-from": "off",
+    "unicorn/prefer-export-from": "error",
     "unicorn/prefer-global-this": "off",
     "unicorn/prefer-import-meta-properties": "error",
     "unicorn/prefer-includes": "error",

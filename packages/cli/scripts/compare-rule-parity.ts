@@ -42,10 +42,6 @@ const allowlist = new Map<string, string>([
     "typescript/require-await",
     "off in oxlint so type-aware runs don't report a function twice; see require-await",
   ],
-  [
-    "unicorn/prefer-export-from",
-    "off in oxlint until its suggestion fix stops dropping exports when one export statement re-exports from two modules; eslint-plugin-unicorn's fix is correct",
-  ],
 ]);
 
 // Base rules whose typescript/ twin reports different code, so one doesn't
