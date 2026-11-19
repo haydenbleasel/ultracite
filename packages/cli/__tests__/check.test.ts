@@ -6,6 +6,7 @@ import { log } from "@clack/prompts";
 
 import { check } from "../src/commands/check";
 import { UltraciteSetupError } from "../src/config-resolution";
+import { MIN_BUN_VERSION } from "../src/dependencies";
 import { resetBunCapabilityCache } from "../src/linters/bun";
 import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
@@ -887,11 +888,15 @@ describe("check", () => {
   test("fails with a setup error, and runs no lint script, when Bun has no bun lint", () => {
     resetBunCapabilityCache();
 
-    const mockSpawn = mock((_cmd: string, args: string[]) =>
-      args[0] === "--help"
-        ? { status: 0, stdout: BUN_HELP_WITHOUT_LINT }
-        : { status: 0, stdout: "$ next lint" }
-    );
+    const mockSpawn = mock((_cmd: string, args: string[]) => {
+      if (args[0] === "--help") {
+        return { status: 0, stdout: BUN_HELP_WITHOUT_LINT };
+      }
+
+      return args[0] === "--version"
+        ? { status: 0, stdout: "1.4.2\n" }
+        : { status: 0, stdout: "$ next lint" };
+    });
 
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
@@ -901,10 +906,40 @@ describe("check", () => {
     }));
 
     expect(() => check()).toThrow(UltraciteSetupError);
-    expect(() => check()).toThrow(/need Bun \d+\.\d+\.\d+ or later/u);
-    // Only `bun --help` ran, once: the answer is cached.
+    expect(() => check()).toThrow(
+      `which need Bun ${MIN_BUN_VERSION} or later. Install or upgrade Bun`
+    );
+    // `bun --help`, then `bun --version` for the message, once: the answer
+    // is cached.
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
       ["bun", "--help"],
+      ["bun", "--version"],
     ]);
+  });
+
+  // A release can be cut from the one before with a few fixes picked onto
+  // it, as Bun 1.4.5 was, so a Bun at the minimum can still lack bun lint.
+  // Telling it that it needs a version it already has would contradict
+  // itself.
+  test("says a Bun at the minimum has no bun lint instead of calling it too old", () => {
+    resetBunCapabilityCache();
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock((_cmd: string, args: string[]) => ({
+        status: 0,
+        stdout:
+          args[0] === "--version"
+            ? `${MIN_BUN_VERSION}\n`
+            : BUN_HELP_WITHOUT_LINT,
+      })),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "bun"),
+    }));
+
+    expect(() => check()).toThrow(
+      `The Bun provider runs \`bun lint\` and \`bun fmt\`, and Bun ${MIN_BUN_VERSION} has no \`bun lint\` with the \`--no-script\` flag Ultracite runs it with.`
+    );
+    expect(() => check()).not.toThrow(/or later/u);
   });
 });

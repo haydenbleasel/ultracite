@@ -1,3 +1,5 @@
+import { lt, valid } from "semver";
+
 import { UltraciteSetupError } from "../config-resolution";
 import { MIN_BUN_VERSION } from "../dependencies";
 import { spawnSync } from "../spawn-sync";
@@ -69,24 +71,53 @@ export const hasBunLint = (): boolean => {
   return help.startsWith(BUN_LINT_USAGE) && help.includes(NO_SCRIPT);
 };
 
-let bunCanLint: boolean | undefined;
+/** What `bun --version` prints, or null when Bun doesn't run. */
+export const readBunVersion = (): string | null => {
+  const result = spawnSync("bun", ["--version"], { stdio: "pipe" });
+  const version = String(result.stdout ?? "").trim();
+
+  return result.status === 0 && version !== "" ? version : null;
+};
+
+/**
+ * Whether a Bun without `bun lint` (see hasBunLint) is one to call too old.
+ * Only a version below MIN_BUN_VERSION is. A release can be cut from the one
+ * before with a few fixes picked onto it, as Bun 1.4.5 was, so a newer
+ * version can still lack the linter, and naming the minimum to a Bun that
+ * already meets it would contradict itself. A version semver can't read
+ * isn't called too old either.
+ */
+export const isBunTooOld = (version: string): boolean =>
+  valid(version) !== null && lt(version, MIN_BUN_VERSION);
+
+// The setup error for a Bun without `bun lint`. Both forms start the same
+// way, which the benchmark harness matches on.
+const missingBunLintMessage = (version: string | null): string =>
+  version === null || isBunTooOld(version)
+    ? `The Bun provider runs \`bun lint\` and \`bun fmt\`, which need Bun ${MIN_BUN_VERSION} or later. Install or upgrade Bun (\`bun upgrade\`) and try again; \`ultracite doctor\` checks the setup.`
+    : `The Bun provider runs \`bun lint\` and \`bun fmt\`, and Bun ${version} has no \`bun lint\` with the \`${NO_SCRIPT}\` flag Ultracite runs it with. Switch to a Bun build that has both and try again; \`ultracite doctor\` checks the setup.`;
+
+// Null when the Bun on PATH has `bun lint`, otherwise the setup error.
+let bunLintProblem: string | null | undefined;
 
 /**
  * Throw a setup error unless the Bun on PATH has `bun lint` and `bun fmt`.
- * An older Bun exits 1 on them, which would otherwise read as lint
- * problems. The answer is cached for the process.
+ * A Bun without them exits 1, which would otherwise read as lint problems.
+ * The answer is cached for the process.
  */
 export const assertBunCanLint = (): void => {
-  bunCanLint ??= hasBunLint();
+  if (bunLintProblem === undefined) {
+    bunLintProblem = hasBunLint()
+      ? null
+      : missingBunLintMessage(readBunVersion());
+  }
 
-  if (!bunCanLint) {
-    throw new UltraciteSetupError(
-      `The Bun provider runs \`bun lint\` and \`bun fmt\`, which need Bun ${MIN_BUN_VERSION} or later. Install or upgrade Bun (\`bun upgrade\`) and try again; \`ultracite doctor\` checks the setup.`
-    );
+  if (bunLintProblem !== null) {
+    throw new UltraciteSetupError(bunLintProblem);
   }
 };
 
 /** Forget the cached capability check (for tests). */
 export const resetBunCapabilityCache = (): void => {
-  bunCanLint = undefined;
+  bunLintProblem = undefined;
 };

@@ -10,6 +10,7 @@ import type { DiagnosticCheck } from "../src/commands/doctor";
 import {
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
+  MIN_BUN_VERSION,
 } from "../src/dependencies";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
@@ -1884,21 +1885,24 @@ export default defineConfig({
 });
 
 // A Bun project: `files` maps the project files that exist (relative to the
-// project root) to their contents, and `bunLint` is whether the Bun on PATH
-// has `bun lint`. node_modules holds ultracite and `installed`.
+// project root) to their contents, `bunLint` is whether the Bun on PATH has
+// `bun lint`, and `bunVersion` what it says its version is. node_modules holds
+// ultracite and `installed`.
 const mockBunProject = ({
   bunLint = true,
   files,
   installed = {},
+  bunVersion = bunLint ? "1.4.4-canary.1" : "1.4.4",
 }: {
   bunLint?: boolean;
   files: Record<string, string>;
   installed?: Record<string, string>;
+  bunVersion?: string;
 }) => {
   mock.module("../src/spawn-sync", () => ({
     spawnSync: mock((_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
       if (args[0] === "--version") {
-        return { status: 0, stdout: bunLint ? "1.4.4-canary.1\n" : "1.4.4\n" };
+        return { status: 0, stdout: `${bunVersion}\n` };
       }
 
       // Bun 1.4.4 has `bun fmt` but no `bun lint`.
@@ -2021,6 +2025,24 @@ describe("doctor for Bun", () => {
       ),
       status: "fail",
     });
+  });
+
+  // Bun 1.4.5 was cut from 1.4.4 with a few fixes picked onto it, and has no
+  // bun lint, so a version at the minimum doesn't prove the linter is there.
+  test("fails a Bun at the minimum without bun lint without calling it too old", () => {
+    mockBunProject({
+      bunLint: false,
+      bunVersion: MIN_BUN_VERSION,
+      files: bunProjectFiles,
+    });
+
+    const check = checkNamed("Bun installation");
+
+    expect(check?.status).toBe("fail");
+    expect(check?.message).toContain(
+      `Bun ${MIN_BUN_VERSION} has no \`bun lint\` with the \`--no-script\` flag`
+    );
+    expect(check?.message).not.toContain("too old");
   });
 
   test("warns when the oxfmt config still needs oxfmt installed", () => {

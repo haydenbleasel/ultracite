@@ -18,7 +18,7 @@ import type { InstalledPackage } from "../config-resolution";
 import { getConfiguredPlugins, pluginRuleSources } from "../configured-plugins";
 import { MIN_BUN_VERSION, toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
-import { hasBunLint } from "../linters/bun";
+import { hasBunLint, isBunTooOld, readBunVersion } from "../linters/bun";
 import { readCoreEnv } from "../linters/oxlint";
 import type { CoreEnv, EnvBlocker } from "../linters/oxlint";
 import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
@@ -760,12 +760,13 @@ const checkOxfmtConfig = (): DiagnosticCheck =>
 // ---------------------------------------------------------------------------
 
 // Bun isn't a dependency of the project, so it's checked by what it can do:
-// an older Bun has no `bun lint` (it reports a missing "lint" script), or
-// one without the `--no-script` flag Ultracite runs it with.
+// a Bun without `bun lint` reports a missing "lint" script, and an early
+// canary has no `--no-script` flag to run it with. Only a version below the
+// minimum is called too old (see isBunTooOld).
 const checkBunInstallation = (): DiagnosticCheck => {
-  const version = spawnSync("bun", ["--version"]);
+  const installed = readBunVersion();
 
-  if (version.status !== 0 || !version.stdout) {
+  if (installed === null) {
     return {
       message: `Bun is not installed — the Bun provider needs Bun ${MIN_BUN_VERSION} or later`,
       name: BUN_CHECK,
@@ -773,11 +774,11 @@ const checkBunInstallation = (): DiagnosticCheck => {
     };
   }
 
-  const installed = String(version.stdout).trim();
-
   if (!hasBunLint()) {
     return {
-      message: `Bun ${installed} is too old for the Bun provider, which needs Bun ${MIN_BUN_VERSION} or later — upgrade with \`bun upgrade\``,
+      message: isBunTooOld(installed)
+        ? `Bun ${installed} is too old for the Bun provider, which needs Bun ${MIN_BUN_VERSION} or later — upgrade with \`bun upgrade\``
+        : `Bun ${installed} has no \`bun lint\` with the \`--no-script\` flag the Bun provider runs it with: \`bun --help\` lists no \`lint\` command, or \`bun lint --help --all\` lists no \`--no-script\` — switch to a Bun build that has both`,
       name: BUN_CHECK,
       status: "fail",
     };

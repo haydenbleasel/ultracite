@@ -31,6 +31,10 @@ If the versions already line up, the stale rule usually comes from your own over
 
 `bun lint` is new in Bun 1.4.5 (1.4.4 has only `bun fmt`). An older Bun takes `lint` for a `package.json` script, and runs yours or fails with `Script not found "lint"`. Ultracite also runs both tools with `--no-script`, which some early canary builds of `bun lint` don't have. So Ultracite checks `bun --help` first, without running any script, and stops with this message. Upgrade Bun with `bun upgrade` (or the installer you used), then check with `npx ultracite doctor`, which reports the Bun it finds. In CI, raise the Bun version in your setup step, such as `bun-version` for `oven-sh/setup-bun`.
 
+## "Bun … has no `bun lint` with the `--no-script` flag Ultracite runs it with."
+
+Your Bun's version is new enough, but it can't run `bun lint` the way Ultracite does: `bun --help` lists no `lint` command, or `bun lint --help --all` lists no `--no-script` flag. Ultracite calls a Bun too old only when its version is below the minimum, because a version number doesn't settle it. A Bun release can be cut from the one before with only a few fixes picked onto it, and leave out the linter. Run `bun --help` to see the commands your Bun has, and switch to a build that lists `lint`. `npx ultracite doctor` reports the Bun it finds.
+
 ## "`bun lint` runs my `lint` script instead of linting."
 
 When `package.json` has a `lint` script, `bun lint` runs that script, and the same goes for `bun fmt` and a `fmt` script. That's Bun's behavior, so a `"lint": "next lint"` script means typing `bun lint` runs Next.js's linter. `ultracite check` and `ultracite fix` aren't affected: they always run Bun's own tools. `ultracite doctor` warns about such scripts.
