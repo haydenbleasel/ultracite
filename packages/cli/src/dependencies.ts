@@ -121,12 +121,11 @@ export const eslintCoreDevDependencies = {
   "prettier-plugin-tailwindcss":
     packageJson.devDependencies["prettier-plugin-tailwindcss"],
   stylelint: toolchainPeerRanges.stylelint,
-  // The generated stylelint config extends/uses these; `stylelint` alone
-  // cannot resolve them.
-  "stylelint-config-idiomatic-order":
-    packageJson.devDependencies["stylelint-config-idiomatic-order"],
+  // The Stylelint preset extends the standard config and loads the order
+  // plugin by name, and Stylelint resolves both from the project.
   "stylelint-config-standard":
     packageJson.devDependencies["stylelint-config-standard"],
+  "stylelint-order": packageJson.devDependencies["stylelint-order"],
 } satisfies Record<string, string>;
 
 // Extra ESLint devDependencies, keyed by the framework that needs them.
@@ -312,12 +311,15 @@ export const dependencyNamesByLinter = {
   // Only the Oxlint setup installs eslint-plugin-tsdoc, but it's an ESLint
   // plugin an ESLint config may load too, so ESLint setups don't prune it.
   // eslint-plugin-prettier and stylelint-prettier are what earlier versions
-  // installed to run Prettier inside ESLint and Stylelint, so switching
-  // linters still removes them.
+  // installed to run Prettier inside ESLint and Stylelint, and
+  // stylelint-config-idiomatic-order is where the Stylelint preset took its
+  // property order from before it held the list itself, so switching linters
+  // still removes them.
   eslint: new Set([
     ...eslintDevDependencyNames,
     "eslint-plugin-prettier",
     "eslint-plugin-tsdoc",
+    "stylelint-config-idiomatic-order",
     "stylelint-prettier",
   ]),
   oxlint: new Set([

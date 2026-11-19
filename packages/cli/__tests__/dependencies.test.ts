@@ -137,6 +137,17 @@ describe("ESLint dependencies", () => {
     }
   });
 
+  test("installs the Stylelint order plugin instead of the config that wrapped it", () => {
+    const core = Object.keys(eslintCoreDevDependencies);
+
+    expect(core).toContain("stylelint-order");
+    expect(core).toContain("stylelint-config-standard");
+    expect(core).not.toContain("stylelint-config-idiomatic-order");
+    expect(
+      dependencyNamesByLinter.eslint.has("stylelint-config-idiomatic-order")
+    ).toBe(true);
+  });
+
   test("pins every package instead of installing latest", () => {
     const versions = [
       ...Object.values(eslintCoreDevDependencies),

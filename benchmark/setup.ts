@@ -68,7 +68,7 @@ const extraDevDependencies = (provider: Provider) => {
   const names = [
     "storybook",
     "stylelint-config-standard",
-    "stylelint-config-idiomatic-order",
+    "stylelint-order",
     "stylelint-prettier",
   ];
 
@@ -250,9 +250,12 @@ export const prepareProject = (options: {
     delete packageJson.devDependencies.ultracite;
   }
 
+  // What init recorded wins: the extras carry this checkout's versions, and
+  // a `base` build's preset can need an older major (Stylelint 17 and
+  // stylelint-config-standard 40 before the move to Stylelint 18).
   packageJson.devDependencies = {
-    ...packageJson.devDependencies,
     ...extraDevDependencies(provider),
+    ...packageJson.devDependencies,
   };
   packageJson.dependencies = {
     ...packageJson.dependencies,

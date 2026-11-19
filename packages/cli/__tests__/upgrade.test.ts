@@ -258,7 +258,15 @@ describe("getToolchainPackages", () => {
 
     expect(packages).toContain("eslint@^10.9.0");
     expect(packages).toContain("prettier@^3.5.3");
-    expect(packages).toContain("stylelint@^17.0.0");
+    expect(packages).toContain("stylelint@^18.0.0");
+    // The Stylelint preset loads these two by name from the project.
+    expect(packages).toContain("stylelint-config-standard@^41.0.0");
+    expect(packages).toContain("stylelint-order@^8.1.3");
+    expect(
+      packages.some((pkg) =>
+        pkg.startsWith("stylelint-config-idiomatic-order@")
+      )
+    ).toBe(false);
     // Newer presets can require plugins an older setup never installed.
     expect(packages.some((pkg) => pkg.startsWith("eslint-plugin-jsdoc@"))).toBe(
       true

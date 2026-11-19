@@ -2,6 +2,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 
 import { ignorePatterns } from "../shared/ignores.mjs";
+import { propertyOrder } from "./property-order.mjs";
 
 // Stylelint imports a bare `customSyntax` name from its own install location,
 // which cannot see the project's packages under isolated installs (pnpm, bun).
@@ -59,7 +60,7 @@ const tailwindFunctionPattern = `/(^|[^\\w-])(${tailwindFunctions.join("|")})\\(
 
 /** @type {import('stylelint').Config} */
 const config = {
-  extends: ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
+  extends: ["stylelint-config-standard"],
   // ignoreFiles globs are resolved against the directory of the config file
   // that stylelint loads, which is the project root for the generated
   // `export { default } from "ultracite/stylelint"` config. Directory
@@ -115,6 +116,8 @@ const config = {
         "function-no-unknown": null,
         // `//` line comments are valid Sass.
         "no-invalid-double-slash-comments": null,
+        // The same unresolved Sass values don't parse as CSS values.
+        "value-no-invalid": null,
       },
     },
     {
@@ -133,9 +136,14 @@ const config = {
         "media-query-no-invalid": null,
         // `//` line comments are valid Less.
         "no-invalid-double-slash-comments": null,
+        // The same unresolved Less values don't parse as CSS values.
+        "value-no-invalid": null,
       },
     },
   ],
+  // order/properties-order, which sorts declarations into the order in
+  // property-order.mjs.
+  plugins: ["stylelint-order"],
   rules: {
     "at-rule-no-unknown": [
       true,
@@ -205,14 +213,20 @@ const config = {
       },
     ],
     "no-descending-specificity": null,
+    // The listed properties first, in that order, then every other property
+    // alphabetically. These are the options stylelint-config-idiomatic-order
+    // set.
+    "order/properties-order": [
+      propertyOrder,
+      {
+        unspecified: "bottomAlphabetical",
+      },
+    ],
     // The *-layout-mappings rules (property, unit, value-keyword) are left
     // off: they reject every physical property, unit and keyword (margin-left,
     // vw, float: left) and can only autofix with a per-project
     // languageOptions.directionality setting.
     "relative-selector-nesting-notation": "explicit",
-    "selector-no-deprecated": true,
-    "selector-no-invalid": true,
-    "selector-no-unmatchable": true,
     "selector-pseudo-class-no-unknown": [
       true,
       {

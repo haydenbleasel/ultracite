@@ -1538,7 +1538,7 @@ export default defineConfig({
     mockInstalledVersions({
       eslint: "10.9.1",
       prettier: "2.8.8",
-      stylelint: "17.2.0",
+      stylelint: "18.0.0",
     });
 
     expect(versionCheck("eslint", "eslint")).toMatchObject({ status: "pass" });
@@ -1549,6 +1549,22 @@ export default defineConfig({
     expect(versionCheck("eslint", "stylelint")).toMatchObject({
       status: "pass",
     });
+  });
+
+  test("fails Stylelint 17, which the preset's packages no longer support", () => {
+    mockInstalledVersions({
+      eslint: "10.9.1",
+      prettier: "3.8.1",
+      stylelint: "17.16.0",
+    });
+
+    expect(versionCheck("eslint", "stylelint")).toMatchObject({
+      message: expect.stringContaining("stylelint 17.16.0 is older"),
+      status: "fail",
+    });
+    expect(versionCheck("eslint", "stylelint")?.message).toContain(
+      "(^18.0.0) — run `ultracite upgrade`"
+    );
   });
 
   test("fails eslint releases that can't load the presets", () => {

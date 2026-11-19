@@ -6,9 +6,17 @@
  * without their custom syntax), false positives on idiomatic Tailwind CSS v4,
  * and ignore patterns that never apply are caught before release. The
  * Tailwind, SCSS and Less fixtures must lint clean; the other files prove the
- * CSS rules run and that build output is skipped.
+ * CSS rules run, that build output is skipped, and that `--fix` sorts
+ * declarations into the preset's property order.
  */
-import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  symlink,
+  writeFile,
+} from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
@@ -18,6 +26,8 @@ interface FixtureFile {
   content: string;
   /** Rule ids that must report. Empty means the file must lint clean. */
   expect: string[];
+  /** What `--fix` must leave in the file. */
+  fixed?: string;
   /** The file must be skipped by the preset's ignoreFiles. */
   ignored?: boolean;
 }
@@ -118,6 +128,55 @@ $sizes: (
   "src/app/(marketing)/page.css": {
     content: typo,
     expect: ["property-no-unknown"],
+  },
+  // The order stylelint-config-idiomatic-order gave: `all`, positioning,
+  // display and the box model, then every other property alphabetically. A
+  // plugin that reports the order without fixing it (stylelint-order 6 on
+  // Stylelint 18) fails here.
+  "src/order.css": {
+    content: `.card {
+  color: red;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
+  background: white;
+  border: 1px solid;
+  width: 10px;
+  user-select: none;
+  top: 0;
+  display: flex;
+  padding: 0;
+  position: absolute;
+  all: unset;
+
+  & .title {
+    font-size: 2rem;
+    overflow: hidden;
+  }
+}
+`,
+    expect: ["order/properties-order"],
+    fixed: `.card {
+  all: unset;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  display: flex;
+  width: 10px;
+  padding: 0;
+  border: 1px solid;
+  margin: 0;
+  background: white;
+  color: red;
+  cursor: pointer;
+  user-select: none;
+
+  & .title {
+    overflow: hidden;
+    font-size: 2rem;
+  }
+}
+`,
   },
   "src/tailwind.css": {
     content: `@import "tailwindcss";
@@ -272,6 +331,30 @@ const main = async () => {
         }
       }
     }
+
+    const fixable = Object.entries(files).flatMap(([relative, file]) =>
+      "fixed" in file ? [{ fixed: file.fixed, relative }] : []
+    );
+
+    await stylelint.lint({
+      cwd: root,
+      files: fixable.map(({ relative }) => relative),
+      fix: true,
+    });
+
+    const fixedContents = await Promise.all(
+      fixable.map(({ relative }) =>
+        readFile(path.join(root, relative), "utf-8")
+      )
+    );
+
+    for (const [index, { fixed, relative }] of fixable.entries()) {
+      if (fixedContents[index] !== fixed) {
+        failures.push(
+          `${relative}: --fix left\n${fixedContents[index]}\nexpected\n${fixed}`
+        );
+      }
+    }
   } finally {
     await rm(root, { force: true, recursive: true });
   }
@@ -286,7 +369,9 @@ const main = async () => {
     process.exit(1);
   }
 
-  console.log("✓ stylelint lints CSS, Tailwind v4, SCSS and Less");
+  console.log(
+    "✓ stylelint lints CSS, Tailwind v4, SCSS and Less, and sorts properties"
+  );
 };
 
 await main();
