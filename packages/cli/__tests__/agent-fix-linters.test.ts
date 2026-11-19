@@ -229,7 +229,9 @@ describe("agent-fix linter adapters", () => {
     expect(jsdoc.help).toContain("JSDoc comments");
     expect(jsdoc.url).toContain("eslint-plugin-jsdoc");
     expect(tsdoc.help).toContain("TSDoc standard");
-  });
+    // Loading four real plugins takes about 20 seconds on a cold Windows
+    // runner, well past the default five.
+  }, 60_000);
 
   test("oxlint adapter loads JS plugins from the config that lints the file", () => {
     // Oxlint resolves `jsPlugins` from the config file. This one sits where
