@@ -71,6 +71,9 @@ const groups: CoverageRow[] = [
     description: "Rules still in development",
     enabled: 1,
     name: "Nursery",
+    // More than twice the next group since Biome 2.6.5, so on the shared
+    // scale it flattened every other bar.
+    offScale: true,
   },
 ];
 
@@ -86,7 +89,7 @@ const fixes = [
 ---
 
 <Coverage
-  caption="Biome 2.6.8 and Ultracite 8.3.1, counted with `biome rage --linter`. Groups are drawn to one scale. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
+  caption="Biome 2.6.8 and Ultracite 8.3.1, counted with `biome rage --linter`. Groups are drawn to one scale, except Nursery, which is more than twice the size of the next and runs off the end. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
   id="bi-rules"
   notes={[
     {

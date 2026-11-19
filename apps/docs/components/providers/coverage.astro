@@ -15,6 +15,13 @@ export interface CoverageRow {
   /** Set the name in monospace, for a plugin name. */
   mono?: boolean;
   name: string;
+  /**
+   * Leave this row out of the shared scale and draw it across the full track,
+   * fading out at the end. For a group so much larger than the rest that
+   * scaling to it would flatten every other bar, such as rules still in
+   * development. Say so in the caption.
+   */
+  offScale?: boolean;
 }
 
 export interface CoverageStat {
@@ -50,7 +57,11 @@ const {
 } = Astro.props;
 
 const showDefaults = rows.some((row) => row.defaults > 0);
-const scale = Math.max(...rows.map((row) => row.available));
+
+const scale = Math.max(
+  ...rows.filter((row) => !row.offScale).map((row) => row.available)
+);
+
 const percent = (count: number, of: number): string => `${(count / of) * 100}%`;
 
 // Four tiles a row from small screens, eight at most on large ones.
@@ -127,8 +138,16 @@ const tileColumns =
               </p>
               <div class="h-7">
                 <div
-                  class="ring-foreground/15 flex h-full overflow-hidden rounded-[3px] ring-1 ring-inset"
-                  style={{ width: percent(row.available, scale) }}
+                  class:list={[
+                    "ring-foreground/15 flex h-full overflow-hidden rounded-[3px] ring-1 ring-inset",
+                    row.offScale &&
+                      "[mask-image:linear-gradient(to_right,black_70%,transparent)]",
+                  ]}
+                  style={{
+                    width: row.offScale
+                      ? "100%"
+                      : percent(row.available, scale),
+                  }}
                 >
                   {row.defaults > 0 && (
                     <span
