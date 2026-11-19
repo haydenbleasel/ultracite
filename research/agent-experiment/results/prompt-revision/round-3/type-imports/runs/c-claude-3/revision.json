@@ -1,0 +1,13 @@
+{
+  "runId": "c-claude-3",
+  "mirrorRevision": "v5",
+  "finalMessage": "I left both issues unchanged. The `require()` on line 38 sits inside the `if (process.env.__NEXT_I18N_SUPPORT)` branch, so the shared i18n module only loads when i18n support is enabled. With i18n off, the bundler can drop that module from the client bundle.\n\nEach way of clearing the rules breaks something:\n\n- **Static `import` at the top of the file:** both rules ask for this, but it makes the module load every time, even with i18n off. That conflicts with your rule against hoisting a conditional load into a static import.\n- **Dynamic `import()`:** this returns a Promise. `normalizeLocalePath` would then have to become async, which changes its signature (`typeof Fn`) and its synchronous behavior for every caller.\n\nA proper fix would mean either making all callers async, or accepting a static import and relying on the bundler to tree-shake by the env flag. Both are design decisions to make elsewhere, not a lint fix in this file.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

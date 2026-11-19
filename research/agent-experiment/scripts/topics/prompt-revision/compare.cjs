@@ -3,7 +3,10 @@
 // the prompt of their day. There are two rounds of revised runs, each with its own prompt text:
 // round one in results/prompt-revision/<base>/runs/ (five subjects), and round two, after three
 // lines of the prompt were reworded, in results/prompt-revision/round-2/<base>/runs/ (three of
-// the five). A run's meta.json records the hash of the prompt.ts it used.
+// the five), and round three (2026-11-18), after the evasion line was reworded and a line about
+// lazy loads added, in results/prompt-revision/round-3/<base>/runs/ (b-ox again, and one subject
+// each from the nested-ternaries and type-imports topics, which rounds one and two didn't run).
+// A run's meta.json records the hash of the prompt.ts it used.
 //
 // Usage: node scripts/topics/prompt-revision/compare.cjs
 //   -> results/prompt-revision/results.json and tables.md
@@ -26,6 +29,8 @@ const RESULTS = join(HERE, "results");
 const OUT = join(RESULTS, "prompt-revision");
 const AGENTS = ["claude", "codex"];
 const LABELS = { claude: "Claude Code", codex: "Codex" };
+
+const SIDES = ["old", "new", "round2", "round3"];
 
 const readJson = (file) => JSON.parse(readFileSync(file, "utf8"));
 
@@ -107,6 +112,43 @@ const SUBJECTS = [
       m.autoApproach === "deleted the dead code" &&
       m.behavior?.verdict === "identical",
   },
+  // Round three only.
+  {
+    base: "nested-ternaries",
+    subject: "c",
+    title:
+      "c, a nested ternary with a counter in one branch (Astro's `getConfigAlias`)",
+    linter: "Oxlint core + react, `no-nested-ternary`",
+    retryLoop: true,
+    question:
+      "Is the ternary still rewritten, with behaviour kept and nothing left for review?",
+    outcome: (m) => m.final?.response ?? "no verdict",
+    detail: (m) => m.final?.outcome ?? "",
+    detailLabel: "Edit",
+    cleared: (m) => m.ultraciteOutcome?.remaining === 0,
+    good: (m) =>
+      /behaviour kept/.test(m.final?.response ?? "") &&
+      m.final?.leftForReview === "none" &&
+      m.ultraciteOutcome?.remaining === 0,
+  },
+  {
+    base: "type-imports",
+    subject: "c",
+    title:
+      "c, a `require` inside a build-flag branch (Next.js's client `normalizeLocalePath`)",
+    linter:
+      "Oxlint core, `node/global-require` and `unicorn/prefer-module` (and, before 6c351c5a, `consistent-type-imports`)",
+    retryLoop: true,
+    question:
+      "Does the i18n module still load only when the flag is set (the topic's oracle, in its three modes)?",
+    outcome: (m) => m.final?.response ?? "no verdict",
+    detail: (m) => m.final?.outcome ?? "",
+    detailLabel: "Edit",
+    cleared: (m) => m.ultraciteOutcome?.remaining === 0,
+    // The oracle's verdict on the final file, as the base topic words it: a static import is
+    // "behaviour changed in repo, kept, elided (wrong)".
+    good: (m) => !/behaviour changed|\(wrong\)/.test(m.final?.response ?? ""),
+  },
 ];
 
 function runIds(dir, subject) {
@@ -156,6 +198,24 @@ function row(dir, id, spec, side) {
     wallSeconds: m.wallSeconds,
     ultraciteOutro: m.ultraciteOutcome?.outro ?? `${derivedOutro()} (derived)`,
     promptTsSha256: meta.ultracite?.promptTsSha256 ?? null,
+    // Added with round three, for every run that records them.
+    issuesHandedOver: given,
+    leftForReviewRules:
+      m.final?.leftForReviewRules ??
+      (m.attempts ?? []).at(-1)?.leftForReviewRules ??
+      null,
+    leftForReviewLine: revision?.leftForReviewLine ?? null,
+    mirrorRevision: meta.ultracite?.mirrorRevision ?? null,
+    // Tool calls named Bash in a Claude run's session logs (null where the measure has no list).
+    bashCalls:
+      m.agent === "claude" &&
+      (m.attempts ?? []).every((a) => Array.isArray(a.session?.toolCalls))
+        ? (m.attempts ?? []).reduce(
+            (n, a) =>
+              n + a.session.toolCalls.filter((t) => t === "Bash").length,
+            0
+          )
+        : null,
     // The agent ended its message with a "Left for review:" line that lists no issue.
     leftForReviewNoneLine:
       revision !== null &&
@@ -174,10 +234,12 @@ const tally = (rows, key) => {
 const results = {
   generatedBy: "scripts/topics/prompt-revision/compare.cjs",
   date: "2026-11-11",
+  round3Date: "2026-11-18",
   subjects: SUBJECTS.map((spec) => {
     const oldDir = join(RESULTS, spec.base, "runs");
     const newDir = join(OUT, spec.base, "runs");
     const round2Dir = join(OUT, "round-2", spec.base, "runs");
+    const round3Dir = join(OUT, "round-3", spec.base, "runs");
     const sides = {
       old: runIds(oldDir, spec.subject).map((id) =>
         row(oldDir, id, spec, "old")
@@ -188,11 +250,14 @@ const results = {
       round2: runIds(round2Dir, spec.subject).map((id) =>
         row(round2Dir, id, spec, "round2")
       ),
+      round3: runIds(round3Dir, spec.subject).map((id) =>
+        row(round3Dir, id, spec, "round3")
+      ),
     };
     const byAgent = {};
     for (const agent of AGENTS) {
       byAgent[agent] = {};
-      for (const side of ["old", "new", "round2"]) {
+      for (const side of SIDES) {
         const rows = sides[side].filter((r) => r.agent === agent);
         byAgent[agent][side] = {
           runs: rows.length,
@@ -203,6 +268,9 @@ const results = {
           relintClear: rows.filter((r) => r.relintClear).length,
           retried: rows.filter((r) => r.attempts > 1).length,
           timedOut: rows.filter((r) => r.timedOut).length,
+          bashCalls: rows.some((r) => r.bashCalls !== null)
+            ? rows.reduce((n, r) => n + (r.bashCalls ?? 0), 0)
+            : null,
           outcomes: tally(rows, "outcome"),
         };
       }
@@ -216,15 +284,23 @@ const results = {
       question: spec.question,
       rounds: {
         old: "the subject's own topic, with the prompt of its day",
-        new: "round one: the prompt reworded on 2026-11-11",
+        new:
+          sides.new.length > 0
+            ? "round one: the prompt reworded on 2026-11-11"
+            : "not run",
         round2:
           sides.round2.length > 0
             ? "round two: three lines of that prompt reworded again, 2026-11-12"
+            : "not run",
+        round3:
+          sides.round3.length > 0
+            ? "round three: the prompt at 6a8d57fa (the evasion line reworded, a lazy-load line added), 2026-11-18"
             : "not run",
       },
       promptTsSha256: {
         new: [...new Set(sides.new.map((r) => r.promptTsSha256))],
         round2: [...new Set(sides.round2.map((r) => r.promptTsSha256))],
+        round3: [...new Set(sides.round3.map((r) => r.promptTsSha256))],
       },
       byAgent,
       runs: sides,
@@ -244,20 +320,20 @@ const cell = (text) =>
 const lines = [
   "# Prompt revision: tables",
   "",
-  'Generated by `scripts/topics/prompt-revision/compare.cjs` from `results.json`. See REPORT.md for method and caveats. "Before" is the subject\'s committed runs in its own topic, "round one" is this topic\'s first runs, and "round two" is the runs after three prompt lines were reworded again (three subjects only). Four runs per cell.',
+  'Generated by `scripts/topics/prompt-revision/compare.cjs` from `results.json`. See REPORT.md for method and caveats. "Before" is the subject\'s committed runs in its own topic, "round one" is this topic\'s first runs, and "round two" is the runs after three prompt lines were reworded again (three subjects only). "Round three" is the runs of 2026-11-18, with the prompt at 6a8d57fa (three subjects, two of them not run in rounds one and two). Four runs per cell.',
   "",
   "## Runs with the right result",
   "",
-  "| Subject | Agent | Before | Round one | Round two |",
-  "| --- | --- | --- | --- | --- |",
+  "| Subject | Agent | Before | Round one | Round two | Round three |",
+  "| --- | --- | --- | --- | --- | --- |",
 ];
 const of = (side, key) =>
   side.runs > 0 ? `${side[key]} of ${side.runs}` : "not run";
 for (const s of results.subjects) {
   for (const agent of AGENTS) {
-    const { old, new: now, round2 } = s.byAgent[agent];
+    const { old, new: now, round2, round3 } = s.byAgent[agent];
     lines.push(
-      `| ${cell(s.title)} | ${LABELS[agent]} | ${of(old, "good")} | ${of(now, "good")} | ${of(round2, "good")} |`
+      `| ${cell(s.title)} | ${LABELS[agent]} | ${of(old, "good")} | ${of(now, "good")} | ${of(round2, "good")} | ${of(round3, "good")} |`
     );
   }
 }
@@ -265,17 +341,22 @@ lines.push(
   "",
   "## Left for review, re-lint clear, retries",
   "",
-  '| Subject | Agent | Round | Left for review | Re-lint clear | Retried | Ends "Left for review:" with nothing left |',
-  "| --- | --- | --- | --- | --- | --- | --- |"
+  '| Subject | Agent | Round | Left for review | Re-lint clear | Retried | Ends "Left for review:" with nothing left | Bash calls (Claude) |',
+  "| --- | --- | --- | --- | --- | --- | --- | --- |"
 );
-const ROUND_NAMES = { old: "before", new: "round one", round2: "round two" };
+const ROUND_NAMES = {
+  old: "before",
+  new: "round one",
+  round2: "round two",
+  round3: "round three",
+};
 for (const s of results.subjects) {
   for (const agent of AGENTS) {
-    for (const side of ["old", "new", "round2"]) {
+    for (const side of SIDES) {
       const c = s.byAgent[agent][side];
       if (c.runs === 0) continue;
       lines.push(
-        `| ${s.base} ${s.subject} | ${LABELS[agent]} | ${ROUND_NAMES[side]} | ${of(c, "leftForReview")} | ${of(c, "relintClear")} | ${c.retried} | ${side === "old" ? "not read" : of(c, "saidLeftForReviewNone")} |`
+        `| ${s.base} ${s.subject} | ${LABELS[agent]} | ${ROUND_NAMES[side]} | ${of(c, "leftForReview")} | ${of(c, "relintClear")} | ${c.retried} | ${side === "old" ? "not read" : of(c, "saidLeftForReviewNone")} | ${agent === "claude" ? (c.bashCalls ?? "not recorded") : "–"} |`
       );
     }
   }
@@ -287,13 +368,13 @@ for (const s of results.subjects) {
     "",
     `${s.title}. ${s.linter}. ${s.question}`,
     "",
-    "| Run | Outcome | Edit or silencing | Left for review | Attempts | Seconds | Ultracite's summary |",
-    "| --- | --- | --- | --- | --- | --- | --- |"
+    "| Run | Issues handed over | Outcome | Edit or silencing | Left for review | Attempts | Seconds | Ultracite's summary |",
+    "| --- | --- | --- | --- | --- | --- | --- | --- |"
   );
-  for (const side of ["old", "new", "round2"]) {
+  for (const side of SIDES) {
     for (const r of s.runs[side]) {
       lines.push(
-        `| ${ROUND_NAMES[side]} ${r.runId} | ${cell(r.outcome)} | ${cell(r.detail)} | ${r.leftForReview} | ${r.attempts}${r.timedOut ? " (timed out)" : ""} | ${r.wallSeconds} | ${cell(r.ultraciteOutro)} |`
+        `| ${ROUND_NAMES[side]} ${r.runId} | ${r.issuesHandedOver} | ${cell(r.outcome)} | ${cell(r.detail)} | ${r.leftForReview}${r.leftForReviewRules?.length ? ` (${cell(r.leftForReviewRules.join(", "))})` : ""} | ${r.attempts}${r.timedOut ? " (timed out)" : ""} | ${r.wallSeconds} | ${cell(r.ultraciteOutro)} |`
       );
     }
   }
@@ -303,7 +384,7 @@ console.log(
   results.subjects
     .map(
       (s) =>
-        `${s.base} ${s.subject}: ${AGENTS.map((a) => `${a} ${s.byAgent[a].old.good}/${s.byAgent[a].old.runs} -> ${s.byAgent[a].new.good}/${s.byAgent[a].new.runs} -> ${s.byAgent[a].round2.good}/${s.byAgent[a].round2.runs}`).join(", ")}`
+        `${s.base} ${s.subject}: ${AGENTS.map((a) => `${a} ${s.byAgent[a].old.good}/${s.byAgent[a].old.runs} -> ${s.byAgent[a].new.good}/${s.byAgent[a].new.runs} -> ${s.byAgent[a].round2.good}/${s.byAgent[a].round2.runs} -> ${s.byAgent[a].round3.good}/${s.byAgent[a].round3.runs}`).join(", ")}`
     )
     .join("\n")
 );

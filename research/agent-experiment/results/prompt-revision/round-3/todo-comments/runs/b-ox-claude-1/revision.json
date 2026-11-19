@@ -1,0 +1,12 @@
+{
+  "runId": "b-ox-claude-1",
+  "mirrorRevision": "v5",
+  "finalMessage": "I made no change. Issue 1 is left for review.\n\nThe TODO at line 323 is still true. `prunePaths` only calls the callbacks in `pruneMap`. It never calls the dispose callbacks in `disposeMap` for the paths it prunes, which is exactly what the comment says is missing. That leaves two ways to clear the warning, and neither fits a lint fix:\n\n- **Delete or reword the comment.** This hides a known gap. It's the kind of disguise the rules rule out, and the reminder would be lost.\n- **Do the TODO.** That means calling `this.disposeMap.get(path)?.(this.dataMap.get(path))` for each path before its prune callback. Dispose callbacks can return a promise, so doing it properly means making `prunePaths` async and awaiting them. That changes both its signature and what it does at runtime, which nobody has asked for here.\n\nThe real fix is to build that dispose step, the async version above, as its own change. It needs a check of every caller of `prunePaths`, because they would then need to await it. Once it's built, the TODO can go.\n\nLeft for review: 1",
+  "leftForReviewLine": "Left for review: 1",
+  "leftForReviewIssues": [
+    1
+  ],
+  "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

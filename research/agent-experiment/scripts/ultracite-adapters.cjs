@@ -54,10 +54,11 @@ const wholeFile = (file) => readFileSync(join(AGENT_FIX, file), "utf8");
 
 const SLICES = {
   // runPiped and parseJsonOutput: how each linter is spawned and its JSON read.
+  // From v5 on the slice starts at PipedRun, so it covers runPipedCommand too (af73526d).
   "linters.ts runPiped": () =>
     sourceSlice(
       "linters.ts",
-      "const runPiped = ",
+      revision() === "v5" ? "interface PipedRun {" : "const runPiped = ",
       "const toTargets = (files: string[], fallback: string): string[] =>\n  files.length > 0 ? files : [fallback];"
     ),
   // toOxlintRuleName through the Oxlint adapter (parser, pass, verify).
@@ -181,11 +182,26 @@ const EXPECTED = {
 //     the harness passes (none, `.`, or one .ts file) the result is the same as before.
 // The rest of v4 is v3's (diff.ts, index.ts and run-agent.ts haven't changed since 9743dfcb).
 // v1, v2 and v3 are unchanged: no code path of theirs reads anything v4 adds.
-const revision = () => process.env.ULTRACITE_MIRROR ?? "v1";
-// v2, v3 and v4 share every change v2 made, except where v3 differs (above).
-const atLeastV2 = () => ["v2", "v3", "v4"].includes(revision());
-// v3 and v4 share every change v3 made.
-const atLeastV3 = () => ["v3", "v4"].includes(revision());
+// "v5" (added with round three of the prompt-revision topic, which selects it) is the agent-fix
+// code at 10153e7d. It is v4 with one change, by af73526d ("Settle Oxlint fixes in one run"):
+//   - linters.ts (runPiped and Oxlint): runPipedCommand returns the exit code with the output, and
+//     runOxlintPass runs its fix pass (`oxlint --fix`, or `--fix-dangerously`) a second time when
+//     the first exits non-zero, that is, when it still reports something. Both go before oxfmt.
+//     The "linters.ts runPiped" slice starts at the PipedRun interface for v5, so it covers
+//     runPipedCommand; for earlier revisions it starts where it always did.
+// The rest of v5 is v4's (diff.ts, index.ts, run-agent.ts and linter-args.ts haven't changed since
+// 60a16471). prompt.ts and agents.ts changed too (6a8d57fa, af73526d's comment); neither is
+// mirrored: run-one.mjs imports the prompt and checks the agent arguments against agents.ts.
+// v1 to v4 are unchanged: no code path of theirs reads anything v5 adds.
+function revision() {
+  return process.env.ULTRACITE_MIRROR ?? "v1";
+}
+// v2 to v5 share every change v2 made, except where v3 differs (above).
+const atLeastV2 = () => ["v2", "v3", "v4", "v5"].includes(revision());
+// v3, v4 and v5 share every change v3 made.
+const atLeastV3 = () => ["v3", "v4", "v5"].includes(revision());
+// v4 and v5 share every change v4 made.
+const atLeastV4 = () => ["v4", "v5"].includes(revision());
 
 const EXPECTED_V2 = {
   ...EXPECTED,
@@ -217,14 +233,24 @@ const EXPECTED_V4 = {
   "linter-args.ts toStylelintTargets":
     "d13e2b6c6d07eb5bf556ca2b8e81175184d7e8201fda428cf0d62122fcb7fd9e",
 };
+// The slices at 10153e7d (af73526d since 60a16471).
+const EXPECTED_V5 = {
+  ...EXPECTED_V4,
+  "linters.ts runPiped":
+    "fe0e4b845516e65a9aa76d8be226786ae104d5bde9226879b225523026b60b8f",
+  "linters.ts oxlint":
+    "62f78fa028964869cc917c9f7947ef5d22e3793c011c9c33d4e6ef6f0905046d",
+};
 const expectedHashes = () =>
-  revision() === "v4"
-    ? EXPECTED_V4
-    : revision() === "v3"
-      ? EXPECTED_V3
-      : revision() === "v2"
-        ? EXPECTED_V2
-        : EXPECTED;
+  revision() === "v5"
+    ? EXPECTED_V5
+    : revision() === "v4"
+      ? EXPECTED_V4
+      : revision() === "v3"
+        ? EXPECTED_V3
+        : revision() === "v2"
+          ? EXPECTED_V2
+          : EXPECTED;
 
 /**
  * Hashes every mirrored slice. `strict` (a new run) throws when one differs from EXPECTED;
@@ -293,7 +319,7 @@ const biomeBin = lib.tools.biomeBin;
 // linters.ts PIPED_MAX_BUFFER and runPiped: linters exit non-zero while diagnostics remain, so only a
 // spawn failure or a signal is an error.
 const PIPED_MAX_BUFFER = 512 * 1024 * 1024;
-function runPiped(label, bin, args, cwd) {
+function runPipedCommand(label, bin, args, cwd) {
   const result = spawnSync(process.execPath, [bin, ...args], {
     cwd,
     encoding: "utf8",
@@ -307,8 +333,12 @@ function runPiped(label, bin, args, cwd) {
       `${label} was killed by signal ${result.signal ?? "unknown"}`
     );
   }
-  return String(result.stdout ?? "");
+  return { status: result.status, stdout: String(result.stdout ?? "") };
 }
+// linters.ts runPiped: the output alone. (Until v5 this was the whole function; v5's
+// runPipedCommand, above, also returns the exit code.)
+const runPiped = (label, bin, args, cwd) =>
+  runPipedCommand(label, bin, args, cwd).stdout;
 
 const STDERR_TAIL_LENGTH = 500;
 function parseJsonOutput(label, stdout) {
@@ -362,7 +392,7 @@ const JS_PLUGIN_PACKAGES_V4 = new Map([
   ["tsdoc", "eslint-plugin-tsdoc"],
 ]);
 const jsPluginPackageMap = () =>
-  revision() === "v4" ? JS_PLUGIN_PACKAGES_V4 : JS_PLUGIN_PACKAGES;
+  atLeastV4() ? JS_PLUGIN_PACKAGES_V4 : JS_PLUGIN_PACKAGES;
 /** The JS plugins this revision looks rule help up for, as [rule prefix, package] pairs. */
 const jsPluginPackages = () => [...jsPluginPackageMap()];
 const jsPlugins = new Map();
@@ -425,24 +455,31 @@ function parseOxlintDiagnostics(stdout) {
 }
 
 /**
- * linters.ts runOxlintPass: `oxlint --fix`, `oxfmt --write`, then `oxlint -f json` on the same
- * targets, from `cwd`. `config` and `fmtConfig` are passed with -c (Ultracite finds the project's
- * own). As in linters.ts, an `--unsafe` in `passthrough` turns `--fix` into `--fix-dangerously`, and
- * the rest of the passthrough goes to both Oxlint runs (added with the react-effects topic; the
- * default, none, gives the commands every earlier topic ran). Returns the diagnostics and the raw
- * report.
+ * linters.ts runOxlintPass: `oxlint --fix` (from v5, a second time when the first exits non-zero),
+ * `oxfmt --write`, then `oxlint -f json` on the same targets, from `cwd`. `config` and `fmtConfig`
+ * are passed with -c (Ultracite finds the project's own). As in linters.ts, an `--unsafe` in
+ * `passthrough` turns `--fix` into `--fix-dangerously`, and the rest of the passthrough goes to
+ * both Oxlint runs (added with the react-effects topic; the default, none, gives the commands
+ * every earlier topic ran). Returns the diagnostics and the raw report.
  */
 function oxlintPass({ cwd, files = [], config, fmtConfig, passthrough = [] }) {
   const hasUnsafe = passthrough.includes("--unsafe");
   const filtered = passthrough.filter((arg) => arg !== "--unsafe");
   const targets = toTargets(files, ".");
   const ox = ["-c", config, "--disable-nested-config"];
-  runPiped(
-    "oxlint",
-    oxlintBin,
-    [...ox, hasUnsafe ? "--fix-dangerously" : "--fix", ...filtered, ...targets],
-    cwd
-  );
+  const fixArgs = [
+    ...ox,
+    hasUnsafe ? "--fix-dangerously" : "--fix",
+    ...filtered,
+    ...targets,
+  ];
+  // v5 (af73526d): a fix pass that reports anything is followed by a second, before oxfmt.
+  if (
+    runPipedCommand("oxlint", oxlintBin, fixArgs, cwd).status !== 0 &&
+    revision() === "v5"
+  ) {
+    runPiped("oxlint", oxlintBin, fixArgs, cwd);
+  }
   runPiped("oxfmt", oxfmtBin, ["-c", fmtConfig, "--write", ...targets], cwd);
   const stdout = runPiped(
     "oxlint",
@@ -519,7 +556,7 @@ function explainBiomeRule(category) {
     result.status === 0
       ? parseBiomeExplainDescription(String(result.stdout ?? ""))
       : undefined;
-  if (revision() === "v4") {
+  if (atLeastV4()) {
     biomeRuleHelp.set(category, help ?? null);
   } else if (help !== undefined) {
     biomeRuleHelp.set(category, help);
@@ -640,7 +677,7 @@ function toStylelintTargets(files, cwd) {
     }
     // v4 (4a32ea73, 6c29ae8c): a glob that names no style extension is expanded and its style
     // files kept; a target with no extension is a directory unless it's a file on disk.
-    if (revision() === "v4") {
+    if (atLeastV4()) {
       if (isUnexpandedGlob(file, cwd)) {
         targets.push(
           ...matchGlob(file, cwd).filter((f) =>

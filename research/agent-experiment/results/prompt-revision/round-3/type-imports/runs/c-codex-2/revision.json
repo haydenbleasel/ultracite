@@ -1,0 +1,13 @@
+{
+  "runId": "c-codex-2",
+  "mirrorRevision": "v5",
+  "finalMessage": "Both issues flag the same `require()`. It loads the locale helper only when `normalizeLocalePath` is called with `__NEXT_I18N_SUPPORT` enabled. Moving the load to module scope would change its timing, and using `import()` would break the function’s synchronous return contract. [normalize-locale-path.ts](<run-root>/c-codex-2/client/normalize-locale-path.ts:38)\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Codex"
+}

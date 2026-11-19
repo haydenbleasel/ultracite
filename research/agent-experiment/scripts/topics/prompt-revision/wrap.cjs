@@ -10,6 +10,13 @@
 //   - the mirror of the rest of agent-fix runs at its "v2" revision (scripts/ultracite-adapters.cjs);
 //   - each measured run also gets revision.json (below);
 //   - more paths are locked while an agent runs: notes that describe the expected outcomes.
+//
+// Round three (2026-11-18, round-3/<base>.cjs) passes options: `mirror: "v5"` selects the mirror's
+// v5 revision (the agent-fix code at 10153e7d) after the base module has loaded, since a base
+// module may select its own (nested-ternaries v3, type-imports v4); `expected` replaces the rules a
+// subject's handoff must hold where a preset change since the base topic's runs changed it; and
+// `adapter` replaces the handoff's description of the adapter's commands. Rounds one and two pass
+// no options and run exactly as before.
 "use strict";
 
 process.env.ULTRACITE_MIRROR = "v2";
@@ -88,9 +95,12 @@ function writeRevision(runId, measure) {
   );
 }
 
-function wrap(baseName) {
+function wrap(baseName, options = {}) {
   const base = require(`../${baseName}.cjs`);
-  return {
+  // After the base module, which may have selected a revision of its own while loading. The
+  // revision is read at each call, so this is the one every run and re-measurement uses.
+  if (options.mirror) process.env.ULTRACITE_MIRROR = options.mirror;
+  const wrapped = {
     ...base,
     lockPaths: [...base.lockPaths, ...EXTRA_LOCKS],
     measure: async (runId) => {
@@ -99,6 +109,20 @@ function wrap(baseName) {
       return measure;
     },
   };
+  if (options.expected) {
+    wrapped.expectedDiagnostics = (subject) =>
+      options.expected[subject.id] ?? base.expectedDiagnostics(subject);
+  }
+  if (options.adapter && base.collect) {
+    wrapped.collect = async (...args) => {
+      const collected = await base.collect(...args);
+      return {
+        ...collected,
+        info: { ...collected.info, adapter: options.adapter },
+      };
+    };
+  }
+  return wrapped;
 }
 
 module.exports = { wrap };

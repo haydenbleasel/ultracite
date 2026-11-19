@@ -1,7 +1,7 @@
 #!/bin/sh
 # Runs prompt-revision specs one after another (the harness locks shared folders while an agent
 # runs, so runs can't overlap). Each argument is <base-topic>/<subject>:<agent>:<n>, or
-# round-2/<base-topic>/<subject>:<agent>:<n> for round two.
+# round-2/<base-topic>/<subject>:<agent>:<n> for round two and round-3/... for round three.
 cd "$(dirname "$0")/../.." || exit 1
 for spec in "$@"; do
   topic="${spec%/*}"

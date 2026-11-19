@@ -1,0 +1,13 @@
+{
+  "runId": "c-claude-4",
+  "mirrorRevision": "v5",
+  "finalMessage": "I made no edits. Both issues point at the same `require()` on line 38, and neither has a fix that keeps the code working the same way.\n\n- **Issue 1 (`node/global-require`):** the rule wants the `require()` moved to the top of the file. But the `require()` sits inside `if (process.env.__NEXT_I18N_SUPPORT)` on purpose. That flag is replaced when the app is built, so the i18n module only ends up in the browser bundle when i18n is turned on. A static import at the top would add it to every bundle, and your rules say not to make that change.\n- **Issue 2 (`unicorn/prefer-module`):** the usual ES-module swap here is `await import()`, which always returns a Promise. `normalizeLocalePath` has to return its result straight away, typed as `typeof Fn`, and its callers rely on that. Making it async would change its return type and break every caller.\n\nTo clear these properly, someone needs to decide how this conditional load should work. One option is a static import, accepting the bigger bundle. Another is a build-time alias that points this file at either the real module or a stub. Either would mean changes outside this file. Otherwise, add an exception for this pattern in the lint config.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

@@ -1,0 +1,13 @@
+{
+  "runId": "c-claude-1",
+  "mirrorRevision": "v5",
+  "finalMessage": "I left both issues unchanged. They flag the same `require(\"../shared/lib/i18n/normalize-locale-path\")` call at `client/normalize-locale-path.ts:38`, and neither has a fix that keeps the code working the same way.\n\nThe `require` sits inside `if (process.env.__NEXT_I18N_SUPPORT)`, so it's a conditional load on purpose. When the build turns i18n support off, the condition is false, the bundler drops the `require`, and the locale-path code stays out of the client bundle. When it's on, the module loads.\n\n- **Issue 1 (`node/global-require`):** the rule's help says to move the `require()` to the top of the file. Doing that, as a `require` or a static `import`, would load the i18n module in every build. That defeats the conditional load, and the task rules say not to do it.\n- **Issue 2 (`unicorn/prefer-module`):** the only ES-module way to load something on demand is `import()`, which returns a Promise. `normalizeLocalePath` would then become async, changing its type (`typeof Fn`) and breaking every caller that expects a result straight away. That's a behavior change, not a style fix.\n\nThe real fix would be a build-time switch outside this file, such as a bundler alias that swaps in a no-op module when i18n is off. That would allow a plain static import here, but it needs config changes, so it's a call for whoever owns the build. Suppression comments aren't allowed, so I didn't add any.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Claude Code. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}

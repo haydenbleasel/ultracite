@@ -1,0 +1,13 @@
+{
+  "runId": "c-codex-3",
+  "mirrorRevision": "v5",
+  "finalMessage": "Both issues flag the same `require()`, which loads the locale module synchronously only when `__NEXT_I18N_SUPPORT` is enabled. Moving the load to module scope would make it eager. Using `import()` inside the branch would change the function’s synchronous return contract.\n\nLeft for review: 1, 2",
+  "leftForReviewLine": "Left for review: 1, 2",
+  "leftForReviewIssues": [
+    1,
+    2
+  ],
+  "ultraciteOutro": "Fixed 0 of 2 issues with Codex. 2 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Codex"
+}

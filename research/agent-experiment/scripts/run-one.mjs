@@ -1058,11 +1058,11 @@ async function runWithRetries() {
     throw new Error(
       `expected handoff ${JSON.stringify(want)}, got ${JSON.stringify(got)}`
     );
-  // v3 of the mirror (the nested-ternaries topic) and v4 (type-imports): runAgentFix records each
-  // file's issues at its turn, before its agent runs, and hands over what recordSourceLines returns
-  // (for the first file, the same diagnostics). Earlier topics run v1 or v2, where the group is used
-  // as it is.
-  const group = ["v3", "v4"].includes(mirror.revision())
+  // v3 of the mirror (the nested-ternaries topic), v4 (type-imports) and v5 (prompt-revision's
+  // round three): runAgentFix records each file's issues at its turn, before its agent runs, and
+  // hands over what recordSourceLines returns (for the first file, the same diagnostics). Earlier
+  // topics run v1 or v2, where the group is used as it is.
+  const group = ["v3", "v4", "v5"].includes(mirror.revision())
     ? {
         file: groups[0].file,
         issues: mirror.recordSourceLinesV3(groups[0].issues, runDir),
@@ -1410,7 +1410,7 @@ async function runWithRetries() {
       diffTsSha256: sources.diffTsSha256,
       mirroredSlicesSha256: sources.hashes,
       // Recorded from v3 on (added with the nested-ternaries topic); v1 and v2 runs don't carry it.
-      ...(["v3", "v4"].includes(mirror.revision())
+      ...(["v3", "v4", "v5"].includes(mirror.revision())
         ? { mirrorRevision: mirror.revision() }
         : {}),
     },

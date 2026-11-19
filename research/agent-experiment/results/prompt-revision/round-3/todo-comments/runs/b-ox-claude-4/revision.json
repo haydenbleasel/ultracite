@@ -1,0 +1,12 @@
+{
+  "runId": "b-ox-claude-4",
+  "mirrorRevision": "v5",
+  "finalMessage": "I left this one unchanged for review. Nothing in the file was edited.\n\n**Issue 1 (line 323, `no-warning-comments`):** The comment `TODO Trigger their dispose callbacks.` describes work that still hasn't been done. `prunePaths` (lines 324–331) only runs the callbacks registered in `pruneMap`. It never calls the callbacks registered in `disposeMap` (set at line 186), even though the update path calls them at line 383.\n\nThe rule's suggested fixes (\"remove or rephrase\") don't work here:\n- **Removing or rewording the comment** would just hide a known gap so the linter stops flagging it.\n- **Doing the TODO** would mean calling `disposeMap.get(path)?.(this.dataMap.get(path))` inside `prunePaths`. That changes what happens when a module is pruned. Dispose callbacks can be async, while `prunePaths` is synchronous and returns `void`. It also isn't clear whether dispose should run before or after prune. Someone who owns the HMR client should decide that.\n\nThe right fix is either to implement dispose-on-prune as described, or to move the TODO into an issue tracker and delete the comment.\n\nLeft for review: 1",
+  "leftForReviewLine": "Left for review: 1",
+  "leftForReviewIssues": [
+    1
+  ],
+  "ultraciteOutro": "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide.",
+  "ultraciteExitCode": 1,
+  "agentLabel": "Claude Code"
+}
