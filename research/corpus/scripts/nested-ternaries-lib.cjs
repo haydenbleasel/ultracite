@@ -92,15 +92,13 @@ const { astUtils } = require("./tools.cjs").load();
 const prettierDir = dirname(
   require.resolve("prettier/package.json", { paths: [CLI] })
 );
-const unicornVersion = JSON.parse(
-  readFileSync(
-    join(
-      dirname(require.resolve("eslint-plugin-unicorn", { paths: [CLI] })),
-      "package.json"
-    ),
-    "utf8"
-  )
-).version;
+// The plugin's entry is its root index.js up to 79 and dist/index.js from 80, so its package.json
+// is the nearest one above the entry.
+const unicornVersion = (() => {
+  let dir = dirname(require.resolve("eslint-plugin-unicorn", { paths: [CLI] }));
+  while (!existsSync(join(dir, "package.json"))) dir = dirname(dir);
+  return JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).version;
+})();
 const toolVersions = () => ({
   ...lib.toolVersions(),
   "eslint-plugin-unicorn": unicornVersion,

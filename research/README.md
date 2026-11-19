@@ -584,6 +584,8 @@ Each post's agent experiment is a topic. `RESEARCH_TOPIC` picks it (default `cog
 
 To add a topic: put its subjects in `corpus/examples/<topic>/`, write `scripts/topics/<topic>.cjs` and a behavior oracle, add hand-made mutants under `harness-tests/<topic>/`, and run the commands below with `RESEARCH_TOPIC=<topic>`.
 
+A topic's script and self-test were written against the presets and the agent-fix code as they stood on the day the topic ran. Its report and `results.json` record the tool versions and the CLI commits it was checked against. A later preset change can make an older topic's self-test fail without changing its committed results, so a failing self-test on an old topic isn't a reason to distrust its numbers; each report lists the drift known when it was written. When a preset or toolchain change stops a topic's script from loading or from generating its lint configs, repair the generation, not the recorded results. The move to Stylelint 18 did that: the preset stopped extending `stylelint-config-idiomatic-order` and loads `stylelint-order` as a plugin, so the six topics that write a Stylelint config now give that plugin by path too.
+
 ### Floating promises (third post)
 
 Subjects are `fp1` (hono's `createPool`, `no-misused-promises`) and `fp2` (Astro's `compose` logger, `no-floating-promises` ×2), from `corpus/examples/floating-promises/`.

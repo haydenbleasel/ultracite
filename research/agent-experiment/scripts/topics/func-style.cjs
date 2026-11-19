@@ -336,7 +336,7 @@ const url = (abs) => JSON.stringify(pathToFileURL(abs).href);
 const preset = (rel) => url(join(CLI, "config", rel));
 /**
  * A package `ultracite init --linter eslint` installs that packages/cli doesn't resolve on its own
- * (prettier-plugin-tailwindcss, the Stylelint preset's two shared configs), from this repo's Bun
+ * (prettier-plugin-tailwindcss, the Stylelint preset's shared config and plugin), from this repo's Bun
  * store, by path, so nothing is installed.
  */
 const storePackage = (name) => {
@@ -439,7 +439,8 @@ const CONFIG_TEXT = () => ({
     "",
     "export default {",
     "  ...config,",
-    `  extends: ${JSON.stringify([storeMain("stylelint-config-standard"), storeMain("stylelint-config-idiomatic-order")])},`,
+    `  extends: ${JSON.stringify([storeMain("stylelint-config-standard")])},`,
+    `  plugins: ${JSON.stringify([storeMain("stylelint-order")])},`,
     "};",
   ],
   // Biome as init writes it (biome.jsonc extending core), copied to the root of a project as
@@ -451,15 +452,17 @@ const CONFIG_TEXT = () => ({
   ).split("\n"),
 });
 function writeConfigs() {
+  const stylelintPreset = readFileSync(
+    join(CLI, "config/stylelint/stylelint.config.mjs"),
+    "utf8"
+  );
   if (
-    !readFileSync(
-      join(CLI, "config/stylelint/stylelint.config.mjs"),
-      "utf8"
-    ).includes(
-      'extends: ["stylelint-config-standard", "stylelint-config-idiomatic-order"]'
-    )
+    !stylelintPreset.includes('extends: ["stylelint-config-standard"]') ||
+    !stylelintPreset.includes('plugins: ["stylelint-order"]')
   )
-    throw new Error("the Stylelint preset's extends changed");
+    throw new Error(
+      "the Stylelint preset's extends or plugins changed: give every package it names by path in CONFIG_TEXT's stylelint.config.mjs, link the same packages in linkedRoot, then update this check"
+    );
   for (const [rel, lines] of Object.entries(CONFIG_TEXT())) {
     const file = join(LINT_CONFIGS, rel);
     const text = `${lines.join("\n")}\n`;
@@ -3700,7 +3703,7 @@ function linkedRoot(tag) {
   for (const name of [
     "prettier-plugin-tailwindcss",
     "stylelint-config-standard",
-    "stylelint-config-idiomatic-order",
+    "stylelint-order",
   ])
     link(storePackage(name), join(root, "node_modules", name));
   link(mirror.eslintBin, join(root, "node_modules/.bin/eslint"));

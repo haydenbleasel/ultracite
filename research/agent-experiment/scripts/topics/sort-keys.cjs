@@ -267,7 +267,7 @@ const fileUrl = (rel) => JSON.stringify(pathToFileURL(join(CLI, rel)).href);
 /**
  * A package `ultracite init --linter eslint` installs in a project but that packages/cli doesn't
  * resolve on its own: prettier-plugin-tailwindcss (added to prettier.config.mjs) and the Stylelint
- * preset's two shared configs. They're in this repo's Bun store; used by path, so nothing is
+ * preset's shared config and plugin. They're in this repo's Bun store; used by path, so nothing is
  * installed.
  */
 const storePackage = (name) => {
@@ -304,14 +304,15 @@ const CONFIG_TEXT = () => ({
     `  plugins: [${JSON.stringify(tailwindPlugin())}],`,
     "};",
   ],
-  // The preset `extends` two shared configs by name, which Stylelint resolves from the project's
-  // node_modules; here they're given by path.
+  // The preset names a shared config (`extends`) and a plugin (`plugins`), which Stylelint resolves
+  // from the project's node_modules; here they're given by path.
   "stylelint.config.mjs": [
     `import config from ${fileUrl("config/stylelint/stylelint.config.mjs")};`,
     "",
     "export default {",
     "  ...config,",
-    `  extends: ${JSON.stringify([storeMain("stylelint-config-standard"), storeMain("stylelint-config-idiomatic-order")])},`,
+    `  extends: ${JSON.stringify([storeMain("stylelint-config-standard")])},`,
+    `  plugins: ${JSON.stringify([storeMain("stylelint-order")])},`,
     "};",
   ],
   // Oxlint as init writes it for this project (core; no React in package.json), and Oxfmt.
@@ -341,16 +342,19 @@ const CONFIG_TEXT = () => ({
   ).split("\n"),
 });
 function writeConfigs() {
-  // The stylelint config above replaces the preset's `extends` with the same two configs by path.
+  // The stylelint config above replaces the preset's `extends` and `plugins` with the same packages
+  // by path.
+  const stylelintPreset = readFileSync(
+    join(CLI, "config/stylelint/stylelint.config.mjs"),
+    "utf8"
+  );
   if (
-    !readFileSync(
-      join(CLI, "config/stylelint/stylelint.config.mjs"),
-      "utf8"
-    ).includes(
-      'extends: ["stylelint-config-standard", "stylelint-config-idiomatic-order"]'
-    )
+    !stylelintPreset.includes('extends: ["stylelint-config-standard"]') ||
+    !stylelintPreset.includes('plugins: ["stylelint-order"]')
   )
-    throw new Error("the Stylelint preset's extends changed");
+    throw new Error(
+      "the Stylelint preset's extends or plugins changed: give every package it names by path in CONFIG_TEXT's stylelint.config.mjs, link the same packages in linkedRoot, then update this check"
+    );
   for (const [rel, lines] of Object.entries(CONFIG_TEXT())) {
     const file = join(LINT_CONFIGS, rel);
     const text = `${lines.join("\n")}\n`;
@@ -2417,7 +2421,7 @@ function linkedRoot(tag) {
   for (const name of [
     "prettier-plugin-tailwindcss",
     "stylelint-config-standard",
-    "stylelint-config-idiomatic-order",
+    "stylelint-order",
   ])
     link(storePackage(name), join(root, "node_modules", name));
   link(mirror.eslintBin, join(root, "node_modules/.bin/eslint"));
