@@ -63,7 +63,7 @@ The philosophy is similar to ESLint's: provide fixes where possible, but don't r
 
 ## Q: Why does an import cycle go away after `ultracite fix`?
 
-The cycle rules skip `import type`, but they don't know that TypeScript also drops a plain import whose bindings are only used as types. So an import like that counts toward a cycle in `ultracite check`, even though the cycle can't happen at runtime. `ultracite fix` rewrites it to `import type` (Biome's `useImportType`, `consistent-type-imports` in Oxlint and ESLint), and the report goes away.
+The cycle rules skip `import type`, but they don't know that TypeScript also drops a plain import whose bindings are only used as types. So an import like that counts toward a cycle in `ultracite check`, even though the cycle can't happen at runtime. `ultracite fix` rewrites it to `import type` (Biome's `useImportType`, `consistent-type-imports` in Oxlint and ESLint), and the report goes away. The `nestjs` and `angular` presets turn that rule off, because the fix breaks dependency injection, so there the import and the report stay until you write `import type` yourself for a class that isn't injected.
 
 The linters also differ on type-only re-exports: Oxlint follows `export type * from`, and ESLint follows `export type { … } from`. Biome doesn't resolve every import the other two do, such as tsconfig `paths` inherited through `extends`, so it can miss a cycle that crosses packages.
 

@@ -469,7 +469,13 @@
         "useFragmentSyntax": "error",
         "useGraphqlNamingConvention": "error",
         "useGroupedAccessorPairs": "error",
-        "useImportType": "error",
+        // Writes a mixed import as `import type { A }` plus `import { b }`,
+        // the form consistent-type-specifier-style asks for in the Oxlint and
+        // ESLint presets. Biome's default writes `import { type A, b }`.
+        "useImportType": {
+          "level": "error",
+          "options": { "style": "separatedType" }
+        },
         "useImportsFirst": "error",
         "useInputName": "error",
         "useLiteralEnumMembers": "error",

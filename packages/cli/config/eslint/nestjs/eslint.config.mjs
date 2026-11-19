@@ -15,8 +15,10 @@ const nestjs = [
       // The autofix turns the import of an injected class into `import type`.
       // Constructor injection needs the class at runtime, so the fix compiles
       // and then fails to resolve the dependency. typescript-eslint only
-      // holds back when it can see `emitDecoratorMetadata`, which takes type
-      // information.
+      // holds back in a file with decorators when it can see
+      // `experimentalDecorators` and `emitDecoratorMetadata`, from
+      // `parserOptions` or from the tsconfig it reads with type information,
+      // and core gives it neither.
       "@typescript-eslint/consistent-type-imports": "off",
     },
   },
