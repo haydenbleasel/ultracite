@@ -15,6 +15,13 @@ const baseRules = Object.fromEntries(
 // consistent-type-definitions is left at its default ("interface"),
 // matching oxlint and Biome's useConsistentTypeDefinitions.
 const overrideRules = {
+  // `import()` type annotations are allowed: `typeof import("x")` is the
+  // only way to type a lazily or conditionally loaded module without loading
+  // it, and the report has no fix.
+  "@typescript-eslint/consistent-type-imports": [
+    "error",
+    { disallowTypeAnnotations: false },
+  ],
   "@typescript-eslint/explicit-function-return-type": "off",
   "@typescript-eslint/explicit-member-accessibility": "off",
   "@typescript-eslint/explicit-module-boundary-types": "off",

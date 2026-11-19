@@ -567,6 +567,31 @@ describe("oxlint core config", () => {
     expect(flaggedBy("promise(prefer-await-to-then)")).toEqual([]);
     expect(flaggedBy("promise(catch-or-return)")).toEqual(["unhandled.ts"]);
   });
+
+  // `typeof import("x")` is the only way to type a lazily loaded module
+  // without loading it, so `import()` type annotations are allowed. An import
+  // used only as a type is still reported.
+  test("allows import() type annotations but still reports a type-only import", () => {
+    const { flaggedBy } = lintFixture("type-imports");
+
+    expect(flaggedBy("typescript(consistent-type-imports)")).toEqual([
+      "type-only.ts",
+    ]);
+  });
+});
+
+describe("oxlint nestjs config", () => {
+  // The rule's fix writes `import type`, which erases the class at runtime.
+  // An injected service then fails to resolve, and `ValidationPipe`, which
+  // reads a `@Body()` DTO class from `design:paramtypes`, validates against
+  // `Object` and skips validation silently. The type-imports fixture is the
+  // control: core alone reports an import that is only used as a type.
+  test("leaves the imports of an injected service and a @Body() DTO alone", () => {
+    const { flaggedBy, output } = lintFixture("nestjs-type-imports");
+
+    expect(output).toContain("cats.controller.ts");
+    expect(flaggedBy("typescript(consistent-type-imports)")).toEqual([]);
+  });
 });
 
 describe("oxlint vitest config", () => {

@@ -63,6 +63,14 @@ export default defineConfig({
     // divs so the Solid and Qwik tests can assert the jsx-a11y rules fire.
     "packages/cli/__tests__/fixtures/solid-a11y",
     "packages/cli/__tests__/fixtures/qwik-a11y",
+    // Deliberately import an injected service and a `@Body()` DTO as values
+    // though they are only named as types, so the NestJS test can assert
+    // consistent-type-imports leaves them alone.
+    "packages/cli/__tests__/fixtures/nestjs-type-imports",
+    // Deliberately imports a type without `import type` and types a
+    // `require` with `typeof import()`, so the test can assert which of the
+    // two consistent-type-imports reports.
+    "packages/cli/__tests__/fixtures/type-imports",
     // Blog research harnesses (see research/README.md). The fixtures are
     // third-party code, deliberately complex cases and agent output, and the
     // results are generated. The scripts aren't shipped, and lint autofixes

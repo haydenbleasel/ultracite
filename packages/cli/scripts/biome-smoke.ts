@@ -228,6 +228,29 @@ export class DogsController {
         expect: [],
         forbid: ["lint/style/useImportType"],
       },
+      "src/create-cat.dto.ts": {
+        content: 'export class CreateCatDto {\n  name = "";\n}\n',
+        expect: [],
+      },
+      "src/kittens.controller.ts": {
+        // `ValidationPipe` reads the DTO class from `design:paramtypes`.
+        // Imported as a type it validates against `Object` and skips
+        // validation silently.
+        content: `import { Body, Controller, Post } from "@nestjs/common";
+
+import { CreateCatDto } from "./create-cat.dto";
+
+@Controller("kittens")
+export class KittensController {
+  @Post()
+  create(@Body() cat: CreateCatDto): string {
+    return cat.name;
+  }
+}
+`,
+        expect: [],
+        forbid: ["lint/style/useImportType"],
+      },
     },
     presets: ["nestjs"],
   },

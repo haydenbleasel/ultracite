@@ -137,7 +137,9 @@ export default defineConfig({
     "no-misleading-character-class": "error",
     "no-multi-assign": "error",
     "no-multi-str": "error",
-    "no-negated-condition": "error",
+    // Off: `unicorn/no-negated-condition` reports the same conditions at the
+    // same position and adds a fix, so this one only doubled each report.
+    "no-negated-condition": "off",
     "no-nested-ternary": "error",
     "no-new": "error",
     "no-new-func": "error",
@@ -412,7 +414,13 @@ export default defineConfig({
     "typescript/consistent-type-assertions": "error",
     "typescript/consistent-type-definitions": "error",
     "typescript/consistent-type-exports": "error",
-    "typescript/consistent-type-imports": "error",
+    // `import()` type annotations are allowed: `typeof import("x")` is the
+    // only way to type a lazily or conditionally loaded module without
+    // loading it, and the report has no fix.
+    "typescript/consistent-type-imports": [
+      "error",
+      { disallowTypeAnnotations: false },
+    ],
     "typescript/dot-notation": "error",
     "typescript/explicit-function-return-type": "off",
     "typescript/explicit-member-accessibility": "off",

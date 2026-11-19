@@ -40,6 +40,11 @@ const overrideRules = {
   // flags builtin (bun:test) and workspace imports as missing dependencies.
   // Off in both linters to keep parity.
   "sonarjs/no-implicit-dependencies": "off",
+  // Off: it reports the nesting that the core `no-nested-ternary` already
+  // reports, a second time. It also sees a ternary nested through a template
+  // literal or a call argument, which `no-nested-ternary` doesn't; that part
+  // is given up for one report per problem.
+  "sonarjs/no-nested-conditional": "off",
   // sonarjs 4.2.1 raised the default threshold to 5; keep the stricter 4.
   "sonarjs/no-nested-functions": ["error", { threshold: 4 }],
   // Duplicates no-unused-vars and has no options, so it reports the

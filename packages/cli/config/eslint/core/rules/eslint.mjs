@@ -20,6 +20,9 @@ const overrideRules = {
   "no-continue": "off",
   "no-duplicate-imports": ["error", { allowSeparateTypeImports: true }],
   "no-implicit-coercion": "off",
+  // Off: `unicorn/no-negated-condition` reports the same conditions at the
+  // same position and adds a fix, so this one only doubled each report.
+  "no-negated-condition": "off",
   "no-restricted-properties": "off",
   "no-ternary": "off",
   "no-undefined": "off",

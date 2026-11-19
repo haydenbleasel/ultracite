@@ -53,6 +53,10 @@ const overrideRules = {
   // checkUnknownCalls is set; this keeps the check v77 ran. Known pure
   // helpers such as defineConfig() and React's memo() stay allowed.
   "unicorn/no-top-level-side-effects": ["error", { checkUnknownCalls: true }],
+  // Off: it duplicates `no-else-return`, and its fix flattens an `else if`
+  // chain into separate guards, which `no-else-return` (with its default
+  // `allowElseIf`, as in oxlint) keeps.
+  "unicorn/no-useless-else": "off",
   // Upstream already skips call arguments in TypeScript files, since a
   // required `T | undefined` parameter needs an explicit `undefined` (#851).
   // Matches oxlint, which skips them everywhere.

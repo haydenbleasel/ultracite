@@ -30,6 +30,14 @@ const overrideRules = {
   "react/jsx-max-props-per-line": "off",
   "react/jsx-newline": "off",
   "react/jsx-no-bind": "off",
+  // "coerce" first, so the fix writes `{!!count && …}`. With the default
+  // order the fix wrote a ternary, and on `{count && (a ? b : c)}` that
+  // nested one ternary inside another, which no-nested-ternary then reported
+  // with no fix.
+  "react/jsx-no-leaked-render": [
+    "error",
+    { validStrategies: ["coerce", "ternary"] },
+  ],
   "react/jsx-no-literals": "off",
   // Forms too, as Biome's noBlankTarget checks them.
   "react/jsx-no-target-blank": ["error", { forms: true }],

@@ -608,6 +608,32 @@ export class CatsController {
         expect: [],
         forbid: ["@typescript-eslint/consistent-type-imports"],
       },
+      "src/create-cat.dto.ts": {
+        content: `export class CreateCatDto {
+  public name = "";
+}
+`,
+        expect: [],
+      },
+      "src/kittens.controller.ts": {
+        // \`ValidationPipe\` reads the DTO class from \`design:paramtypes\`.
+        // Imported as a type it validates against \`Object\` and skips
+        // validation silently.
+        content: `import { Body, Controller, Post } from "@nestjs/common";
+
+import { CreateCatDto } from "./create-cat.dto.js";
+
+@Controller("kittens")
+export class KittensController {
+  @Post()
+  public create(@Body() cat: CreateCatDto): string {
+    return cat.name;
+  }
+}
+`,
+        expect: [],
+        forbid: ["@typescript-eslint/consistent-type-imports"],
+      },
     },
     presets: ["nestjs"],
     typeAware: {},
