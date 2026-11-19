@@ -1,0 +1,21 @@
+diff --git a/dist/markdown-BXc7gNyN.js b/dist/markdown-BXc7gNyN.js
+index b8f7f7975381e3b6cac53e05136f58cf63d2c5ee..2d67789a9e34a669f53aefb22213c0bc74d61a1b 100644
+--- a/dist/markdown-BXc7gNyN.js
++++ b/dist/markdown-BXc7gNyN.js
+@@ -4987,7 +4987,15 @@ function mu(e, t, r, n, i) {
+ 	return YE(e, t, r, n, i) ? u ? Nn : On : u ? " " : "";
+ }
+ function Xh(e, t) {
+-	return mu(e, e.node.value, KE(e, t) ? "never" : t.proseWrap, !1, t);
++	let { next: oxfmtFenceNext, previous: oxfmtFencePrev } = e;
++	// Preserve line breaks that sit directly against a `:::` container
++	// directive fence, so `proseWrap: "never"` keeps the opening/closing
++	// fence on their own lines instead of joining them into the prose (which
++	// breaks the directive). Ordinary prose still wraps per proseWrap.
++	// See prettier/prettier#19040.
++	let oxfmtIsFence = (w) => w != null && typeof w.value === "string" && w.value.startsWith(":::");
++	let oxfmtProseWrap = oxfmtIsFence(oxfmtFencePrev) || oxfmtIsFence(oxfmtFenceNext) ? "preserve" : KE(e, t) ? "never" : t.proseWrap;
++	return mu(e, e.node.value, oxfmtProseWrap, !1, t);
+ }
+ function $E(e) {
+ 	let { previous: t, next: r } = e;

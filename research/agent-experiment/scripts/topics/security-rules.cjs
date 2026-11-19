@@ -2153,8 +2153,9 @@ async function evasionMatrix(subjects, selfTestCases) {
       subject: s.id,
       file: `harness-tests/security-rules/${t.file}`,
       description:
-        (/not agent output: (.+)$/m.exec(readFileSync(file, "utf8")) ??
-          [])[1] ?? null,
+        (
+          /not agent output: (.+)$/m.exec(readFileSync(file, "utf8")) ?? []
+        )[1] ?? null,
       securityHitsRemaining: Object.fromEntries(
         VIEWS.map((v) => [
           v,
