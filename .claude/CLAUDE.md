@@ -48,6 +48,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Use the `key` prop for elements in iterables (prefer unique IDs over array indices)
 - Nest children between opening and closing tags instead of passing as props
 - Don't define components inside other components
+- In JSX, work out a multi-way condition in a variable or helper above the `return`, not in a chain of ternaries
 
 ### Accessibility
 
@@ -69,8 +70,8 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 - Keep functions focused and under reasonable cognitive complexity limits
 - Extract complex conditions into well-named boolean variables
-- Use early returns to reduce nesting
-- Prefer simple conditionals over nested ternary operators
+- Use early returns to reduce nesting, and put braces around every `if` body, including a one-line guard
+- Use a single ternary for a choice between two values. For three or more outcomes, use early returns or a lookup; never nest ternaries
 - Group related code together and separate concerns
 - Avoid import cycles; move shared code into a module both sides import
 - Don't leave TODO or FIXME comments in new code. For an existing one, do the task, delete it if it's done, or leave it; never reword it to get past the linter

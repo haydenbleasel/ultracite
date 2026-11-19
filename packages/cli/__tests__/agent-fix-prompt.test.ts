@@ -68,7 +68,15 @@ describe("agent-fix prompt", () => {
     expect(prompt).toContain("fixing that behavior is the point");
     expect(prompt).not.toContain("while preserving runtime behavior");
     // Hiding code from a rule clears many rules, so it's named, not denied.
+    expect(prompt).toContain(
+      "Writing the code in the form the rule asks for is the fix"
+    );
+    expect(prompt).toContain("Disguising the code so the rule stops matching");
+    expect(prompt).not.toContain("an equivalent construct");
     expect(prompt).toContain("is not a fix, even if the linter goes quiet");
+    expect(prompt).toContain(
+      "Don't turn a conditional or lazy load (a `require` or `import()` inside a branch or a function) into a static import"
+    );
     expect(prompt).not.toContain("will not clear it");
     expect(prompt).toContain("the minimal change can be no change");
     expect(prompt).toContain("needs changes outside this file");
