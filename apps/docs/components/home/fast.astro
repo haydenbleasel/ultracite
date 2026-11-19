@@ -5,9 +5,10 @@ import SectionHeading from "./section-heading.astro";
 // Medians on an Apple M1 Pro, end to end through the ultracite CLI. The single
 // file is the component from the hero's session; the project is the repo's
 // benchmark fixture at 42 files (lib/benchmarks). The single-file figure was
-// re-measured with oxlint 1.90.0 and oxfmt 0.75.0 on 2026-11-11: `ultracite
-// check src/components/user-list.tsx` on the component as the agent wrote it,
-// median 326 ms over 20 runs (321 to 345), within noise of the 330 shown.
+// re-measured with oxlint 1.94.0 and oxfmt 0.79.0 on 2026-11-18 (Ultracite
+// 8.3.1 from main at 09156707, before it was published): `ultracite check
+// src/components/user-list.tsx` on the component as the agent wrote it,
+// median 323 ms over 20 runs (312 to 335), so the 330 shown stands.
 const project = runFor(42);
 
 const stats = [

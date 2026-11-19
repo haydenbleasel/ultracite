@@ -10,8 +10,10 @@ import BeforeAfter from "../before-after.astro";
 // ultracite/eslint/type-aware also left
 // `@typescript-eslint/strict-boolean-expressions` on `asChild` and
 // `sonarjs/prefer-read-only-props` on the props. Re-run 2026-11-18
-// from main at 71744dd4, before it was published: unchanged (Prettier's time for
-// the file varies by a few ms a run; the one shown is from a quiet machine).
+// from main at 71744dd4, before it was published: unchanged. Prettier's time
+// for the file was re-measured later that day with Ultracite 8.3.1 from main
+// at 09156707 (Stylelint 18.0.0 installed): 52 to 55ms over ten runs on a
+// quiet machine, median 54ms.
 const before = `import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
 import type { ReactNode } from 'react'
@@ -102,6 +104,6 @@ const items = [
       </p>
     ))}
     <p class="mt-1">✖ 1 problem (1 error, 0 warnings)</p>
-    <p class="mt-1 truncate">components/button.tsx 59ms</p>
+    <p class="mt-1 truncate">components/button.tsx 54ms</p>
   </Terminal>
 </BeforeAfter>

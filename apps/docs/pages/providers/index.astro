@@ -31,9 +31,11 @@ const hrefFor = (id: ProviderId): string => `/providers/${id}`;
 // file. Rules that read types: Oxlint's type-aware rules in core; Biome's
 // type-aware preset; for ESLint, the 102 rules ultracite/eslint/type-aware
 // adds plus the 32 SonarJS rules in core that use types when there are some.
-// Times are from lib/benchmarks, and are still the 2026-11-11 session's (the
-// versions the note under the table names): the machine was busy on
-// 2026-11-18, so they were not re-run.
+// Times are from lib/benchmarks, re-run on 2026-11-18 with Ultracite 8.3.1
+// packed from main at 09156707, before it was published (the versions the
+// note under the table names). At 420 files Biome came out 13 ms ahead of
+// Oxlint, where the 2026-11-11 session had them 1 ms apart, so the FAQ says
+// "close" rather than "level".
 const small = runFor(42);
 const large = runFor(420);
 
@@ -147,7 +149,7 @@ const faqs: FaqItem[] = [
     question: "Do all three enforce the same rules?",
   },
   {
-    answer: `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files the two were level, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
+    answer: `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files the two were close, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
     question: "Is Biome faster than Oxlint?",
   },
 ];
@@ -293,7 +295,7 @@ const faqs: FaqItem[] = [
         </table>
       </div>
       <p class="border-border text-muted-foreground border-t px-4 py-5 text-sm/6 text-pretty sm:px-6 lg:px-10">
-        Ultracite 8.2.0. Times are medians of five runs of{" "}
+        Ultracite 8.3.1. Times are medians of five runs of{" "}
         <code class="font-mono text-[13px]">ultracite check</code> on{" "}
         {benchmarkMachine} over the repo’s benchmark fixture, with{" "}
         {toolchainVersions.oxlint}; {toolchainVersions.biome}; and{" "}

@@ -31,8 +31,9 @@ import { providerLogos } from "../../lib/logos";
 // the examples and the timings. Rechecked on this date for Biome 2.6.8 and
 // Ultracite 8.3.1 (packed from main at 71744dd4, before it was published): the rule
 // counts, the assist actions, the examples and what the formatter covers
-// (core now formats Markdown). The timings were not re-run (the machine was
-// busy) and are still the 8.2.0 session's, on Biome 2.6.4.
+// (core now formats Markdown). The timings were re-run later the same day
+// with Biome 2.6.8 and Ultracite 8.3.1 packed from main at 09156707, before
+// it was published.
 const lastModified = "2026-11-18";
 const command = "npx ultracite@latest init --linter biome";
 const small = runFor(42);
@@ -60,7 +61,7 @@ const faqs: FaqItem[] = [
     question: "Do I still need Prettier?",
   },
   {
-    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files the two were level, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (475 in its core preset to Biome’s 350), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files the two were close, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (475 in its core preset to Biome’s 350), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
     question: "Should I use Biome or Oxlint?",
   },
   {

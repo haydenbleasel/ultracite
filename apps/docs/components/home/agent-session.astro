@@ -4,10 +4,11 @@
 // can't fix go back to the agent, and the next run is clean. The diagnostics
 // and timings are what Ultracite's Oxlint core + React presets report for this
 // component on an M1 Pro (diagnostics rechecked with oxlint 1.94.0 and oxfmt
-// 0.79.0 on 2026-11-18: unchanged; timings last rechecked with oxlint 1.90.0
-// and oxfmt 0.75.0 on 2026-11-11: `ultracite fix --hook` with a Write payload
-// on stdin, medians over 20 runs of 331 ms on the file as written (326 to 342)
-// and 329 ms on the fixed one (323 to 339), within noise of the figures shown).
+// 0.79.0 on 2026-11-18: unchanged; timings re-measured the same day with
+// Ultracite 8.3.1 from main at 09156707, before it was published: `ultracite
+// fix --hook` with a Write payload on stdin, medians over 20 runs of 323 ms on
+// the file as written (319 to 335), so the 333 shown stands, and 325 ms on the
+// fixed one (320 to 334), which replaced a 334 just outside that range).
 // The markup is the finished session, so the page reads complete without
 // JavaScript; the script replays it from the top.
 const hookCommand = "bunx ultracite fix --hook";
@@ -182,7 +183,7 @@ const diff = [
               ></span>
               <span class="hp-hook-result text-ok">
                 ✓ No problems{" "}
-                <span class="text-panel-muted whitespace-nowrap">· 334 ms</span>
+                <span class="text-panel-muted whitespace-nowrap">· 325 ms</span>
               </span>
             </p>
           </div>

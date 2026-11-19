@@ -29,7 +29,8 @@ import { providerLogos } from "../../lib/logos";
 // example, the agent output and the timings. Rechecked on this date for
 // Oxlint 1.94.0, Oxfmt 0.79.0 and Ultracite 8.3.1 (packed from main at 71744dd4, before it was published):
 // the rule counts, the Oxfmt example and the agent output. The timings were
-// not re-run (the machine was busy) and are still the 8.2.0 session's.
+// re-run later the same day with the same tool versions and Ultracite 8.3.1
+// packed from main at 09156707, before it was published.
 const lastModified = "2026-11-18";
 const small = runFor(42);
 const large = runFor(420);
@@ -62,7 +63,7 @@ const faqs: FaqItem[] = [
     question: "Do I still need Prettier?",
   },
   {
-    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and at 420 files the two were level, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (475 core rules to Biome’s 350), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and at 420 files the two were close, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (475 core rules to Biome’s 350), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
     question: "Should I use Oxlint or Biome?",
   },
   {
