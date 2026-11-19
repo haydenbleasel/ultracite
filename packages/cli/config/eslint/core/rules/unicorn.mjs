@@ -71,14 +71,12 @@ const overrideRules = {
     "error",
     { checkComputedMemberAccess: true, checkVaryingBase: true },
   ],
-  // Also report two or more trailing optional parameters when the function
-  // has no options object yet, as in clamp(value, minimum = 0, maximum = 1).
-  // Off by default upstream. oxlint has no prefer-options-parameter, so this
-  // is ESLint-only.
-  "unicorn/prefer-options-parameter": [
-    "error",
-    { checkWithoutOptionsObject: true },
-  ],
+  // checkWithoutOptionsObject stays at its default, off. It also reports two
+  // or more trailing optional parameters on a function with no options
+  // object, as in clamp(value, minimum = 0, maximum = 1). That has no fix and
+  // reported 25 places in this CLI's source against 7 without it, most of
+  // them a second optional parameter that reads fine as it is.
+  "unicorn/prefer-options-parameter": "error",
   "unicorn/prefer-string-raw": "off",
   // Enforces Temporal over Date, but Temporal still lacks broad runtime
   // support; unicorn ships it off by default. Premature to enforce.

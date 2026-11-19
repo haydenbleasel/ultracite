@@ -711,14 +711,12 @@
     }
   },
   "markdown": {
-    // Biome 2.6's Markdown formatter changed the rendered text: up to 2.6.6
-    // it rewrote a literal "[ ]" in prose to "[]", and before 2.6.4 it
-    // dropped the space before some inline code spans. 2.6.7 fixed the last
-    // of those, but the peer range still allows the releases that have them,
-    // so .md files stay unformatted as they were before 2.6. The linter
-    // stays on.
+    // The formatter is on. It needs Biome 2.6.7: earlier 2.6 releases
+    // changed the rendered text, rewriting a literal "[ ]" in prose to "[]"
+    // and dropping the space before some inline code spans, which is why the
+    // peer range starts there.
     "formatter": {
-      "enabled": false
+      "enabled": true
     },
     // Reads a leading `---` block as frontmatter instead of a thematic break
     // followed by a heading.

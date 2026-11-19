@@ -13,6 +13,18 @@ import jsxA11yRules from "../react/jsx-a11y.mjs";
 // stay on: camelCase is what most Solid code writes, and `on:click` gets
 // checked once Oxlint knows it.
 export default defineConfig({
+  overrides: [
+    {
+      // Solid's compiler assigns the variable passed to `ref`, which the rule
+      // can't know, so it reports every `let el; <div ref={el} />`. The
+      // ESLint preset swaps in solid/no-unassigned-vars, which counts `ref`
+      // as an assignment; Oxlint has no Solid plugin, so here it's off.
+      files: ["**/*.jsx", "**/*.tsx"],
+      rules: {
+        "no-unassigned-vars": "off",
+      },
+    },
+  ],
   plugins: ["jsx-a11y"],
   rules: {
     ...jsxA11yRules,

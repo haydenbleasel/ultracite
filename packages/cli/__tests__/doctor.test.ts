@@ -1488,10 +1488,10 @@ export default defineConfig({
   // ---------------------------------------------------------------------------
 
   test("passes when the installed biome satisfies the supported range", () => {
-    mockInstalledVersions({ "@biomejs/biome": "2.6.3" });
+    mockInstalledVersions({ "@biomejs/biome": "2.6.8" });
 
     expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
-      message: "@biomejs/biome 2.6.3 satisfies ^2.6.2",
+      message: "@biomejs/biome 2.6.8 satisfies ^2.6.7",
       status: "pass",
     });
   });

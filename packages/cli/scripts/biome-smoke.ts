@@ -92,11 +92,10 @@ export class AppService {
   },
   core: {
     files: {
-      // Biome's Markdown formatter is off, so an unaligned table is left alone.
+      // Biome's Markdown formatter is on, so an unaligned table is reported.
       "README.md": {
         content: "| a | b |\n|-|-|\n| 1 | 2 |\n",
-        expect: [],
-        forbid: ["format"],
+        expect: ["format"],
       },
       "src/app.css": {
         content: `.card {
