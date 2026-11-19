@@ -44,10 +44,13 @@ jobs:
           build-mode: none
           # research/ is measured data, not shipped code: agent outputs (one
           # fails to parse on purpose), verbatim copies of third-party code
-          # and the corpus scripts.
+          # and the corpus scripts. The CLI's test fixtures are lint inputs
+          # that never run, and several are bad code on purpose so a rule
+          # has something to report.
           config: |
             paths-ignore:
               - research
+              - packages/cli/__tests__/fixtures
 
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
