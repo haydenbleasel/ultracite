@@ -5,6 +5,7 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
+import { findBunOnPath } from "./bun";
 import { assertRunnable } from "./command";
 import type { RunOutcome } from "./command";
 import {
@@ -164,6 +165,12 @@ const collectSamples = (
 
 const fmt = (ms: number): string => `${ms.toFixed(1)}ms`;
 
+/** A provider the harness couldn't run here, and why. */
+interface Skipped {
+  provider: Provider;
+  reason: string;
+}
+
 interface Regression {
   provider: Provider;
   command: Command;
@@ -171,12 +178,14 @@ interface Regression {
   pValue: number;
 }
 
-const analyze = (samples: readonly Sample[]): Regression[] => {
+const analyze = (
+  samples: readonly Sample[],
+  skipped: readonly Skipped[],
+  compareMode: boolean
+): Regression[] => {
   const regressions: Regression[] = [];
   const lines: string[] = [];
   const summary: string[] = [];
-
-  const compareMode = samples.every((sample) => sample.base);
 
   if (compareMode) {
     lines.push(
@@ -189,8 +198,8 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
     );
 
     for (const sample of samples) {
-      // SAFETY: compareMode is only true when the `samples.every` check above
-      // confirmed every sample carries base timings.
+      // SAFETY: in compare mode, main() only benchmarks a provider once both
+      // builds are prepared, so every sample carries base timings.
       const base = sample.base as number[];
       const baseMedian = median(base);
       const headMedian = median(sample.head);
@@ -261,6 +270,14 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
     );
   }
 
+  const skippedLines = skipped.map(
+    ({ provider, reason }) => `Skipped ${provider}: ${reason}.`
+  );
+
+  for (const line of skippedLines) {
+    console.log(line);
+  }
+
   const summaryPath = process.env.GITHUB_STEP_SUMMARY;
 
   if (summaryPath) {
@@ -275,6 +292,10 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
         regressions.length > 0
           ? `\n**${regressions.length} regression(s) detected.**\n`
           : "\nNo statistically significant regressions.\n";
+    }
+
+    if (skippedLines.length > 0) {
+      footer += `\n${skippedLines.join("\n\n")}\n`;
     }
 
     appendFileSync(
@@ -305,9 +326,28 @@ const main = (): void => {
   mkdirSync(WORK_ROOT, { recursive: true });
 
   const samples: Sample[] = [];
+  const skipped: Skipped[] = [];
+
+  const skip = (provider: Provider, reason: string): void => {
+    console.log(`  skipping ${provider}: ${reason}`);
+    skipped.push({ provider, reason });
+  };
 
   for (const provider of ACTIVE_PROVIDERS) {
     console.log(`\nPreparing ${provider}...`);
+
+    // `bun lint` and `bun fmt` come with Bun itself, so the Bun provider runs
+    // whichever Bun is on PATH, and only one that has them.
+    if (provider === "bun") {
+      const bun = findBunOnPath(WORK_ROOT);
+
+      if (bun.missing) {
+        skip(provider, bun.missing);
+        continue;
+      }
+
+      console.log(`  using Bun ${bun.revision ?? "(unknown version)"}`);
+    }
 
     const head = prepareProject({
       buildLabel: "head",
@@ -315,6 +355,11 @@ const main = (): void => {
       tarball: args.head,
       workRoot: WORK_ROOT,
     });
+
+    if (!head) {
+      skip(provider, `the head build has no \`--linter ${provider}\``);
+      continue;
+    }
 
     const base = args.base
       ? prepareProject({
@@ -324,6 +369,15 @@ const main = (): void => {
           workRoot: WORK_ROOT,
         })
       : undefined;
+
+    // A provider the base build predates has nothing to compare against.
+    if (args.base && !base) {
+      skip(
+        provider,
+        `the base build has no \`--linter ${provider}\`, so there's nothing to compare against`
+      );
+      continue;
+    }
 
     for (const command of ACTIVE_COMMANDS) {
       assertProjectRunnable(head, command);
@@ -337,7 +391,7 @@ const main = (): void => {
     }
   }
 
-  const regressions = analyze(samples);
+  const regressions = analyze(samples, skipped, compareMode);
 
   if (regressions.length > 0) {
     console.error(`\n✗ ${regressions.length} performance regression(s):`);

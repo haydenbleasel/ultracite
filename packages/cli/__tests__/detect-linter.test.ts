@@ -200,4 +200,57 @@ describe("detectLinter (real implementation)", () => {
       restoreFileSystemMock();
     }
   });
+
+  // The Bun provider writes the Oxlint provider's files; only the import of
+  // defineConfig tells them apart.
+  test("detects Bun from an oxlint config that imports ultracite/bun", async () => {
+    const { detectLinter } = await loadRealUtils();
+    mockFileSystem({
+      [path.join(cwd, "oxlint.config.ts")]:
+        `import { defineConfig } from "ultracite/bun";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({ extends: [core] });
+`,
+    });
+
+    try {
+      expect(detectLinter()).toBe("bun");
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
+  test("detects Oxlint from an oxlint config that imports oxlint", async () => {
+    const { detectLinter } = await loadRealUtils();
+    mockFileSystem({
+      [path.join(cwd, "oxlint.config.mts")]:
+        `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({ extends: [core] });
+`,
+    });
+
+    try {
+      expect(detectLinter()).toBe("oxlint");
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
+  // bunfig.toml configures Bun's installer and test runner too, so it never
+  // says which linter a project uses.
+  test("doesn't take a bunfig.toml for a linter config", async () => {
+    const { detectLinter } = await loadRealUtils();
+    mockFileSystem({
+      [path.join(cwd, "bunfig.toml")]: "[lint]\n[fmt]\n",
+    });
+
+    try {
+      expect(detectLinter()).toBeNull();
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
 });
