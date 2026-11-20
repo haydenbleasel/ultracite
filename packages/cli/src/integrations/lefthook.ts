@@ -17,11 +17,7 @@ import {
   ultraciteFixCommand,
 } from "./project-command";
 import { stagedFileExtensions } from "./staged-files";
-import {
-  renderYamlDocument,
-  replaceYamlStrings,
-  someYamlString,
-} from "./yaml-document";
+import { renderYamlDocument, someYamlString } from "./yaml-document";
 
 const defaultPath = "./lefthook.yml";
 
@@ -46,26 +42,69 @@ const isYamlPath = (file: string): boolean =>
 // project and the globs only decided whether it ran.
 const legacyFileExtensions = ["js", "jsx", "ts", "tsx", "json", "jsonc", "css"];
 
+// The full list init has written since v8, first as one glob per extension
+// and then as a single brace glob. A snapshot, not a copy to keep in sync:
+// add new types to stagedFileExtensions only, so globs written with this
+// list are still recognized (and widened) after they change.
+const v8FileExtensions = [
+  "js",
+  "jsx",
+  "mjs",
+  "cjs",
+  "ts",
+  "tsx",
+  "mts",
+  "cts",
+  "json",
+  "jsonc",
+  "css",
+  "scss",
+  "less",
+  "vue",
+  "svelte",
+  "astro",
+  "html",
+  "md",
+  "mdx",
+  "yaml",
+  "yml",
+  "graphql",
+  "gql",
+];
+
 // With lefthook's default (gobwas) matcher `*` crosses directories, so
 // `*.js` matches every .js file, while `**/*.js` needs at least one directory
 // and skips root files like `index.ts` or `package.json`. The doublestar
 // matcher behaves like a shell glob, where `**/*.js` is the one that matches
 // everywhere.
+const globPrefix = (doublestar: boolean): string => (doublestar ? "**/" : "");
+
 const globsFor = (extensions: string[], doublestar: boolean): string[] =>
-  extensions.map((extension) =>
-    doublestar ? `**/*.${extension}` : `*.${extension}`
-  );
+  extensions.map((extension) => `${globPrefix(doublestar)}*.${extension}`);
+
+const compactGlobFor = (extensions: string[], doublestar: boolean): string =>
+  `${globPrefix(doublestar)}*.{${extensions.join(",")}}`;
 
 const createGlob = (doublestar: boolean): string =>
-  `${doublestar ? "**/" : ""}*.{${stagedFileExtensions.join(",")}}`;
+  compactGlobFor(stagedFileExtensions, doublestar);
 
-// Every glob list an init has written, for either matcher: the full
-// extensions, and the narrower legacy ones (whose `**` form also missed
-// root-level files under the default matcher).
-const generatedGlobLists = new Set(
-  [stagedFileExtensions, legacyFileExtensions].flatMap((extensions) => [
-    JSON.stringify(globsFor(extensions, false)),
-    JSON.stringify(globsFor(extensions, true)),
+// Every glob an init has written, for either matcher, as JSON, with the file
+// types it covers: the legacy and v8 lists (the legacy `**` form also missed
+// root-level files under the default matcher), and the brace glob for the v8
+// and current extensions.
+const generatedGlobs = new Map(
+  [false, true].flatMap((doublestar) => [
+    ...[legacyFileExtensions, v8FileExtensions].map(
+      (extensions) =>
+        [JSON.stringify(globsFor(extensions, doublestar)), extensions] as const
+    ),
+    ...[v8FileExtensions, stagedFileExtensions].map(
+      (extensions) =>
+        [
+          JSON.stringify(compactGlobFor(extensions, doublestar)),
+          extensions,
+        ] as const
+    ),
   ])
 );
 
@@ -140,12 +179,100 @@ const findUltraciteJob = (hook: YAML.YAMLMap): YAML.YAMLMap | undefined => {
   );
 };
 
+// Whether a job's glob is a scalar or a list of them that can be edited in
+// place. Anchored globs, and lists with anchored items, may be shared with
+// other jobs.
+const isEditableGlob = (
+  glob: unknown
+): glob is YAML.Scalar | YAML.YAMLSeq<YAML.Scalar> =>
+  (YAML.isScalar(glob) ||
+    (YAML.isSeq(glob) &&
+      glob.items.every((item) => YAML.isScalar(item) && !item.anchor))) &&
+  !glob.anchor;
+
+/**
+ * Brings a glob an init wrote (a list, or a brace glob for other extensions
+ * or the other matcher) up to date. With `widen`, it becomes the current
+ * brace glob. Without it, for a job whose command was edited, it keeps its
+ * form and file types and only gets the configured matcher's prefix, so it
+ * still matches files in every directory. Hand-edited globs are left alone.
+ * Returns whether anything changed.
+ */
+const upgradeGlob = (
+  doc: YAML.Document,
+  job: YAML.YAMLMap,
+  doublestar: boolean,
+  widen: boolean
+): boolean => {
+  // `get` types a kept node as a Scalar, but it can be any node.
+  const glob: unknown = job.get("glob", true);
+
+  if (!isEditableGlob(glob)) {
+    return false;
+  }
+
+  const extensions = generatedGlobs.get(JSON.stringify(glob.toJSON()));
+
+  if (!extensions) {
+    return false;
+  }
+
+  const currentGlob = createGlob(doublestar);
+
+  if (YAML.isScalar(glob)) {
+    const value = widen ? currentGlob : compactGlobFor(extensions, doublestar);
+
+    if (glob.value === value) {
+      return false;
+    }
+
+    // Keeps the scalar's comments and quoting.
+    glob.value = value;
+
+    return true;
+  }
+
+  if (!widen) {
+    const globs = globsFor(extensions, doublestar);
+
+    if (JSON.stringify(glob.toJSON()) === JSON.stringify(globs)) {
+      return false;
+    }
+
+    // Item by item, so each keeps its comments.
+    for (const [index, item] of glob.items.entries()) {
+      item.value = globs[index];
+    }
+
+    return true;
+  }
+
+  const compact = doc.createNode(currentGlob);
+
+  // The list's item comments move above the replacement scalar.
+  const comments = glob.items.flatMap((item) => [
+    item.commentBefore,
+    item.comment,
+  ]);
+
+  compact.commentBefore =
+    [glob.commentBefore, ...comments, glob.comment]
+      .filter(Boolean)
+      .join("\n") || undefined;
+  compact.spaceBefore = glob.spaceBefore;
+  job.set("glob", compact);
+
+  return true;
+};
+
 /**
  * Brings an ultracite job written by an earlier init up to date: a dlx
  * command (which Yarn 1 can't run, and which ignores the pinned version)
  * becomes the installed binary, a command without `{staged_files}` (which
  * fixed the whole project) gets it, and generated globs become a single
- * brace glob for the configured matcher. Returns whether anything changed.
+ * brace glob for the configured matcher. A job whose command was edited
+ * keeps its command and file types, and only gets the matcher fixed.
+ * Returns whether anything changed.
  */
 const upgradeUltraciteJob = (
   doc: YAML.Document,
@@ -153,55 +280,23 @@ const upgradeUltraciteJob = (
   command: string,
   doublestar: boolean
 ): boolean => {
-  const run = job.get("run");
+  // `get` types a kept node as a Scalar, but it can be any node.
+  const run: unknown = job.get("run", true);
 
-  if (!isGeneratedJobCommand(String(run))) {
-    return false;
+  const generated =
+    YAML.isScalar(run) && isGeneratedJobCommand(String(run.value));
+
+  // An anchored command may be shared with other hooks, so it stays as is.
+  const commandChanged = generated && !run.anchor && run.value !== command;
+
+  if (commandChanged) {
+    // Only `run`, keeping its comments.
+    run.value = command;
   }
 
-  const commandChanged = replaceYamlStrings(
-    job,
-    (value) => value === job.get("run"),
-    command
-  );
+  const globChanged = upgradeGlob(doc, job, doublestar, generated);
 
-  const glob = job.get("glob", true);
-  const currentGlob = createGlob(doublestar);
-
-  if (
-    YAML.isScalar(glob) &&
-    !glob.anchor &&
-    glob.value === createGlob(!doublestar)
-  ) {
-    glob.value = currentGlob;
-
-    return true;
-  }
-
-  if (
-    YAML.isSeq(glob) &&
-    !glob.anchor &&
-    glob.items.every((item) => YAML.isScalar(item) && !item.anchor) &&
-    generatedGlobLists.has(JSON.stringify(glob.toJSON()))
-  ) {
-    const compact = doc.createNode(currentGlob);
-
-    // The list's item comments move above the replacement scalar.
-    const comments = glob.items.flatMap((item) =>
-      YAML.isScalar(item) ? [item.commentBefore, item.comment] : []
-    );
-
-    compact.commentBefore =
-      [glob.commentBefore, ...comments, glob.comment]
-        .filter(Boolean)
-        .join("\n") || undefined;
-    compact.spaceBefore = glob.spaceBefore;
-    job.set("glob", compact);
-
-    return true;
-  }
-
-  return commandChanged;
+  return commandChanged || globChanged;
 };
 
 /**
