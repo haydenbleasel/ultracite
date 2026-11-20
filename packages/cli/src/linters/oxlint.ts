@@ -1228,7 +1228,7 @@ const findSpreadAhead = (entries: ConfigEntry[]): SpreadAhead | null => {
 const findPresetReferences = (contents: string): string[] => {
   const presets = [
     ...contents.matchAll(
-      /import (?<local>\w+)(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
+      /import (?<local>[\w$]+)(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
     ),
   ].flatMap((match) => {
     const preset = toUltracitePreset(match.groups?.source ?? "");

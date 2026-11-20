@@ -2921,20 +2921,25 @@ describe("findLoadedJsPlugins", () => {
     ).toEqual([]);
   });
 
-  test("reads Cloudflare in a config init can't restructure when its code uses the import", () => {
-    const config = coreConfigWith(
-      'import { defineConfig } from "oxlint";',
-      'import cloudflare from "@cloudflare/oxlint-config";',
-      'import { makeConfig } from "./make-config";',
-      "// cloudflare is the preset below.",
-      "export default defineConfig(makeConfig([core, cloudflare]));"
-    );
+  test.each(["cloudflare", "$cloudflare"])(
+    "reads Cloudflare imported as %s in a config init can't restructure when its code uses the import",
+    (name) => {
+      const config = coreConfigWith(
+        'import { defineConfig } from "oxlint";',
+        `import ${name} from "@cloudflare/oxlint-config";`,
+        'import { makeConfig } from "./make-config";',
+        `// ${name} is the preset below.`,
+        `export default defineConfig(makeConfig([core, ${name}]));`
+      );
 
-    expect(findLoadedJsPlugins(config)).toEqual(["@cloudflare/oxlint-config"]);
-    expect(
-      findLoadedJsPlugins(config.replace("[core, cloudflare]", "[core]"))
-    ).toEqual([]);
-  });
+      expect(findLoadedJsPlugins(config)).toEqual([
+        "@cloudflare/oxlint-config",
+      ]);
+      expect(
+        findLoadedJsPlugins(config.replace(`[core, ${name}]`, "[core]"))
+      ).toEqual([]);
+    }
+  );
 
   // A let can be reassigned, so its initializer isn't read as the config.
   test("reads Cloudflare in a config exported through a reassigned let", () => {
