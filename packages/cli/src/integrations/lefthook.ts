@@ -56,10 +56,10 @@ const globsFor = (extensions: string[], doublestar: boolean): string[] =>
     doublestar ? `**/*.${extension}` : `*.${extension}`
   );
 
-const createGlobs = (doublestar: boolean): string[] =>
-  globsFor(stagedFileExtensions, doublestar);
+const createGlob = (doublestar: boolean): string =>
+  `${doublestar ? "**/" : ""}*.{${stagedFileExtensions.join(",")}}`;
 
-// Every glob list an init has written, for either matcher: the current
+// Every glob list an init has written, for either matcher: the full
 // extensions, and the narrower legacy ones (whose `**` form also missed
 // root-level files under the default matcher).
 const generatedGlobLists = new Set(
@@ -72,8 +72,7 @@ const generatedGlobLists = new Set(
 const renderJob = (command: string, doublestar: boolean): string =>
   [
     `    - run: ${command}`,
-    "      glob:",
-    ...createGlobs(doublestar).map((glob) => `        - "${glob}"`),
+    `      glob: "${createGlob(doublestar)}"`,
     "      stage_fixed: true",
   ].join("\n");
 
@@ -112,9 +111,9 @@ const createJobNode = (
 ): YAML.Node =>
   // A Map keeps lefthook's conventional key order (run first).
   doc.createNode(
-    new Map<string, boolean | string | string[]>([
+    new Map<string, boolean | string>([
       ["run", command],
-      ["glob", createGlobs(doublestar)],
+      ["glob", createGlob(doublestar)],
       ["stage_fixed", true],
     ])
   );
@@ -145,9 +144,8 @@ const findUltraciteJob = (hook: YAML.YAMLMap): YAML.YAMLMap | undefined => {
  * Brings an ultracite job written by an earlier init up to date: a dlx
  * command (which Yarn 1 can't run, and which ignores the pinned version)
  * becomes the installed binary, a command without `{staged_files}` (which
- * fixed the whole project) gets it, and a glob list an init wrote (the
- * narrower pre-v8 one, or one for the other matcher) becomes the current
- * list. Hand-edited globs are left alone. Returns whether anything changed.
+ * fixed the whole project) gets it, and generated globs become a single
+ * brace glob for the configured matcher. Returns whether anything changed.
  */
 const upgradeUltraciteJob = (
   doc: YAML.Document,
@@ -155,26 +153,55 @@ const upgradeUltraciteJob = (
   command: string,
   doublestar: boolean
 ): boolean => {
+  const run = job.get("run");
+
+  if (!isGeneratedJobCommand(String(run))) {
+    return false;
+  }
+
   const commandChanged = replaceYamlStrings(
     job,
-    (value) => value === job.get("run") && isGeneratedJobCommand(value),
+    (value) => value === job.get("run"),
     command
   );
 
   const glob = job.get("glob", true);
-  const globList = YAML.isSeq(glob) ? JSON.stringify(glob.toJSON()) : null;
-  const currentGlobs = createGlobs(doublestar);
+  const currentGlob = createGlob(doublestar);
 
-  const hasLegacyGlobs =
-    globList !== null &&
-    globList !== JSON.stringify(currentGlobs) &&
-    generatedGlobLists.has(globList);
+  if (
+    YAML.isScalar(glob) &&
+    !glob.anchor &&
+    glob.value === createGlob(!doublestar)
+  ) {
+    glob.value = currentGlob;
 
-  if (hasLegacyGlobs) {
-    job.set("glob", doc.createNode(currentGlobs));
+    return true;
   }
 
-  return commandChanged || hasLegacyGlobs;
+  if (
+    YAML.isSeq(glob) &&
+    !glob.anchor &&
+    glob.items.every((item) => YAML.isScalar(item) && !item.anchor) &&
+    generatedGlobLists.has(JSON.stringify(glob.toJSON()))
+  ) {
+    const compact = doc.createNode(currentGlob);
+
+    // The list's item comments move above the replacement scalar.
+    const comments = glob.items.flatMap((item) =>
+      YAML.isScalar(item) ? [item.commentBefore, item.comment] : []
+    );
+
+    compact.commentBefore =
+      [glob.commentBefore, ...comments, glob.comment]
+        .filter(Boolean)
+        .join("\n") || undefined;
+    compact.spaceBefore = glob.spaceBefore;
+    job.set("glob", compact);
+
+    return true;
+  }
+
+  return commandChanged;
 };
 
 /**
