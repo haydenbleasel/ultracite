@@ -88,6 +88,13 @@ const compactGlobFor = (extensions: string[], doublestar: boolean): string =>
 const createGlob = (doublestar: boolean): string =>
   compactGlobFor(stagedFileExtensions, doublestar);
 
+// A glob as YAML, double-quoted (JSON's quoting is valid YAML) so a leading
+// `*` isn't read as an alias, and a list in flow style.
+const yamlGlob = (glob: string | string[]): string =>
+  Array.isArray(glob)
+    ? `[${glob.map((item) => JSON.stringify(item)).join(", ")}]`
+    : JSON.stringify(glob);
+
 // Every glob an init has written, for either matcher, as JSON, with the file
 // types it covers: the legacy and v8 lists (the legacy `**` form also missed
 // root-level files under the default matcher), and the brace glob for the v8
@@ -111,7 +118,7 @@ const generatedGlobs = new Map(
 const renderJob = (command: string, doublestar: boolean): string =>
   [
     `    - run: ${command}`,
-    `      glob: "${createGlob(doublestar)}"`,
+    `      glob: ${yamlGlob(createGlob(doublestar))}`,
     "      stage_fixed: true",
   ].join("\n");
 
@@ -163,6 +170,38 @@ const warnManualEdit = (file: string, command: string): void => {
   );
 };
 
+/**
+ * Values init didn't write into an ultracite job because a YAML anchor or
+ * alias shares them with other jobs, or with `sharedJob`, an anchor shares
+ * the whole job with other hooks: an edit in place would change those too.
+ * Each field is a key and its new value as YAML.
+ */
+interface AnchoredEdits {
+  fields: [key: string, value: string][];
+  sharedJob: boolean;
+}
+
+// What changed in a document, and what is left to change by hand.
+interface ConfigUpdate {
+  anchored?: AnchoredEdits;
+  changed: boolean;
+}
+
+const warnAnchoredEdits = (
+  file: string,
+  { fields, sharedJob }: AnchoredEdits
+): void => {
+  const keys = fields.map(([key]) => key).join(" and ");
+
+  const reason = sharedJob
+    ? `Could not update the Ultracite job in ${file}: other hooks share it through a YAML anchor, so an edit here would change them too. Give pre-commit its own copy of the job, with:`
+    : `Could not fully update the Ultracite job in ${file}: a YAML anchor or alias shares its ${keys} with other jobs, so an edit here would change them too. Give the job values of its own instead:`;
+
+  const values = fields.map(([key, value]) => `  ${key}: ${value}`);
+
+  log.warn([reason, ...values].join("\n"));
+};
+
 // The job (or command) in a pre-commit hook that runs ultracite fix.
 const findUltraciteJob = (hook: YAML.YAMLMap): YAML.YAMLMap | undefined => {
   const jobs = hook.get("jobs", true);
@@ -194,75 +233,81 @@ const isSharedJob = (hook: YAML.YAMLMap, job: YAML.YAMLMap): boolean => {
   );
 };
 
-// Whether a job's glob is a scalar or a list of them that can be edited in
-// place. Anchored globs, and lists with anchored items, may be shared with
-// other jobs.
+// Whether a job's glob is a scalar or a list of them.
+const isGlobNode = (
+  glob: unknown
+): glob is YAML.Scalar | YAML.YAMLSeq<YAML.Scalar> =>
+  YAML.isScalar(glob) ||
+  (YAML.isSeq(glob) && glob.items.every((item) => YAML.isScalar(item)));
+
+// Whether a job's glob can be edited in place. Anchored globs, and lists
+// with anchored items, may be shared with other jobs.
 const isEditableGlob = (
   glob: unknown
 ): glob is YAML.Scalar | YAML.YAMLSeq<YAML.Scalar> =>
-  (YAML.isScalar(glob) ||
-    (YAML.isSeq(glob) &&
-      glob.items.every((item) => YAML.isScalar(item) && !item.anchor))) &&
-  !glob.anchor;
+  isGlobNode(glob) &&
+  !glob.anchor &&
+  (YAML.isScalar(glob) || glob.items.every((item) => !item.anchor));
 
 /**
- * Brings a glob an init wrote (a list, or a brace glob for other extensions
- * or the other matcher) up to date. With `widen`, it becomes the current
+ * The glob to write in place of one an init wrote (a list, or a brace glob
+ * for other extensions or the other matcher). With `widen`, it's the current
  * brace glob. Without it, for a job whose command was edited, it keeps its
  * form and file types and only gets the configured matcher's prefix, so it
- * still matches files in every directory. Hand-edited globs are left alone.
- * Returns whether anything changed.
+ * still matches files in every directory. Undefined when the glob is already
+ * up to date or was edited by hand.
  */
-const upgradeGlob = (
-  doc: YAML.Document,
-  job: YAML.YAMLMap,
+const upgradedGlob = (
+  glob: YAML.Scalar | YAML.YAMLSeq<YAML.Scalar>,
   doublestar: boolean,
   widen: boolean
-): boolean => {
-  // `get` types a kept node as a Scalar, but it can be any node.
-  const glob: unknown = job.get("glob", true);
-
-  if (!isEditableGlob(glob)) {
-    return false;
-  }
-
-  const extensions = generatedGlobs.get(JSON.stringify(glob.toJSON()));
+): string | string[] | undefined => {
+  const current = JSON.stringify(glob.toJSON());
+  const extensions = generatedGlobs.get(current);
 
   if (!extensions) {
-    return false;
+    return undefined;
   }
 
-  const currentGlob = createGlob(doublestar);
+  const unlessCurrent = (value: string | string[]) =>
+    JSON.stringify(value) === current ? undefined : value;
 
+  if (widen) {
+    return unlessCurrent(createGlob(doublestar));
+  }
+
+  return unlessCurrent(
+    YAML.isScalar(glob)
+      ? compactGlobFor(extensions, doublestar)
+      : globsFor(extensions, doublestar)
+  );
+};
+
+// Writes a glob from upgradedGlob in place of the job's glob, keeping its
+// comments.
+const setGlob = (
+  doc: YAML.Document,
+  job: YAML.YAMLMap,
+  glob: YAML.Scalar | YAML.YAMLSeq<YAML.Scalar>,
+  value: string | string[]
+): void => {
   if (YAML.isScalar(glob)) {
-    const value = widen ? currentGlob : compactGlobFor(extensions, doublestar);
-
-    if (glob.value === value) {
-      return false;
-    }
-
     // Keeps the scalar's comments and quoting.
     glob.value = value;
 
-    return true;
+    return;
   }
 
-  if (!widen) {
-    const globs = globsFor(extensions, doublestar);
-
-    if (JSON.stringify(glob.toJSON()) === JSON.stringify(globs)) {
-      return false;
-    }
-
+  if (Array.isArray(value)) {
     // Item by item, so each keeps its comments.
     for (const [index, item] of glob.items.entries()) {
-      item.value = globs[index];
+      item.value = value[index];
     }
 
-    return true;
+    return;
   }
 
-  const compact = doc.createNode(currentGlob);
+  const compact = doc.createNode(value);
 
   // The list's item comments move above the replacement scalar.
   const comments = glob.items.flatMap((item) => [
@@ -276,8 +321,6 @@ const upgradeGlob = (
       .join("\n") || undefined;
   compact.spaceBefore = glob.spaceBefore;
   job.set("glob", compact);
-
-  return true;
 };
 
 /**
@@ -287,8 +330,9 @@ const upgradeGlob = (
  * fixed the whole project) gets it, and generated globs become a single
  * brace glob for the configured matcher. A job whose command was edited
  * keeps its command and file types, and only gets the matcher fixed.
- * Returns whether anything changed, or `shared-command` when an anchor
- * prevents a command upgrade.
+ * A job other hooks share through an anchor is left as is, and so is a
+ * command or glob an anchor or alias shares with other jobs. Returns
+ * whether anything changed, and what those leave to change by hand.
  */
 const upgradeUltraciteJob = (
   doc: YAML.Document,
@@ -302,7 +346,7 @@ const upgradeUltraciteJob = (
     doublestar: boolean;
     shared: boolean;
   }
-): boolean | "shared-command" => {
+): ConfigUpdate => {
   // `get` types a kept node as a Scalar, but it can be any node.
   const run: unknown = job.get("run", true);
 
@@ -311,34 +355,55 @@ const upgradeUltraciteJob = (
 
   const commandChanged = generated && run.value !== command;
 
-  if (commandChanged && (shared || run.anchor)) {
-    return "shared-command";
-  }
+  const glob: unknown = job.get("glob", true);
+  const editableGlob = isEditableGlob(glob);
 
-  if (shared) {
-    return false;
-  }
+  // An alias shares another job's glob, so it's never edited, but it can
+  // still be outdated.
+  const globNode = YAML.isAlias(glob) ? glob.resolve(doc) : glob;
+
+  const globUpgrade = isGlobNode(globNode)
+    ? upgradedGlob(globNode, doublestar, generated)
+    : undefined;
+
+  const fields: AnchoredEdits["fields"] = [];
+  let changed = false;
 
   if (commandChanged) {
-    // Only `run`, keeping its comments.
-    run.value = command;
+    if (shared || run.anchor) {
+      fields.push(["run", command]);
+    } else {
+      // Only `run`, keeping its comments.
+      run.value = command;
+      changed = true;
+    }
   }
 
-  const globChanged = upgradeGlob(doc, job, doublestar, generated);
+  if (globUpgrade !== undefined) {
+    if (shared || !editableGlob) {
+      fields.push(["glob", yamlGlob(globUpgrade)]);
+    } else {
+      setGlob(doc, job, glob, globUpgrade);
+      changed = true;
+    }
+  }
 
-  return commandChanged || globChanged;
+  return {
+    anchored: fields.length > 0 ? { fields, sharedJob: shared } : undefined,
+    changed,
+  };
 };
 
 /**
  * Adds the ultracite job to a lefthook config document, through the yaml
  * Document API so any indentation style stays valid and comments survive.
- * Returns whether the document changed, `shared-command` for a blocked
- * upgrade, or null when a job can't be added.
+ * Returns whether the document changed and what an anchor leaves to change
+ * by hand, or null when a job can't be added.
  */
 const addUltraciteJob = (
   doc: YAML.Document,
   command: string
-): boolean | "shared-command" | null => {
+): ConfigUpdate | null => {
   if (doc.contents === null) {
     doc.contents = doc.createNode({});
   }
@@ -366,7 +431,7 @@ const addUltraciteJob = (
       doc.createNode({ jobs: [createJobNode(doc, command, doublestar)] })
     );
 
-    return true;
+    return { changed: true };
   }
 
   if (!YAML.isMap(hook)) {
@@ -385,7 +450,7 @@ const addUltraciteJob = (
 
   // A hand-written command elsewhere in the hook already runs ultracite.
   if (someYamlString(hook, runsUltraciteFix)) {
-    return false;
+    return { changed: false };
   }
 
   const jobs = hook.get("jobs", true);
@@ -394,14 +459,14 @@ const addUltraciteJob = (
     // First, so files are fixed before other jobs check them.
     jobs.items.unshift(createJobNode(doc, command, doublestar));
 
-    return true;
+    return { changed: true };
   }
 
   if (jobs === undefined || (YAML.isScalar(jobs) && jobs.value === null)) {
     // `jobs` and `commands` can live side by side; lefthook runs jobs first.
     hook.set("jobs", doc.createNode([createJobNode(doc, command, doublestar)]));
 
-    return true;
+    return { changed: true };
   }
 
   return null;
@@ -479,24 +544,20 @@ export const lefthook = {
       return;
     }
 
-    const changed = addUltraciteJob(doc, command);
+    const update = addUltraciteJob(doc, command);
 
-    if (changed === null) {
+    if (update === null) {
       warnManualEdit(file, command);
 
       return;
     }
 
-    if (changed === "shared-command") {
-      log.warn(
-        `Could not update the Ultracite job in ${file} because it uses a shared YAML anchor. Update the existing pre-commit job to run this command:\n  ${command}`
-      );
-
-      return;
+    if (update.changed) {
+      await writeProjectFile(file, renderYamlDocument(doc, existingContents));
     }
 
-    if (changed) {
-      await writeProjectFile(file, renderYamlDocument(doc, existingContents));
+    if (update.anchored) {
+      warnAnchoredEdits(file, update.anchored);
     }
   },
 };
