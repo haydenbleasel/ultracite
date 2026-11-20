@@ -339,5 +339,6 @@ export const dependencyNamesByLinter = {
     "oxlint",
     "oxlint-plugin-react-doctor",
     "oxlint-tsgolint",
+    // tsrs can also supply the project's standalone TypeScript compiler.
   ]),
 } satisfies Record<Linter, Set<string>>;

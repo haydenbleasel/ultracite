@@ -1409,6 +1409,19 @@ export default defineConfig({
     expect(project.warn.mock.calls.at(-1)?.[0]).toContain("./base.json");
   });
 
+  test("merges Cloudflare environments before project settings during RC migration", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json": '{"env": {"jest": true, "node": false}}',
+    });
+
+    await oxlint.update({ jsPlugins: ["@cloudflare/oxlint-config"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      "env: {\n    ...core.env,\n    ...cloudflare.env,\n    jest: true,\n    node: false,"
+    );
+  });
+
   test("migrates the .oxlintrc.jsonc form too", async () => {
     const project = mockProject({
       "./.oxlintrc.jsonc": `{
@@ -2662,6 +2675,23 @@ export default defineConfig({ rules: {} });
 });
 
 describe("findLoadedJsPlugins", () => {
+  test("detects Cloudflare only when the preset is used", () => {
+    expect(
+      findLoadedJsPlugins('// extends: ["@cloudflare/oxlint-config"]')
+    ).toEqual([]);
+
+    const config = coreConfigWith(
+      'import cloudflare from "@cloudflare/oxlint-config";',
+      '// Try "@cloudflare/oxlint-config" for type-aware linting.',
+      "export default { extends: [core] };"
+    );
+
+    expect(findLoadedJsPlugins(config)).toEqual([]);
+    expect(
+      findLoadedJsPlugins(config.replace("[core]", "[core, cloudflare]"))
+    ).toEqual(["@cloudflare/oxlint-config"]);
+  });
+
   test("finds nothing in a config that extends core alone", () => {
     expect(findLoadedJsPlugins(coreConfigWith())).toEqual([]);
   });

@@ -238,6 +238,7 @@ type OverridableProperty = "env" | "ignorePatterns" | "jsPlugins" | "settings";
 interface GeneratedProperties {
   // The name core is imported under.
   coreIdentifier: string;
+  envSources: string[];
   hasJsPluginSettings: boolean;
   hoistedJsPlugins: string[];
 }
@@ -570,9 +571,15 @@ const generateConfigContent = (
       : `  extends: [\n${renderEntries(allExtends, [], "    ")}\n  ],`;
 
   const coreIdentifier = identifierOf(corePath);
+  const coreEnv = `${coreIdentifier}.env`;
+
+  const envSources = resolvedExtends.includes(cloudflarePreset)
+    ? [coreEnv, `${identifierOf(cloudflarePreset)}.env`]
+    : [coreEnv];
 
   const generated: GeneratedProperties = {
     coreIdentifier,
+    envSources,
     hasJsPluginSettings,
     hoistedJsPlugins: hoistedJsPluginIdentifiers,
   };
@@ -590,9 +597,7 @@ const generateConfigContent = (
   // before `extends` to keep the keys sorted.
   const envProperty = generatedProperty(
     "env",
-    resolvedExtends.includes(cloudflarePreset)
-      ? `{ ...${coreIdentifier}.env, ...${identifierOf(cloudflarePreset)}.env }`
-      : `${coreIdentifier}.env`
+    envSources.length === 1 ? coreEnv : `{ ...${envSources.join(", ...")} }`
   );
 
   const properties = [
@@ -1129,7 +1134,9 @@ const readLoadedPresets = (contents: string): LoadedPresets => {
     ),
     presets: existing
       ? [...existing.presets, ...existing.reached]
-      : findPresetReferences(contents),
+      : findPresetReferences(contents).filter(
+          (preset) => preset !== cloudflarePreset
+        ),
   };
 };
 
@@ -1166,6 +1173,10 @@ export const findLoadedJsPlugins = (
     loaded.add(shadcnPlugin);
   }
 
+  if (presets.includes(cloudflarePreset)) {
+    loaded.add(cloudflarePreset);
+  }
+
   // A config that registers landmines itself names an entry point, such as
   // "@interfere/landmines/testing", never the bare package.
   if (
@@ -1176,7 +1187,10 @@ export const findLoadedJsPlugins = (
   }
 
   for (const plugin of oxlintJsPluginNames) {
-    if (contents.includes(`"${plugin}"`) || contents.includes(`'${plugin}'`)) {
+    if (
+      plugin !== cloudflarePreset &&
+      (contents.includes(`"${plugin}"`) || contents.includes(`'${plugin}'`))
+    ) {
       loaded.add(plugin);
     }
   }
@@ -1278,8 +1292,7 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
       };
     } else if (key === "env" && isJsonObject(value)) {
       extras.overrides.env ??= {
-        build: ({ coreIdentifier }) =>
-          renderSpreadObject(key, [`${coreIdentifier}.env`], value),
+        build: ({ envSources }) => renderSpreadObject(key, envSources, value),
       };
     } else if (key === "settings" && isJsonObject(value)) {
       extras.overrides.settings ??= {
