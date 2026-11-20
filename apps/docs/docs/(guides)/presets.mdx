@@ -312,3 +312,13 @@ export default [...core, ...gdp];
 ```
 
 It matches the Oxlint preset: upstream's strict mode stops proofs being forged with type assertions or minted outside `proofs/`, and empty proof interfaces (`interface X<P> extends Proof<"X", [P]> {}`) are allowed inside `proofs/`. Sensitive functions take proofs they never read at runtime (`_proof: UserIsProjectAdmin<U, P>`); the core presets already ignore `_`-prefixed arguments in `no-unused-vars`, so those need no setting of their own.
+
+## Cloudflare (Oxlint)
+
+Select `@cloudflare/oxlint-config` in the optional JS plugins prompt or pass it to `init`:
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins @cloudflare/oxlint-config
+```
+
+Ultracite installs the [Cloudflare preset](https://github.com/cloudflare/oxlint-config) and its `tsrs` beta backend. The generated config extends Cloudflare after Ultracite's core and before the framework presets, so framework-specific rules take precedence. The preset turns on type-aware linting itself, so `ultracite check` and `ultracite fix` run its type-aware rules without an extra flag. In a TypeScript project, an interactive init also sets up type-aware linting as `--type-aware` does without asking about it, and still confirms the `strictNullChecks` those rules need before changing any tsconfig. A non-interactive run only does that with `--type-aware`.

@@ -9,6 +9,7 @@ import {
 import {
   eslintFrameworkDevDependencies,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
+  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../src/dependencies";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -139,6 +140,28 @@ describe("getConfiguredPlugins", () => {
         "oxlint-plugin-react-doctor",
         OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["oxlint-plugin-react-doctor"],
       ],
+    ]);
+  });
+
+  test("lists Cloudflare's preset and tsrs in a config init can't restructure", () => {
+    const plugins = withConfig(
+      "oxlint.config.ts",
+      [
+        'import { defineConfig } from "oxlint";',
+        'import core from "ultracite/oxlint/core";',
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        'import { makeConfig } from "./make-config";',
+        "export default defineConfig(makeConfig([core, cloudflare]));",
+      ].join("\n"),
+      () => getConfiguredPlugins("oxlint")
+    );
+
+    expect([...plugins]).toEqual([
+      [
+        "@cloudflare/oxlint-config",
+        OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["@cloudflare/oxlint-config"],
+      ],
+      ["tsrs", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs],
     ]);
   });
 

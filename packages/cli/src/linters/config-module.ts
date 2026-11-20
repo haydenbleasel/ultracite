@@ -712,7 +712,66 @@ const parseProgram = (source: string): ASTNode | null => {
   }
 };
 
-export const parseConfigModule = (source: string): ParsedConfigModule => {
+const readBoundConfigExport = (
+  source: string,
+  body: ASTNode[],
+  declaration: ASTNode
+): ConfigExport | null => {
+  const name = identifierName(declaration);
+
+  if (!name) {
+    return null;
+  }
+
+  for (const statement of body) {
+    // `export const config = ...` declares the binding as well.
+    const variables =
+      statement.type === "ExportNamedDeclaration"
+        ? statement.declaration
+        : statement;
+
+    if (variables?.type !== "VariableDeclaration") {
+      continue;
+    }
+
+    const binding = variables.declarations.find(
+      ({ id }) => id.type === "Identifier" && id.name === name
+    );
+
+    // Only a const's initializer is what it exports: a `let` or `var` can
+    // be reassigned after it.
+    if (binding) {
+      return variables.kind === "const" && binding.init
+        ? readConfigExport(source, binding.init)
+        : null;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * The names a module's code reads outside its imports (see readNames), or
+ * null when it doesn't parse.
+ */
+export const readModuleNames = (source: string): Set<string> | null => {
+  const program = parseProgram(source);
+
+  if (program?.type !== "Program") {
+    return null;
+  }
+
+  return new Set(
+    program.body.flatMap((node) =>
+      node.type === "ImportDeclaration" ? [] : readNames(node)
+    )
+  );
+};
+
+export const parseConfigModule = (
+  source: string,
+  { followDefaultBinding = false } = {}
+): ParsedConfigModule => {
   const program = parseProgram(source);
 
   if (program?.type !== "Program") {
@@ -731,6 +790,14 @@ export const parseConfigModule = (source: string): ParsedConfigModule => {
       imports.push(readImport(source, node, afterLine, next));
     } else if (node.type === "ExportDefaultDeclaration") {
       configExport = readConfigExport(source, node.declaration);
+
+      if (!configExport && followDefaultBinding) {
+        configExport = readBoundConfigExport(
+          source,
+          program.body,
+          node.declaration
+        );
+      }
     } else {
       statements.push(readStatement(source, node, afterLine, next));
     }
