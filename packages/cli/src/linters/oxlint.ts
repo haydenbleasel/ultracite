@@ -994,6 +994,7 @@ const readExistingConfig = (
   // preset; with no such import it's the project's own (`const core = ...`).
   const coreIdentifier = extras.presetIdentifiers.get(corePath) ?? null;
   const cloudflareIdentifier = extras.presetIdentifiers.get(cloudflarePreset);
+  let envEntry: ConfigEntry | undefined;
 
   const isGeneratedCoreValue = (entry: ConfigEntry, property: string) =>
     coreIdentifier !== null &&
@@ -1028,11 +1029,7 @@ const readExistingConfig = (
         extras.usedNames.add(name);
       }
     } else if (entry.key === "env") {
-      if (
-        !(isGeneratedCoreValue(entry, "env") || isGeneratedCloudflareEnv(entry))
-      ) {
-        extras.overrides.env = { entry: carry(entry) };
-      }
+      envEntry = entry;
     } else if (entry.key === "ignorePatterns") {
       if (!isGeneratedCoreValue(entry, "ignorePatterns")) {
         extras.overrides.ignorePatterns = { entry: carry(entry) };
@@ -1067,7 +1064,33 @@ const readExistingConfig = (
       return preset ? [preset] : reach(ownConsts.get(name) ?? []);
     });
 
-  return { extras, order, presets, reached: reach(extendsSources) };
+  const reached = reach(extendsSources);
+
+  const extendsCloudflare =
+    presets.includes(cloudflarePreset) || reached.includes(cloudflarePreset);
+
+  if (envEntry && !isGeneratedCoreValue(envEntry, "env")) {
+    const mergesCloudflare = isGeneratedCloudflareEnv(envEntry);
+
+    if (!(extendsCloudflare && mergesCloudflare)) {
+      const entry = carry(envEntry);
+      const { valueText } = envEntry;
+      extras.overrides.env =
+        extendsCloudflare || mergesCloudflare || valueText === null
+          ? { entry }
+          : {
+              build: ({ envSources: [, cloudflareEnv] }) =>
+                cloudflareEnv
+                  ? {
+                      ...entry,
+                      text: `env: { ...${cloudflareEnv}, ...(${valueText}) }`,
+                    }
+                  : entry,
+            };
+    }
+  }
+
+  return { extras, order, presets, reached };
 };
 
 // `import * as core` reaches the preset as `core.default`, which the
@@ -1299,7 +1322,8 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
       for (const reference of value) {
         const preset = toUltracitePreset(String(reference));
 
-        if (preset) {
+        // JSON extends accepts file paths, not Cloudflare's npm specifier.
+        if (preset && preset !== cloudflarePreset) {
           presets.push(preset);
         } else {
           unmigrated.push(String(reference));
