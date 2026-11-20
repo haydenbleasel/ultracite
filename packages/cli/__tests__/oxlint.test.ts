@@ -1526,6 +1526,37 @@ export default defineConfig({
     );
   });
 
+  test("adds Cloudflare to a project environment in a config that already extends it", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": coreConfigWith(
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        "export default { env: { ...core.env, node: true }, extends: [core, cloudflare] };"
+      ),
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      "env: { ...core.env, ...cloudflare.env, node: true },"
+    );
+    expect(content).toContain("extends: [core, cloudflare],");
+  });
+
+  test("keeps a project environment that spreads Cloudflare's in a config that extends it", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": coreConfigWith(
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        "export default { env: { ...cloudflare.env, node: true }, extends: [core, cloudflare] };"
+      ),
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("env: { ...cloudflare.env, node: true },");
+  });
+
   test("doesn't add Cloudflare to a project environment that already spreads it", async () => {
     const project = mockProject({
       "./oxlint.config.ts": coreConfigWith(

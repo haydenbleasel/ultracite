@@ -53,7 +53,10 @@ export const isOxlintNpmJsPlugin = (
  * The Oxlint toolchain `init` installs and `upgrade` re-syncs, at the ranges
  * the presets were verified against. oxfmt is pre-1.0, so its caret range
  * holds the minor version and formatting doesn't change under a project
- * between Ultracite releases.
+ * between Ultracite releases. tsrs starts where the peer range Cloudflare's
+ * preset declares for it does, so a project isn't held to a single beta.
+ * Its versions follow the TypeScript release it builds on (7.1.0-beta.tsrs3),
+ * so the range stops at TypeScript 8 the way a caret stops at a major.
  */
 export const OXLINT_TOOLCHAIN_DEV_DEPENDENCIES = {
   oxfmt: packageJson.devDependencies.oxfmt,

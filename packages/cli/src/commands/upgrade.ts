@@ -4,7 +4,7 @@ import process from "node:process";
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager } from "nypm";
-import { gtr, lt, valid, validRange } from "semver";
+import { gtr, lt, satisfies, valid, validRange } from "semver";
 
 import packageJson from "../../package.json" with { type: "json" };
 import { agentAdapters, assertAgentAvailable } from "../agent-fix/agents";
@@ -169,6 +169,19 @@ const collectProjectDependencyNames = async (): Promise<Set<string>> => {
   ]);
 };
 
+// tsrs can be the project's own TypeScript compiler, so one that already
+// satisfies the range doctor checks stays at the version the project chose.
+const hasSupportedTsrs = (): boolean => {
+  const version = findInstalledPackage("tsrs")?.manifest.version;
+
+  return (
+    version !== undefined &&
+    satisfies(version, OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs, {
+      includePrerelease: true,
+    })
+  );
+};
+
 /**
  * The `name@version` specs to (re)install for a toolchain: everything the
  * preset requires — including packages newer presets added — plus the
@@ -230,7 +243,10 @@ export const getToolchainPackages = (
         );
       }
 
-      if (projectDependencies.has("@cloudflare/oxlint-config")) {
+      if (
+        projectDependencies.has("@cloudflare/oxlint-config") &&
+        !hasSupportedTsrs()
+      ) {
         packages.set("tsrs", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs);
       }
 

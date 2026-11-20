@@ -1142,8 +1142,11 @@ const readExistingConfig = (
         ([name, preset]) => (preset === cloudflarePreset ? [`${name}.env`] : [])
       );
 
+      // oxlint doesn't carry `env` through `extends`, so a project's own env
+      // gets Cloudflare's whether init adds the preset or the config already
+      // extends it. addCloudflareEnv keeps one that spreads it as written.
       extras.overrides.env =
-        extendsCloudflare || mergesCloudflare || value === null
+        mergesCloudflare || value === null
           ? { entry }
           : {
               build: ({ envSources: [, cloudflareEnv] }) =>

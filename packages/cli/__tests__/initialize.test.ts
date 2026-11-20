@@ -4795,9 +4795,15 @@ describe("init questions", () => {
   });
 
   // Cloudflare's preset sets `options.typeAware` itself, which Oxlint
-  // carries through `extends`, so its rules still run through tsrs.
+  // carries through `extends`, so its rules still run through tsrs. A
+  // non-interactive run without --type-aware never edits tsconfig.
   test.each([
     ["a JavaScript project", {}, {}],
+    [
+      "a non-interactive TypeScript project",
+      { "tsconfig.json": '{"compilerOptions": {}}' },
+      {},
+    ],
     [
       "an explicit type-aware false",
       { "tsconfig.json": '{"compilerOptions": {}}' },

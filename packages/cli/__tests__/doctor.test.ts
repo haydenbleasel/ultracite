@@ -1735,6 +1735,37 @@ export default defineConfig({
     expect(findCheck(checks, "eslint-plugin-github version")).toBeUndefined();
   });
 
+  // Cloudflare's preset takes any tsrs from its beta on, and a project can run
+  // a newer tsrs as its own compiler.
+  test.each(["0.25.0-ts7.1.0-beta", "0.26.0", "7.1.0-beta.tsrs3"])(
+    "accepts tsrs %s alongside Cloudflare's preset",
+    (tsrs) => {
+      const checks = pluginChecks(
+        "oxlint",
+        pluginProject(
+          [
+            "oxlint.config.ts",
+            [
+              'import { defineConfig } from "oxlint";',
+              'import core from "ultracite/oxlint/core";',
+              'import cloudflare from "@cloudflare/oxlint-config";',
+              "export default defineConfig({ extends: [core, cloudflare] });",
+            ].join("\n"),
+          ],
+          { "@cloudflare/oxlint-config": "0.1.0", tsrs }
+        )
+      );
+
+      expect(checks).toEqual([
+        expect.objectContaining({
+          message: expect.stringContaining("2 lint plugins the config loads"),
+          name: "Plugin versions",
+          status: "pass",
+        }),
+      ]);
+    }
+  );
+
   test("checks the package a wrapper plugin takes its rules from", () => {
     // pnpm links each package out of its store, next to its own
     // dependencies, so the wrapper's copy isn't in the project's node_modules.

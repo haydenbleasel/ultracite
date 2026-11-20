@@ -1587,13 +1587,14 @@ const selectTypeAware = async (
     return true;
   }
 
-  // Only a TypeScript project has types to check.
-  if (!(interactive || cloudflare) || !(await tsconfig.exists())) {
+  // Only a TypeScript project has types to check. A non-interactive run only
+  // sets it up with --type-aware, so it never edits tsconfig unasked.
+  if (!interactive || !(await tsconfig.exists())) {
     return false;
   }
 
   // Cloudflare's preset turns type-aware linting on itself, so choosing it
-  // answers this question.
+  // answers this question. The strictNullChecks edit is still confirmed.
   if (cloudflare) {
     return true;
   }
