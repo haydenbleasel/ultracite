@@ -7,6 +7,16 @@ import YAML from "yaml";
 import { lefthook } from "../src/integrations/lefthook";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
+const stagedGlob =
+  "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,jsonc,css,scss,less,vue,svelte,astro,html,md,mdx,yaml,yml,graphql,gql}";
+
+// The file types init has written globs for since v8, as it wrote them.
+// Configs with these must still be upgraded after a type is added.
+const v8Extensions =
+  "js,jsx,mjs,cjs,ts,tsx,mts,cts,json,jsonc,css,scss,less,vue,svelte,astro,html,md,mdx,yaml,yml,graphql,gql".split(
+    ","
+  );
+
 const npmPm: PackageManager = { command: "npm", name: "npm" };
 
 mock.module("../src/spawn-sync", () => ({
@@ -513,50 +523,65 @@ describe("lefthook", () => {
       );
     });
 
-    test("uses globs that match root-level files", async () => {
+    test("uses one compact glob for all supported file types", async () => {
       const written = mockProject({});
 
       await lefthook.create("npm");
       restoreFileSystemMock();
 
       const [job] = preCommitJobs(written.get("./lefthook.yml"));
-      expect(job.glob).toContain("*.ts");
-      expect(job.glob).not.toContain("**/*.ts");
+      expect(job.glob).toBe(stagedGlob);
     });
 
-    test("globs every file type the toolchains handle", async () => {
-      const written = mockProject({});
+    test.each(["gobwas", "doublestar"])(
+      "compacts the generated v8 glob list under the %s matcher",
+      async (matcher) => {
+        const prefix = matcher === "doublestar" ? "**/" : "";
 
-      await lefthook.create("npm");
-      restoreFileSystemMock();
+        const list = v8Extensions
+          .map(
+            (extension) =>
+              `        - "${prefix}*.${extension}" # ${extension} file`
+          )
+          .join("\n");
 
-      const [job] = preCommitJobs(written.get("./lefthook.yml"));
-      expect(job.glob).toEqual([
-        "*.js",
-        "*.jsx",
-        "*.mjs",
-        "*.cjs",
-        "*.ts",
-        "*.tsx",
-        "*.mts",
-        "*.cts",
-        "*.json",
-        "*.jsonc",
-        "*.css",
-        "*.scss",
-        "*.less",
-        "*.vue",
-        "*.svelte",
-        "*.astro",
-        "*.html",
-        "*.md",
-        "*.mdx",
-        "*.yaml",
-        "*.yml",
-        "*.graphql",
-        "*.gql",
-      ]);
-    });
+        const written = mockProject({
+          "./lefthook.yml": `glob_matcher: ${matcher}
+pre-commit:
+  jobs:
+    - run: bunx ultracite fix {staged_files}
+      glob: # Staged file types
+${list}
+      stage_fixed: true
+    # Check the result
+    - run: bun test
+`,
+        });
+
+        await lefthook.update("bun");
+        restoreFileSystemMock();
+
+        const config = written.get("./lefthook.yml");
+        expect(config).toContain(`glob_matcher: ${matcher}`);
+        expect(config).toContain("# Staged file types");
+        expect(config).toContain("# ts file");
+        expect(config).toContain("    # Check the result\n    - run: bun test");
+        expect(preCommitJobs(config)).toEqual([
+          {
+            glob: `${prefix}${stagedGlob}`,
+            run: "bunx ultracite fix {staged_files}",
+            stage_fixed: true,
+          },
+          { run: "bun test" },
+        ]);
+
+        const rerun = mockProject({ "./lefthook.yml": config ?? "" });
+        await lefthook.update("bun");
+        restoreFileSystemMock();
+
+        expect(rerun.size).toBe(0);
+      }
+    );
 
     test("widens the glob list a pre-v8 init wrote", async () => {
       const written = mockProject({
@@ -579,15 +604,15 @@ describe("lefthook", () => {
       restoreFileSystemMock();
 
       const [job] = preCommitJobs(written.get("./lefthook.yml"));
-      expect(job.glob).toHaveLength(23);
-      expect(job.glob).toContain("*.vue");
-      expect(job.glob).toContain("*.mts");
-      expect(job.glob).not.toContain("**/*.vue");
+      expect(job.glob).toBe(stagedGlob);
     });
 
-    test("widens a pre-v8 doublestar glob list under the doublestar matcher", async () => {
+    test.each([
+      "glob_matcher: doublestar",
+      "matcher: &matcher doublestar\nglob_matcher: *matcher",
+    ])("widens a pre-v8 glob list with %s", async (matcher) => {
       const written = mockProject({
-        "./lefthook.yml": `glob_matcher: doublestar
+        "./lefthook.yml": `${matcher}
 pre-commit:
   jobs:
     - run: npx ultracite fix {staged_files}
@@ -607,9 +632,7 @@ pre-commit:
       restoreFileSystemMock();
 
       const [job] = preCommitJobs(written.get("./lefthook.yml"));
-      expect(job.glob).toHaveLength(23);
-      expect(job.glob).toContain("**/*.astro");
-      expect(job.glob).not.toContain("*.astro");
+      expect(job.glob).toBe(`**/${stagedGlob}`);
     });
 
     test("leaves a glob list a user edited alone", async () => {
@@ -630,6 +653,80 @@ pre-commit:
       expect(written.size).toBe(0);
     });
 
+    test("fixes only the matcher of a generated glob list on a job whose command was edited", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: npx ultracite fix --unsafe {staged_files}
+      glob:
+        - "**/*.js" # js file
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      const config = written.get("./lefthook.yml");
+      const [job] = preCommitJobs(config);
+      expect(job.run).toBe("npx ultracite fix --unsafe {staged_files}");
+      expect(job.glob).toEqual([
+        "*.js",
+        "*.jsx",
+        "*.ts",
+        "*.tsx",
+        "*.json",
+        "*.jsonc",
+        "*.css",
+      ]);
+      expect(config).toContain("# js file");
+    });
+
+    test("keeps the file types of a generated glob list on a job whose command was edited", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: npx ultracite fix --unsafe {staged_files}
+      glob:
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+    });
+
+    test("leaves a brace glob a user wrote alone", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: npx ultracite fix {staged_files}
+      glob: "*.{js,jsx,ts,tsx,json,jsonc,css}"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+    });
+
     test("uses ** globs when the config opts into the doublestar matcher", async () => {
       const written = mockProject({
         "./lefthook.yml": "glob_matcher: doublestar\n",
@@ -639,7 +736,55 @@ pre-commit:
       restoreFileSystemMock();
 
       const [job] = preCommitJobs(written.get("./lefthook.yml"));
-      expect(job.glob).toContain("**/*.ts");
+      expect(job.glob).toBe(`**/${stagedGlob}`);
+    });
+
+    test("updates a generated compact glob when the matcher changes", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `glob_matcher: doublestar
+pre-commit:
+  jobs:
+    - run: bunx ultracite fix {staged_files}
+      glob: "*.{${v8Extensions.join(",")}}" # Managed file types
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("bun");
+      restoreFileSystemMock();
+
+      const config = written.get("./lefthook.yml");
+      const [job] = preCommitJobs(config);
+      expect(job.glob).toBe(`**/${stagedGlob}`);
+      expect(config).toContain("# Managed file types");
+    });
+
+    test.each([
+      `[&shared "*.js", "*.jsx", "*.ts", "*.tsx", "*.json", "*.jsonc", "*.css"]`,
+      `&shared "${stagedGlob}"`,
+    ])("leaves glob anchors shared by other jobs alone", async (glob) => {
+      const written = mockProject({
+        "./lefthook.yml": `glob_matcher: doublestar
+pre-commit:
+  jobs:
+    - run: bunx ultracite fix {staged_files}
+      glob: ${glob}
+      stage_fixed: true
+    - run: bun test {staged_files}
+      glob: *shared
+`,
+      });
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      await lefthook.update("bun");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining(`glob: "**/${stagedGlob}"`)
+      );
+      warn.mockRestore();
     });
 
     test("upgrades a job from an earlier init instead of adding a second one", async () => {
@@ -665,7 +810,7 @@ pre-commit:
       const jobs = preCommitJobs(written.get("./lefthook.yml"));
       expect(jobs).toHaveLength(1);
       expect(jobs[0].run).toBe("yarn ultracite fix {staged_files}");
-      expect(jobs[0].glob).toContain("*.js");
+      expect(jobs[0].glob).toBe(stagedGlob);
     });
 
     test("does not add a second job when the package manager changes", async () => {
@@ -718,6 +863,224 @@ pre-commit:
       const jobs = preCommitJobs(written.get("./lefthook.yml"));
       expect(jobs).toHaveLength(1);
       expect(jobs[0].run).toBe("pnpm exec ultracite fix {staged_files}");
+    });
+
+    test("changes only the job's command, not other fields that repeat it", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - env:
+        CMD: npx ultracite fix {staged_files}
+      run: npx ultracite fix {staged_files}
+`,
+      });
+
+      await lefthook.update("pnpm");
+      restoreFileSystemMock();
+
+      const [job] = preCommitJobs(written.get("./lefthook.yml"));
+      expect(job.run).toBe("pnpm exec ultracite fix {staged_files}");
+      expect(job.env.CMD).toBe("npx ultracite fix {staged_files}");
+    });
+
+    const legacyGlobs = `["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json", "**/*.jsonc", "**/*.css"]`;
+
+    test("upgrades the glob of a job whose outdated command is anchored, and gives the command to change", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: &fix yarn dlx ultracite fix
+      glob: ${legacyGlobs}
+pre-push:
+  jobs:
+    - run: *fix
+`,
+      });
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      await lefthook.update("pnpm");
+      restoreFileSystemMock();
+
+      const config = YAML.parse(written.get("./lefthook.yml") ?? "");
+      expect(config["pre-commit"].jobs).toEqual([
+        { glob: stagedGlob, run: "yarn dlx ultracite fix" },
+      ]);
+      expect(config["pre-push"].jobs).toEqual([
+        { run: "yarn dlx ultracite fix" },
+      ]);
+      expect(warn).toHaveBeenCalledTimes(1);
+
+      const [[message]] = warn.mock.calls;
+      expect(message).toContain("shares its run with other jobs");
+      expect(message).toContain("run: pnpm exec ultracite fix {staged_files}");
+      expect(message).not.toContain("glob:");
+      warn.mockRestore();
+    });
+
+    test("gives the glob for a job whose glob is aliased from another job", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: bun test {staged_files}
+      glob: &shared ${legacyGlobs}
+    - run: bunx ultracite fix {staged_files}
+      glob: *shared
+`,
+      });
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      await lefthook.update("bun");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+      expect(warn).toHaveBeenCalledTimes(1);
+
+      const [[message]] = warn.mock.calls;
+      expect(message).toContain("shares its glob with other jobs");
+      expect(message).toContain(`glob: "${stagedGlob}"`);
+      expect(message).not.toContain("run:");
+      warn.mockRestore();
+    });
+
+    test.each([
+      [
+        "job",
+        `pre-commit:
+  jobs:
+    - &fix
+      run: npx ultracite fix --unsafe {staged_files}
+      glob: ${legacyGlobs}
+pre-push:
+  jobs:
+    - *fix
+`,
+        // An edited command keeps its file types, so only the matcher changes.
+        'glob: ["*.js", "*.jsx", "*.ts", "*.tsx", "*.json", "*.jsonc", "*.css"]',
+      ],
+      [
+        "job list",
+        `pre-commit:
+  jobs: &jobs
+    - run: npx ultracite fix {staged_files}
+      glob: ${legacyGlobs}
+pre-push:
+  jobs: *jobs
+`,
+        `glob: "${stagedGlob}"`,
+      ],
+      [
+        "hook",
+        `pre-commit: &hook
+  commands:
+    fix:
+      run: npx ultracite fix {staged_files}
+      glob: ${legacyGlobs}
+pre-push: *hook
+`,
+        `glob: "${stagedGlob}"`,
+      ],
+    ])(
+      "leaves a job other hooks share through an anchored %s alone, with the glob to change it to",
+      async (_anchored, config, glob) => {
+        const written = mockProject({ "./lefthook.yml": config });
+        const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+        await lefthook.update("npm");
+        restoreFileSystemMock();
+
+        expect(written.size).toBe(0);
+        expect(warn).toHaveBeenCalledTimes(1);
+
+        const [[message]] = warn.mock.calls;
+        expect(message).toContain("Give pre-commit its own copy of the job");
+        expect(message).toContain(glob);
+        expect(message).not.toContain("run:");
+        warn.mockRestore();
+      }
+    );
+
+    test("gives the command and the anchored glob for a job other hooks share", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit: &hook
+  jobs:
+    - run: npx ultracite fix
+      glob: &globs ${legacyGlobs}
+pre-push: *hook
+`,
+      });
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+      expect(warn).toHaveBeenCalledTimes(1);
+
+      const [[message]] = warn.mock.calls;
+      expect(message).toContain("Give pre-commit its own copy of the job");
+      expect(message).toContain("run: npx ultracite fix {staged_files}");
+      expect(message).toContain(`glob: "${stagedGlob}"`);
+      warn.mockRestore();
+    });
+
+    test("still asks for the glob after a shared job's command was updated by hand", async () => {
+      const config = `pre-commit:
+  jobs:
+    - &fix
+      run: yarn dlx ultracite fix
+      glob: ["*.js", "*.jsx", "*.ts", "*.tsx", "*.json", "*.jsonc", "*.css"]
+pre-push:
+  jobs:
+    - *fix
+`;
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+      const written = mockProject({ "./lefthook.yml": config });
+      await lefthook.update("yarn");
+      restoreFileSystemMock();
+
+      // Only the command the first warning asked for is changed.
+      const edited = config.replace(
+        "yarn dlx ultracite fix",
+        "yarn ultracite fix {staged_files}"
+      );
+
+      const rerun = mockProject({ "./lefthook.yml": edited });
+      await lefthook.update("yarn");
+      restoreFileSystemMock();
+
+      expect(written.size + rerun.size).toBe(0);
+      expect(warn).toHaveBeenCalledTimes(2);
+
+      const [[first], [second]] = warn.mock.calls;
+      expect(first).toContain("run: yarn ultracite fix {staged_files}");
+      expect(first).toContain(`glob: "${stagedGlob}"`);
+      expect(second).toContain(`glob: "${stagedGlob}"`);
+      expect(second).not.toContain("run:");
+      warn.mockRestore();
+    });
+
+    test("says nothing about a shared job that's up to date", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit: &hook
+  jobs:
+    - run: npx ultracite fix {staged_files}
+      glob: "${stagedGlob}"
+pre-push: *hook
+`,
+      });
+
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
     });
 
     test("leaves a hand-written ultracite job alone", async () => {
