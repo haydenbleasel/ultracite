@@ -590,6 +590,11 @@ describe("initialize", () => {
         message: "Which JS plugins would you like to add (optional)?",
         options: [
           {
+            hint: "Cloudflare rules with type-aware linting via tsrs",
+            label: "@cloudflare/oxlint-config",
+            value: "@cloudflare/oxlint-config",
+          },
+          {
             hint: "strict rules against agent shortcuts in tests",
             label: "@interfere/landmines",
             value: "@interfere/landmines",
@@ -2272,37 +2277,56 @@ describe("helper functions", () => {
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
-    test("installs oxlint-tsgolint when type-aware is true", async () => {
-      const installedPackages: string[] = [];
+    test.each([
+      { backend: "oxlint-tsgolint", jsPlugins: [] },
+      { backend: "tsrs", jsPlugins: ["@cloudflare/oxlint-config"] },
+    ] as const)(
+      "installs $backend for type-aware Oxlint",
+      async ({ backend, jsPlugins }) => {
+        const installedPackages: string[] = [];
 
-      const mockAddDep = mock((pkg: string | string[]) => {
-        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+        const mockAddDep = mock((pkg: string | string[]) => {
+          installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
 
-        return Promise.resolve();
-      });
+          return Promise.resolve();
+        });
 
-      mock.module("nypm", () => ({
-        addDevDependency: mockAddDep,
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        removeDependency: mock(() => Promise.resolve()),
-      }));
+        mock.module("nypm", () => ({
+          addDevDependency: mockAddDep,
+          detectPackageManager: mock(() =>
+            Promise.resolve({ name: "npm", warnings: [] })
+          ),
+          dlxCommand: mock(() => "npx ultracite fix"),
+          removeDependency: mock(() => Promise.resolve()),
+        }));
 
-      mock.module("@clack/prompts", () => ({
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
+        mock.module("@clack/prompts", () => ({
+          spinner: mock(() => ({
+            message: mock(noop),
+            start: mock(noop),
+            stop: mock(noop),
+          })),
+        }));
 
-      await installDependencies(npmPm, "oxlint", true, true, true);
-      expect(installedPackages).toContain(
-        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
-      );
-    });
+        await installDependencies(
+          npmPm,
+          "oxlint",
+          true,
+          true,
+          true,
+          [],
+          [...jsPlugins]
+        );
+        expect(installedPackages).toContain(
+          `${backend}@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES[backend]}`
+        );
+        expect(
+          installedPackages.filter((pkg) =>
+            /^(?:oxlint-tsgolint|tsrs)@/u.test(pkg)
+          )
+        ).toHaveLength(1);
+      }
+    );
 
     test("does not install oxlint-tsgolint when type-aware is false", async () => {
       const installedPackages: string[] = [];

@@ -48,7 +48,7 @@ import { chainScript } from "./integrations/project-command";
 import { biome } from "./linters/biome";
 import { eslint } from "./linters/eslint";
 import { oxfmt } from "./linters/oxfmt";
-import { oxlint } from "./linters/oxlint";
+import { findLoadedJsPlugins, oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
@@ -258,6 +258,8 @@ export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
 
 // Prompt hints for the JS plugins that need a word of explanation.
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
+  "@cloudflare/oxlint-config":
+    "Cloudflare rules with type-aware linting via tsrs",
   "@interfere/landmines": "strict rules against agent shortcuts in tests",
   "@shadcn/lint": "design-system rules for Tailwind v4 components",
   "anti-slop": "vendored opinionated preset, nothing to install",
@@ -267,7 +269,7 @@ const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
 
 const buildNoInstallDevDependencies = (
   linter: Linter,
-  typeAware: boolean,
+  typeAwareBackend: OxlintTypeAwareBackend | null,
   frameworks: Frameworks[],
   jsPlugins: OxlintJsPlugin[] = []
 ) => {
@@ -287,9 +289,9 @@ const buildNoInstallDevDependencies = (
     devDependencies.oxlint = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint;
     devDependencies.oxfmt = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt;
 
-    if (typeAware) {
-      devDependencies["oxlint-tsgolint"] =
-        OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"];
+    if (typeAwareBackend) {
+      devDependencies[typeAwareBackend] =
+        OXLINT_TOOLCHAIN_DEV_DEPENDENCIES[typeAwareBackend];
     }
 
     for (const jsPlugin of jsPlugins) {
@@ -511,6 +513,24 @@ const getScriptsToAdd = async (): Promise<
   return Object.keys(scripts).length > 0 ? scripts : undefined;
 };
 
+type OxlintTypeAwareBackend = "oxlint-tsgolint" | "tsrs";
+
+const selectOxlintTypeAwareBackend = (
+  linter: Linter,
+  typeAware: boolean,
+  jsPlugins: OxlintJsPlugin[]
+): OxlintTypeAwareBackend | null => {
+  if (linter !== "oxlint") {
+    return null;
+  }
+
+  if (usesCloudflarePreset(jsPlugins)) {
+    return "tsrs";
+  }
+
+  return typeAware ? "oxlint-tsgolint" : null;
+};
+
 export const installDependencies = async (
   packageManager: PackageManager,
   linter: Linter = "biome",
@@ -527,6 +547,12 @@ export const installDependencies = async (
   }
 
   const packages: string[] = [`ultracite@${ultraciteVersion}`];
+
+  const typeAwareBackend = selectOxlintTypeAwareBackend(
+    linter,
+    typeAware,
+    jsPlugins
+  );
 
   // Add linter-specific dependencies
   if (linter === "biome") {
@@ -548,10 +574,9 @@ export const installDependencies = async (
       `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`
     );
 
-    // Type-aware linting requires oxlint-tsgolint
-    if (typeAware) {
+    if (typeAwareBackend) {
       packages.push(
-        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+        `${typeAwareBackend}@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES[typeAwareBackend]}`
       );
     }
 
@@ -602,7 +627,7 @@ export const installDependencies = async (
   } else {
     const devDependencies = buildNoInstallDevDependencies(
       linter,
-      typeAware,
+      typeAwareBackend,
       frameworks,
       jsPlugins
     );
@@ -1516,6 +1541,12 @@ const readFirstConfig = (names: readonly string[]): string => {
   }
 };
 
+const usesCloudflarePreset = (jsPlugins: readonly OxlintJsPlugin[]): boolean =>
+  jsPlugins.includes("@cloudflare/oxlint-config") ||
+  findLoadedJsPlugins(readFirstConfig(oxlintConfigNames)).includes(
+    "@cloudflare/oxlint-config"
+  );
+
 // Whether the project already runs the type-aware rules, so re-running init
 // keeps them without --type-aware.
 const hasTypeAwareSetup = async (linter: Linter): Promise<boolean> => {
@@ -1735,7 +1766,11 @@ const selectInitializeOptions = async (
   const linter = await selectLinter(opts, interactive);
   const frameworks = await selectFrameworks(opts, interactive);
   const jsPlugins = await selectJsPlugins(opts, linter, interactive);
-  const typeAware = await selectTypeAware(opts, linter, interactive);
+
+  const typeAware =
+    (linter === "oxlint" && usesCloudflarePreset(jsPlugins)) ||
+    (await selectTypeAware(opts, linter, interactive));
+
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
   const hooks = await selectHooks(opts, interactive);

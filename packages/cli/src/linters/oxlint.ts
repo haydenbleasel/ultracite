@@ -49,6 +49,7 @@ const findOxlintRcFile = (): (typeof oxlintRcFiles)[number] | null =>
 // @interfere/landmines each have a preset of their own at
 // ultracite/oxlint/shadcn and ultracite/oxlint/landmines.
 const antiSlopPreset = "anti-slop";
+const cloudflarePreset = "@cloudflare/oxlint-config";
 const landminesPlugin = "@interfere/landmines";
 const landminesPreset = "landmines";
 const shadcnPlugin = "@shadcn/lint";
@@ -65,6 +66,7 @@ const oxlintSelectableJsPluginNames = [
 ] as const;
 
 const oxlintJsPluginNames = [
+  cloudflarePreset,
   antiSlopPreset,
   landminesPlugin,
   shadcnPlugin,
@@ -79,6 +81,7 @@ const isSelectableJsPlugin = (
   jsPlugin: OxlintJsPlugin
 ): jsPlugin is OxlintSelectableJsPlugin =>
   jsPlugin !== antiSlopPreset &&
+  jsPlugin !== cloudflarePreset &&
   jsPlugin !== landminesPlugin &&
   jsPlugin !== shadcnPlugin;
 
@@ -121,6 +124,10 @@ const reactDoctorFrameworkAddOns = ["next", "tanstack"];
 // paths keep every segment (next/js-plugins -> nextJsPlugins) so they never
 // collide with the base js-plugins identifier.
 const getOxlintConfigIdentifier = (configPath: string) => {
+  if (configPath === cloudflarePreset) {
+    return "cloudflare";
+  }
+
   const name = configPath
     .replace(/^ultracite\/oxlint\//u, "")
     .replaceAll("/", "-");
@@ -151,6 +158,7 @@ const otherPresets = "*";
 // a config's imports, which `ultracite fix` sorts (#863).
 const presetOrder = [
   corePath,
+  cloudflarePreset,
   ...options.frameworks.map(getOxlintConfigPath),
   otherPresets,
   jsPluginsPath,
@@ -202,6 +210,10 @@ const resolvePresets = (
 
   if (jsPlugins.includes(landminesPlugin)) {
     resolved.add(landminesPath);
+  }
+
+  if (jsPlugins.includes(cloudflarePreset)) {
+    resolved.add(cloudflarePreset);
   }
 
   if (jsPlugins.includes(antiSlopPreset)) {
@@ -576,7 +588,12 @@ const generateConfigContent = (
   // browser globals core declares are unknown, so rules such as
   // no-implied-eval never see `setTimeout("…")` as the global. It goes
   // before `extends` to keep the keys sorted.
-  const envProperty = generatedProperty("env", `${coreIdentifier}.env`);
+  const envProperty = generatedProperty(
+    "env",
+    resolvedExtends.includes(cloudflarePreset)
+      ? `{ ...${coreIdentifier}.env, ...${identifierOf(cloudflarePreset)}.env }`
+      : `${coreIdentifier}.env`
+  );
 
   const properties = [
     generatedProperty("ignorePatterns", `${coreIdentifier}.ignorePatterns`),
@@ -654,6 +671,10 @@ const ULTRACITE_PRESET_RE =
   /ultracite\/(?:config\/)?oxlint\/(?<preset>[a-z0-9-]+(?:\/js-plugins)?)/u;
 
 const toUltracitePreset = (reference: string): string | null => {
+  if (reference === cloudflarePreset) {
+    return cloudflarePreset;
+  }
+
   const preset = ULTRACITE_PRESET_RE.exec(reference)?.groups?.preset;
 
   return preset ? getOxlintConfigPath(preset) : null;

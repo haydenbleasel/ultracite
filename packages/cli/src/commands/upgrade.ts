@@ -230,6 +230,10 @@ export const getToolchainPackages = (
         );
       }
 
+      if (projectDependencies.has("@cloudflare/oxlint-config")) {
+        packages.set("tsrs", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs);
+      }
+
       for (const [name, version] of [
         ...Object.entries(OXLINT_JS_PLUGIN_DEV_DEPENDENCIES),
         ...Object.values(oxfmtFrameworkDevDependencies).flatMap(

@@ -353,6 +353,33 @@ describe("oxlint linter", () => {
       expect(content).not.toContain("jsPluginSettings");
     });
 
+    test("puts Cloudflare between core and framework presets even with TSDoc selected", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        frameworks: ["nestjs"],
+        jsPlugins: ["@cloudflare/oxlint-config", "eslint-plugin-tsdoc"],
+      });
+
+      const [[, content]] = mockWriteFile.mock.calls;
+      expect(content).toContain(
+        'import cloudflare from "@cloudflare/oxlint-config";'
+      );
+      expect(content).toContain("env: { ...core.env, ...cloudflare.env },");
+      expect(content).toContain(
+        "extends: [core, cloudflare, nestjs, jsPlugins],"
+      );
+      expect(content).toContain('selectJsPlugins(["tsdoc"])');
+    });
+
     test("adds the landmines preset as a plain extend and hoists its jsPlugins", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
