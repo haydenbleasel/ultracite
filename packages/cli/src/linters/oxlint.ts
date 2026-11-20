@@ -324,6 +324,7 @@ const uniqueIdentifier = (base: string, taken: Set<string>): string => {
 };
 
 interface PresetBindings {
+  cloudflareIdentifier: string | undefined;
   // Presets the project imports without extending them (for their rules,
   // say), or whose extend a selection replaces while its code still uses
   // them, by the name they're imported under; their imports stay.
@@ -342,9 +343,18 @@ interface PresetBindings {
 const bindPresets = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[],
-  extras: OxlintExtras
+  extras: OxlintExtras,
+  reachedPresets: readonly string[] = []
 ): PresetBindings => {
-  const presets = resolvePresets(extendsList, jsPlugins);
+  const cloudflareIsReached = reachedPresets.includes(cloudflarePreset);
+
+  const presets = resolvePresets(
+    extendsList,
+    cloudflareIsReached
+      ? jsPlugins.filter((plugin) => plugin !== cloudflarePreset)
+      : jsPlugins
+  );
+
   const hasSelection = jsPlugins.some(isSelectableJsPlugin);
 
   // Whether a preset is written as an extended import under its own name;
@@ -397,7 +407,14 @@ const bindPresets = (
     );
   }
 
-  return { importedOnly, names, presets };
+  return {
+    cloudflareIdentifier:
+      names.get(cloudflarePreset) ??
+      (cloudflareIsReached ? importedOnly.get(cloudflarePreset) : undefined),
+    importedOnly,
+    names,
+    presets,
+  };
 };
 
 // oxlint does not merge `settings` from extended configs, so react-doctor's
@@ -471,7 +488,12 @@ const generateConfigContent = (
   const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
 
-  const { importedOnly, names, presets: resolvedExtends } = bindings;
+  const {
+    cloudflareIdentifier,
+    importedOnly,
+    names,
+    presets: resolvedExtends,
+  } = bindings;
 
   const identifierOf = (preset: string) =>
     names.get(preset) ?? getOxlintConfigIdentifier(preset);
@@ -573,8 +595,8 @@ const generateConfigContent = (
   const coreIdentifier = identifierOf(corePath);
   const coreEnv = `${coreIdentifier}.env`;
 
-  const envSources = resolvedExtends.includes(cloudflarePreset)
-    ? [coreEnv, `${identifierOf(cloudflarePreset)}.env`]
+  const envSources = cloudflareIdentifier
+    ? [coreEnv, `${cloudflareIdentifier}.env`]
     : [coreEnv];
 
   const generated: GeneratedProperties = {
@@ -1120,7 +1142,7 @@ interface LoadedPresets {
 // its own entries extend through a const or an `import * as`, and with a
 // `selectJsPlugins` of the project's own not counted as a selection.
 const readLoadedPresets = (contents: string): LoadedPresets => {
-  const parsed = parseConfigModule(contents);
+  const parsed = parseConfigModule(contents, { followDefaultBinding: true });
 
   const existing =
     parsed.kind === "module"
@@ -1396,7 +1418,11 @@ const readCurrentConfig = (
     existing: existing ?? {
       extras: emptyExtras(),
       order: [],
-      presets: findPresetReferences(contents),
+      presets: findPresetReferences(contents).filter(
+        (preset) =>
+          preset !== cloudflarePreset ||
+          readLoadedPresets(contents).presets.includes(cloudflarePreset)
+      ),
       reached: [],
     },
     jsPlugins: parseExistingJsPlugins(
@@ -1473,7 +1499,12 @@ const planUpdate = (
     (property) => property.key === "options"
   );
 
-  const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
+  const bindings = bindPresets(
+    newExtends,
+    jsPlugins,
+    existing.extras,
+    existing.reached
+  );
 
   // The generated config declares these itself, so a binding of the
   // project's own with the same name would be declared twice.

@@ -712,7 +712,41 @@ const parseProgram = (source: string): ASTNode | null => {
   }
 };
 
-export const parseConfigModule = (source: string): ParsedConfigModule => {
+const readBoundConfigExport = (
+  source: string,
+  body: ASTNode[],
+  declaration: ASTNode
+): ConfigExport | null => {
+  const name = identifierName(declaration);
+
+  if (!name) {
+    return null;
+  }
+
+  for (const statement of body) {
+    if (
+      statement.type !== "VariableDeclaration" ||
+      statement.kind !== "const"
+    ) {
+      continue;
+    }
+
+    const binding = statement.declarations.find(
+      ({ id }) => id.type === "Identifier" && id.name === name
+    );
+
+    if (binding?.init) {
+      return readConfigExport(source, binding.init);
+    }
+  }
+
+  return null;
+};
+
+export const parseConfigModule = (
+  source: string,
+  { followDefaultBinding = false } = {}
+): ParsedConfigModule => {
   const program = parseProgram(source);
 
   if (program?.type !== "Program") {
@@ -731,6 +765,14 @@ export const parseConfigModule = (source: string): ParsedConfigModule => {
       imports.push(readImport(source, node, afterLine, next));
     } else if (node.type === "ExportDefaultDeclaration") {
       configExport = readConfigExport(source, node.declaration);
+
+      if (!configExport && followDefaultBinding) {
+        configExport = readBoundConfigExport(
+          source,
+          program.body,
+          node.declaration
+        );
+      }
     } else {
       statements.push(readStatement(source, node, afterLine, next));
     }

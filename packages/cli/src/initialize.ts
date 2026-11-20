@@ -1543,9 +1543,11 @@ const readFirstConfig = (names: readonly string[]): string => {
 
 const usesCloudflarePreset = (jsPlugins: readonly OxlintJsPlugin[]): boolean =>
   jsPlugins.includes("@cloudflare/oxlint-config") ||
-  findLoadedJsPlugins(readFirstConfig(oxlintConfigNames)).includes(
-    "@cloudflare/oxlint-config"
-  );
+  findLoadedJsPlugins(
+    readFirstConfig(
+      oxlintConfigNames.filter((name) => name.startsWith("oxlint.config."))
+    )
+  ).includes("@cloudflare/oxlint-config");
 
 // Whether the project already runs the type-aware rules, so re-running init
 // keeps them without --type-aware.

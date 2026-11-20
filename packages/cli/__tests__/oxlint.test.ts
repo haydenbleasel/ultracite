@@ -1441,6 +1441,24 @@ export default defineConfig({
     expect(project.info.mock.calls.at(-1)?.[0]).toContain(".oxlintrc.jsonc");
   });
 
+  test("keeps Cloudflare environments when an existing config extends it through a const", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json": '{"env": {"jest": true}}',
+      "./oxlint.config.ts": coreConfigWith(
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        "const selected = cloudflare;",
+        "export default { extends: [core, selected] };"
+      ),
+    });
+
+    await oxlint.update({ jsPlugins: ["@cloudflare/oxlint-config"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("const selected = cloudflare;");
+    expect(content).toContain("extends: [\n    core,\n    selected,");
+    expect(content).toContain("...cloudflare.env,\n    jest: true,");
+  });
+
   test("merges .oxlintrc.json settings with the react-doctor settings", async () => {
     const project = mockProject({
       "./.oxlintrc.json": '{ "settings": { "next": { "rootDir": "app" } } }',
@@ -2675,6 +2693,19 @@ export default defineConfig({ rules: {} });
 });
 
 describe("findLoadedJsPlugins", () => {
+  test("reads Cloudflare in a config exported through a const", () => {
+    const config = coreConfigWith(
+      'import cloudflare from "@cloudflare/oxlint-config";',
+      "const config = { extends: [core, cloudflare] };",
+      "export default config;"
+    );
+
+    expect(findLoadedJsPlugins(config)).toEqual(["@cloudflare/oxlint-config"]);
+    expect(
+      findLoadedJsPlugins(config.replace("[core, cloudflare]", "[core]"))
+    ).toEqual([]);
+  });
+
   test("detects Cloudflare only when the preset is used", () => {
     expect(
       findLoadedJsPlugins('// extends: ["@cloudflare/oxlint-config"]')
