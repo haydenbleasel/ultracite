@@ -326,6 +326,8 @@ export const dependencyNamesByLinter = {
     "stylelint-config-idiomatic-order",
     "stylelint-prettier",
   ]),
+  // Init installs tsrs with @cloudflare/oxlint-config, but tsrs can also be
+  // the project's own TypeScript compiler, so moving off Oxlint keeps it.
   oxlint: new Set([
     "@astrojs/compiler-rs",
     "@cloudflare/oxlint-config",
@@ -339,6 +341,5 @@ export const dependencyNamesByLinter = {
     "oxlint",
     "oxlint-plugin-react-doctor",
     "oxlint-tsgolint",
-    // tsrs can also supply the project's standalone TypeScript compiler.
   ]),
 } satisfies Record<Linter, Set<string>>;

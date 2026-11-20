@@ -724,23 +724,48 @@ const readBoundConfigExport = (
   }
 
   for (const statement of body) {
-    if (
-      statement.type !== "VariableDeclaration" ||
-      statement.kind !== "const"
-    ) {
+    // `export const config = ...` declares the binding as well.
+    const variables =
+      statement.type === "ExportNamedDeclaration"
+        ? statement.declaration
+        : statement;
+
+    if (variables?.type !== "VariableDeclaration") {
       continue;
     }
 
-    const binding = statement.declarations.find(
+    const binding = variables.declarations.find(
       ({ id }) => id.type === "Identifier" && id.name === name
     );
 
-    if (binding?.init) {
-      return readConfigExport(source, binding.init);
+    // Only a const's initializer is what it exports: a `let` or `var` can
+    // be reassigned after it.
+    if (binding) {
+      return variables.kind === "const" && binding.init
+        ? readConfigExport(source, binding.init)
+        : null;
     }
   }
 
   return null;
+};
+
+/**
+ * The names a module's code reads outside its imports (see readNames), or
+ * null when it doesn't parse.
+ */
+export const readModuleNames = (source: string): Set<string> | null => {
+  const program = parseProgram(source);
+
+  if (program?.type !== "Program") {
+    return null;
+  }
+
+  return new Set(
+    program.body.flatMap((node) =>
+      node.type === "ImportDeclaration" ? [] : readNames(node)
+    )
+  );
 };
 
 export const parseConfigModule = (

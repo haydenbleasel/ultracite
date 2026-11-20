@@ -1,6 +1,7 @@
 import { readFile, rm } from "node:fs/promises";
 
 import { log } from "@clack/prompts";
+import type { ASTNode } from "magicast";
 import { z } from "zod";
 
 import { options } from "../data/options";
@@ -17,7 +18,9 @@ import type { WorkspaceFrameworks } from "../workspace-frameworks";
 import {
   arrayEntries,
   identifierName,
+  memberPath,
   parseConfigModule,
+  readModuleNames,
   renderEntries,
   renderImport,
   renderJsonProperty,
@@ -730,6 +733,65 @@ const toRendered = (entry: ConfigEntry): RenderedEntry => ({
   text: entry.text,
 });
 
+const BLANK_RE = /^\s*$/u;
+
+/**
+ * A project's own `env` value with Cloudflare's environments added where a
+ * generated config has them: right after its spread of core's, so
+ * Cloudflare's override core's. Keys the project writes after that spread
+ * override both, and the ones it writes ahead of it stay defaults that both
+ * override, as core's already did. Without that spread, Cloudflare's go
+ * ahead of the whole value. A value that already spreads Cloudflare's, under
+ * any name the preset is imported as, is kept as written.
+ */
+const addCloudflareEnv = (
+  source: string,
+  value: ASTNode,
+  coreEnv: string | null,
+  cloudflareEnv: string,
+  importedCloudflareEnvs: readonly string[]
+): string => {
+  const start = value.start ?? 0;
+  const end = value.end ?? 0;
+  const text = source.slice(start, end);
+
+  const spreads =
+    value.type === "ObjectExpression"
+      ? value.properties.filter((property) => property.type === "SpreadElement")
+      : [];
+
+  const cloudflareEnvs = new Set([cloudflareEnv, ...importedCloudflareEnvs]);
+
+  if (
+    spreads.some((spread) =>
+      cloudflareEnvs.has(memberPath(spread.argument) ?? "")
+    )
+  ) {
+    return text;
+  }
+
+  const coreSpread = spreads.find(
+    (spread) => coreEnv !== null && memberPath(spread.argument) === coreEnv
+  );
+
+  if (!coreSpread) {
+    return `{ ...${cloudflareEnv}, ...(${text}) }`;
+  }
+
+  const spreadStart = coreSpread.start ?? 0;
+  const spreadEnd = coreSpread.end ?? 0;
+
+  // On a line of its own like the spread when that's how it's written.
+  const indent = source.slice(
+    source.lastIndexOf("\n", spreadStart - 1) + 1,
+    spreadStart
+  );
+
+  const separator = BLANK_RE.test(indent) ? `,\n${indent}` : ", ";
+
+  return `${source.slice(start, spreadEnd)}${separator}...${cloudflareEnv}${source.slice(spreadEnd, end)}`;
+};
+
 interface ExistingConfig {
   extras: OxlintExtras;
   // The presets and the js-plugins selection (as the js-plugins preset) in
@@ -1074,16 +1136,27 @@ const readExistingConfig = (
 
     if (!(extendsCloudflare && mergesCloudflare)) {
       const entry = carry(envEntry);
-      const { valueText } = envEntry;
+      const { value } = envEntry;
+
+      const importedCloudflareEnvs = [...presetBindings].flatMap(
+        ([name, preset]) => (preset === cloudflarePreset ? [`${name}.env`] : [])
+      );
+
       extras.overrides.env =
-        extendsCloudflare || mergesCloudflare || valueText === null
+        extendsCloudflare || mergesCloudflare || value === null
           ? { entry }
           : {
               build: ({ envSources: [, cloudflareEnv] }) =>
                 cloudflareEnv
                   ? {
                       ...entry,
-                      text: `env: { ...${cloudflareEnv}, ...(${valueText}) }`,
+                      text: `env: ${addCloudflareEnv(
+                        source,
+                        value,
+                        coreIdentifier && `${coreIdentifier}.env`,
+                        cloudflareEnv,
+                        importedCloudflareEnvs
+                      )}`,
                     }
                   : entry,
             };
@@ -1144,13 +1217,25 @@ const findSpreadAhead = (entries: ConfigEntry[]): SpreadAhead | null => {
 };
 
 // The pre-parser way of finding presets, for a file init can't restructure:
-// default imports of Ultracite presets, then legacy string extends.
+// default imports of Ultracite presets and Cloudflare's, then legacy string
+// extends. Cloudflare's import counts only when the config's code uses the
+// name it's imported under, since an import alone loads none of its rules,
+// and a string extend names a file, never Cloudflare's npm specifier (see
+// mergeRcConfig).
 const findPresetReferences = (contents: string): string[] => {
   const presets = [
     ...contents.matchAll(
-      /import \w+(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
+      /import (?<local>\w+)(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
     ),
-  ].flatMap((match) => toUltracitePreset(match.groups?.source ?? "") ?? []);
+  ].flatMap((match) => {
+    const preset = toUltracitePreset(match.groups?.source ?? "");
+
+    return preset &&
+      (preset !== cloudflarePreset ||
+        readModuleNames(contents)?.has(match.groups?.local ?? ""))
+      ? [preset]
+      : [];
+  });
 
   if (presets.length > 0) {
     return presets;
@@ -1158,9 +1243,11 @@ const findPresetReferences = (contents: string): string[] => {
 
   const body = /extends:\s*\[(?<body>[\s\S]*?)\]/u.exec(contents)?.groups?.body;
 
-  return [...(body ?? "").matchAll(QUOTED_STRING_RE)].flatMap(
-    (match) => toUltracitePreset(match.groups?.name ?? "") ?? []
-  );
+  return [...(body ?? "").matchAll(QUOTED_STRING_RE)].flatMap((match) => {
+    const preset = toUltracitePreset(match.groups?.name ?? "");
+
+    return preset && preset !== cloudflarePreset ? [preset] : [];
+  });
 };
 
 interface LoadedPresets {
@@ -1188,9 +1275,7 @@ const readLoadedPresets = (contents: string): LoadedPresets => {
     ),
     presets: existing
       ? [...existing.presets, ...existing.reached]
-      : findPresetReferences(contents).filter(
-          (preset) => preset !== cloudflarePreset
-        ),
+      : findPresetReferences(contents),
   };
 };
 
@@ -1407,6 +1492,18 @@ interface CarriedConfig {
   replaced: boolean;
 }
 
+// The presets a config update replaces keeps: the ones findPresetReferences
+// finds, less Cloudflare's when the config is exported through a const that
+// readLoadedPresets can read and that doesn't extend it.
+const findReplacedPresets = (contents: string): string[] => {
+  const presets = findPresetReferences(contents);
+
+  return presets.includes(cloudflarePreset) &&
+    !readLoadedPresets(contents).presets.includes(cloudflarePreset)
+    ? presets.filter((preset) => preset !== cloudflarePreset)
+    : presets;
+};
+
 /** A config's contents as update carries them over, or why it can't. */
 const readCurrentConfig = (
   contents: string | null
@@ -1451,11 +1548,7 @@ const readCurrentConfig = (
     existing: existing ?? {
       extras: emptyExtras(),
       order: [],
-      presets: findPresetReferences(contents).filter(
-        (preset) =>
-          preset !== cloudflarePreset ||
-          readLoadedPresets(contents).presets.includes(cloudflarePreset)
-      ),
+      presets: findReplacedPresets(contents),
       reached: [],
     },
     jsPlugins: parseExistingJsPlugins(

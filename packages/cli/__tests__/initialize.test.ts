@@ -2231,7 +2231,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies(npmPm, "eslint", false, true, false, ["react"]);
+      await installDependencies(npmPm, "eslint", false, true, null, ["react"]);
 
       const withOverrides = written.find((content) =>
         content.includes('"overrides"')
@@ -2244,9 +2244,7 @@ describe("helper functions", () => {
 
       written.length = 0;
       const pnpmPm: PackageManager = { command: "pnpm", name: "pnpm" };
-      await installDependencies(pnpmPm, "eslint", false, true, false, [
-        "react",
-      ]);
+      await installDependencies(pnpmPm, "eslint", false, true, null, ["react"]);
 
       expect(written.some((content) => content.includes('"overrides"'))).toBe(
         false
@@ -2313,7 +2311,7 @@ describe("helper functions", () => {
           "oxlint",
           true,
           true,
-          true,
+          backend,
           [],
           [...jsPlugins]
         );
@@ -2354,7 +2352,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies(npmPm, "oxlint", true, true, false);
+      await installDependencies(npmPm, "oxlint", true, true, null);
       expect(installedPackages).not.toContain(
         `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
       );
@@ -2388,11 +2386,11 @@ describe("helper functions", () => {
 
       const compiler = `@astrojs/compiler-rs@${oxfmtFrameworkDevDependencies.astro?.["@astrojs/compiler-rs"]}`;
 
-      await installDependencies(npmPm, "oxlint", true, true, false, ["astro"]);
+      await installDependencies(npmPm, "oxlint", true, true, null, ["astro"]);
       expect(installedPackages).toContain(compiler);
 
       installedPackages.length = 0;
-      await installDependencies(npmPm, "oxlint", true, true, false, ["react"]);
+      await installDependencies(npmPm, "oxlint", true, true, null, ["react"]);
       expect(installedPackages).not.toContain(compiler);
     });
 
@@ -2420,7 +2418,13 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies(npmPm, "oxlint", false, true, true);
+      await installDependencies(
+        npmPm,
+        "oxlint",
+        false,
+        true,
+        "oxlint-tsgolint"
+      );
       expect(mockWriteFile).toHaveBeenCalled();
       expect(writtenContents.some((c) => c.includes("oxlint-tsgolint"))).toBe(
         true
@@ -4754,6 +4758,81 @@ describe("init questions", () => {
         )
       ).toBe(false);
       expect(written.get(`./${configFile}`)).toContain(expected);
+    }
+  );
+
+  test("turns on type-aware linting with tsrs for Cloudflare in a TypeScript project", async () => {
+    const prompts = recordingPrompts();
+
+    const { written } = mockProject({
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({
+        "js-plugins": ["@cloudflare/oxlint-config"],
+        linter: "oxlint",
+        skipInstall: true,
+      });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.confirm.mock.calls.some(([prompt]) =>
+        prompt.message.includes("Turn on type-aware")
+      )
+    ).toBe(false);
+    expect(written.get("./oxlint.config.mts")).toContain(
+      "options: { typeAware: true }"
+    );
+
+    const { devDependencies } = JSON.parse(written.get("package.json") ?? "{}");
+
+    expect(devDependencies).toHaveProperty("tsrs");
+    expect(devDependencies).not.toHaveProperty("oxlint-tsgolint");
+  });
+
+  // Cloudflare's preset sets `options.typeAware` itself, which Oxlint
+  // carries through `extends`, so its rules still run through tsrs.
+  test.each([
+    ["a JavaScript project", {}, {}],
+    [
+      "an explicit type-aware false",
+      { "tsconfig.json": '{"compilerOptions": {}}' },
+      { "type-aware": false },
+    ],
+  ] as const)(
+    "doesn't set up type-aware linting itself for Cloudflare in %s",
+    async (_case, files, flags) => {
+      recordingPrompts();
+
+      const { written } = mockProject({
+        ...files,
+        "package.json": '{"name": "app"}',
+      });
+
+      try {
+        await initialize({
+          ...flags,
+          "js-plugins": ["@cloudflare/oxlint-config"],
+          linter: "oxlint",
+          skipInstall: true,
+          yes: true,
+        });
+      } finally {
+        restoreProject();
+      }
+
+      expect(written.has("tsconfig.json")).toBe(false);
+      expect(written.get("./oxlint.config.mts")).not.toContain("typeAware");
+      expect(written.get("./oxlint.config.mts")).toContain(
+        "extends: [core, cloudflare],"
+      );
+      expect(
+        JSON.parse(written.get("package.json") ?? "{}").devDependencies
+      ).toHaveProperty("tsrs");
     }
   );
 

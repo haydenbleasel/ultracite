@@ -321,4 +321,4 @@ Select `@cloudflare/oxlint-config` in the optional JS plugins prompt or pass it 
 npx ultracite init --linter oxlint --js-plugins @cloudflare/oxlint-config
 ```
 
-Ultracite installs the [Cloudflare preset](https://github.com/cloudflare/oxlint-config) and its `tsrs` beta backend. The generated config extends Cloudflare after Ultracite's core and before the framework presets, so framework-specific rules take precedence. `ultracite check` and `ultracite fix` then run type-aware rules without an extra flag.
+Ultracite installs the [Cloudflare preset](https://github.com/cloudflare/oxlint-config) and its `tsrs` beta backend. The generated config extends Cloudflare after Ultracite's core and before the framework presets, so framework-specific rules take precedence. The preset turns on type-aware linting itself, so `ultracite check` and `ultracite fix` run its type-aware rules without an extra flag. In a TypeScript project, init also sets up type-aware linting as `--type-aware` does without asking about it, including the `strictNullChecks` those rules need, which an interactive run still confirms before changing any tsconfig.

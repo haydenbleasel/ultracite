@@ -515,16 +515,19 @@ const getScriptsToAdd = async (): Promise<
 
 type OxlintTypeAwareBackend = "oxlint-tsgolint" | "tsrs";
 
+// tsrs is a peer dependency of Cloudflare's preset, which sets
+// `options.typeAware` itself, so Oxlint runs its type-aware rules through
+// tsrs whatever init writes in the project's config.
 const selectOxlintTypeAwareBackend = (
   linter: Linter,
   typeAware: boolean,
-  jsPlugins: OxlintJsPlugin[]
+  cloudflare: boolean
 ): OxlintTypeAwareBackend | null => {
   if (linter !== "oxlint") {
     return null;
   }
 
-  if (usesCloudflarePreset(jsPlugins)) {
+  if (cloudflare) {
     return "tsrs";
   }
 
@@ -536,7 +539,7 @@ export const installDependencies = async (
   linter: Linter = "biome",
   install = true,
   quiet = false,
-  typeAware = false,
+  typeAwareBackend: OxlintTypeAwareBackend | null = null,
   frameworks: Frameworks[] = ["react"],
   jsPlugins: OxlintJsPlugin[] = []
 ) => {
@@ -547,12 +550,6 @@ export const installDependencies = async (
   }
 
   const packages: string[] = [`ultracite@${ultraciteVersion}`];
-
-  const typeAwareBackend = selectOxlintTypeAwareBackend(
-    linter,
-    typeAware,
-    jsPlugins
-  );
 
   // Add linter-specific dependencies
   if (linter === "biome") {
@@ -1336,6 +1333,8 @@ interface InitializeSelections extends EditorSelections, AgentSelections {
   jsPlugins: OxlintJsPlugin[];
   linter: Linter;
   typeAware: boolean;
+  // The package init installs to run Oxlint's type-aware rules, if any.
+  typeAwareBackend: OxlintTypeAwareBackend | null;
 }
 
 // Changes to files init doesn't own, settled before anything is written.
@@ -1575,7 +1574,8 @@ const hasTypeAwareSetup = async (linter: Linter): Promise<boolean> => {
 const selectTypeAware = async (
   opts: InitializeFlags,
   linter: Linter,
-  interactive: boolean
+  interactive: boolean,
+  cloudflare: boolean
 ): Promise<boolean> => {
   if (opts["type-aware"] !== undefined) {
     return opts["type-aware"];
@@ -1588,8 +1588,14 @@ const selectTypeAware = async (
   }
 
   // Only a TypeScript project has types to check.
-  if (!interactive || !(await tsconfig.exists())) {
+  if (!(interactive || cloudflare) || !(await tsconfig.exists())) {
     return false;
+  }
+
+  // Cloudflare's preset turns type-aware linting on itself, so choosing it
+  // answers this question.
+  if (cloudflare) {
+    return true;
   }
 
   const typeAware = await confirm({
@@ -1768,10 +1774,14 @@ const selectInitializeOptions = async (
   const linter = await selectLinter(opts, interactive);
   const frameworks = await selectFrameworks(opts, interactive);
   const jsPlugins = await selectJsPlugins(opts, linter, interactive);
+  const cloudflare = linter === "oxlint" && usesCloudflarePreset(jsPlugins);
 
-  const typeAware =
-    (linter === "oxlint" && usesCloudflarePreset(jsPlugins)) ||
-    (await selectTypeAware(opts, linter, interactive));
+  const typeAware = await selectTypeAware(
+    opts,
+    linter,
+    interactive,
+    cloudflare
+  );
 
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
@@ -1787,6 +1797,11 @@ const selectInitializeOptions = async (
     jsPlugins,
     linter,
     typeAware,
+    typeAwareBackend: selectOxlintTypeAwareBackend(
+      linter,
+      typeAware,
+      cloudflare
+    ),
   };
 };
 
@@ -1931,7 +1946,8 @@ const setupLinting = async ({
   selections,
   workspaces,
 }: InitializeContext): Promise<void> => {
-  const { frameworks, jsPlugins, linter, typeAware } = selections;
+  const { frameworks, jsPlugins, linter, typeAware, typeAwareBackend } =
+    selections;
 
   // Workspace frameworks need their plugins installed (and, for Prettier,
   // configured) at the root, though their rules only apply in the
@@ -1951,7 +1967,7 @@ const setupLinting = async ({
     linter,
     install,
     quiet,
-    typeAware,
+    typeAwareBackend,
     allFrameworks,
     jsPlugins
   );
