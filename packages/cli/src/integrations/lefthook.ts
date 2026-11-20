@@ -287,22 +287,37 @@ const upgradeGlob = (
  * fixed the whole project) gets it, and generated globs become a single
  * brace glob for the configured matcher. A job whose command was edited
  * keeps its command and file types, and only gets the matcher fixed.
- * Returns whether anything changed.
+ * Returns whether anything changed, or `shared-command` when an anchor
+ * prevents a command upgrade.
  */
 const upgradeUltraciteJob = (
   doc: YAML.Document,
   job: YAML.YAMLMap,
-  command: string,
-  doublestar: boolean
-): boolean => {
+  {
+    command,
+    doublestar,
+    shared,
+  }: {
+    command: string;
+    doublestar: boolean;
+    shared: boolean;
+  }
+): boolean | "shared-command" => {
   // `get` types a kept node as a Scalar, but it can be any node.
   const run: unknown = job.get("run", true);
 
   const generated =
     YAML.isScalar(run) && isGeneratedJobCommand(String(run.value));
 
-  // An anchored command may be shared with other hooks, so it stays as is.
-  const commandChanged = generated && !run.anchor && run.value !== command;
+  const commandChanged = generated && run.value !== command;
+
+  if (commandChanged && (shared || run.anchor)) {
+    return "shared-command";
+  }
+
+  if (shared) {
+    return false;
+  }
 
   if (commandChanged) {
     // Only `run`, keeping its comments.
@@ -317,12 +332,13 @@ const upgradeUltraciteJob = (
 /**
  * Adds the ultracite job to a lefthook config document, through the yaml
  * Document API so any indentation style stays valid and comments survive.
- * Returns whether the document changed, or null when it can't be edited.
+ * Returns whether the document changed, `shared-command` for a blocked
+ * upgrade, or null when a job can't be added.
  */
 const addUltraciteJob = (
   doc: YAML.Document,
   command: string
-): boolean | null => {
+): boolean | "shared-command" | null => {
   if (doc.contents === null) {
     doc.contents = doc.createNode({});
   }
@@ -333,7 +349,15 @@ const addUltraciteJob = (
     return null;
   }
 
-  const doublestar = root.get("glob_matcher") === "doublestar";
+  const matcher: unknown = root.get("glob_matcher", true);
+
+  const resolvedMatcher = YAML.isAlias(matcher)
+    ? matcher.resolve(doc)
+    : matcher;
+
+  const doublestar =
+    YAML.isScalar(resolvedMatcher) && resolvedMatcher.value === "doublestar";
+
   const hook = root.get("pre-commit", true);
 
   if (hook === undefined || (YAML.isScalar(hook) && hook.value === null)) {
@@ -352,11 +376,11 @@ const addUltraciteJob = (
   const existingJob = findUltraciteJob(hook);
 
   if (existingJob) {
-    // A shared job stays as is, like an anchored command or glob.
-    return (
-      !isSharedJob(hook, existingJob) &&
-      upgradeUltraciteJob(doc, existingJob, command, doublestar)
-    );
+    return upgradeUltraciteJob(doc, existingJob, {
+      command,
+      doublestar,
+      shared: isSharedJob(hook, existingJob),
+    });
   }
 
   // A hand-written command elsewhere in the hook already runs ultracite.
@@ -459,6 +483,14 @@ export const lefthook = {
 
     if (changed === null) {
       warnManualEdit(file, command);
+
+      return;
+    }
+
+    if (changed === "shared-command") {
+      log.warn(
+        `Could not update the Ultracite job in ${file} because it uses a shared YAML anchor. Update the existing pre-commit job to run this command:\n  ${command}`
+      );
 
       return;
     }

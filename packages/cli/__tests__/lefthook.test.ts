@@ -607,9 +607,12 @@ ${list}
       expect(job.glob).toBe(stagedGlob);
     });
 
-    test("widens a pre-v8 doublestar glob list under the doublestar matcher", async () => {
+    test.each([
+      "glob_matcher: doublestar",
+      "matcher: &matcher doublestar\nglob_matcher: *matcher",
+    ])("widens a pre-v8 glob list with %s", async (matcher) => {
       const written = mockProject({
-        "./lefthook.yml": `glob_matcher: doublestar
+        "./lefthook.yml": `${matcher}
 pre-commit:
   jobs:
     - run: npx ultracite fix {staged_files}
@@ -874,24 +877,31 @@ pre-commit:
       expect(job.env.CMD).toBe("npx ultracite fix {staged_files}");
     });
 
-    test("leaves an anchored command other hooks share alone", async () => {
+    const legacyGlobs = `["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json", "**/*.jsonc", "**/*.css"]`;
+
+    test("warns before leaving an outdated anchored command and its glob alone", async () => {
       const written = mockProject({
         "./lefthook.yml": `pre-commit:
   jobs:
-    - run: &fix npx ultracite fix {staged_files}
+    - run: &fix yarn dlx ultracite fix
+      glob: ${legacyGlobs}
 pre-push:
   jobs:
     - run: *fix
 `,
       });
 
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
       await lefthook.update("pnpm");
       restoreFileSystemMock();
 
       expect(written.size).toBe(0);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining("pnpm exec ultracite fix {staged_files}")
+      );
+      warn.mockRestore();
     });
-
-    const legacyGlobs = `["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json", "**/*.jsonc", "**/*.css"]`;
 
     test.each([
       [
@@ -928,13 +938,16 @@ pre-push: *hook
       ],
     ])(
       "leaves a job other hooks share through an anchored %s alone",
-      async (_anchored, config) => {
+      async (anchored, config) => {
         const written = mockProject({ "./lefthook.yml": config });
+        const warn = spyOn(log, "warn").mockImplementation(() => {});
 
         await lefthook.update("pnpm");
         restoreFileSystemMock();
 
         expect(written.size).toBe(0);
+        expect(warn).toHaveBeenCalledTimes(anchored === "job" ? 0 : 1);
+        warn.mockRestore();
       }
     );
 
