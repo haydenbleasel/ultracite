@@ -1459,6 +1459,21 @@ export default defineConfig({
     expect(content).toContain("...cloudflare.env,\n    jest: true,");
   });
 
+  test("merges RC environments into an existing generated Cloudflare config", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json": '{"env": {"jest": true}}',
+      "./oxlint.config.ts": coreConfigWith(
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        "export default { env: { ...core.env, ...cloudflare.env, }, extends: [core, cloudflare] };"
+      ),
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("...cloudflare.env,\n    jest: true,");
+  });
+
   test("merges .oxlintrc.json settings with the react-doctor settings", async () => {
     const project = mockProject({
       "./.oxlintrc.json": '{ "settings": { "next": { "rootDir": "app" } } }',

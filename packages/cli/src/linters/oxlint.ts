@@ -993,10 +993,17 @@ const readExistingConfig = (
   // `core.env` is the generated value only when `core` is the imported core
   // preset; with no such import it's the project's own (`const core = ...`).
   const coreIdentifier = extras.presetIdentifiers.get(corePath) ?? null;
+  const cloudflareIdentifier = extras.presetIdentifiers.get(cloudflarePreset);
 
   const isGeneratedCoreValue = (entry: ConfigEntry, property: string) =>
     coreIdentifier !== null &&
     compact(entry.valueText) === `${coreIdentifier}.${property}`;
+
+  const isGeneratedCloudflareEnv = (entry: ConfigEntry) =>
+    coreIdentifier !== null &&
+    cloudflareIdentifier !== undefined &&
+    compact(entry.valueText).replace(/,\}$/u, "}") ===
+      `{...${coreIdentifier}.env,...${cloudflareIdentifier}.env}`;
 
   for (const entry of config.entries) {
     if (entry.key === "extends") {
@@ -1021,7 +1028,9 @@ const readExistingConfig = (
         extras.usedNames.add(name);
       }
     } else if (entry.key === "env") {
-      if (!isGeneratedCoreValue(entry, "env")) {
+      if (
+        !(isGeneratedCoreValue(entry, "env") || isGeneratedCloudflareEnv(entry))
+      ) {
         extras.overrides.env = { entry: carry(entry) };
       }
     } else if (entry.key === "ignorePatterns") {
