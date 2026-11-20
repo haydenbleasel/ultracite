@@ -179,6 +179,21 @@ const findUltraciteJob = (hook: YAML.YAMLMap): YAML.YAMLMap | undefined => {
   );
 };
 
+// Whether other hooks may share a job: an alias of the job, or of the list
+// or hook holding it, changes along with it.
+const isSharedJob = (hook: YAML.YAMLMap, job: YAML.YAMLMap): boolean => {
+  const jobs = hook.get("jobs", true);
+
+  const list =
+    YAML.isSeq(jobs) && jobs.items.includes(job)
+      ? jobs
+      : hook.get("commands", true);
+
+  return Boolean(
+    hook.anchor || job.anchor || (YAML.isNode(list) && list.anchor)
+  );
+};
+
 // Whether a job's glob is a scalar or a list of them that can be edited in
 // place. Anchored globs, and lists with anchored items, may be shared with
 // other jobs.
@@ -337,7 +352,11 @@ const addUltraciteJob = (
   const existingJob = findUltraciteJob(hook);
 
   if (existingJob) {
-    return upgradeUltraciteJob(doc, existingJob, command, doublestar);
+    // A shared job stays as is, like an anchored command or glob.
+    return (
+      !isSharedJob(hook, existingJob) &&
+      upgradeUltraciteJob(doc, existingJob, command, doublestar)
+    );
   }
 
   // A hand-written command elsewhere in the hook already runs ultracite.

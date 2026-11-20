@@ -891,6 +891,53 @@ pre-push:
       expect(written.size).toBe(0);
     });
 
+    const legacyGlobs = `["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json", "**/*.jsonc", "**/*.css"]`;
+
+    test.each([
+      [
+        "job",
+        `pre-commit:
+  jobs:
+    - &fix
+      run: npx ultracite fix --unsafe {staged_files}
+      glob: ${legacyGlobs}
+pre-push:
+  jobs:
+    - *fix
+`,
+      ],
+      [
+        "job list",
+        `pre-commit:
+  jobs: &jobs
+    - run: npx ultracite fix {staged_files}
+      glob: ${legacyGlobs}
+pre-push:
+  jobs: *jobs
+`,
+      ],
+      [
+        "hook",
+        `pre-commit: &hook
+  commands:
+    fix:
+      run: npx ultracite fix {staged_files}
+      glob: ${legacyGlobs}
+pre-push: *hook
+`,
+      ],
+    ])(
+      "leaves a job other hooks share through an anchored %s alone",
+      async (_anchored, config) => {
+        const written = mockProject({ "./lefthook.yml": config });
+
+        await lefthook.update("pnpm");
+        restoreFileSystemMock();
+
+        expect(written.size).toBe(0);
+      }
+    );
+
     test("leaves a hand-written ultracite job alone", async () => {
       const written = mockProject({
         "./lefthook.yml":
