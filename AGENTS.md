@@ -16,7 +16,9 @@ The docs site at https://www.ultracite.ai lives in this repo too.
 
 ```
 packages/cli/                 The published `ultracite` package
-  src/index.ts                Commander entry; every subcommand is registered here
+  src/index.ts                Bin entry: engines.node gate, then loads cli.ts
+  src/cli.ts                  Commander entry; every subcommand is registered here
+  src/ensure-node-engine.ts   Clear unsupported-Node message before heavy imports
   src/commands/               check, fix, doctor, upgrade
   src/initialize.ts           `ultracite init` orchestration (prompts + flags)
   src/linters/                One adapter per tool: biome, eslint, oxlint, oxfmt, prettier, stylelint
