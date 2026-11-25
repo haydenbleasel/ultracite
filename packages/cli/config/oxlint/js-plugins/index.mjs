@@ -181,6 +181,9 @@ const config = defineConfig({
         // Repeated string literals (test titles, expected values) are normal
         // and idiomatic in test files.
         "sonarjs/no-duplicate-string": "off",
+        // sonarjs 4.2.3 removed the rule's internal test-file check, so it
+        // would otherwise report every non-test source file (#885).
+        "sonarjs/no-empty-test-file": "error",
       },
     },
     {
@@ -380,7 +383,9 @@ const config = defineConfig({
     "sonarjs/no-empty-collection": "error",
     "sonarjs/no-empty-group": "error",
     "sonarjs/no-empty-parameterized-test-dataset": "error",
-    "sonarjs/no-empty-test-file": "error",
+    // Scoped to test files in the override below: sonarjs >= 4.2.3 relies on
+    // the analyzer to select test files, which the standalone plugin lacks.
+    "sonarjs/no-empty-test-file": "off",
     "sonarjs/no-empty-test-title": "error",
     "sonarjs/no-equals-in-for-termination": "error",
     "sonarjs/no-exclusive-tests": "error",

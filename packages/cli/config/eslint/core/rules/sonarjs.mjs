@@ -13,6 +13,10 @@ const baseRules = Object.fromEntries(
 // Overrides mirror the oxlint js-plugins preset (config/oxlint/js-plugins),
 // which is the benchmark for rule decisions across linters.
 const overrideRules = {
+  // sonarjs >= 4.2.3 only runs this rule on test files when SonarQube's
+  // analysis layer selects them; the standalone plugin has no such layer.
+  // eslint.config.mjs re-enables it in the test-file override (#885).
+  "sonarjs/no-empty-test-file": "off",
   // Fights the formatter (arrowParentheses: always).
   "sonarjs/arrow-function-convention": "off",
   // The same number as Biome's noExcessiveCognitiveComplexity limit, but the

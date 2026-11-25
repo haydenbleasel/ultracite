@@ -173,6 +173,9 @@ const core = [
     ],
     rules: {
       "sonarjs/no-duplicate-string": "off",
+      // sonarjs 4.2.3 removed the rule's internal test-file check, so it is
+      // off globally and enabled only here (#885).
+      "sonarjs/no-empty-test-file": "error",
     },
   },
   ...routeFileConfigs,

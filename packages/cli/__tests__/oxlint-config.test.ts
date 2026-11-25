@@ -1062,6 +1062,44 @@ describe("oxlint js-plugins config", () => {
     });
   }
 
+  test("no-empty-test-file is enabled only for test files", async () => {
+    const rule = "sonarjs/no-empty-test-file";
+
+    // sonarjs >= 4.2.3 dropped its internal test-file check, so enabling the
+    // rule globally reports every non-test source file (#885). Both presets
+    // must scope it to the same test globs the other test-only sonarjs rules
+    // use.
+
+    // SAFETY: readOxlintConfig returns an untyped module default, which is an
+    // OxlintConfig for every preset in config/oxlint.
+    const oxlint = (await readOxlintConfig("js-plugins")) as OxlintConfig;
+
+    expect(oxlint.rules?.[rule]).toBe("off");
+
+    const testOverride = oxlint.overrides?.find((override: OxlintOverride) =>
+      override.files?.includes(
+        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+      )
+    );
+
+    expect(testOverride?.rules?.[rule]).toBe("error");
+
+    const eslintPath = path.join(
+      import.meta.dirname,
+      "../config/eslint/core/eslint.config.mjs"
+    );
+
+    const eslintSource = readFileSync(eslintPath, "utf-8");
+
+    expect(eslintSource).toMatch(/"sonarjs\/no-empty-test-file":\s*"error"/u);
+
+    const { syntacticRules } = await import(
+      path.join(import.meta.dirname, "../config/eslint/core/rules/sonarjs.mjs")
+    );
+
+    expect(syntacticRules?.[rule]).toBe("off");
+  });
+
   test("js-plugins does not enable sonarjs rules that require type checking", async () => {
     const config = await readOxlintConfig("js-plugins");
 
