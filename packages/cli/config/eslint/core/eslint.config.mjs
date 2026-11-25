@@ -173,8 +173,15 @@ const core = [
     ],
     rules: {
       "sonarjs/no-duplicate-string": "off",
-      // sonarjs 4.2.3 removed the rule's internal test-file check, so it is
-      // off globally and enabled only here (#885).
+    },
+  },
+  {
+    // sonarjs 4.2.3 removed the rule's internal test-file check, so it is off
+    // globally and enabled only for the test files sonarjs 4.2.2 checked,
+    // leaving out `__tests__` helpers and `.test-d.ts` type tests. Mirrors
+    // the oxlint js-plugins preset (#885).
+    files: ["**/*.{test,spec,cy}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"],
+    rules: {
       "sonarjs/no-empty-test-file": "error",
     },
   },

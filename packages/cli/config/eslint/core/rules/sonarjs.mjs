@@ -13,10 +13,6 @@ const baseRules = Object.fromEntries(
 // Overrides mirror the oxlint js-plugins preset (config/oxlint/js-plugins),
 // which is the benchmark for rule decisions across linters.
 const overrideRules = {
-  // sonarjs >= 4.2.3 only runs this rule on test files when SonarQube's
-  // analysis layer selects them; the standalone plugin has no such layer.
-  // eslint.config.mjs re-enables it in the test-file override (#885).
-  "sonarjs/no-empty-test-file": "off",
   // Fights the formatter (arrowParentheses: always).
   "sonarjs/arrow-function-convention": "off",
   // The same number as Biome's noExcessiveCognitiveComplexity limit, but the
@@ -40,6 +36,10 @@ const overrideRules = {
   // Overlaps max-depth, which is off. Not a duplicate: it defaults to 3
   // levels rather than 4, and carries nesting across nested functions.
   "sonarjs/nested-control-flow": "off",
+  // sonarjs >= 4.2.3 only runs this rule on test files when SonarQube's
+  // analysis layer selects them; the standalone plugin has no such layer.
+  // eslint.config.mjs turns it on for test files (#885).
+  "sonarjs/no-empty-test-file": "off",
   // No dependency-manifest resolution in oxlint's JS plugin bridge, so this
   // flags builtin (bun:test) and workspace imports as missing dependencies.
   // Off in both linters to keep parity.

@@ -181,8 +181,17 @@ const config = defineConfig({
         // Repeated string literals (test titles, expected values) are normal
         // and idiomatic in test files.
         "sonarjs/no-duplicate-string": "off",
-        // sonarjs 4.2.3 removed the rule's internal test-file check, so it
-        // would otherwise report every non-test source file (#885).
+      },
+    },
+    {
+      // sonarjs 4.2.3 removed the rule's internal test-file check, so it
+      // would otherwise report every non-test source file (#885). This glob
+      // is the one sonarjs 4.2.2 checked: helpers and fixtures under
+      // `__tests__` hold no test cases by design, and type-test files
+      // (`.test-d.ts`) can be top-level `expectTypeOf` calls, which the rule
+      // doesn't count as tests.
+      files: ["**/*.{test,spec,cy}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"],
+      rules: {
         "sonarjs/no-empty-test-file": "error",
       },
     },
@@ -383,7 +392,7 @@ const config = defineConfig({
     "sonarjs/no-empty-collection": "error",
     "sonarjs/no-empty-group": "error",
     "sonarjs/no-empty-parameterized-test-dataset": "error",
-    // Scoped to test files in the override below: sonarjs >= 4.2.3 relies on
+    // Scoped to test files in the override above: sonarjs >= 4.2.3 relies on
     // the analyzer to select test files, which the standalone plugin lacks.
     "sonarjs/no-empty-test-file": "off",
     "sonarjs/no-empty-test-title": "error",
