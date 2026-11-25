@@ -28,12 +28,24 @@ export const getUnsupportedNodeMessage = (
   ].join("\n");
 };
 
-/** Exit process 1 with a clear message when Node is below the supported range. */
-export const assertSupportedNodeEngine = (): void => {
-  const message = getUnsupportedNodeMessage();
+/**
+ * Print a clear message and set exit code 1 when Node is outside the supported
+ * range. Returns whether the CLI may load.
+ *
+ * Sets `process.exitCode` rather than calling `process.exit()`, which can drop
+ * the message while a write to a piped stderr is still pending.
+ */
+export const ensureSupportedNodeEngine = (
+  nodeVersion = process.versions.node
+): boolean => {
+  const message = getUnsupportedNodeMessage(nodeVersion);
 
   if (message) {
     console.error(message);
-    process.exit(1);
+    process.exitCode = 1;
+
+    return false;
   }
+
+  return true;
 };

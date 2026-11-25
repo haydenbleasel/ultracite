@@ -1,7 +1,10 @@
-import { describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, spyOn, test } from "bun:test";
 
 import packageJson from "../package.json" with { type: "json" };
-import { getUnsupportedNodeMessage } from "../src/ensure-node-engine";
+import {
+  ensureSupportedNodeEngine,
+  getUnsupportedNodeMessage,
+} from "../src/ensure-node-engine";
 
 describe("getUnsupportedNodeMessage", () => {
   test("returns null for a supported Node 22 version", () => {
@@ -31,5 +34,40 @@ describe("getUnsupportedNodeMessage", () => {
     expect(message).not.toBeNull();
     expect(message).toContain("22.18.0");
     expect(message).toContain(packageJson.engines.node);
+  });
+});
+
+describe("ensureSupportedNodeEngine", () => {
+  const originalExitCode = process.exitCode;
+
+  afterEach(() => {
+    process.exitCode = originalExitCode;
+  });
+
+  test("lets the CLI load on a supported version", () => {
+    const errorSpy = spyOn(console, "error").mockImplementation(() => {});
+
+    expect(ensureSupportedNodeEngine("24.15.0")).toBe(true);
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(process.exitCode).toBe(originalExitCode);
+
+    errorSpy.mockRestore();
+  });
+
+  test("prints the message and sets exit code 1 without exiting", () => {
+    const errorSpy = spyOn(console, "error").mockImplementation(() => {});
+
+    // process.exit() can drop a pending write to a piped stderr.
+    const exitSpy = spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("process.exit() was called");
+    });
+
+    expect(ensureSupportedNodeEngine("20.20.0")).toBe(false);
+    expect(errorSpy).toHaveBeenCalledWith(getUnsupportedNodeMessage("20.20.0"));
+    expect(process.exitCode).toBe(1);
+    expect(exitSpy).not.toHaveBeenCalled();
+
+    errorSpy.mockRestore();
+    exitSpy.mockRestore();
   });
 });
