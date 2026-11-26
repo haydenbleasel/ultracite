@@ -7,6 +7,7 @@ import type { options } from "../data/options";
 import type { JsonObject } from "../data/types";
 import { parseJsoncStrict } from "../schemas";
 import { exists, resolveEsmConfigPath, writeProjectFile } from "../utils";
+import { BUN_CONFIG_MODULE } from "./bun";
 import {
   parseConfigModule,
   renderEntries,
@@ -37,6 +38,8 @@ type Framework = (typeof options.frameworks)[number];
 interface OxfmtOptions {
   // The major versions of Astro the project depends on.
   astroMajorVersions?: number[];
+  /** Write the config for the Bun provider (see config/bun/index.mjs). */
+  bun?: boolean;
   frameworks?: Framework[];
 }
 
@@ -88,15 +91,34 @@ const emptyExtras = (): OxfmtExtras => ({
   ultraciteLocal: "ultracite",
 });
 
+// A Bun config imports defineConfig from ultracite/bun, so it loads (and
+// type checks) without oxfmt installed. Anything else the project imports
+// from oxfmt stays on its own import.
+const renderDefineConfigImports = (
+  bun: boolean,
+  oxfmtSpecifiers: string[]
+): string[] => {
+  if (!bun) {
+    return [renderImport("oxfmt", ["defineConfig", ...oxfmtSpecifiers])];
+  }
+
+  return [
+    oxfmtSpecifiers.length > 0 ? renderImport("oxfmt", oxfmtSpecifiers) : "",
+    renderImport(BUN_CONFIG_MODULE, ["defineConfig"]),
+  ];
+};
+
 const generateConfigContent = (
   extras: OxfmtExtras = emptyExtras(),
   opts: OxfmtOptions = {}
 ) => {
   const imports = [
-    renderImport("oxfmt", ["defineConfig", ...extras.oxfmtSpecifiers]),
+    ...renderDefineConfigImports(opts.bun ?? false, extras.oxfmtSpecifiers),
     `import ${extras.ultraciteLocal} from "${ULTRACITE_OXFMT}";`,
     ...extras.imports,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const statements = extras.statements.join("\n\n");
 
@@ -136,6 +158,12 @@ const readExistingConfig = (config: ConfigModule): OxfmtExtras | null => {
   const extras = emptyExtras();
 
   for (const moduleImport of config.imports) {
+    // The Bun provider's defineConfig, regenerated for whichever provider
+    // init is writing for.
+    if (!moduleImport.typeOnly && moduleImport.source === BUN_CONFIG_MODULE) {
+      continue;
+    }
+
     if (moduleImport.typeOnly) {
       extras.imports.push(moduleImport.text);
     } else if (moduleImport.source === "oxfmt") {

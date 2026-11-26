@@ -9,6 +9,7 @@ import {
 import path from "node:path";
 import process from "node:process";
 
+import { acceptsBunLinter } from "./bun";
 import { FIXTURE_COPIES } from "./config";
 import type { Provider } from "./config";
 
@@ -160,13 +161,16 @@ export const resetSrc = (project: PreparedProject): void => {
  * the real `ultracite init` to generate the provider config, install the
  * provider's tools, and lay down the fixture tree. Everything here is
  * untimed — only the lint invocations in the harness are measured.
+ *
+ * Returns undefined when the build predates the provider (only Bun is new
+ * enough for that), so the harness can skip it.
  */
 export const prepareProject = (options: {
   workRoot: string;
   buildLabel: string;
   provider: Provider;
   tarball: string;
-}): PreparedProject => {
+}): PreparedProject | undefined => {
   const { workRoot, buildLabel, provider, tarball } = options;
   const dir = path.join(workRoot, buildLabel, provider);
   rmSync(dir, { force: true, recursive: true });
@@ -217,6 +221,15 @@ export const prepareProject = (options: {
     "index.js"
   );
 
+  // A build from before the Bun provider has no `--linter bun`. Older builds
+  // don't reject an unknown linter either, so ask its help, not init.
+  if (
+    provider === "bun" &&
+    !acceptsBunLinter(run("node", [ultraciteBin, "init", "--help"], dir).stdout)
+  ) {
+    return undefined;
+  }
+
   runOrThrow(
     "ultracite init",
     "node",
@@ -235,7 +248,8 @@ export const prepareProject = (options: {
   );
 
   // 3. Keep ultracite pinned to the tarball (init records a version range for
-  //    it); then install the provider tools it wrote into package.json.
+  //    it); then install the provider tools it wrote into package.json. For
+  //    Bun that's nothing: `bun lint` and `bun fmt` come with the Bun on PATH.
   const packageJsonPath = path.join(dir, "package.json");
 
   // SAFETY: this package.json was written above and then edited by `ultracite

@@ -16,8 +16,9 @@ import {
 } from "../config-resolution";
 import type { InstalledPackage } from "../config-resolution";
 import { getConfiguredPlugins, pluginRuleSources } from "../configured-plugins";
-import { toolchainPeerRanges } from "../dependencies";
+import { MIN_BUN_VERSION, toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
+import { hasBunLint, isBunTooOld, readBunVersion } from "../linters/bun";
 import { readCoreEnv } from "../linters/oxlint";
 import type { CoreEnv, EnvBlocker } from "../linters/oxlint";
 import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
@@ -28,6 +29,7 @@ import {
   detectLinter,
   eslintConfigNames,
   findNearestFile,
+  isBunConfig,
   legacyEslintConfigNames,
   oxfmtConfigNames,
   oxlintConfigNames,
@@ -51,6 +53,10 @@ const BIOME_JSX_RUNTIME_CHECK = "Biome JSX runtime";
 const OXLINT_CHECK = "Oxlint configuration";
 const OXLINT_ENV_CHECK = "Oxlint environment";
 const OXFMT_CHECK = "oxfmt configuration";
+const BUN_CHECK = "Bun installation";
+const BUN_FORMAT_CONFIG_CHECK = "Bun formatter configuration";
+const BUNFIG_CHECK = "bunfig.toml";
+const BUN_SCRIPTS_CHECK = "Bun scripts";
 const ULTRACITE_DEP_CHECK = "Ultracite dependency";
 const CONFLICTING_TOOLS_CHECK = "Conflicting tools";
 const PLUGIN_VERSIONS_CHECK = "Plugin versions";
@@ -750,6 +756,131 @@ const checkOxfmtConfig = (): DiagnosticCheck =>
   });
 
 // ---------------------------------------------------------------------------
+// Bun checks
+// ---------------------------------------------------------------------------
+
+// Bun isn't a dependency of the project, so it's checked by what it can do:
+// a Bun without `bun lint` reports a missing "lint" script, and an early
+// canary has no `--no-script` flag to run it with. Only a version below the
+// minimum is called too old (see isBunTooOld).
+const checkBunInstallation = (): DiagnosticCheck => {
+  const installed = readBunVersion();
+
+  if (installed === null) {
+    return {
+      message: `Bun is not installed — the Bun provider needs Bun ${MIN_BUN_VERSION} or later`,
+      name: BUN_CHECK,
+      status: "fail",
+    };
+  }
+
+  if (!hasBunLint()) {
+    return {
+      message: isBunTooOld(installed)
+        ? `Bun ${installed} is too old for the Bun provider, which needs Bun ${MIN_BUN_VERSION} or later — upgrade with \`bun upgrade\``
+        : `Bun ${installed} has no \`bun lint\` with the \`--no-script\` flag the Bun provider runs it with: \`bun --help\` lists no \`lint\` command, or \`bun lint --help --all\` lists no \`--no-script\` — switch to a Bun build that has both`,
+      name: BUN_CHECK,
+      status: "fail",
+    };
+  }
+
+  return {
+    message: `Bun ${installed} is installed and has \`bun lint\` and \`bun fmt\``,
+    name: BUN_CHECK,
+    status: "pass",
+  };
+};
+
+// The Bun provider's oxfmt config imports defineConfig from ultracite/bun, so
+// it loads and type checks without oxfmt installed.
+const checkBunFormatConfig = (): DiagnosticCheck | null => {
+  const found = findNearestFile(oxfmtConfigNames);
+
+  if (!found) {
+    return null;
+  }
+
+  if (isBunConfig(found.path)) {
+    return {
+      message: `${found.fileName} imports defineConfig from ultracite/bun`,
+      name: BUN_FORMAT_CONFIG_CHECK,
+      status: "pass",
+    };
+  }
+
+  return {
+    message: `${found.fileName} doesn't import defineConfig from ultracite/bun, so it needs oxfmt installed — run \`ultracite init\` to update it`,
+    name: BUN_FORMAT_CONFIG_CHECK,
+    status: "warn",
+  };
+};
+
+const BUNFIG_SECTION_RE = /^\s*\[{1,2}(?<section>lint|fmt)(?:\.|\])/gmu;
+
+// Bun applies bunfig.toml's [lint] and [fmt] sections on top of the oxlint
+// and oxfmt configs, but the editor extensions only read those configs, so
+// settings kept in bunfig.toml make the editor and `ultracite check` disagree.
+const checkBunfig = (): DiagnosticCheck | null => {
+  const bunfigPath = path.join(process.cwd(), "bunfig.toml");
+
+  if (!existsSync(bunfigPath)) {
+    return null;
+  }
+
+  const sections = [
+    ...new Set(
+      [...readFileSync(bunfigPath, "utf-8").matchAll(BUNFIG_SECTION_RE)].map(
+        (match) => `[${match.groups?.section ?? ""}]`
+      )
+    ),
+  ];
+
+  if (sections.length === 0) {
+    return null;
+  }
+
+  return {
+    message: `bunfig.toml has ${sections.join(" and ")} settings, which Bun applies on top of oxlint.config.ts and oxfmt.config.ts but editors don't read — move them into those files`,
+    name: BUNFIG_CHECK,
+    status: "warn",
+  };
+};
+
+// `bun lint` and `bun fmt` run a package.json script of the same name, when
+// there is one, instead of linting or formatting. `ultracite check` and `fix`
+// aren't affected, but typing `bun lint` would run the other tool.
+const checkBunScripts = (): DiagnosticCheck | null => {
+  const scripts = readPackageJsonSync(
+    path.join(process.cwd(), "package.json")
+  )?.scripts;
+
+  const shadowing = (["lint", "fmt"] as const).filter((name) => {
+    const script = scripts?.[name];
+
+    return (
+      script !== undefined &&
+      !script.includes("ultracite") &&
+      !script.includes(`bun ${name}`)
+    );
+  });
+
+  if (shadowing.length === 0) {
+    return null;
+  }
+
+  const runs = shadowing.map(
+    (name) =>
+      `\`bun ${name}\` runs the package.json "${name}" script (\`${scripts?.[name] ?? ""}\`)`
+  );
+
+  return {
+    message: `${runs.join(" and ")} instead of Bun's own tool, unless you pass \`--no-script\` — \`ultracite check\` and \`ultracite fix\` always run Bun's`,
+    name: BUN_SCRIPTS_CHECK,
+    status: "warn",
+  };
+};
+
+// ---------------------------------------------------------------------------
 // Shared checks
 // ---------------------------------------------------------------------------
 
@@ -944,6 +1075,32 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           name: "oxfmt version",
         },
         { fn: checkOxfmtConfig, name: OXFMT_CHECK },
+        {
+          fn: () => checkPluginVersions(linter),
+          name: PLUGIN_VERSIONS_CHECK,
+        }
+      );
+      break;
+    }
+
+    case "bun": {
+      checks.push(
+        { fn: checkBunInstallation, name: BUN_CHECK },
+        { fn: checkOxlintConfig, name: OXLINT_CHECK },
+        { fn: checkOxfmtConfig, name: OXFMT_CHECK },
+        { fn: checkBunFormatConfig, name: BUN_FORMAT_CONFIG_CHECK },
+        { fn: checkBunfig, name: BUNFIG_CHECK },
+        { fn: checkBunScripts, name: BUN_SCRIPTS_CHECK },
+        // Only installed for the editor extensions, which run them on the
+        // same configs.
+        {
+          fn: () => checkToolVersion("oxlint", false),
+          name: "Oxlint version",
+        },
+        {
+          fn: () => checkToolVersion("oxfmt", false),
+          name: "oxfmt version",
+        },
         {
           fn: () => checkPluginVersions(linter),
           name: PLUGIN_VERSIONS_CHECK,
