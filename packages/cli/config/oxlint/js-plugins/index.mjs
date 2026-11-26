@@ -184,6 +184,18 @@ const config = defineConfig({
       },
     },
     {
+      // sonarjs 4.2.3 removed the rule's internal test-file check, so it
+      // would otherwise report every non-test source file (#885). This glob
+      // is the one sonarjs 4.2.2 checked: helpers and fixtures under
+      // `__tests__` hold no test cases by design, and type-test files
+      // (`.test-d.ts`) can be top-level `expectTypeOf` calls, which the rule
+      // doesn't count as tests.
+      files: ["**/*.{test,spec,cy}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"],
+      rules: {
+        "sonarjs/no-empty-test-file": "error",
+      },
+    },
+    {
       files: [ROUTE_FILE_GLOB],
       rules: {
         // File-based routers (TanStack Router, React Router, SvelteKit)
@@ -380,7 +392,9 @@ const config = defineConfig({
     "sonarjs/no-empty-collection": "error",
     "sonarjs/no-empty-group": "error",
     "sonarjs/no-empty-parameterized-test-dataset": "error",
-    "sonarjs/no-empty-test-file": "error",
+    // Scoped to test files in the override above: sonarjs >= 4.2.3 relies on
+    // the analyzer to select test files, which the standalone plugin lacks.
+    "sonarjs/no-empty-test-file": "off",
     "sonarjs/no-empty-test-title": "error",
     "sonarjs/no-equals-in-for-termination": "error",
     "sonarjs/no-exclusive-tests": "error",

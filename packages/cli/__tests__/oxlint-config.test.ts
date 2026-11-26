@@ -1062,6 +1062,74 @@ describe("oxlint js-plugins config", () => {
     });
   }
 
+  test("no-empty-test-file is enabled only for test files", async () => {
+    const rule = "sonarjs/no-empty-test-file";
+
+    // sonarjs >= 4.2.3 dropped its internal test-file check, so enabling the
+    // rule globally reports every non-test source file (#885). Both presets
+    // turn it on for the files sonarjs 4.2.2 checked, which leaves out
+    // helpers under __tests__ and type-test files.
+    const expected = {
+      "cypress/e2e/login.cy.ts": "error",
+      "src/__tests__/helpers.ts": "off",
+      "src/example.spec.tsx": "error",
+      "src/example.test.ts": "error",
+      "src/example.ts": "off",
+      "src/types.test-d.ts": "off",
+    } satisfies Record<string, OxlintRuleSeverity>;
+
+    const files = Object.keys(expected);
+
+    // SAFETY: readOxlintConfig returns an untyped module default, which is an
+    // OxlintConfig for every preset in config/oxlint.
+    const oxlint = (await readOxlintConfig("js-plugins")) as OxlintConfig;
+
+    // Overrides apply in order, so the last one that matches and sets the
+    // rule wins.
+    const oxlintSeverity = (file: string) => {
+      let severity = oxlint.rules?.[rule];
+
+      for (const override of oxlint.overrides ?? []) {
+        const setting = override.rules?.[rule];
+
+        if (
+          setting !== undefined &&
+          override.files.some((glob) => new Bun.Glob(glob).match(file))
+        ) {
+          severity = setting;
+        }
+      }
+
+      return severity;
+    };
+
+    expect(
+      Object.fromEntries(files.map((file) => [file, oxlintSeverity(file)]))
+    ).toEqual(expected);
+
+    // The ESLint core preset loads plugins that touch node:fs at import time,
+    // which other test files mock, so ESLint resolves it in a subprocess.
+    const script = `
+      const { ESLint } = await import("eslint");
+      const { default: core } = await import("./config/eslint/core/eslint.config.mjs");
+      const eslint = new ESLint({ overrideConfig: core, overrideConfigFile: true });
+      const severities = {};
+      for (const file of ${JSON.stringify(files)}) {
+        const config = await eslint.calculateConfigForFile(file);
+        const [severity = 0] = config?.rules?.[${JSON.stringify(rule)}] ?? [];
+        severities[file] = ["off", "warn", "error"][severity];
+      }
+      console.log(JSON.stringify(severities));
+    `;
+
+    const result = Bun.spawnSync([process.execPath, "-e", script], {
+      cwd: path.join(import.meta.dirname, ".."),
+    });
+
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    expect(JSON.parse(result.stdout.toString())).toEqual(expected);
+  });
+
   test("js-plugins does not enable sonarjs rules that require type checking", async () => {
     const config = await readOxlintConfig("js-plugins");
 
