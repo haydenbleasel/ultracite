@@ -14,13 +14,16 @@ const external = [
 // accumulating stale content-hashed assets between builds.
 await rm("dist", { force: true, recursive: true });
 
+// Two entrypoints so the engine gate in index.js can run before cli.js pulls
+// in runtime deps that crash on unsupported Node (for example execa 10).
 const result = await Bun.build({
   banner: "#!/usr/bin/env node",
-  entrypoints: ["src/index.ts"],
+  entrypoints: ["src/index.ts", "src/cli.ts"],
   external,
   format: "esm",
   minify: true,
   outdir: "dist",
+  splitting: true,
   target: "node",
 });
 
