@@ -86,36 +86,13 @@ Ultracite also adds `husky` to your `prepare` script so hooks are installed on `
 pre-commit:
   jobs:
     - run: npx ultracite fix {staged_files}
-      glob:
-        - "*.js"
-        - "*.jsx"
-        - "*.mjs"
-        - "*.cjs"
-        - "*.ts"
-        - "*.tsx"
-        - "*.mts"
-        - "*.cts"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-        - "*.scss"
-        - "*.less"
-        - "*.vue"
-        - "*.svelte"
-        - "*.astro"
-        - "*.html"
-        - "*.md"
-        - "*.mdx"
-        - "*.yaml"
-        - "*.yml"
-        - "*.graphql"
-        - "*.gql"
+      glob: "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,jsonc,css,scss,less,vue,svelte,astro,html,md,mdx,yaml,yml,graphql,gql}"
       stage_fixed: true
 ```
 
-Lefthook replaces `{staged_files}` with the staged files that match the globs, so only those are fixed, and `stage_fixed` re-stages them. The globs cover every file type Biome, Oxlint and Oxfmt, or ESLint, Prettier and Stylelint lint or format. With Lefthook's default glob matcher, `*.js` matches files in every directory, including the project root. If your config sets `glob_matcher: doublestar`, Ultracite writes `**/*.js`-style globs instead.
+Lefthook replaces `{staged_files}` with the staged files that match the glob, so only those are fixed, and `stage_fixed` re-stages them. The glob covers every file type Biome, Oxlint and Oxfmt, or ESLint, Prettier and Stylelint lint or format. With Lefthook's default glob matcher, `*.{js,ts}` matches files in every directory, including the project root. If your config sets `glob_matcher: doublestar`, Ultracite writes the glob with a `**/` prefix.
 
-If you already have a Lefthook config, Ultracite edits the one Lefthook actually loads (`lefthook.yml`, `.lefthook.yml`, `.config/lefthook.yml`, or their `.yaml` variants) and adds the job first in `pre-commit`, keeping your comments and formatting. JSON and TOML configs aren't edited: Ultracite prints the job to add instead. Ultracite also appends `lefthook install` to your `prepare` script, keeping any existing command.
+If you already have a Lefthook config, Ultracite edits the one Lefthook actually loads (`lefthook.yml`, `.lefthook.yml`, `.config/lefthook.yml`, or their `.yaml` variants) and adds the job first in `pre-commit`, keeping your comments and formatting. JSON and TOML configs aren't edited: Ultracite prints the job to add instead. A job, command or glob that a YAML anchor or alias shares with other hooks or jobs isn't edited either, since the edit would change them too: Ultracite prints the values to give the pre-commit job instead. Ultracite also appends `lefthook install` to your `prepare` script, keeping any existing command.
 
 ### lint-staged
 
