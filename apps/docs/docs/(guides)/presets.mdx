@@ -313,12 +313,37 @@ export default [...core, ...gdp];
 
 It matches the Oxlint preset: upstream's strict mode stops proofs being forged with type assertions or minted outside `proofs/`, and empty proof interfaces (`interface X<P> extends Proof<"X", [P]> {}`) are allowed inside `proofs/`. Sensitive functions take proofs they never read at runtime (`_proof: UserIsProjectAdmin<U, P>`); the core presets already ignore `_`-prefixed arguments in `no-unused-vars`, so those need no setting of their own.
 
-## Cloudflare (Oxlint)
+## Cloudflare's Rules with @cloudflare/oxlint-config
 
-Select `@cloudflare/oxlint-config` in the optional JS plugins prompt or pass it to `init`:
+[`@cloudflare/oxlint-config`](https://github.com/cloudflare/oxlint-config) is the Oxlint preset Cloudflare uses for its own JavaScript and TypeScript projects. It builds on [`@nkzw/oxlint-config`](https://github.com/nkzw-tech/oxlint-config) and adds rules for type safety, promises and type-only imports, plus a handful of JS-plugin rules that core doesn't have.
+
+It's a full preset with its own opinions, so it's **off by default**. You can enable it during setup: it appears as `@cloudflare/oxlint-config` in the JS-plugins prompt, and non-interactive setup accepts it via `--js-plugins`:
 
 ```package-install
 npx ultracite init --linter oxlint --js-plugins @cloudflare/oxlint-config
 ```
 
-Ultracite installs the [Cloudflare preset](https://github.com/cloudflare/oxlint-config) and its `tsrs` beta backend. The generated config extends Cloudflare after Ultracite's core and before the framework presets, so framework-specific rules take precedence. The preset turns on type-aware linting itself, so `ultracite check` and `ultracite fix` run its type-aware rules without an extra flag. In a TypeScript project, an interactive init also sets up type-aware linting as `--type-aware` does without asking about it, and still confirms the `strictNullChecks` those rules need before changing any tsconfig. A non-interactive run only does that with `--type-aware`.
+Or add it to your config manually:
+
+```package-install
+npm install -D @cloudflare/oxlint-config oxlint-tsgolint
+```
+
+```ts title="oxlint.config.ts"
+import cloudflare from "@cloudflare/oxlint-config";
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: { ...core.env, ...cloudflare.env },
+  extends: [core, cloudflare],
+  ignorePatterns: core.ignorePatterns,
+  options: { typeAware: true },
+});
+```
+
+A few things to keep in mind:
+
+- **It turns on type-aware linting.** The preset sets Oxlint's `typeAware` option itself, so choosing it sets up everything `--type-aware` does. `init` installs `oxlint-tsgolint` and turns on `strictNullChecks` in your tsconfig files (an interactive run asks first), and core's type-aware rules run as well as the preset's.
+- **Its settings win over core's.** The preset goes after core and before the framework presets. Where it sets a rule core also sets, its setting applies: it asks for `Array<T>` where core asks for `T[]`, reports `console` calls, and turns several type-safety rules off in test files. To keep core's choice, set the rule under `rules` in your own config, or in an `overrides` entry when the preset changes it for certain files.
+- **It needs version 0.2.0 or later.** That's the first release that doesn't require `tsrs`, another type-aware backend for Oxlint. If your project installs `tsrs` anyway, Oxlint uses it in place of `oxlint-tsgolint`.

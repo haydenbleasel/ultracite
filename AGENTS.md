@@ -127,6 +127,8 @@ Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `drizzle
 
 `js-plugins` bridges `eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` through oxlint's `jsPlugins`. They are opt-in via `init --js-plugins` because they are much slower (issue #741 is why the benchmark exists). Their npm packages must be **root** devDependencies so a clean install can load `oxlint.config.ts`. `anti-slop`, `@shadcn/lint`, `@interfere/landmines` and `gdp` are standalone presets extended directly, not through `selectJsPlugins`. `gdp` loads its plugin from `@gdp-ts/core`, which is a runtime library in user projects, so init must never install or prune it.
 
+`@cloudflare/oxlint-config` is the one third-party preset init extends straight from npm, after core and before the framework presets (`presetOrder` in `src/linters/oxlint.ts`). It sets `options.typeAware` itself, so selecting it turns on the whole type-aware setup, and it runs on `oxlint-tsgolint`. Never install or track `tsrs` for it: the peer is optional since 0.2.0, and Oxlint switches every type-aware rule in a project to `tsrs-lint` as soon as that binary is in `node_modules/.bin`.
+
 ## The CLI (`packages/cli/src`)
 
 - `index.ts` registers commands with Commander. `check` and `fix` pass unknown flags straight through to the underlying linter via `linter-args.ts`; keep that behaviour when adding options.

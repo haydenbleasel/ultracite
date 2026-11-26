@@ -4,7 +4,6 @@ import {
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
-  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "./dependencies";
 import { findLoadedJsPlugins } from "./linters/oxlint";
 import { eslintConfigNames, findNearestFile, oxlintConfigNames } from "./utils";
@@ -97,10 +96,6 @@ export const getConfiguredPlugins = (linter: Linter): Map<string, string> => {
   if (linter === "oxlint") {
     for (const name of getConfiguredOxlintJsPlugins()) {
       plugins.set(name, OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[name]);
-    }
-
-    if (plugins.has("@cloudflare/oxlint-config")) {
-      plugins.set("tsrs", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs);
     }
   }
 

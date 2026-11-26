@@ -444,32 +444,25 @@ describe("getToolchainPackages", () => {
     );
   });
 
-  // tsrs can be the project's own TypeScript compiler, so upgrade leaves one
-  // alone that doctor already accepts.
-  test.each([
-    ["isn't installed", null, true],
-    ["is older than the range", "0.24.0-ts7.1.0-beta", true],
-    ["is a newer beta", "0.26.0-ts7.2.0-beta", false],
-    ["follows TypeScript's versions", "7.1.0-beta.tsrs3", false],
-  ] as const)(
-    "oxlint reinstalls tsrs for Cloudflare only when needed: the installed one %s",
-    async (_case, version, reinstalls) => {
-      setup({ versions: [version === null ? null : installed(version)] });
-      const { getToolchainPackages } = await loadUpgrade();
+  // Cloudflare's preset runs on oxlint-tsgolint, which init installs with it.
+  // A project that runs tsrs instead chose that itself, and tsrs can be its
+  // TypeScript compiler too, so upgrade never installs or moves it.
+  test("oxlint re-pins Cloudflare's preset and leaves a project's tsrs alone", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
 
-      const packages = getToolchainPackages(
-        "oxlint",
-        new Set(["@cloudflare/oxlint-config", "tsrs"])
-      );
+    const packages = getToolchainPackages(
+      "oxlint",
+      new Set(["@cloudflare/oxlint-config", "oxlint-tsgolint", "tsrs"])
+    );
 
-      expect(
-        packages.includes(`tsrs@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs}`)
-      ).toBe(reinstalls);
-      expect(packages).toContain(
-        `@cloudflare/oxlint-config@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["@cloudflare/oxlint-config"]}`
-      );
-    }
-  );
+    expect(packages).toContain(
+      `@cloudflare/oxlint-config@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["@cloudflare/oxlint-config"]}`
+    );
+    expect(packages).toContain(
+      `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+    );
+    expect(packages.some((pkg) => pkg.startsWith("tsrs@"))).toBe(false);
+  });
 });
 
 describe("upgrade", () => {

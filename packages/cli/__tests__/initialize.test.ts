@@ -590,7 +590,7 @@ describe("initialize", () => {
         message: "Which JS plugins would you like to add (optional)?",
         options: [
           {
-            hint: "Cloudflare rules with type-aware linting via tsrs",
+            hint: "Cloudflare's preset, turns on type-aware linting",
             label: "@cloudflare/oxlint-config",
             value: "@cloudflare/oxlint-config",
           },
@@ -2231,7 +2231,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies(npmPm, "eslint", false, true, null, ["react"]);
+      await installDependencies(npmPm, "eslint", false, true, false, ["react"]);
 
       const withOverrides = written.find((content) =>
         content.includes('"overrides"')
@@ -2244,7 +2244,9 @@ describe("helper functions", () => {
 
       written.length = 0;
       const pnpmPm: PackageManager = { command: "pnpm", name: "pnpm" };
-      await installDependencies(pnpmPm, "eslint", false, true, null, ["react"]);
+      await installDependencies(pnpmPm, "eslint", false, true, false, [
+        "react",
+      ]);
 
       expect(written.some((content) => content.includes('"overrides"'))).toBe(
         false
@@ -2275,56 +2277,37 @@ describe("helper functions", () => {
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
-    test.each([
-      { backend: "oxlint-tsgolint", jsPlugins: [] },
-      { backend: "tsrs", jsPlugins: ["@cloudflare/oxlint-config"] },
-    ] as const)(
-      "installs $backend for type-aware Oxlint",
-      async ({ backend, jsPlugins }) => {
-        const installedPackages: string[] = [];
+    test("installs oxlint-tsgolint when type-aware is true", async () => {
+      const installedPackages: string[] = [];
 
-        const mockAddDep = mock((pkg: string | string[]) => {
-          installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+      const mockAddDep = mock((pkg: string | string[]) => {
+        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
 
-          return Promise.resolve();
-        });
+        return Promise.resolve();
+      });
 
-        mock.module("nypm", () => ({
-          addDevDependency: mockAddDep,
-          detectPackageManager: mock(() =>
-            Promise.resolve({ name: "npm", warnings: [] })
-          ),
-          dlxCommand: mock(() => "npx ultracite fix"),
-          removeDependency: mock(() => Promise.resolve()),
-        }));
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
 
-        mock.module("@clack/prompts", () => ({
-          spinner: mock(() => ({
-            message: mock(noop),
-            start: mock(noop),
-            stop: mock(noop),
-          })),
-        }));
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
 
-        await installDependencies(
-          npmPm,
-          "oxlint",
-          true,
-          true,
-          backend,
-          [],
-          [...jsPlugins]
-        );
-        expect(installedPackages).toContain(
-          `${backend}@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES[backend]}`
-        );
-        expect(
-          installedPackages.filter((pkg) =>
-            /^(?:oxlint-tsgolint|tsrs)@/u.test(pkg)
-          )
-        ).toHaveLength(1);
-      }
-    );
+      await installDependencies(npmPm, "oxlint", true, true, true);
+      expect(installedPackages).toContain(
+        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+      );
+    });
 
     test("does not install oxlint-tsgolint when type-aware is false", async () => {
       const installedPackages: string[] = [];
@@ -2352,7 +2335,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies(npmPm, "oxlint", true, true, null);
+      await installDependencies(npmPm, "oxlint", true, true, false);
       expect(installedPackages).not.toContain(
         `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
       );
@@ -2386,11 +2369,11 @@ describe("helper functions", () => {
 
       const compiler = `@astrojs/compiler-rs@${oxfmtFrameworkDevDependencies.astro?.["@astrojs/compiler-rs"]}`;
 
-      await installDependencies(npmPm, "oxlint", true, true, null, ["astro"]);
+      await installDependencies(npmPm, "oxlint", true, true, false, ["astro"]);
       expect(installedPackages).toContain(compiler);
 
       installedPackages.length = 0;
-      await installDependencies(npmPm, "oxlint", true, true, null, ["react"]);
+      await installDependencies(npmPm, "oxlint", true, true, false, ["react"]);
       expect(installedPackages).not.toContain(compiler);
     });
 
@@ -2418,13 +2401,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies(
-        npmPm,
-        "oxlint",
-        false,
-        true,
-        "oxlint-tsgolint"
-      );
+      await installDependencies(npmPm, "oxlint", false, true, true);
       expect(mockWriteFile).toHaveBeenCalled();
       expect(writtenContents.some((c) => c.includes("oxlint-tsgolint"))).toBe(
         true
@@ -4761,58 +4738,30 @@ describe("init questions", () => {
     }
   );
 
-  test("turns on type-aware linting with tsrs for Cloudflare in a TypeScript project", async () => {
-    const prompts = recordingPrompts();
-
-    const { written } = mockProject({
-      "package.json": '{"name": "app"}',
-      "tsconfig.json": '{"compilerOptions": {}}',
-    });
-
-    try {
-      await initialize({
-        "js-plugins": ["@cloudflare/oxlint-config"],
-        linter: "oxlint",
-        skipInstall: true,
-      });
-    } finally {
-      restoreProject();
-    }
-
-    expect(
-      prompts.confirm.mock.calls.some(([prompt]) =>
-        prompt.message.includes("Turn on type-aware")
-      )
-    ).toBe(false);
-    expect(written.get("./oxlint.config.mts")).toContain(
-      "options: { typeAware: true }"
-    );
-
-    const { devDependencies } = JSON.parse(written.get("package.json") ?? "{}");
-
-    expect(devDependencies).toHaveProperty("tsrs");
-    expect(devDependencies).not.toHaveProperty("oxlint-tsgolint");
-  });
-
-  // Cloudflare's preset sets `options.typeAware` itself, which Oxlint
-  // carries through `extends`, so its rules still run through tsrs. A
-  // non-interactive run without --type-aware never edits tsconfig.
+  // Cloudflare's preset sets `options.typeAware` itself, so choosing it is
+  // choosing type-aware linting. Init sets that up as --type-aware does, on
+  // the backend it already installs, whether or not anyone can be asked.
   test.each([
-    ["a JavaScript project", {}, {}],
     [
-      "a non-interactive TypeScript project",
+      "an interactive TypeScript project",
       { "tsconfig.json": '{"compilerOptions": {}}' },
       {},
     ],
     [
-      "an explicit type-aware false",
+      "a non-interactive TypeScript project",
       { "tsconfig.json": '{"compilerOptions": {}}' },
-      { "type-aware": false },
+      { yes: true },
+    ],
+    ["a JavaScript project", {}, { yes: true }],
+    [
+      "a run told not to",
+      { "tsconfig.json": '{"compilerOptions": {}}' },
+      { "type-aware": false, yes: true },
     ],
   ] as const)(
-    "doesn't set up type-aware linting itself for Cloudflare in %s",
+    "turns on type-aware linting for Cloudflare's preset in %s",
     async (_case, files, flags) => {
-      recordingPrompts();
+      const prompts = recordingPrompts();
 
       const { written } = mockProject({
         ...files,
@@ -4825,22 +4774,69 @@ describe("init questions", () => {
           "js-plugins": ["@cloudflare/oxlint-config"],
           linter: "oxlint",
           skipInstall: true,
-          yes: true,
         });
       } finally {
         restoreProject();
       }
 
-      expect(written.has("tsconfig.json")).toBe(false);
-      expect(written.get("./oxlint.config.mts")).not.toContain("typeAware");
-      expect(written.get("./oxlint.config.mts")).toContain(
-        "extends: [core, cloudflare],"
-      );
       expect(
-        JSON.parse(written.get("package.json") ?? "{}").devDependencies
-      ).toHaveProperty("tsrs");
+        prompts.confirm.mock.calls.some(([prompt]) =>
+          prompt.message.includes("Turn on type-aware")
+        )
+      ).toBe(false);
+
+      const config = written.get("./oxlint.config.mts") ?? "";
+
+      expect(config).toContain('from "@cloudflare/oxlint-config"');
+      expect(config).toContain("options: { typeAware: true }");
+
+      const { devDependencies } = JSON.parse(
+        written.get("package.json") ?? "{}"
+      );
+
+      expect(devDependencies).toHaveProperty("@cloudflare/oxlint-config");
+      expect(devDependencies).toHaveProperty("oxlint-tsgolint");
+      expect(devDependencies).not.toHaveProperty("tsrs");
     }
   );
+
+  // A config that extends the preset by hand already runs the type-aware
+  // rules, so init installs what they need without --type-aware.
+  test("sets up type-aware linting for a config that already extends Cloudflare's preset", async () => {
+    const prompts = recordingPrompts();
+
+    const { written } = mockProject({
+      "oxlint.config.ts": [
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        'import { defineConfig } from "oxlint";',
+        'import core from "ultracite/oxlint/core";',
+        "",
+        "export default defineConfig({",
+        "  env: { ...core.env, ...cloudflare.env },",
+        "  extends: [core, cloudflare],",
+        "  ignorePatterns: core.ignorePatterns,",
+        "});",
+        "",
+      ].join("\n"),
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.confirm.mock.calls.some(([prompt]) =>
+        prompt.message.includes("Turn on type-aware")
+      )
+    ).toBe(false);
+    expect(
+      JSON.parse(written.get("package.json") ?? "{}").devDependencies
+    ).toHaveProperty("oxlint-tsgolint");
+  });
 
   test("asks about the Ultracite skill before writing anything", async () => {
     const writtenWhenAsked: number[] = [];

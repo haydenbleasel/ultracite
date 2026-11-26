@@ -1735,36 +1735,54 @@ export default defineConfig({
     expect(findCheck(checks, "eslint-plugin-github version")).toBeUndefined();
   });
 
-  // Cloudflare's preset takes any tsrs from its beta on, and a project can run
-  // a newer tsrs as its own compiler.
-  test.each(["0.25.0-ts7.1.0-beta", "0.26.0", "7.1.0-beta.tsrs3"])(
-    "accepts tsrs %s alongside Cloudflare's preset",
-    (tsrs) => {
-      const checks = pluginChecks(
-        "oxlint",
-        pluginProject(
-          [
-            "oxlint.config.ts",
-            [
-              'import { defineConfig } from "oxlint";',
-              'import core from "ultracite/oxlint/core";',
-              'import cloudflare from "@cloudflare/oxlint-config";',
-              "export default defineConfig({ extends: [core, cloudflare] });",
-            ].join("\n"),
-          ],
-          { "@cloudflare/oxlint-config": "0.1.0", tsrs }
-        )
-      );
+  const cloudflareConfig: [string, string] = [
+    "oxlint.config.ts",
+    [
+      'import { defineConfig } from "oxlint";',
+      'import core from "ultracite/oxlint/core";',
+      'import cloudflare from "@cloudflare/oxlint-config";',
+      "export default defineConfig({ extends: [core, cloudflare] });",
+    ].join("\n"),
+  ];
 
-      expect(checks).toEqual([
-        expect.objectContaining({
-          message: expect.stringContaining("2 lint plugins the config loads"),
-          name: "Plugin versions",
-          status: "pass",
-        }),
-      ]);
-    }
-  );
+  // Cloudflare's preset runs on oxlint-tsgolint or on tsrs, and the project
+  // picks, so the check covers the preset alone, whichever is installed.
+  test.each([
+    ["oxlint-tsgolint", "7.0.2008"],
+    ["tsrs", "7.1.0-beta.tsrs5"],
+  ])("checks Cloudflare's preset, not the %s beside it", (backend, version) => {
+    const checks = pluginChecks(
+      "oxlint",
+      pluginProject(cloudflareConfig, {
+        "@cloudflare/oxlint-config": "0.2.0",
+        [backend]: version,
+      })
+    );
+
+    expect(checks).toEqual([
+      expect.objectContaining({
+        message: expect.stringContaining("1 lint plugin the config loads"),
+        name: "Plugin versions",
+        status: "pass",
+      }),
+    ]);
+  });
+
+  test("fails a Cloudflare preset older than the one Ultracite installs", () => {
+    const checks = pluginChecks(
+      "oxlint",
+      pluginProject(cloudflareConfig, { "@cloudflare/oxlint-config": "0.1.0" })
+    );
+
+    expect(
+      findCheck(checks, "@cloudflare/oxlint-config version")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        "@cloudflare/oxlint-config 0.1.0 is older"
+      ),
+      status: "fail",
+    });
+  });
 
   test("checks the package a wrapper plugin takes its rules from", () => {
     // pnpm links each package out of its store, next to its own

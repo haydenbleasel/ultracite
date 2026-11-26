@@ -53,16 +53,12 @@ export const isOxlintNpmJsPlugin = (
  * The Oxlint toolchain `init` installs and `upgrade` re-syncs, at the ranges
  * the presets were verified against. oxfmt is pre-1.0, so its caret range
  * holds the minor version and formatting doesn't change under a project
- * between Ultracite releases. tsrs starts where the peer range Cloudflare's
- * preset declares for it does, so a project isn't held to a single beta.
- * Its versions follow the TypeScript release it builds on (7.1.0-beta.tsrs3),
- * so the range stops at TypeScript 8 the way a caret stops at a major.
+ * between Ultracite releases.
  */
 export const OXLINT_TOOLCHAIN_DEV_DEPENDENCIES = {
   oxfmt: packageJson.devDependencies.oxfmt,
   oxlint: packageJson.devDependencies.oxlint,
   "oxlint-tsgolint": packageJson.devDependencies["oxlint-tsgolint"],
-  tsrs: packageJson.devDependencies.tsrs,
 };
 
 /**
@@ -329,8 +325,6 @@ export const dependencyNamesByLinter = {
     "stylelint-config-idiomatic-order",
     "stylelint-prettier",
   ]),
-  // Init installs tsrs with @cloudflare/oxlint-config, but tsrs can also be
-  // the project's own TypeScript compiler, so moving off Oxlint keeps it.
   oxlint: new Set([
     "@astrojs/compiler-rs",
     "@cloudflare/oxlint-config",

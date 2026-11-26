@@ -59,7 +59,7 @@ bunx ultracite init \
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest` | `cypress` | `storybook` | `playwright` | `react-native` | `drizzle`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
 - `--hooks` — Enable auto-fix hooks: `claude` | `codex` | `copilot` | `cursor` | `devin` | `codebuddy` | `deepagents` | `grok`
-- `--js-plugins` — Opt-in Oxlint JS plugins: `@interfere/landmines` | `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-jsdoc` | `eslint-plugin-sonarjs` | `eslint-plugin-tsdoc` | `oxlint-plugin-react-doctor`
+- `--js-plugins` — Opt-in Oxlint JS plugins and presets: `@cloudflare/oxlint-config` (also turns on type-aware linting) | `@interfere/landmines` | `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-jsdoc` | `eslint-plugin-sonarjs` | `eslint-plugin-tsdoc` | `oxlint-plugin-react-doctor`
 - `--type-aware` — Enable type-aware linting (ESLint and Biome: extend their `type-aware` preset; Oxlint: installs `oxlint-tsgolint` and sets `typeAware`), and turn on `strictNullChecks` in tsconfig files
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation

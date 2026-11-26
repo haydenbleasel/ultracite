@@ -9,7 +9,6 @@ import {
 import {
   eslintFrameworkDevDependencies,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
-  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../src/dependencies";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -143,7 +142,7 @@ describe("getConfiguredPlugins", () => {
     ]);
   });
 
-  test("lists Cloudflare's preset and tsrs in a config init can't restructure", () => {
+  test("lists Cloudflare's preset in a config init can't restructure", () => {
     const plugins = withConfig(
       "oxlint.config.ts",
       [
@@ -161,7 +160,6 @@ describe("getConfiguredPlugins", () => {
         "@cloudflare/oxlint-config",
         OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["@cloudflare/oxlint-config"],
       ],
-      ["tsrs", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.tsrs],
     ]);
   });
 
