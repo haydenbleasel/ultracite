@@ -19,18 +19,21 @@ import {
 import { providerLogos } from "../../lib/logos";
 import type { ProviderId } from "../../lib/providers";
 
-const lastModified = "2026-11-18";
+const lastModified = "2026-11-26";
 
 const breadcrumbs: Crumb[] = [{ href: "/providers", name: "Providers" }];
 
 const hrefFor = (id: ProviderId): string => `/providers/${id}`;
 
-// Rules on in each core preset (Ultracite 8.3.1, recounted 2026-11-18 from main at 71744dd4, with Oxlint 1.94.0, Biome
-// 2.6.8 and ESLint 10.15.0): Oxlint's set to "error", Biome's from `biome
-// rage --linter`, and ESLint's from `eslint --print-config` on a TypeScript
-// file. Rules that read types: Oxlint's type-aware rules in core; Biome's
-// type-aware preset; for ESLint, the 102 rules ultracite/eslint/type-aware
-// adds plus the 32 SonarJS rules in core that use types when there are some.
+// Rules on in each core preset (Ultracite 8.3.1, recounted 2026-11-18 from
+// main at 71744dd4, with Oxlint 1.94.0, Biome 2.6.8 and ESLint 10.15.0):
+// Oxlint's set to "error", Biome's from `biome rage --linter`, and ESLint's
+// from `eslint --print-config` on a TypeScript file. Biome's recounted
+// 2026-11-26 from main at 86f79644 with noJsxPropsBind turned off (#888), on
+// Biome 2.6.8 and 2.6.9. Rules that read types: Oxlint's type-aware rules in
+// core; Biome's type-aware preset; for ESLint, the 102 rules
+// ultracite/eslint/type-aware adds plus the 32 SonarJS rules in core that use
+// types when there are some.
 // Times are from lib/benchmarks, re-run on 2026-11-18 with Ultracite 8.3.1
 // packed from main at 09156707, before it was published (the versions the
 // note under the table names). At 420 files Biome came out 13 ms ahead of
@@ -51,7 +54,7 @@ const engines = [
   },
   {
     check420: formatMs(large.ms.biome),
-    coreRules: 350,
+    coreRules: 349,
     id: "biome",
     name: "Biome",
     recommended: false,
@@ -81,7 +84,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
     label: "Runs on",
     values: ["Native Rust binaries", "One native Rust binary", "Node.js"],
   },
-  { label: "Rules on in the core preset", values: ["475", "350", "913"] },
+  { label: "Rules on in the core preset", values: ["475", "349", "913"] },
   {
     label: "`ultracite check`, 42 files",
     values: [

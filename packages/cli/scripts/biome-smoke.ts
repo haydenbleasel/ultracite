@@ -297,6 +297,29 @@ export const Counter = component$(() => {
 `,
         expect: ["lint/correctness/noQwikUseVisibleTask"],
       },
+      // Inline `onClick$` handlers are the usual style in Qwik. Biome's
+      // noJsxPropsBind reports this one when it's on.
+      "src/toggle.tsx": {
+        content: `import { component$, useSignal } from "@builder.io/qwik";
+
+export const Toggle = component$(() => {
+  const on = useSignal(false);
+
+  return (
+    <button
+      onClick$={() => {
+        on.value = !on.value;
+      }}
+      type="button"
+    >
+      toggle
+    </button>
+  );
+});
+`,
+        expect: [],
+        forbid: ["lint/performance/noJsxPropsBind"],
+      },
     },
     presets: ["qwik"],
   },
@@ -312,6 +335,22 @@ export const Counter = component$(() => {
 );
 `,
         expect: ["lint/correctness/useJsxKeyInIterable"],
+      },
+      // Inline handlers are idiomatic React; Oxlint's React preset turns
+      // react-perf/jsx-no-new-function-as-prop off too.
+      "src/toggle.tsx": {
+        content: `export const Toggle = ({
+  onToggle,
+}: {
+  readonly onToggle: (on: boolean) => void;
+}) => (
+  <button onClick={() => onToggle(true)} type="button">
+    toggle
+  </button>
+);
+`,
+        expect: [],
+        forbid: ["lint/performance/noJsxPropsBind"],
       },
     },
     presets: ["react"],
@@ -352,6 +391,23 @@ export const App = () => (
 );
 `,
         expect: ["lint/correctness/noSolidDestructuredProps"],
+      },
+      // Solid components run once, so an inline handler isn't recreated.
+      "src/toggle.tsx": {
+        content: `import { createSignal } from "solid-js";
+
+export const Toggle = () => {
+  const [on, setOn] = createSignal(false);
+
+  return (
+    <button onClick={() => setOn(!on())} type="button">
+      toggle
+    </button>
+  );
+};
+`,
+        expect: [],
+        forbid: ["lint/performance/noJsxPropsBind"],
       },
     },
     presets: ["solid"],
