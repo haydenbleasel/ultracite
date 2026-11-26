@@ -1,3 +1,28 @@
+## 8.3.2
+
+### Patch Changes
+
+- 1c27fdf: Update Biome to 2.6.9. The release adds 28 nursery rules, which the Biome presets leave off, and promotes, renames or removes none, so the presets are unchanged and the `@biomejs/biome` peer range stays at `^2.6.7`.
+  
+  Biome 2.6.9 fixes a false syntax error we reported. An import that mixes an inline `type` specifier with a value and carries import attributes, such as `import { type A, b } from "./m" with { … }`, is no longer reported as a type-only import ([biomejs/biome#13304](https://github.com/biomejs/biome/issues/13304)). An import whose specifiers are all inline `type` is still reported, though TypeScript accepts it.
+  
+  Several rules the presets already turn on change after upgrading. `noDescendingSpecificity` no longer reports nested selectors that style different elements, and now reports `a:hover { … }` followed by `a { … }`, as Stylelint does. `noDuplicateSelectors` finds duplicates it missed, such as a repeated attribute selector with a quoted value. The test rules `noIdenticalTestTitle`, `useTestHooksOnTop` and `useTestHooksInOrder` now check the tests inside `describe.todo`, `describe.skipIf(…)` and Playwright's `test.describe.serial` blocks. `useFilenamingConvention` reports once per HTML, Vue, Svelte or Astro file instead of once per embedded script, and in Astro files `useImportType`, `noUndeclaredVariables` and `noUnusedVariables` follow what the template uses.
+  
+  The HTML formatter now collapses whitespace in a static `class` attribute, formats a valid `style` attribute as CSS declarations, and no longer adds a line break, which rendered as a space, between elements that touch in the source. See the [2.6.9 release notes](https://github.com/biomejs/biome/releases/tag/%40biomejs%2Fbiome%402.6.9).
+- c4a76b5: Update oxfmt to 0.80.0. The release changes no options, so the preset is unchanged and the `oxfmt` peer range stays at `>=0.71.0 <1`.
+  
+  It is mostly bug fixes. oxfmt no longer hangs when it runs with a single worker thread, an assigned class breaks a long `extends` or `implements` clause the way any other class does, and CSS, HTML and Markdown each get formatting fixes. If you set your own `sortImports.groups` and wrap groups in an array, the order inside the array now breaks ties between imports from the same source; the preset sets no groups, so its import order is the same. See the [0.80.0 release notes](https://github.com/oxc-project/oxc/releases/tag/oxfmt_v0.80.0).
+- 517d36e: Update Oxlint to 1.95.0 and `oxlint-tsgolint` to 7.0.2008, and enable Oxlint's new type-aware rule, [`typescript/no-unsafe-class-instance-assignment`](https://oxc.rs/docs/guide/usage/linter/rules/typescript/no-unsafe-class-instance-assignment.html), in the core Oxlint preset.
+  
+  The rule reports a value used where an instance of a class is expected when it wasn't created by that class's constructor, such as `const user: User = { name: "a" }`. It matches the `@typescript-eslint` rule of the same name that the ESLint type-aware preset already enables. Like the other type-aware rules, it only runs with `oxlint --type-aware` and `oxlint-tsgolint` installed, and Oxlint 1.95.0 needs `oxlint-tsgolint` 7.0.2008 or later.
+  
+  Oxlint 1.95.0 also repairs two fixes we reported, both applied by `ultracite fix --unsafe`. `unicorn/prefer-logical-operator-over-ternary` keeps the parentheses a nested ternary or an arrow function needs, where it used to write `x || y ? a : b` ([oxc-project/oxc#29877](https://github.com/oxc-project/oxc/issues/29877)). `no-unneeded-ternary` leaves `f() ? true : true` alone instead of deleting the call ([oxc-project/oxc#29878](https://github.com/oxc-project/oxc/issues/29878)), and turns `a + b ? true : false` into `!!(a + b)`, not `a + b`.
+  
+  The rewrites for `no-unsafe-negation`, `jest/prefer-to-contain` and `vitest/prefer-to-contain` are now suggestions, so plain `ultracite fix` reports them and `--unsafe` applies them.
+  
+  Requires oxlint >= 1.95.0
+- 86f7964: `sonarjs/no-empty-test-file` no longer reports every source file with `eslint-plugin-sonarjs` 4.2.3 or later ([#885](https://github.com/haydenbleasel/ultracite/issues/885)). That release removed the rule's own check for test files and leaves picking them to SonarQube, which the standalone plugin doesn't have. The ESLint preset and the Oxlint JS plugins preset now turn the rule off everywhere and back on for files named `*.test.*`, `*.spec.*` and `*.cy.*`, the files the plugin checked before. Helpers and fixtures under `__tests__` and type-test files (`*.test-d.ts`) are still not reported.
+
 ## 8.3.1
 
 ### Patch Changes
