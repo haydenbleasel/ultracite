@@ -41,7 +41,9 @@ describe("ensureSupportedNodeEngine", () => {
   const originalExitCode = process.exitCode;
 
   afterEach(() => {
-    process.exitCode = originalExitCode;
+    // Bun ignores `process.exitCode = undefined`, so an unset exit code is
+    // restored as 0; otherwise `bun test` exits 1 after every test passed.
+    process.exitCode = originalExitCode ?? 0;
   });
 
   test("lets the CLI load on a supported version", () => {
