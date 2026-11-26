@@ -48,7 +48,7 @@ import { chainScript } from "./integrations/project-command";
 import { biome } from "./linters/biome";
 import { eslint } from "./linters/eslint";
 import { oxfmt } from "./linters/oxfmt";
-import { oxlint } from "./linters/oxlint";
+import { findLoadedJsPlugins, oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
@@ -258,6 +258,8 @@ export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
 
 // Prompt hints for the JS plugins that need a word of explanation.
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
+  "@cloudflare/oxlint-config":
+    "Cloudflare's preset, turns on type-aware linting",
   "@interfere/landmines": "strict rules against agent shortcuts in tests",
   "@shadcn/lint": "design-system rules for Tailwind v4 components",
   "anti-slop": "vendored opinionated preset, nothing to install",
@@ -1501,6 +1503,7 @@ const selectJsPlugins = async (
 };
 
 const TYPE_AWARE_OPTION_RE = /typeAware["']?\s*:\s*true/u;
+const cloudflarePreset = "@cloudflare/oxlint-config";
 
 const readFirstConfig = (names: readonly string[]): string => {
   const found = names.find((name) => exists(`./${name}`));
@@ -1532,18 +1535,29 @@ const hasTypeAwareSetup = async (linter: Linter): Promise<boolean> => {
   }
 
   const packageJsonObject = await readPackageJson();
+  const config = readFirstConfig(oxlintConfigNames);
 
   return (
     "oxlint-tsgolint" in (packageJsonObject?.devDependencies ?? {}) ||
-    TYPE_AWARE_OPTION_RE.test(readFirstConfig(oxlintConfigNames))
+    TYPE_AWARE_OPTION_RE.test(config) ||
+    findLoadedJsPlugins(config).includes(cloudflarePreset)
   );
 };
 
 const selectTypeAware = async (
   opts: InitializeFlags,
   linter: Linter,
-  interactive: boolean
+  interactive: boolean,
+  jsPlugins: readonly OxlintJsPlugin[]
 ): Promise<boolean> => {
+  // Cloudflare's preset sets `options.typeAware` itself, and Oxlint carries
+  // that through `extends`, so a config that extends it runs the type-aware
+  // rules whatever init is told. Choosing the preset is choosing them, with
+  // the oxlint-tsgolint and strictNullChecks they need.
+  if (jsPlugins.includes(cloudflarePreset)) {
+    return true;
+  }
+
   if (opts["type-aware"] !== undefined) {
     return opts["type-aware"];
   }
@@ -1735,7 +1749,7 @@ const selectInitializeOptions = async (
   const linter = await selectLinter(opts, interactive);
   const frameworks = await selectFrameworks(opts, interactive);
   const jsPlugins = await selectJsPlugins(opts, linter, interactive);
-  const typeAware = await selectTypeAware(opts, linter, interactive);
+  const typeAware = await selectTypeAware(opts, linter, interactive, jsPlugins);
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
   const hooks = await selectHooks(opts, interactive);

@@ -590,6 +590,11 @@ describe("initialize", () => {
         message: "Which JS plugins would you like to add (optional)?",
         options: [
           {
+            hint: "Cloudflare's preset, turns on type-aware linting",
+            label: "@cloudflare/oxlint-config",
+            value: "@cloudflare/oxlint-config",
+          },
+          {
             hint: "strict rules against agent shortcuts in tests",
             label: "@interfere/landmines",
             value: "@interfere/landmines",
@@ -4732,6 +4737,106 @@ describe("init questions", () => {
       expect(written.get(`./${configFile}`)).toContain(expected);
     }
   );
+
+  // Cloudflare's preset sets `options.typeAware` itself, so choosing it is
+  // choosing type-aware linting. Init sets that up as --type-aware does, on
+  // the backend it already installs, whether or not anyone can be asked.
+  test.each([
+    [
+      "an interactive TypeScript project",
+      { "tsconfig.json": '{"compilerOptions": {}}' },
+      {},
+    ],
+    [
+      "a non-interactive TypeScript project",
+      { "tsconfig.json": '{"compilerOptions": {}}' },
+      { yes: true },
+    ],
+    ["a JavaScript project", {}, { yes: true }],
+    [
+      "a run told not to",
+      { "tsconfig.json": '{"compilerOptions": {}}' },
+      { "type-aware": false, yes: true },
+    ],
+  ] as const)(
+    "turns on type-aware linting for Cloudflare's preset in %s",
+    async (_case, files, flags) => {
+      const prompts = recordingPrompts();
+
+      const { written } = mockProject({
+        ...files,
+        "package.json": '{"name": "app"}',
+      });
+
+      try {
+        await initialize({
+          ...flags,
+          "js-plugins": ["@cloudflare/oxlint-config"],
+          linter: "oxlint",
+          skipInstall: true,
+        });
+      } finally {
+        restoreProject();
+      }
+
+      expect(
+        prompts.confirm.mock.calls.some(([prompt]) =>
+          prompt.message.includes("Turn on type-aware")
+        )
+      ).toBe(false);
+
+      const config = written.get("./oxlint.config.mts") ?? "";
+
+      expect(config).toContain('from "@cloudflare/oxlint-config"');
+      expect(config).toContain("options: { typeAware: true }");
+
+      const { devDependencies } = JSON.parse(
+        written.get("package.json") ?? "{}"
+      );
+
+      expect(devDependencies).toHaveProperty("@cloudflare/oxlint-config");
+      expect(devDependencies).toHaveProperty("oxlint-tsgolint");
+      expect(devDependencies).not.toHaveProperty("tsrs");
+    }
+  );
+
+  // A config that extends the preset by hand already runs the type-aware
+  // rules, so init installs what they need without --type-aware.
+  test("sets up type-aware linting for a config that already extends Cloudflare's preset", async () => {
+    const prompts = recordingPrompts();
+
+    const { written } = mockProject({
+      "oxlint.config.ts": [
+        'import cloudflare from "@cloudflare/oxlint-config";',
+        'import { defineConfig } from "oxlint";',
+        'import core from "ultracite/oxlint/core";',
+        "",
+        "export default defineConfig({",
+        "  env: { ...core.env, ...cloudflare.env },",
+        "  extends: [core, cloudflare],",
+        "  ignorePatterns: core.ignorePatterns,",
+        "});",
+        "",
+      ].join("\n"),
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.confirm.mock.calls.some(([prompt]) =>
+        prompt.message.includes("Turn on type-aware")
+      )
+    ).toBe(false);
+    expect(
+      JSON.parse(written.get("package.json") ?? "{}").devDependencies
+    ).toHaveProperty("oxlint-tsgolint");
+  });
 
   test("asks about the Ultracite skill before writing anything", async () => {
     const writtenWhenAsked: number[] = [];

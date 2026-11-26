@@ -443,6 +443,26 @@ describe("getToolchainPackages", () => {
       false
     );
   });
+
+  // Cloudflare's preset runs on oxlint-tsgolint, which init installs with it.
+  // A project that runs tsrs instead chose that itself, and tsrs can be its
+  // TypeScript compiler too, so upgrade never installs or moves it.
+  test("oxlint re-pins Cloudflare's preset and leaves a project's tsrs alone", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    const packages = getToolchainPackages(
+      "oxlint",
+      new Set(["@cloudflare/oxlint-config", "oxlint-tsgolint", "tsrs"])
+    );
+
+    expect(packages).toContain(
+      `@cloudflare/oxlint-config@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["@cloudflare/oxlint-config"]}`
+    );
+    expect(packages).toContain(
+      `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+    );
+    expect(packages.some((pkg) => pkg.startsWith("tsrs@"))).toBe(false);
+  });
 });
 
 describe("upgrade", () => {
