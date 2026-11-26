@@ -5,7 +5,9 @@
 // Counts are from `biome rage --linter` with Biome 2.6.8 and Ultracite
 // 8.3.1 (recounted 2026-11-18 from main at 71744dd4, before it was published):
 // core alone, then each preset added (React sets 20 rules, 3 of
-// which core already has on).
+// which core already has on). Recounted 2026-11-26 from main at 86f79644
+// with noJsxPropsBind turned off (#888), on Biome 2.6.8 and 2.6.9: core is
+// 349, and React and Next.js are unchanged.
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
@@ -13,7 +15,7 @@ import Terminal from "../../landing/terminal.astro";
 const PRESETS = ["core", "react", "next"];
 
 const ruleCounts = new Map([
-  ["core", 350],
+  ["core", 349],
   ["next", 7],
   ["react", 17],
 ]);
@@ -75,33 +77,32 @@ const settings = [
       </dl>
     </div>
   </AnnotatedCode>
-  {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.6.8 printed
-      it with `react` declared in package.json, as an app would: one diagnostic
-      with its message, frame and first note, the other by its header, then
-      the summary. Re-run 2026-11-18 on Ultracite 8.3.1 (from main at 09156707,
-      before it was published): unchanged. Biome's own time over 20 runs on a
-      quiet machine was 6ms in 19 and 7ms in one. */}
+  {/* `ultracite fix` on the repo's benchmark fixture's src, as Biome 2.6.8
+      printed it with `react` declared in package.json, as an app would: the
+      one diagnostic left, with its message, the reported line of its frame
+      and its note, then the summary. Re-run 2026-11-26 from main at 86f79644
+      with noJsxPropsBind turned off (#888), which was the other diagnostic;
+      Biome 2.6.9 prints the same. It fixes 7 files where it fixed 6, since
+      core writes separated type imports (4ce8f28). The time isn't re-measured:
+      on 2026-11-18, Biome's own time over 20 runs on a quiet machine was 6ms
+      in 19 and 7ms in one. */}
   <Terminal class="lg:col-span-5">
     <p class="text-panel-foreground mb-3 truncate">
       <span class="text-signal">$</span> npx ultracite fix
     </p>
     <p class="text-panel-foreground truncate">
-      src/component.tsx:42:27 lint/performance/noJsxPropsBind
-    </p>
-    <p class="mt-1 text-pretty">
-      <span class="text-signal">×</span> JSX props should not use arrow
-      functions
-    </p>
-    <pre class="mt-2 overflow-hidden font-mono text-[13px]/[1.55]"><span class="text-signal">&gt;</span> 42 │   onChange={"{"}() =&gt; onToggle(task.id){"}"}
-     │             <span class="text-signal">^^^^^^^^^^^^^^^^^^^^^^^</span></pre>
-    <p class="mt-2 text-pretty">
-      i This function will be recreated on every render, which can cause
-      unnecessary rerenders.
-    </p>
-    <p class="text-panel-foreground mt-3 truncate">
       src/utils.ts:62:14 lint/performance/noAwaitInLoops
     </p>
-    <p class="mt-3">Checked 7 files in 6ms. Fixed 6 files.</p>
-    <p>Found 2 errors.</p>
+    <p class="mt-1 text-pretty">
+      <span class="text-signal">×</span> Avoid using await inside loops.
+    </p>
+    <pre class="mt-2 overflow-hidden font-mono text-[13px]/[1.55]"><span class="text-signal">&gt;</span> 62 │   return await operation();
+     │          <span class="text-signal">^^^^^^^^^^^^^^^^^</span></pre>
+    <p class="mt-2 text-pretty">
+      i Using await inside loops might cause performance issues or unintended
+      sequential execution, consider use Promise.all() instead.
+    </p>
+    <p class="mt-3">Checked 7 files in 6ms. Fixed 7 files.</p>
+    <p>Found 1 error.</p>
   </Terminal>
 </div>

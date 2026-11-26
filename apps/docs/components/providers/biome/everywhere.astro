@@ -7,6 +7,10 @@ import Everywhere from "../everywhere.astro";
 // printed for `ultracite check` on the repo's benchmark fixture (with `react`
 // declared in package.json, as an app would), without their code frames.
 // Re-run 2026-11-18 on Ultracite 8.3.1 (as `ultracite check src`): unchanged.
+// Re-run 2026-11-26 from main at 86f79644 with noJsxPropsBind turned off
+// (#888), on Biome 2.6.8 and 2.6.9: 11 errors, three of them useImportType's
+// since core writes separated type imports (4ce8f28). noAwaitInLoops is now
+// the excerpt's diagnostic without a fix.
 const vscodeSettings = `{
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -35,14 +39,14 @@ const diagnostics = [
     rule: "assist/source/organizeImports",
   },
   {
-    fixable: false,
-    location: "src/component.tsx:42:27",
-    rule: "lint/performance/noJsxPropsBind",
-  },
-  {
     fixable: true,
     location: "src/data.ts:5:8",
     rule: "assist/source/useSortedInterfaceMembers",
+  },
+  {
+    fixable: false,
+    location: "src/utils.ts:59:14",
+    rule: "lint/performance/noAwaitInLoops",
   },
 ];
 ---
@@ -88,6 +92,6 @@ const diagnostics = [
       </p>
     ))}
     <p>…</p>
-    <p>Found 9 errors.</p>
+    <p>Found 11 errors.</p>
   </Fragment>
 </Everywhere>

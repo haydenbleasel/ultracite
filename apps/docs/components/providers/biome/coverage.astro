@@ -9,10 +9,12 @@ import type { CoverageRow } from "../coverage.astro";
 // once with an empty config in a project with no framework dependencies, once
 // with ultracite/biome/core. `defaults` counts the default rules core keeps;
 // it turns off two, a11y/noAutofocus and complexity/noImportantStyles.
-// Re-derive when either version moves.
+// Recounted 2026-11-26 from main at 86f79644 with noJsxPropsBind turned off
+// (#888), on Biome 2.6.8 and 2.6.9: one fewer Performance rule, which has no
+// fix. Re-derive when either version moves.
 const catalogSize = 816;
 const defaultCount = 218;
-const coreCount = 350;
+const coreCount = 349;
 const typeAwareCount = 5;
 
 const groups: CoverageRow[] = [
@@ -55,7 +57,7 @@ const groups: CoverageRow[] = [
     available: 16,
     defaults: 3,
     description: "Code that could run faster",
-    enabled: 10,
+    enabled: 9,
     name: "Performance",
   },
   {
@@ -77,13 +79,13 @@ const groups: CoverageRow[] = [
   },
 ];
 
-// What `ultracite fix` can do about each of the 350, by the fix kind Biome
+// What `ultracite fix` can do about each of the 349, by the fix kind Biome
 // gives it. Ultracite makes three unsafe fixes safe: noUnusedImports,
 // useBlockStatements and useTailwindSortedClasses.
 const fixes = [
   { label: "safe fix, applied by fix", value: "74" },
   { label: "unsafe fix, with --unsafe", value: "79" },
-  { label: "no fix, for the agent", value: "197" },
+  { label: "no fix, for the agent", value: "196" },
   { label: "type-aware, opt-in", value: String(typeAwareCount) },
 ];
 ---
@@ -118,7 +120,7 @@ const fixes = [
   title={`${defaultCount} rules by default. ${coreCount} with Ultracite.`}
 >
   Ultracite keeps all but two of Biome’s recommended rules, then turns on most
-  of the style, complexity and performance rules Biome leaves off. They catch
-  what agents get wrong: import cycles, nested ternaries, awaits inside loops
-  and forEach where for…of would do.
+  of the style and complexity rules Biome leaves off, and about half of the
+  performance ones. They catch what agents get wrong: import cycles, nested
+  ternaries, awaits inside loops and forEach where for…of would do.
 </Coverage>

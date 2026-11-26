@@ -372,7 +372,12 @@
         "noBarrelFile": "off",
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",
-        "noJsxPropsBind": "error",
+        // Off, like react-perf/jsx-no-new-function-as-prop in the oxlint
+        // React config and react/jsx-no-bind in the ESLint one: inline JSX
+        // function props are idiomatic modern React. Core also lints Solid
+        // and Qwik, where inline handlers are the usual style, and a Solid
+        // component runs once, so its handlers are never recreated.
+        "noJsxPropsBind": "off",
         // Off, like import/no-namespace in the oxlint config: libraries such
         // as Zod and Radix document `import * as` as their API, and bundlers
         // tree-shake member access on a namespace.

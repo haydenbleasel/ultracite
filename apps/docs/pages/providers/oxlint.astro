@@ -21,17 +21,19 @@ import { providerLogos } from "../../lib/logos";
 // Facts on this page were checked against Oxlint 1.87.0, Oxfmt 0.72.0 and
 // Ultracite 7.12.4. Rechecked for Ultracite 8.0.0: the rule counts, the Oxfmt
 // example (with Oxfmt 0.71.0, which 8.0.0 installs) and the timings.
-// Rechecked on this date for Oxlint 1.90.0, Oxfmt 0.75.0 and Ultracite 8.1.1
+// Rechecked on 2026-11-01 for Oxlint 1.90.0, Oxfmt 0.75.0 and Ultracite 8.1.1
 // (packed from main at 3572b864): the rule counts, the Oxfmt example, the
-// agent output and the timings. Rechecked on this date for the same tool
+// agent output and the timings. Rechecked on 2026-11-11 for the same tool
 // versions and Ultracite 8.2.0 (packed from main at 2bd7aaad plus the preset
 // changes it releases, before it was published): the rule counts, the Oxfmt
-// example, the agent output and the timings. Rechecked on this date for
-// Oxlint 1.94.0, Oxfmt 0.79.0 and Ultracite 8.3.1 (packed from main at 71744dd4, before it was published):
-// the rule counts, the Oxfmt example and the agent output. The timings were
-// re-run later the same day with the same tool versions and Ultracite 8.3.1
-// packed from main at 09156707, before it was published.
-const lastModified = "2026-11-18";
+// example, the agent output and the timings. Rechecked on 2026-11-18 for
+// Oxlint 1.94.0, Oxfmt 0.79.0 and Ultracite 8.3.1 (packed from main at
+// 71744dd4, before it was published): the rule counts, the Oxfmt example and
+// the agent output. The timings were re-run later the same day with the same
+// tool versions and Ultracite 8.3.1 packed from main at 09156707, before it
+// was published. On 2026-11-26 the FAQ took Biome's core count down to 349,
+// after noJsxPropsBind was turned off (#888).
+const lastModified = "2026-11-26";
 const small = runFor(42);
 const large = runFor(420);
 const command = "npx ultracite@latest init --linter oxlint";
@@ -63,7 +65,7 @@ const faqs: FaqItem[] = [
     question: "Do I still need Prettier?",
   },
   {
-    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and at 420 files the two were close, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (475 core rules to Biome’s 350), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and at 420 files the two were close, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (475 core rules to Biome’s 349), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
     question: "Should I use Oxlint or Biome?",
   },
   {
